@@ -1,0 +1,91 @@
+services:
+  app:
+    image: ghcr.io/${GITHUB_REPOSITORY:-instaparty/instaparty}:latest
+    restart: unless-stopped
+    env_file:
+      - .env
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    volumes:
+      - app-storage:/var/www/html/storage
+    expose:
+      - "8000"
+    command: >
+      sh -c "php artisan migrate --force &&
+             php artisan config:cache &&
+             php artisan route:cache &&
+             php artisan event:cache &&
+             php artisan filament:cache-components &&
+             php artisan octane:start --server=swoole --host=0.0.0.0 --port=8000 ||
+             php artisan serve --host=0.0.0.0 --port=8000"
+
+  queue:
+    image: ghcr.io/${GITHUB_REPOSITORY:-instaparty/instaparty}:latest
+    restart: unless-stopped
+    env_file:
+      - .env
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    volumes:
+      - app-storage:/var/www/html/storage
+    command: php artisan queue:work --tries=3 --max-time=3600
+
+  scheduler:
+    image: ghcr.io/${GITHUB_REPOSITORY:-instaparty/instaparty}:latest
+    restart: unless-stopped
+    env_file:
+      - .env
+    depends_on:
+      mysql:
+        condition: service_healthy
+    volumes:
+      - app-storage:/var/www/html/storage
+    command: php artisan schedule:work
+
+  mysql:
+    image: mysql:8.0
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - mysql-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    volumes:
+      - redis-data:/data
+
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+    depends_on:
+      - app
+
+volumes:
+  mysql-data:
+  redis-data:
+  app-storage:
+  caddy-data:
+  caddy-config:
