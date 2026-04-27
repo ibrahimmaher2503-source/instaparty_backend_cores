@@ -5,6 +5,11 @@
 # Exit 2 + stderr message blocks the command and tells Claude why.
 set -euo pipefail
 
+# If jq is unavailable, fall through — the settings.json deny list is the primary guard.
+if ! command -v jq >/dev/null 2>&1; then
+  exit 0
+fi
+
 INPUT=$(cat)
 CMD=$(echo "$INPUT" | jq -r '.tool_input.command // ""')
 

@@ -1,7 +1,15 @@
 <?php
 
+use App\Modules\Geography\Providers\GeographyServiceProvider;
+use App\Modules\Identity\Providers\IdentityServiceProvider;
+use App\Modules\Shared\Providers\SharedServiceProvider;
+use App\Providers\AppServiceProvider;
+use App\Providers\Filament\AdminPanelProvider;
+
 return [
-    App\Providers\AppServiceProvider::class,
-    App\Modules\Shared\Providers\SharedServiceProvider::class,
-    App\Providers\Filament\AdminPanelProvider::class,
+    AppServiceProvider::class,
+    SharedServiceProvider::class,
+    GeographyServiceProvider::class,
+    IdentityServiceProvider::class,
+    AdminPanelProvider::class,
 ];

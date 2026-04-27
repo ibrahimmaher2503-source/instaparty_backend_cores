@@ -3,6 +3,8 @@
 # Auto-formats PHP files with Laravel Pint after every edit. Non-blocking on failure.
 set -euo pipefail
 
+command -v jq >/dev/null 2>&1 || exit 0
+
 INPUT=$(cat)
 FILE=$(echo "$INPUT" | jq -r '.tool_input.file_path // .tool_input.path // ""')
 

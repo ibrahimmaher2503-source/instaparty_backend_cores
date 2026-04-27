@@ -4,8 +4,13 @@
 # Critical: must check stop_hook_active to avoid infinite loops if we ever exit 2.
 set -euo pipefail
 
-INPUT=$(cat)
-STOP_ACTIVE=$(echo "$INPUT" | jq -r '.stop_hook_active // false')
+if ! command -v jq >/dev/null 2>&1; then
+  # jq unavailable — skip stop_hook_active check and proceed with logging
+  STOP_ACTIVE=false
+else
+  INPUT=$(cat)
+  STOP_ACTIVE=$(echo "$INPUT" | jq -r '.stop_hook_active // false')
+fi
 
 # If we've already triggered once in this stop cycle, do nothing
 if [ "$STOP_ACTIVE" = "true" ]; then

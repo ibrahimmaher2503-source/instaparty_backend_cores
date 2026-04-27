@@ -15,11 +15,11 @@ class AdminUserSeeder extends Seeder
         $admin = User::firstOrCreate(
             ['email' => 'admin@instaparty.local'],
             [
-                'public_id'   => (string) Str::ulid(),
-                'name'        => 'InstaParty Admin',
-                'phone_e164'  => '+20000000000',
-                'password'    => bcrypt(config('app.admin_password', 'password')),
-                'status'      => 'active',
+                'public_id' => (string) Str::ulid(),
+                'name' => 'InstaParty Admin',
+                'phone_e164' => '+20000000000',
+                'password' => bcrypt(config('app.admin_password', 'password')),
+                'status' => 'active',
             ]
         );
 

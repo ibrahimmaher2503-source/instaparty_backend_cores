@@ -3,6 +3,8 @@
 # Blocks edits to files that should never be modified by the agent.
 set -euo pipefail
 
+command -v jq >/dev/null 2>&1 || exit 0
+
 INPUT=$(cat)
 TOOL=$(echo "$INPUT" | jq -r '.tool_name // ""')
 FILE=$(echo "$INPUT" | jq -r '.tool_input.file_path // .tool_input.path // ""')

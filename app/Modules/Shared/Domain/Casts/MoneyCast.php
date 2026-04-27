@@ -11,7 +11,7 @@ use InvalidArgumentException;
 use UnexpectedValueException;
 
 /**
- * @implements CastsAttributes<Money, Money|int>
+ * @implements CastsAttributes<Money, mixed>
  */
 class MoneyCast implements CastsAttributes
 {
@@ -41,7 +41,7 @@ class MoneyCast implements CastsAttributes
 
         if ($value instanceof Money) {
             return [
-                "{$this->field}_minor"    => $value->getMinorAmount()->toInt(),
+                "{$this->field}_minor" => $value->getMinorAmount()->toInt(),
                 "{$this->field}_currency" => $value->getCurrency()->getCurrencyCode(),
             ];
         }
@@ -56,7 +56,7 @@ class MoneyCast implements CastsAttributes
             }
 
             return [
-                "{$this->field}_minor"    => $value,
+                "{$this->field}_minor" => $value,
                 "{$this->field}_currency" => $currency,
             ];
         }

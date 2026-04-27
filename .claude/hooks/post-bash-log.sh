@@ -3,6 +3,8 @@
 # Appends timestamp + command + exit code to .claude/bash-commands.log for traceability.
 set -euo pipefail
 
+command -v jq >/dev/null 2>&1 || exit 0
+
 INPUT=$(cat)
 CMD=$(echo "$INPUT" | jq -r '.tool_input.command // ""')
 EXIT_CODE=$(echo "$INPUT" | jq -r '.tool_response.exit_code // .tool_response.returncode // "?"')

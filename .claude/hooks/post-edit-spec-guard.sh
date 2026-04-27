@@ -4,6 +4,8 @@
 # This is "reminder mode" — it doesn't fail the edit, just nudges Claude to fix it next.
 set -euo pipefail
 
+command -v jq >/dev/null 2>&1 || exit 0
+
 INPUT=$(cat)
 FILE=$(echo "$INPUT" | jq -r '.tool_input.file_path // .tool_input.path // ""')
 
