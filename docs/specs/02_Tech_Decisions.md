@@ -212,14 +212,23 @@ This section is the locked reference for how the three product types are modeled
 | Local dev | MinIO in Docker |
 | Public bucket | `instaparty-public` (CDN-fronted) |
 | Private bucket | `instaparty-private` (signed URLs only) |
-| Library | spatie/laravel-medialibrary |
+| Library | `spatie/laravel-medialibrary` — gallery-style use cases only (see strategy below) |
 | Image conversions | thumb (200px), medium (600px), large (1200px), webp variants |
 | Disk driver | `s3` with custom endpoint for Spaces |
 | Use path style endpoint | `false` for Spaces, `true` for MinIO |
-| Vendor documents | Private bucket, signed URLs only |
-| Settlement proofs | Private bucket |
-| Service images | Public bucket with CDN |
 | Chat media | Firebase Storage (separate from app storage) |
+
+### Per-asset storage strategy (LOCKED)
+
+| Asset | Storage method | Bucket | Access |
+|---|---|---|---|
+| Service images (galleries) | `spatie/laravel-medialibrary` — `HasMedia`, `gallery` collection | `instaparty-public` | CDN public URL |
+| Vendor profile avatar / cover | `spatie/laravel-medialibrary` — `HasMedia`, `avatar`/`cover` collection | `instaparty-public` | CDN public URL |
+| Vendor documents (CR, tax card, national ID, IBAN proof) | Direct `Storage::disk('s3-private')->putFileAs(...)` — `file_path`/`file_name` on `vendor_documents` table | `instaparty-private` | Signed URL (15-min TTL) |
+| Settlement proofs | Direct `Storage::disk('s3-private')->putFileAs(...)` — explicit columns on `withdrawals` table | `instaparty-private` | Signed URL (15-min TTL) |
+| Chat media | Firebase Storage | Firebase project | Firebase download URL |
+
+**Rationale for split strategy**: `spatie/laravel-medialibrary` excels at gallery-style use cases where image conversions, collections, and media ordering are needed. Vendor documents and settlement proofs are **entities with review state** — they have their own tables (`vendor_documents`, `withdrawals`) with `status`, `reviewed_by`, `reviewed_at`, `review_notes` columns. Coupling these to MediaLibrary's morph relation adds complexity without benefit. Direct S3 with explicit `file_path`/`file_name` columns keeps the review workflow in one table and avoids joining to the `media` table for every query.
 
 ---
 

@@ -122,7 +122,7 @@ file: (binary)
 }
 ```
 
-**Errors**: `422` invalid doc_type, file too large (max 10MB), unsupported MIME type
+**Errors**: `422` invalid doc_type, file exceeds 10 MB, MIME type not in `[application/pdf, image/jpeg, image/png]`
 
 ---
 

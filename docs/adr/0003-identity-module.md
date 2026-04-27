@@ -220,7 +220,32 @@ app/Modules/Identity/
 - لو أتى admin اعتمد vendor للـ digital يوم 1 ثم سحب الموافقة يوم 30، الـ JSON ما يحتفظش بالـ history
 - Spatie permission gates أبسط: `Gate::authorize('service.create.rental.own', $vendor)` يقرأ من جدول معروف
 
-### 6.3 `customer_addresses` snapshot على `booking_addresses`
+**Clarification 2026-04-27 — Approval sequencing & auto-revocation (Ibrahim):**
+
+1. **Per-type approval requires overall profile approval first.** `ApproveVendorForTypeAction` MUST assert `vendor_profile.approval_status === approved` and throw a `422` if the profile is still `pending` or `rejected`. The Filament per-type buttons are only visible/enabled when `approval_status = approved`.
+
+2. **Auto-revocation on suspension or rejection.** When `approval_status` transitions to `suspended` or `rejected`, ALL rows in `vendor_approved_product_types` with `revoked_at IS NULL` for that vendor MUST be auto-revoked (bulk `revoked_at = now()`, `revoked_by = acting admin`) and the corresponding Spatie permissions revoked. This is implemented as a **listener** (`RevokeAllVendorTypesOnStatusChange`) registered on the `VendorSuspended` and `VendorRejected` events — NOT inline in the Action.
+
+   Listener fires via `DB::afterCommit` just like all other domain event listeners. It calls `RevokeVendorTypeAction` for each active type, or bulk-revokes directly for performance if the vendor has 3 active types.
+
+3. **Cascading effect on Catalog (Phase 2 note):** When types are auto-revoked, the vendor's published services of those types must be taken offline. This cascade is the responsibility of a **Catalog listener** on `VendorTypeRevoked` (Phase 2 implementation). The Identity module fires the events — Catalog consumes them.
+
+### 6.3 Vendor document storage: direct S3, not MediaLibrary
+
+**القرار:** `vendor_documents` table stores `file_path` + `file_name` directly. Files stored on `s3-private` disk via `Storage::disk('s3-private')->putFileAs(...)`. Access via signed URLs (15-min TTL). MediaLibrary is NOT used for documents.
+
+**البديل:** `HasMedia` trait on `VendorDocument` with a `documents` collection in MediaLibrary.
+
+**ليه؟**
+- Documents are entities with review state (`status`, `reviewed_by`, `reviewed_at`, `review_notes`) — the review workflow lives on the `vendor_documents` table itself.
+- MediaLibrary's `media` morph table would require an extra join for every document query with no functional benefit.
+- MediaLibrary is reserved for gallery-style use cases: service image galleries (`gallery` collection with thumb/medium/large conversions) and profile avatars/covers.
+- Settlement proofs follow the same pattern (explicit columns on `withdrawals`).
+- Chat media is in Firebase Storage — entirely separate from app storage.
+
+**Reference:** `docs/specs/02_Tech_Decisions.md` §8 (Per-asset storage strategy).
+
+### 6.4 `customer_addresses` snapshot على `booking_addresses`
 
 **القرار:** عند إنشاء booking، نـ snapshot الـ address لـ `booking_addresses`، مش FK للـ `customer_addresses.id`.
 
@@ -230,7 +255,7 @@ app/Modules/Identity/
 - Booking history لازم يكون immutable. لو customer غير address بعد ما حجز، الـ booking لازم يحتفظ بالـ original delivery address.
 - Soft-deleting `customer_addresses` ما يأثرش على bookings تاريخية.
 
-### 6.4 TOTP secrets في جدول منفصل
+### 6.5 TOTP secrets في جدول منفصل
 
 **القرار:** `two_factor_secrets` table، مش عمود على `users`.
 
@@ -251,8 +276,11 @@ app/Modules/Identity/
 |---|---|---|
 | `Identity\\CustomerRegistered` | بعد commit للـ customer | `{user_id, email, locale}` |
 | `Identity\\VendorRegistered` | بعد commit للـ vendor | `{user_id, vendor_profile_id}` |
+| `Identity\\VendorApproved` | overall profile approved | `{vendor_profile_id, approved_by}` |
 | `Identity\\VendorApprovedForType` | per-type approval | `{vendor_profile_id, product_type, approved_by}` |
-| `Identity\\VendorTypeRevoked` | revocation | `{vendor_profile_id, product_type, reason}` |
+| `Identity\\VendorRejected` | overall profile rejected | `{vendor_profile_id, reason, rejected_by}` — triggers auto-revocation listener |
+| `Identity\\VendorSuspended` | vendor suspended | `{vendor_profile_id, reason, suspended_by}` — triggers auto-revocation listener |
+| `Identity\\VendorTypeRevoked` | single-type revocation | `{vendor_profile_id, product_type, reason, revoked_by}` |
 | `Identity\\PhoneVerified` | OTP confirmed | `{user_id}` |
 
 ### Events بنستهلكها:

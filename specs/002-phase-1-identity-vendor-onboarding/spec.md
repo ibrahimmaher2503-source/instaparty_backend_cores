@@ -38,7 +38,7 @@ A vendor signs up, submits business data (name, business type, governorate/city,
 **Acceptance Scenarios**:
 
 1. **Given** an unregistered user, **When** POST /api/v1/register/vendor with required fields, **Then** user + vendor_profile created with approval_status=pending, VendorRegistered event fired, admin notified
-2. **Given** an approved phone-verified vendor, **When** POST /api/v1/vendor/documents with file + type, **Then** document stored via MediaLibrary, vendor_documents row created
+2. **Given** an approved phone-verified vendor, **When** POST /api/v1/vendor/documents with file + type, **Then** file uploaded to `s3-private`, `vendor_documents` row created with `file_path`, `file_name`, `status=pending`
 3. **Given** a vendor with uploaded docs, **When** GET /api/v1/vendor/profile, **Then** full profile resource returned in request locale (EN/AR)
 4. **Given** an unauthenticated request, **When** POST /api/v1/register/vendor, **Then** 422 if duplicate phone/email
 5. **Given** a vendor role user, **When** accessing customer-only endpoint, **Then** 403
@@ -55,11 +55,12 @@ An admin reviews a pending vendor in the Filament Vendor Approval Queue and appr
 
 **Acceptance Scenarios**:
 
-1. **Given** a pending vendor, **When** admin calls ApproveVendorForTypeAction with product_type=rental, **Then** vendor_approved_product_types row created, Spatie permission granted, VendorApprovedForType event fired after commit
-2. **Given** an approved vendor, **When** admin calls RevokeVendorTypeAction, **Then** revoked_at set, permission revoked, VendorTypeRevoked event fired
-3. **Given** a pending vendor, **When** admin calls ApproveVendorAction (profile-level), **Then** approval_status=approved, approved_at + approved_by set, VendorApproved event fired
-4. **Given** a vendor not approved for digital, **When** checking `service.create.digital.own`, **Then** Gate returns false
-5. **Given** a non-admin, **When** calling ApproveVendorForTypeAction, **Then** 403
+1. **Given** a pending vendor, **When** admin calls ApproveVendorAction (profile-level), **Then** approval_status=approved, approved_at + approved_by set, VendorApproved event fired after commit
+2. **Given** an approved vendor, **When** admin calls ApproveVendorForTypeAction with product_type=rental, **Then** vendor_approved_product_types row created, Spatie permission granted, VendorApprovedForType event fired after commit
+3. **Given** a pending vendor, **When** admin calls ApproveVendorForTypeAction, **Then** 422 (profile not yet approved)
+4. **Given** an approved vendor with rental + sale approvals, **When** admin calls SuspendVendorAction, **Then** approval_status=suspended, both type rows auto-revoked (revoked_at set), Spatie permissions revoked, VendorSuspended + VendorTypeRevoked events fired
+5. **Given** a vendor not approved for digital, **When** checking `service.create.digital.own`, **Then** Gate returns false
+6. **Given** a non-admin, **When** calling ApproveVendorForTypeAction, **Then** 403
 
 ---
 
@@ -85,9 +86,24 @@ An approved vendor can update their business profile (name, bio, coverage areas,
 - Duplicate phone/email registration → 422 with field-level error in request locale
 - Vendor submitting docs after approval (updates) → allowed, new documents version stored
 - Revoking an approval type that was never granted → 422
+- Approving for a product type when `approval_status = pending` → 422 (must approve profile first)
+- Suspending or rejecting a vendor with active type approvals → all active `vendor_approved_product_types` rows auto-revoked in same transaction, Spatie permissions revoked via `RevokeAllVendorTypesOnStatusChange` listener
 - Customer attempting vendor-only endpoints → 403
 - Two-factor auth requested before enrollment → 422 with enrollment instructions
 - Coverage area referencing a city_id not in `cities` → 422 FK validation
+- OTP requested more than 3 times in 10 minutes → 429 with `Retry-After` header indicating lockout expiry (60 min)
+- OTP verification attempted during lockout window → 429
+
+---
+
+## Clarifications
+
+### Session 2026-04-27
+
+- Q: Can admin approve a vendor for product types while `approval_status` is still `pending`? → A: No — per-type approval requires `approval_status = approved` first (Option C). Additionally, when `approval_status` transitions to `suspended` or `rejected`, ALL active `vendor_approved_product_types` rows must be auto-revoked via a `RevokeAllVendorTypesOnStatusChange` listener on the `VendorSuspended`/`VendorRejected` events. Decision recorded in ADR-0003 §6.2.
+- Q: Should vendor documents use MediaLibrary or direct S3? → A: Direct `Storage::disk('s3-private')` with signed URL access (15-min TTL); `file_path`/`file_name` on `vendor_documents` table — MediaLibrary is NOT used. MediaLibrary reserved for gallery-style use cases (service images, profile avatars). Storage strategy matrix added to `docs/specs/02_Tech_Decisions.md` §8 and ADR-0003 §6.3.
+- Q: Which MIME types are allowed for vendor document uploads? → A: PDF + JPEG + PNG only (`application/pdf`, `image/jpeg`, `image/png`); max 10 MB per file.
+- Q: What is the OTP rate limit for phone verification? → A: 3 send attempts per phone number per 10-minute window, then 60-minute lockout. Applies from Phase 1 (stub enforces it; real gateway enforces it in Phase 5).
 
 ---
 
@@ -97,9 +113,9 @@ An approved vendor can update their business profile (name, bio, coverage areas,
 
 - **FR-I01**: System MUST allow customers to register with email + phone + password; phone OTP verification required before booking
 - **FR-I02**: System MUST allow vendors to register with full business profile; approval_status starts at `pending`
-- **FR-I03**: Vendors MUST be able to upload documents (CR, tax card, national ID, IBAN proof) stored via MediaLibrary
-- **FR-I04**: Admin MUST be able to approve or reject vendor profiles (overall profile approval)
-- **FR-I05**: Admin MUST be able to approve or revoke vendor authorization per product type (rental/sale/digital) independently — maps to PRD §6.3 (admin approves per type), PRD §6.2 step 4, Vendor Journey §1
+- **FR-I03**: Vendors MUST be able to upload documents (CR, tax card, national ID, IBAN proof) stored via `Storage::disk('s3-private')` with signed URL access only (15-min TTL); metadata (`file_path`, `file_name`, `doc_type`, `status`) stored on `vendor_documents` table — NOT via MediaLibrary; accepted MIME types: `application/pdf`, `image/jpeg`, `image/png`; max file size: 10 MB
+- **FR-I04**: Admin MUST be able to approve or reject vendor profiles (overall profile approval); `approval_status` transitions: `pending → approved`, `pending → rejected`, `approved → suspended`
+- **FR-I05**: Admin MUST be able to approve vendor per product type (rental/sale/digital), but ONLY after `approval_status = approved`; per-type approval on a `pending` or `rejected` vendor MUST return 422 — maps to PRD §6.3, PRD §6.2 step 4, Vendor Journey §1
 - **FR-I06**: Per-type approval MUST grant/revoke corresponding Spatie permissions (`service.create.{type}.own`, `service.update.{type}.own`, `service.delete.{type}.own`, `service.publish.{type}.own`)
 - **FR-I07**: Auth MUST support Sanctum token mode (mobile) and SPA cookie mode (web) — ADR-0003 §5 references `02_Tech_Decisions.md` §3.1
 - **FR-I08**: All registration/profile API responses MUST support EN and AR via Accept-Language header
@@ -108,6 +124,8 @@ An approved vendor can update their business profile (name, bio, coverage areas,
 - **FR-I11**: Customer addresses MUST be stored in `customer_addresses` with soft delete; snapshot to `booking_addresses` at booking time (Phase 3 will consume this)
 - **FR-I12**: Vendor coverage areas MUST reference valid `cities.id` from Geography module (cross-module via FK only, no model import)
 - **FR-I13**: Phone OTP stub provider in Phase 1 (real SMS in Phase 5); the stub MUST be swappable via the channel adapter pattern
+- **FR-I14**: When `approval_status` transitions to `suspended` or `rejected`, the system MUST auto-revoke ALL active `vendor_approved_product_types` rows and revoke the corresponding Spatie permissions; implemented as `RevokeAllVendorTypesOnStatusChange` listener on `VendorSuspended` and `VendorRejected` events (fires via `DB::afterCommit`)
+- **FR-I15**: OTP send requests MUST be rate-limited to 3 attempts per phone number per 10-minute window; after 3 failed attempts the phone is locked out for 60 minutes; lockout enforced via Redis (key `otp_lockout:{phone_e164}`, TTL 3600s); applies from Phase 1 (stub) through Phase 5 (real SMS)
 
 ### Key Entities
 
@@ -132,6 +150,7 @@ An approved vendor can update their business profile (name, bio, coverage areas,
 - **SC-004**: Pest test suite covers happy path, 401, 403, validation, and locale for every Identity endpoint — test run completes in under 60 seconds
 - **SC-005**: Vendor without type approval receives 403 when attempting service creation (enforced by Spatie Gate, not just middleware)
 - **SC-006**: All approval/revocation actions appear in the audit log with actor, timestamp, and changed values
+- **SC-007**: The 4th OTP send attempt within 10 minutes returns 429 with a `Retry-After` header — verified by automated test
 
 ---
 
