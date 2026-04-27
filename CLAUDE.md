@@ -1,4 +1,4 @@
-# InstaParty — Project Memory (Constitution)
+﻿# InstaParty — Project Memory (Constitution)
 
 > Loaded by Claude Code at every session start. Treat as the project's constitution.
 > If anything in this file conflicts with a chat instruction, **this file wins** unless explicitly overridden by Ibrahim in chat.
@@ -13,10 +13,26 @@ When specs disagree, resolve in this order (top wins):
 2. **`CLAUDE.md`** (this file)
 3. `docs/specs/03_Three_Product_Types.md`
 4. `docs/specs/02_Tech_Decisions.md`
-5. `docs/specs/05_Software_Description.md`
-6. Conversation
+5. `docs/specs/11_DB_Schema.md` (LOCKED 60-table schema)
+6. `docs/specs/09_Phasing_Plan.md` (week-by-week scope and cut-list)
+7. `docs/specs/10_Package_List.md` (LOCKED package list)
+8. `docs/specs/05_Software_Description.md`
+9. Conversation
 
-`docs/specs/04_Bilingual_Spec.md`, `06_Customer_Journey.md`, `07_Vendor_Journey.md`, `08_Admin_Journey.md` are reference material — read when relevant.
+Reference material (read when relevant, not always):
+- `docs/specs/04_Bilingual_Spec.md` — EN/AR/RTL implementation
+- `docs/specs/06_Customer_Journey.md` — customer flow with Mermaid
+- `docs/specs/07_Vendor_Journey.md` — vendor flow with Mermaid
+- `docs/specs/08_Admin_Journey.md` — admin flow with Mermaid
+
+Modular rules (auto-loaded by Claude Code on file-glob match):
+- `.claude/rules/migrations.md` — when editing migrations
+- `.claude/rules/schema-cheatsheet.md` — when editing migrations, models, or repositories (compact table inventory)
+- `.claude/rules/actions.md` — when editing Action classes
+- `.claude/rules/filament.md` — when editing Filament Resources
+- `.claude/rules/filament-components.md` — Filament v3 UI component reference
+- `.claude/rules/modules.md` — when editing anything in `app/Modules/`
+- `.claude/rules/product-types.md` — when editing Catalog/Booking/Discovery/Reviews/Imports
 
 ---
 
@@ -184,6 +200,36 @@ If asked to build any of these, **push back** and reference this file + PRD §5.
 
 ---
 
+## Phasing Discipline (8-week plan — see `docs/specs/09_Phasing_Plan.md`)
+
+When asked to build a feature, first check **which phase it belongs to**. Only build features in the current or earlier phase.
+
+- **Phase 0 (W1):** Foundation, Geography, Filament install
+- **Phase 1 (W2):** Identity & Vendor onboarding (per-type approval)
+- **Phase 2 (W2-W3):** Catalog (3 product types fully scaffolded)
+- **Phase 3 (W4):** Discovery + Booking core + state machines
+- **Phase 4 (W5):** Payments (Paymob) + Settlement + Wallets + Withdrawals
+- **Phase 5 (W6):** Communications + Reviews + Loyalty
+- **Phase 6 (W7):** Reporting + Excel imports for all 3 types + Audit + CMS
+- **Phase 7 (W8):** Hardening + Staging deploy
+
+Each phase has a **cut-list** in `09_Phasing_Plan.md` for when behind schedule. If Ibrahim says "I'm a week behind," reference the cut-list and recommend deferrals — don't silently keep building everything.
+
+---
+
+## Package Discipline — `docs/specs/10_Package_List.md` is LOCKED
+
+**Never `composer require` a package not on the list.** When tempted:
+
+1. Stop and ask Ibrahim: "Is this package worth adding?"
+2. Justify it in one paragraph (problem it solves, alternatives considered)
+3. Update `10_Package_List.md` in the same commit
+4. Then run the install
+
+Filament plugin sprawl is the most common way to lose Phase 1 — keep to the curated plugins listed in `10_Package_List.md` §3. Anything else is Phase 2 conversation.
+
+---
+
 ## Build & Run Commands
 
 ```bash
@@ -264,18 +310,31 @@ Detailed rules: `.claude/rules/migrations.md`.
 - Use `filament/spatie-laravel-translatable-plugin` for all translatable fields with EN/AR tabs
 - Use `filament-shield` for permissions
 - Run `php artisan shield:generate --all` after creating new resources
+- Use the curated plugin list ONLY (see `docs/specs/10_Package_List.md` §3) — no plugin sprawl
 
-Detailed rules: `.claude/rules/filament.md`.
+**Component reference:** `.claude/rules/filament-components.md` is the authoritative list of Filament v3 forms / tables / filters / actions / infolists / widgets / notifications / plugin patterns to use. It loads automatically when you touch a Filament file. **Use those exact namespaces and patterns** — don't improvise component names.
+
+**Money columns** use `->money('EGP', divideBy: 100)` — never display `_minor` raw.
+
+**Product type columns** use the per-type colored badge pattern in `filament-components.md` §2.
+
+Detailed rules: `.claude/rules/filament.md` (resource shape) + `.claude/rules/filament-components.md` (component reference).
 
 ---
 
 ## Always Read These Specs Before Architectural Work
 
-- Schema/DB questions → `docs/specs/02_Tech_Decisions.md` §4
+- Schema/DB questions → `docs/specs/11_DB_Schema.md` (full table specs) or `.claude/rules/schema-cheatsheet.md` (auto-loaded quick reference)
+- Tech stack/architecture questions → `docs/specs/02_Tech_Decisions.md`
 - Product-type questions → `docs/specs/03_Three_Product_Types.md`
 - Bilingual/i18n questions → `docs/specs/04_Bilingual_Spec.md`
 - Booking flow questions → `docs/specs/01_PRD.md` §6 + §7
 - Customer/Vendor/Admin journey → `docs/specs/06_*.md`, `07_*.md`, `08_*.md`
+- "Should I build this now?" → `docs/specs/09_Phasing_Plan.md`
+- "Can I install this package?" → `docs/specs/10_Package_List.md`
+- Filament UI components → `.claude/rules/filament-components.md` (auto-loads)
+- "Why was this decided this way?" → `docs/adr/`
+- **Starting a new module → ALWAYS create an ADR using `docs/adr/templates/0002-new-module.md` BEFORE writing migrations**
 
 ---
 
@@ -284,11 +343,14 @@ Detailed rules: `.claude/rules/filament.md`.
 Push back honestly when:
 
 - I propose something out of Phase 1 scope (reference §5.2 of PRD)
+- I propose something out of the **current phase** when running tight on time (reference `09_Phasing_Plan.md` cut-list)
+- I want to install a package not on `10_Package_List.md`
 - I propose something contradicting Tech Decisions
 - I propose generic "service" code that ignores the three product types
 - I propose floats for money
 - I propose business logic in Models
 - I propose if/elseif chains on type strings
 - I propose Phase 2 features without scoping them as such
+- I propose a Filament component or pattern that's not in `.claude/rules/filament-components.md`
 
 Don't be silent — name the conflict and reference the spec.
