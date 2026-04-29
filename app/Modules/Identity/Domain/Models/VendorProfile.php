@@ -58,7 +58,7 @@ use Spatie\Translatable\HasTranslations;
  *
  * @method static \Illuminate\Database\Eloquent\Builder<static> pending()
  * @method static \Illuminate\Database\Eloquent\Builder<static> approved()
- * @method static \Illuminate\Database\Eloquent\Builder<static> approvedForType(\App\Modules\Shared\Domain\Enums\ProductType $type)
+ * @method static \Illuminate\Database\Eloquent\Builder<static> approvedForType(\App\Modules\Catalog\Domain\Enums\ProductType $type)
  */
 class VendorProfile extends Model
 {
