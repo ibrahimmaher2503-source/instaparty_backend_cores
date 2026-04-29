@@ -125,9 +125,9 @@ class OccasionResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index'  => ListOccasions::route('/'),
+            'index' => ListOccasions::route('/'),
             'create' => CreateOccasion::route('/create'),
-            'edit'   => EditOccasion::route('/{record}/edit'),
+            'edit' => EditOccasion::route('/{record}/edit'),
         ];
     }
 }

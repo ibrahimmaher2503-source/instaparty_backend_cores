@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Modules\Catalog\Filament\Resources;
 
-use App\Modules\Catalog\Domain\Models\Category;
 use App\Modules\Catalog\Domain\Enums\ProductType;
+use App\Modules\Catalog\Domain\Models\Category;
 use App\Modules\Catalog\Filament\Resources\CategoryResource\Pages\CreateCategory;
 use App\Modules\Catalog\Filament\Resources\CategoryResource\Pages\EditCategory;
 use App\Modules\Catalog\Filament\Resources\CategoryResource\Pages\ListCategories;
@@ -100,8 +100,8 @@ class CategoryResource extends Resource
                 ->schema([
                     CheckboxList::make('allowed_product_types')
                         ->options([
-                            ProductType::Rental->value  => ProductType::Rental->label(),
-                            ProductType::Sale->value    => ProductType::Sale->label(),
+                            ProductType::Rental->value => ProductType::Rental->label(),
+                            ProductType::Sale->value => ProductType::Sale->label(),
                             ProductType::Digital->value => ProductType::Digital->label(),
                         ])
                         ->columns(3)
@@ -149,9 +149,9 @@ class CategoryResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index'  => ListCategories::route('/'),
+            'index' => ListCategories::route('/'),
             'create' => CreateCategory::route('/create'),
-            'edit'   => EditCategory::route('/{record}/edit'),
+            'edit' => EditCategory::route('/{record}/edit'),
         ];
     }
 }
