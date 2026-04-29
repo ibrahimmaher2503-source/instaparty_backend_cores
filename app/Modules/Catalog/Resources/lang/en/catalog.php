@@ -78,6 +78,7 @@ return [
         'draft'          => 'Draft',
         'pending_review' => 'Pending Review',
         'published'      => 'Published',
+        'rejected'       => 'Rejected',
         'archived'       => 'Archived',
     ],
 

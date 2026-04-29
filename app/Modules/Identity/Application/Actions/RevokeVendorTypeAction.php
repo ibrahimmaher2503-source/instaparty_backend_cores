@@ -52,7 +52,12 @@ class RevokeVendorTypeAction
             $log->withProperties(['product_type' => $productType->value, 'permissions_revoked' => $permissions, 'reason' => $revokeReason])
                 ->log('revoked_vendor_type');
 
-            DB::afterCommit(fn () => event(new VendorTypeRevoked($row)));
+            DB::afterCommit(fn () => event(new VendorTypeRevoked(
+                vendorProfileId: $vendorProfile->id,
+                productType: $productType,
+                revokedBy: $actorId,
+                reason: $revokeReason,
+            )));
 
             return $row;
         });

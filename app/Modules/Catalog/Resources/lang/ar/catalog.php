@@ -78,6 +78,7 @@ return [
         'draft'          => 'مسودة',
         'pending_review' => 'قيد المراجعة',
         'published'      => 'منشور',
+        'rejected'       => 'مرفوض',
         'archived'       => 'مؤرشف',
     ],
 
