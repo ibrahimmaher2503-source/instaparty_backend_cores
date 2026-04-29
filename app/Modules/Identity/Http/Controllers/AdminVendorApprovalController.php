@@ -14,7 +14,7 @@ use App\Modules\Identity\Http\Requests\ApproveVendorForTypeRequest;
 use App\Modules\Identity\Http\Requests\RejectVendorProfileRequest;
 use App\Modules\Identity\Http\Requests\RevokeVendorTypeRequest;
 use App\Modules\Identity\Http\Resources\VendorProfileResource;
-use App\Modules\Shared\Domain\Enums\ProductType;
+use App\Modules\Catalog\Domain\Enums\ProductType;
 use App\Modules\Shared\Http\ApiResponse;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
