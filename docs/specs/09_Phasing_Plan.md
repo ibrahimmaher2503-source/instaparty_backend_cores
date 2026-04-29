@@ -1,420 +1,1183 @@
-# InstaParty — Phasing Plan (Phase 1, 8 weeks aggressive solo)
+# InstaParty — Phasing Plan v2 (Phase 1, 16 micro-phases)
 
+> **Why v2 exists:** Phase 2 (7 days) and Phases 3/4 (5 days each) في الخطة الأصلية كبار جداً للـ AI. Claude Code بيفقد context في النص. الحل: كل phase = ≤3 أيام = chunk قابل للـ scope-audit + ADR + tests + commit.
+>
 > **Owner:** Ibrahim (solo full-stack)
-> **Scope:** Backend (Laravel API) + Admin (Filament v3) only. Mobile and Next.js come AFTER Phase 1.
-> **Honest sizing:** This is aggressive. Plan assumes ~6 productive hours/day, no major distractions, no client scope changes.
+> **Scope:** Backend (Laravel API) + Admin (Filament v3) only
+> **Total:** 8 weeks (40 working days) split into 16 micro-phases
+> **Hours:** ~6 productive hours/day, no major distractions
 
 ---
 
-## Source-of-truth rule
+## What Changed vs v1
 
-Every phase must respect: `docs/specs/01_PRD.md`, `CLAUDE.md`, `docs/specs/03_Three_Product_Types.md`, `docs/specs/02_Tech_Decisions.md`, `docs/specs/10_Package_List.md`, `.claude/rules/filament-components.md`.
-
-Phase 2 features (subscription tiers, platform packages, dispute engine, card templates, page slider, QR catalog, advanced tax) are **forbidden** in Phase 1. If asked to add them, push back and reference `01_PRD.md` §5.2.
-
----
-
-## Risk register (read once, refer back when slipping)
-
-| Risk | Likelihood | Impact | Mitigation |
-|---|---|---|---|
-| Three product types triple effort vs single-type marketplace | High | High | Commit to per-type pattern in W2; once one type works, replicate via copy-modify |
-| Paymob sandbox webhook signing | High | Medium | Allocate full 2 days in W5; have ngrok ready Day 1 |
-| Bilingual EN/AR Filament forms slower than expected | High | Medium | Use translatable plugin from W2; never delay AR until later |
-| Meilisearch Arabic tokenizer config | Medium | Low | Standard `ar` tokenizer + index per locale field works for Phase 1 |
-| Real-time chat moderation (regex blocker) | Medium | Medium | Phase 1 = synchronous regex check before write; advanced ML can be Phase 2 |
-| Excel imports across 3 product types | Medium | High | Start with one type's importer in W2-3; replicate in W7 |
-| Test coverage falling behind | High | High | Pest tests written *with* each module — never deferred |
-
-**If any risk fires and you fall a week behind, follow the cut-list per phase.**
+| v1 (old) | v2 (new) |
+|---|---|
+| 8 phases, 5-7 days each | 16 phases, ≤3 days each |
+| Mixed concerns per phase | One concern per phase |
+| Phase = "Catalog" (everything) | Phases = "Catalog: Foundation" + "Catalog: Rental Type" + "Catalog: Sale Type" + "Catalog: Digital Type" + "Catalog: Excel" |
+| Cut-list general | Cut-list per micro-phase |
+| One ADR per phase (sometimes none) | One ADR per phase (mandatory) |
+| One demo per week | One demo per phase (3 days) |
 
 ---
 
-## Phase 0 — Foundation (Week 1)
+## Source-of-Truth Rule (unchanged from v1)
 
-**Goal:** A bootable Laravel 12 + Filament v3 app with the Geography module, Docker dev environment, CI pipeline. Verified deployable to staging.
+Every phase must respect: `01_PRD.md`, `CLAUDE.md`, `03_Three_Product_Types.md`, `02_Tech_Decisions.md`, `10_Package_List.md`, `11_DB_Schema.md`, `.claude/rules/*.md`.
 
-### Day 1
+Phase 2 features (subscription tiers, platform packages, dispute engine, card templates, page slider, QR catalog, advanced tax) are **forbidden** in Phase 1.
+
+---
+
+## Phase Structure (every phase follows this template)
+
+Each phase has:
+
+```
+PHASE X.Y — {Name} ({N} days)
+
+GOAL: One sentence. What's the demo at the end?
+
+PRD COVERAGE: FR-XX, FR-YY (cite specific FRs)
+
+ADR REQUIRED: ADR-NNNN-{slug}.md (created on Day 1)
+
+TABLES TOUCHED: list (only the ones THIS phase creates/modifies)
+
+DELIVERABLE: One concrete thing demonstrable in /admin or via API
+
+DAYS:
+  Day 1: {what}
+  Day 2: {what}
+  Day 3: {what} (if applicable)
+
+CUT-LIST: What defers to Phase 1.5 if this micro-phase slips
+
+EXIT CRITERIA: 3-5 checkboxes that prove "done"
+
+BLOCKS: Which next phases depend on this one
+```
+
+---
+
+## Risk Register (read once)
+
+Same risks as v1, but now mitigated by smaller scope per phase:
+
+| Risk | Mitigation in v2 |
+|---|---|
+| Three product types triple effort | Each type gets its own phase (2.2, 2.3, 2.4). Pattern locked in 2.2, replicated in 2.3, 2.4. |
+| Paymob webhook signing | Phase 4.1 is JUST the gateway adapter. Phase 4.2 is JUST refunds. |
+| Bilingual Filament forms slower | Geography (1.0) sets the EN/AR pattern. Every later Filament resource follows same pattern. |
+| Meilisearch tokenizer | Phase 3.1 (Discovery) is isolated. If it breaks, it doesn't block Booking. |
+| Excel imports complexity | Phase 2.5 (rental Excel only). Phase 6.1 (sale + digital Excel) — separate. |
+| Test coverage falling behind | Each phase has Pest tests as Day-3 task — non-negotiable. |
+
+---
+
+## Phase Index (16 micro-phases)
+
+| Phase | Name | Days | Week | Module |
+|---|---|---|---|---|
+| **0.0** | Foundation Setup | 2 | W1 | — |
+| **0.1** | Geography Module | 2 | W1 | Geography |
+| **0.2** | Identity Migrations + MoneyCast | 1 | W1 | Identity (DB only) |
+| **1.0** | Identity Core (Models + Auth) | 3 | W2 | Identity |
+| **1.1** | Vendor Onboarding + Approval | 2 | W2 | Identity |
+| **2.0** | Catalog Foundation (base + occasions + categories) | 2 | W2-3 | Catalog |
+| **2.1** | Catalog: Rental Type | 2 | W3 | Catalog |
+| **2.2** | Catalog: Sale Type | 2 | W3 | Catalog |
+| **2.3** | Catalog: Digital Type + Inventory | 2 | W3 | Catalog |
+| **2.4** | Catalog: Rental Excel Import | 1 | W3 | Catalog |
+| **3.0** | Discovery (Meilisearch) | 2 | W4 | Discovery |
+| **3.1** | Booking: Draft + Items | 2 | W4 | Booking |
+| **3.2** | Booking: Negotiation Loop | 2 | W4-5 | Booking |
+| **4.0** | Payments: Paymob Gateway | 2 | W5 | Payments |
+| **4.1** | Payments: Refunds (per-type) | 1 | W5 | Payments |
+| **4.2** | Settlement: Wallets + Commissions + Withdrawals | 3 | W5-6 | Settlement |
+| **5.0** | Communication: Notifications | 2 | W6 | Communication |
+| **5.1** | Reviews | 1 | W6 | Reviews |
+| **5.2** | Loyalty (per-vendor) | 2 | W6 | Loyalty |
+| **5.3** | Marketing Campaigns | 1 | W7 | Communication |
+| **6.0** | Reports + Audit Log | 2 | W7 | Reporting |
+| **6.1** | Sale + Digital Excel Imports | 1 | W7 | Catalog |
+| **6.2** | CMS Pages + Settings | 1 | W7 | Cross-cutting |
+| **7.0** | Hardening: Performance + Security | 2 | W8 | All |
+| **7.1** | Staging Deploy + Smoke Tests | 2 | W8 | DevOps |
+| **7.2** | Documentation + Retrospective | 1 | W8 | All |
+
+**Total: 26 phases × ~1.5 days avg = 40 days = 8 weeks.** Some phases are 1 day, some are 3 — average works out.
+
+
+---
+
+## PHASE 0.0 — Foundation Setup (2 days, Week 1)
+
+**GOAL:** Bootable Laravel 12 + Filament v3 app with Docker Compose stack running locally.
+
+**PRD COVERAGE:** §3 (Technology Baseline), NFR (architecture)
+
+**ADR REQUIRED:** None (using locked Tech Decisions §1)
+
+**TABLES TOUCHED:** Framework tables only (users, sessions, jobs, cache, personal_access_tokens, media via Spatie)
+
+**DELIVERABLE:** `docker compose up` brings the stack online; `php artisan migrate` works; `/admin` returns 200.
+
+**DAYS:**
+
+### Day 1 — Project + Packages
 - [ ] `composer create-project laravel/laravel instaparty`
-- [ ] Drop in this entire setup bundle: `CLAUDE.md`, `docs/specs/`, `.claude/`
-- [ ] Make hooks executable: `chmod +x .claude/hooks/*.sh`
-- [ ] `composer require` foundation packages (see `10_Package_List.md` §1)
-- [ ] `git init`, first commit, push to GitHub
-
-### Day 2
-- [ ] Docker Compose: app, mysql, redis, meilisearch, mailpit, minio
+- [ ] Drop in setup bundle (CLAUDE.md, docs/specs/, .claude/)
+- [ ] `chmod +x .claude/hooks/*.sh`
+- [ ] `composer require` Day-1 packages from `10_Package_List.md` §1
+- [ ] `git init` + first commit + push to GitHub
 - [ ] `.env.example` with all keys documented
+
+### Day 2 — Docker + Auth Scaffold + Filament
+- [ ] Docker Compose: app, mysql, redis, meilisearch, mailpit, minio
 - [ ] Laravel Sanctum scaffold (SPA mode)
-- [ ] Spatie Permission + roles seeder
-- [ ] Filament v3 install at `/admin`, custom resource discovery scanning `app/Modules/*/Filament/Resources/`
+- [ ] Spatie Permission install + roles seeder
+- [ ] Filament v3 install at `/admin` with custom resource discovery for `app/Modules/*/Filament/Resources/`
 
-### Day 3
-- [ ] **Geography module** — full slice: migrations (governorates, regions, cities), models, factories, seeders for Egypt, Filament Resources with translatable EN/AR
-- [ ] First Pest tests: model factory, translatable read/write
-- [ ] **Verification:** seed Egypt geography, browse it in Filament
+**CUT-LIST:** Defer Caddy/staging (move to Phase 7.1)
 
-### Day 4
-- [ ] **Identity module migrations only:** users, vendor_profiles, vendor_documents, vendor_approved_product_types, vendor_business_hours, vendor_coverage_areas, customer_profiles, customer_addresses, user_devices, two_factor_secrets
-- [ ] Run `php artisan migrate` and verify schema
-- [ ] Add `MoneyCast` (custom Eloquent cast for `Brick\Money`)
+**EXIT CRITERIA:**
+- ✅ `docker compose up` works
+- ✅ `php artisan migrate` runs without error
+- ✅ `/admin` shows Filament login (even with no admin user yet)
+- ✅ `git status` clean after commit
 
-### Day 5
-- [ ] GitHub Actions CI: install, migrate, run Pest, run Pint, run PHPStan
-- [ ] Caddy + Docker compose for staging
-- [ ] Manual deploy to Hetzner CX22 staging box
-- [ ] **Sanity check:** Visit `https://staging.instaparty.com/admin` and log in
-
-### End of W1 — Deliverables
-- Bootable app at `/` (API) and `/admin` (Filament)
-- Geography module complete with tests
-- Identity migrations applied (models/Resources come in W2)
-- CI green
-- Staging deployed
-
-### W1 Cut-list (if behind)
-- Defer Caddy/staging deploy to W8
-- Skip CI for now, run tests locally only
+**BLOCKS:** Phase 0.1, all other phases
 
 ---
 
-## Phase 1 — Identity & Vendor Onboarding (Week 2 first half)
+## PHASE 0.1 — Geography Module (2 days, Week 1)
 
-**Goal:** Vendors can sign up, upload documents, get approved per product type. Customers can sign up.
+**GOAL:** Egypt geography seeded and browsable in Filament with EN+AR.
 
-### Days 6-7
-- [ ] Identity module: Models (User, VendorProfile, CustomerProfile, etc.), all relationships, scopes, casts
+**PRD COVERAGE:** Cross-cutting infrastructure (no specific FR — used by all later modules)
+
+**ADR REQUIRED:** `ADR-0004-geography-module.md`
+
+**TABLES TOUCHED:** governorates, regions, cities
+
+**DELIVERABLE:** Admin can browse Egypt's governorates/regions/cities in `/admin` with locale switcher working.
+
+**DAYS:**
+
+### Day 1 — Migrations + Models + Factories
+- [ ] Write ADR-0004 first (use `/new-module-adr Geography`)
+- [ ] Migrations for governorates, regions, cities (with denormalized `governorate_id` on cities)
+- [ ] Models: Governorate, Region, City — translatable `name` JSON column, public_id ULID
+- [ ] Factories for all three
+- [ ] EgyptGeographySeeder (all 27 governorates + major cities)
+
+### Day 2 — Filament Resources + Tests
+- [ ] GovernorateResource, RegionResource, CityResource with translatable EN/AR tabs
+- [ ] Filter by parent (cities by region, regions by governorate)
+- [ ] `php artisan shield:generate --all`
+- [ ] Pest tests: factory smoke, translatable read/write, FK protection on delete
+
+**CUT-LIST:** Defer non-Egypt seeds (KSA, UAE) to Phase 2 multi-country
+
+**EXIT CRITERIA:**
+- ✅ ADR-0004 accepted
+- ✅ All Egypt geography seeded
+- ✅ Filament browse works in EN AND AR
+- ✅ All Pest tests pass
+- ✅ Architecture test: Geography doesn't import other module models
+
+**BLOCKS:** Phase 0.2 (Identity FKs depend on cities), Phase 2.x (vendor coverage areas)
+
+---
+
+## PHASE 0.2 — Identity Migrations + MoneyCast (1 day, Week 1)
+
+**GOAL:** All Identity tables exist (no models yet) + `MoneyCast` ready for use.
+
+**PRD COVERAGE:** Foundation for FR-21, FR-28
+
+**ADR REQUIRED:** `ADR-0003-identity-module.md` (already exists in template — finalize Phase 0 sections)
+
+**TABLES TOUCHED:** users (extends), vendor_profiles, vendor_documents, vendor_approved_product_types, vendor_business_hours, vendor_coverage_areas, customer_profiles, user_devices, two_factor_secrets, customer_addresses
+
+**DELIVERABLE:** All Identity migrations applied. `MoneyCast` working with one demo column.
+
+**DAYS:**
+
+### Day 1 — Migrations + MoneyCast
+- [ ] Finalize ADR-0003 (Phase 0 portion)
+- [ ] All 10 Identity migrations in dependency order (users → vendor_profiles → ... → customer_addresses)
+- [ ] `MoneyCast` in `app/Modules/Shared/Domain/Casts/`
+- [ ] Pest test: migrations apply cleanly, FK to cities works (restrictOnDelete)
+- [ ] Pest test: MoneyCast converts `_minor` + `_currency` ↔ `Brick\Money\Money`
+
+**CUT-LIST:** None — these migrations are required for everything
+
+**EXIT CRITERIA:**
+- ✅ `php artisan migrate:fresh` succeeds
+- ✅ FK constraints enforced (try delete city with vendor coverage → fails)
+- ✅ MoneyCast unit test passes
+
+**BLOCKS:** Phase 1.0, all phases involving money
+
+---
+
+## PHASE 1.0 — Identity Core (Models + Auth) (3 days, Week 2)
+
+**GOAL:** Customers and vendors can register and log in via API.
+
+**PRD COVERAGE:** FR-19 (auth foundation), partial FR-1 (sign-up flow)
+
+**ADR REQUIRED:** ADR-0003 (Identity) — already started
+
+**TABLES TOUCHED:** All Identity tables (data layer only — schema already done)
+
+**DELIVERABLE:** `POST /api/v1/customer/register` and `POST /api/v1/vendor/register` work end-to-end. Login returns Sanctum token.
+
+**DAYS:**
+
+### Day 1 — Models + Sanctum + Roles
+- [ ] All Identity Models with relationships, casts, scopes (NO business logic)
 - [ ] Sanctum SPA + token guards configured
-- [ ] Spatie roles + per-type vendor permissions: `service.create.{rental|sale|digital}.own` (and `update`, `delete`, `publish`)
-- [ ] Auth Actions: `RegisterCustomerAction`, `RegisterVendorAction`, `LoginAction`, `LogoutAction`
-- [ ] Phone verification flow (OTP via SMS gateway — stub provider in W2, real in W6)
-
-### Day 8
-- [ ] Filament Resources:
-  - Users (basic)
-  - Vendor Profiles
-  - **Vendor Approval Queue** (with per-product-type approval action buttons)
-  - Customer Profiles (read-only)
-- [ ] Shield permissions generated: `php artisan shield:generate --all`
+- [ ] Spatie roles seeder: customer, vendor, admin
+- [ ] Per-product-type vendor permissions: `service.{action}.{type}.own` × 4 actions × 3 types = 12 permissions
 - [ ] First admin user seeder
 
-### W2 (first half) — Deliverables
-- Sign up as customer or vendor via API
-- Admin can approve/reject vendor per product type
-- Filament Vendor Approval Queue functional in EN + AR
+### Day 2 — Auth Actions + API
+- [ ] `RegisterCustomerAction`, `RegisterVendorAction`, `LoginAction`, `LogoutAction`
+- [ ] Form Requests with bilingual validation messages
+- [ ] API Resources: `UserResource`, `VendorProfileResource`, `CustomerProfileResource`
+- [ ] Routes in `app/Modules/Identity/Routes/{customer,vendor,admin}.php`
+- [ ] Phone verification stub (real OTP in Phase 5.0)
+
+### Day 3 — Tests
+- [ ] Pest: register customer happy path
+- [ ] Pest: register vendor happy path (creates vendor_profile)
+- [ ] Pest: login returns valid Sanctum token
+- [ ] Pest: validation rules (duplicate phone → 422, invalid email → 422)
+- [ ] Pest: locale (EN response, AR response)
+- [ ] Pest: rate limiting on register (max 5/min)
+
+**CUT-LIST:**
+- Defer 2FA setup → Phase 7.0 (Hardening)
+- Defer phone OTP delivery → Phase 5.0 (stub responses for now)
+- Defer customer address book API → Phase 1.1 if tight
+
+**EXIT CRITERIA:**
+- ✅ Customer can register, log in, log out via API
+- ✅ Vendor can register (gets `vendor_profile` with `approval_status=pending`)
+- ✅ Tokens work for authenticated routes
+- ✅ All Pest tests pass
+
+**BLOCKS:** Phase 1.1, Phase 2.x (vendor must exist to create services)
 
 ---
 
-## Phase 2 — Catalog (Week 2 second half + Week 3)
+## PHASE 1.1 — Vendor Onboarding + Approval (2 days, Week 2)
 
-**Goal:** Vendors can create rental, sale, and digital services with full bilingual fields. Excel import works for at least one type. Filament has 3 separate Service Resources.
+**GOAL:** Admin approves vendors per product type via Filament. Vendor sees approval status.
 
-### Days 9-10
-- [ ] Catalog migrations: occasions, categories, service_themes, category_service_field_schemas, services (base), service_rental_details, service_sale_details, service_digital_details, service_pricing_tiers, service_availability_blocks, service_excluded_dates, service_themes pivot, **service_inventory_reservations**
-- [ ] `App\Modules\Catalog\Domain\Enums\ProductType` enum
-- [ ] Models with `$translatable` arrays
-- [ ] Per-type Form Requests: `CreateRentalServiceRequest`, etc.
+**PRD COVERAGE:** FR-29 (admin approves vendors), Tech Decisions §2.4 (per-type approval)
 
-### Days 11-12
-- [ ] Per-type Actions:
-  - `CreateRentalServiceAction`, `UpdateRentalServiceAction`
-  - `CreateSaleServiceAction`, `UpdateSaleServiceAction`
-  - `CreateDigitalServiceAction`, `UpdateDigitalServiceAction`
-  - `PublishServiceAction`, `ArchiveServiceAction`, `ModerateServiceAction` (cross-type)
-- [ ] `ProductType` enum used everywhere with `match($enum)` for cross-type code
-- [ ] API endpoints (vendor-facing): `POST /api/v1/vendor/services/{type}`, `GET /api/v1/vendor/services?type={...}`
-- [ ] API Resources: `RentalServiceResource`, `SaleServiceResource`, `DigitalServiceResource` extending base
+**ADR REQUIRED:** Already covered in ADR-0003 §6.2
 
-### Days 13-14
-- [ ] **Filament Resources for services — all three:**
-  - `RentalServiceResource`
-  - `SaleServiceResource`
-  - `DigitalServiceResource`
-- All grouped under "Services" navigation. Each with translatable EN/AR tabs.
-- [ ] Filament Resources: Occasions, Categories, Service Themes
-- [ ] Inventory reservation Action: `HoldServiceInventoryAction` (15-min cart hold, 24-hour payment hold)
-- [ ] Pest tests covering all three types per Action
+**TABLES TOUCHED:** vendor_profiles (status updates), vendor_approved_product_types, vendor_documents
 
-### Day 15
-- [ ] **Excel imports** — start with rental template:
-  - `RentalServicesImport` (Maatwebsite Excel)
-  - Bilingual columns (`name_en`, `name_ar`, etc.)
-  - Validation: per-row, no partial commits
-  - Background queue for >50 rows
-- [ ] `ImportRentalServicesFromExcelAction`
-- [ ] Filament page: bulk-upload with progress + per-row error feedback in user's locale
+**DELIVERABLE:** Admin uses Filament "Vendor Approval Queue" to approve a vendor for `rental` only. Vendor's API shows `approval_status=approved` for rental, no rights for sale/digital.
 
-### End of W2-W3 — Deliverables
-- Three product types fully scaffolded in DB, code, Filament
-- Vendors create services via API per type (each tested)
-- Vendors bulk-import rental services from Excel
-- Per-type Filament Resources working in EN + AR
+**DAYS:**
 
-### W2-3 Cut-list (if behind)
-- Defer Sale and Digital Excel importers to W7
-- Defer service themes pivot/UI (use simple text tag for now)
-- Defer pricing tier UI (one base price per service for now)
+### Day 1 — Approval Actions + Filament Queue
+- [ ] Actions: `ApproveVendorAction`, `ApproveVendorForTypeAction`, `RejectVendorAction`, `RevokeVendorTypeAction`, `SuspendVendorAction`
+- [ ] Filament: `VendorProfileResource`, `VendorApprovalQueueResource` with per-type approve/revoke buttons
+- [ ] Document upload (Spatie Media Library) for CR, tax card, IBAN proof
+- [ ] Domain events: `VendorApprovedForType`, `VendorTypeRevoked`
+
+### Day 2 — Tests + Notification Stubs
+- [ ] Pest: approve vendor for rental → can create rental services (Phase 2.x), can't create sale
+- [ ] Pest: revoke type → service creation gated
+- [ ] Pest: full audit trail in `vendor_approved_product_types`
+- [ ] Notification stubs (real dispatch in Phase 5.0): "vendor approved", "vendor rejected"
+
+**CUT-LIST:**
+- Defer document review workflow (admin marks each doc approved/rejected) — Phase 7.0
+- Defer vendor business hours UI — Phase 2.0
+
+**EXIT CRITERIA:**
+- ✅ Admin Filament queue shows pending vendors
+- ✅ Per-type approval buttons work
+- ✅ Authorization gates fire on `service.create.{type}.own` per type
+- ✅ Audit log captures every approval/revocation
+
+**BLOCKS:** Phase 2.x (vendor must be approved per type to create services)
 
 ---
 
-## Phase 3 — Discovery + Booking Core (Week 4)
+## PHASE 2.0 — Catalog Foundation (2 days, Week 2-3)
 
-**Goal:** Customers browse services, build a booking with multiple vendors, and submit it. Vendors see incoming bookings.
+**GOAL:** Occasions, categories (hierarchical), and field schemas in place. NO services yet.
 
-### Day 16
-- [ ] Discovery module:
-  - Meilisearch setup (Scout driver) with `product_type` facet
-  - Service indexer with per-locale fields
-  - `SearchServicesAction` with type filter
-  - Customer-facing API: `GET /api/v1/customer/services?occasion=...&type=...&filters=...`
+**PRD COVERAGE:** FR-1, FR-19, FR-20, BR-5
 
-### Days 17-18
-- [ ] Booking migrations: bookings, **booking_snapshots** (versioned read model), booking_addresses, booking_locks, booking_vendors, booking_items, booking_modifications, booking_state_transitions, booking_customer_notes
-- [ ] Booking module Models, with the **3 orthogonal status columns** on `bookings`: `lifecycle_status`, `payment_status`, `fulfillment_status`
-- [ ] Per-type fulfillment state machines on `booking_items.item_status` (3 distinct graphs via spatie/laravel-model-states)
+**ADR REQUIRED:** `ADR-0005-catalog-module.md`
 
-### Day 19
-- [ ] Booking Actions:
-  - `CreateBookingDraftAction` (cross-type)
-  - `AddItemToBookingAction` (with `match($enum)` for type-specific reservation logic)
-  - `SubmitBookingAction` — splits per vendor, fires `BookingSubmittedToVendor` event
-  - `VendorAcceptBookingAction`, `VendorModifyBookingAction`, `VendorRejectBookingAction`
-  - `CustomerConfirmModifiedBookingAction`
+**TABLES TOUCHED:** occasions, categories, occasion_category, category_field_schemas, service_themes
+
+**DELIVERABLE:** Admin sets up "Birthday → Inflatables (rental category)" with custom field schema. Vendor's API can list occasions and categories (filtered by allowed product types).
+
+**DAYS:**
+
+### Day 1 — Migrations + Models
+- [ ] Write ADR-0005 first
+- [ ] Migrations: occasions, categories (with parent_id self-ref + `allowed_product_types` JSON), occasion_category pivot, category_field_schemas, service_themes
+- [ ] Models with translatable JSON columns
+- [ ] Factories + seeders (Birthday, Wedding, Engagement + sample categories)
+
+### Day 2 — Filament + API + Tests
+- [ ] Filament: OccasionResource, CategoryResource (tree view), ServiceThemeResource, CategoryFieldSchemaResource
+- [ ] API: `GET /api/v1/customer/occasions`, `GET /api/v1/customer/categories?occasion_id=X&product_type=Y`
+- [ ] Pest: tree relationships, filterable by allowed_product_types
+
+**CUT-LIST:**
+- Defer service themes pivot/UI — use simple text tag (Phase 6.x)
+- Defer dynamic field schema rendering on vendor side — hardcoded fields per type for now
+
+**EXIT CRITERIA:**
+- ✅ Admin builds occasion → categories tree
+- ✅ Customer API lists categories filtered by product type
+- ✅ ADR-0005 accepted
+
+**BLOCKS:** Phase 2.1, 2.2, 2.3
+
+---
+
+## PHASE 2.1 — Catalog: Rental Type (2 days, Week 3)
+
+**GOAL:** Vendors create rental services via API. Admin sees them in `RentalServiceResource`.
+
+**PRD COVERAGE:** FR-19, FR-20, FR-21
+
+**ADR REQUIRED:** Already in ADR-0005
+
+**TABLES TOUCHED:** services (base), service_rental_details
+
+**DELIVERABLE:** `POST /api/v1/vendor/services/rental` creates an inflatable with `requires_electricity`, `setup_time_minutes`, `security_deposit_minor`. Filament shows it.
+
+**DAYS:**
+
+### Day 1 — Migrations + Action + API
+- [ ] Migration: services (base, polymorphic, `product_type` discriminator) + service_rental_details
+- [ ] `ProductType` enum in `app/Modules/Catalog/Domain/Enums/`
+- [ ] `CreateRentalServiceRequest`, `UpdateRentalServiceRequest`
+- [ ] `CreateRentalServiceAction`, `UpdateRentalServiceAction`
+- [ ] API: `POST/PATCH /api/v1/vendor/services/rental`
+- [ ] `RentalServiceResource` (API Resource extending base)
+
+### Day 2 — Filament + Tests
+- [ ] Filament `RentalServiceResource` (under "Services" navigation group)
+- [ ] EN/AR tabs for translatable fields
+- [ ] Spatie Media Library for images (max 11)
+- [ ] Pest: rental creation (happy + auth + authz + validation + locale)
+
+**CUT-LIST:**
+- Defer pricing tiers UI — single base_price for now (Phase 6.x)
+- Defer availability_blocks — assume "always available" for now
+
+**EXIT CRITERIA:**
+- ✅ Vendor creates rental service via API
+- ✅ Admin sees it in Filament RentalServiceResource
+- ✅ Form validates `requires_electricity`, `default_rental_duration_hours`
+- ✅ Pest tests pass
+
+**BLOCKS:** Phase 2.2 (uses same pattern), Phase 3.1 (booking needs services)
+
+---
+
+## PHASE 2.2 — Catalog: Sale Type (2 days, Week 3)
+
+**GOAL:** Vendors create sale services. Pattern from 2.1 replicated for sale.
+
+**PRD COVERAGE:** Same as 2.1
+
+**TABLES TOUCHED:** service_sale_details (services already exists)
+
+**DELIVERABLE:** `POST /api/v1/vendor/services/sale` creates a cake with `is_perishable`, `is_made_to_order`, `lead_time_hours`, `customization_fields`.
+
+**DAYS:**
+
+### Day 1 — Migration + Action + API
+- [ ] Migration: service_sale_details
+- [ ] `CreateSaleServiceRequest`, `CreateSaleServiceAction`
+- [ ] Conditional validation: `lead_time_hours` required when `is_made_to_order=true`
+- [ ] API: `POST/PATCH /api/v1/vendor/services/sale`
+- [ ] `SaleServiceResource` (API)
+
+### Day 2 — Filament + Tests
+- [ ] Filament `SaleServiceResource`
+- [ ] Pest: all standard tests + `is_made_to_order` conditional validation
+- [ ] Pest: `customization_fields` JSON validation
+
+**CUT-LIST:** None (sale type is core)
+
+**EXIT CRITERIA:**
+- ✅ Vendor creates cake with customization fields
+- ✅ `lead_time_hours` enforced when made-to-order
+- ✅ Pest tests pass
+
+**BLOCKS:** Phase 2.3
+
+---
+
+## PHASE 2.3 — Catalog: Digital Type + Inventory Reservations (2 days, Week 3)
+
+**GOAL:** Digital services + inventory reservation system (cart hold + payment hold).
+
+**PRD COVERAGE:** Same as 2.1 + Tech Decisions inventory locked decision
+
+**TABLES TOUCHED:** service_digital_details, service_inventory_reservations
+
+**DELIVERABLE:** Vendor creates an e-invitation digital service. `HoldServiceInventoryAction` reserves with 15-min TTL (cart) or 24h TTL (after submit). Cleanup job releases expired holds.
+
+**DAYS:**
+
+### Day 1 — Digital + Inventory Schema
+- [ ] Migration: service_digital_details
+- [ ] Migration: service_inventory_reservations
+- [ ] `CreateDigitalServiceRequest`, `CreateDigitalServiceAction`
+- [ ] API: `POST/PATCH /api/v1/vendor/services/digital`
+- [ ] `DigitalServiceResource` (API + Filament)
+
+### Day 2 — Inventory + Cleanup
+- [ ] `HoldServiceInventoryAction` with `match($enum)` per-type logic
+- [ ] `ReleaseExpiredReservations` artisan command + Schedule (every minute)
+- [ ] Pest: cart hold expires after 15 min
+- [ ] Pest: payment hold expires after 24h
+- [ ] Pest: rental overlap detection
+- [ ] Pest: digital "always available" (no overlap)
+
+**CUT-LIST:**
+- Defer code_pool_id (digital code pools) — Phase 1.5
+
+**EXIT CRITERIA:**
+- ✅ All 3 product types creatable
+- ✅ Inventory reservation works for rental (overlap check) + sale (stock decrement) + digital (no constraint)
+- ✅ Cleanup job releases expired holds in test
+- ✅ Pest covers all 3 types
+
+**BLOCKS:** Phase 3.1 (booking creates reservations)
+
+---
+
+## PHASE 2.4 — Catalog: Rental Excel Import (1 day, Week 3)
+
+**GOAL:** Vendor uploads Excel of rental services. No partial commits.
+
+**PRD COVERAGE:** FR-22
+
+**TABLES TOUCHED:** excel_imports, excel_import_errors
+
+**DELIVERABLE:** Vendor uploads `rentals.xlsx` via Filament. 10 rows valid → all created. 10 rows with 1 invalid → none created, error report shown per row in vendor's locale.
+
+**DAYS:**
+
+### Day 1 — Importer + UI + Tests
+- [ ] `RentalServicesImport` (Maatwebsite Excel)
+- [ ] `ImportRentalServicesFromExcelAction` (transactional, no partial commits)
+- [ ] Bilingual columns: `name_en`, `name_ar`, `short_description_en`, `short_description_ar`, etc.
+- [ ] Filament page: bulk-upload form with progress + per-row errors
+- [ ] Pest: 100% valid → all imported
+- [ ] Pest: 1 invalid → 0 imported, errors logged
+
+**CUT-LIST:**
+- Defer image folder upload (just filename references for now) — Phase 6.x
+
+**EXIT CRITERIA:**
+- ✅ Excel template downloadable
+- ✅ Valid rows → bulk create works
+- ✅ Invalid rows → nothing imported, errors visible
+
+**BLOCKS:** Phase 6.1 (sale + digital Excel use same pattern)
+
+---
+
+## PHASE 3.0 — Discovery (Meilisearch) (2 days, Week 4)
+
+**GOAL:** Customer searches services with `product_type` facet, EN/AR tokenizers.
+
+**PRD COVERAGE:** FR-3, FR-4
+
+**ADR REQUIRED:** `ADR-0006-discovery-module.md`
+
+**TABLES TOUCHED:** wishlists, wishlist_items, saved_searches, search_logs
+
+**DELIVERABLE:** `GET /api/v1/customer/services?occasion=birthday&type=rental&q=نطاطية` returns hits in Arabic. Filament admin can re-index on demand.
+
+**DAYS:**
+
+### Day 1 — Meilisearch + Indexer
+- [ ] Write ADR-0006
+- [ ] Scout config + Meilisearch driver
+- [ ] Service indexer with per-locale fields
+- [ ] Searchable attributes: `name_en`, `name_ar`, `short_description_en`, `short_description_ar`
+- [ ] Filterable: `product_type`, `category_id`, `occasion_ids`, `vendor_id`, `price_minor`
+- [ ] Migration: wishlists, wishlist_items, saved_searches, search_logs
+
+### Day 2 — API + Tests
+- [ ] `SearchServicesAction` with type filter
+- [ ] API: `GET /api/v1/customer/services?...`
+- [ ] Wishlists API (add/remove)
+- [ ] Pest: Arabic tokenization works
+- [ ] Pest: facet filters apply correctly per product type
+- [ ] Pest: pagination
+
+**CUT-LIST:**
+- Defer saved searches UI — Phase 1.5
+- Defer search logs analytics — Phase 6.0
+
+**EXIT CRITERIA:**
+- ✅ Customer searches and gets results in their locale
+- ✅ Type filter works
+- ✅ Wishlist add/remove works
+
+**BLOCKS:** Phase 3.1 (booking uses search results)
+
+---
+
+## PHASE 3.1 — Booking: Draft + Items (2 days, Week 4)
+
+**GOAL:** Customer creates draft booking, adds items from multiple vendors, sees split per vendor.
+
+**PRD COVERAGE:** FR-1 through FR-9
+
+**ADR REQUIRED:** `ADR-0007-booking-module.md`
+
+**TABLES TOUCHED:** bookings, booking_addresses, booking_vendors, booking_items, booking_locks, booking_snapshots, booking_customer_notes
+
+**DELIVERABLE:** Customer creates draft → adds 2 rentals from vendor A + 1 cake from vendor B. Sees split. Reservation held 15 min.
+
+**DAYS:**
+
+### Day 1 — Schema + Models
+- [ ] Write ADR-0007
+- [ ] Migrations: bookings (3 status columns), booking_addresses (snapshot), booking_vendors, booking_items, booking_locks, booking_snapshots, booking_customer_notes
+- [ ] Models with relationships
+- [ ] Per-type fulfillment state machines on booking_items.item_status (3 distinct graphs via spatie/laravel-model-states)
+
+### Day 2 — Actions + API + Tests
+- [ ] `CreateBookingDraftAction`
+- [ ] `AddItemToBookingAction` with `match($enum)` for per-type reservation logic
+- [ ] `RemoveItemFromBookingAction`
+- [ ] API endpoints
+- [ ] Pest: draft creation, item add (rental + sale + digital), per-vendor split, total calculation
+
+**CUT-LIST:**
+- Defer booking_snapshots versioning — use latest snapshot only
+- Defer pricing tiers calculation — base_price × quantity for now
+
+**EXIT CRITERIA:**
+- ✅ Customer adds items from 2 vendors → 2 booking_vendors rows
+- ✅ Reservations held with 15-min TTL
+- ✅ Total computed correctly (subtotal + delivery_fee per vendor)
+- ✅ Pest covers all 3 product types
+
+**BLOCKS:** Phase 3.2
+
+---
+
+## PHASE 3.2 — Booking: Negotiation Loop (2 days, Week 4-5)
+
+**GOAL:** Vendor accepts/modifies/rejects. Customer reviews modifications. Loop until alignment.
+
+**PRD COVERAGE:** FR-10 through FR-15, FR-16 through FR-18
+
+**TABLES TOUCHED:** booking_modifications, booking_modification_items, booking_state_transitions
+
+**DELIVERABLE:** Vendor modifies booking with new line item. Customer sees `diff_snapshot` highlighting changes. Customer accepts → booking confirmed.
+
+**DAYS:**
+
+### Day 1 — Submit + Vendor Actions
+- [ ] `SubmitBookingAction` — splits per vendor, fires `BookingSubmittedToVendor` event
+- [ ] `VendorAcceptBookingAction`, `VendorModifyBookingAction`, `VendorRejectBookingAction`
+- [ ] `CustomerConfirmModifiedBookingAction`
 - [ ] Idempotency keys for submit and confirm
+- [ ] Migration: booking_modifications, booking_modification_items, booking_state_transitions
 
-### Day 20
-- [ ] Filament Resources: Bookings Monitor (with per-type filter), Booking Item Fulfillment
-- [ ] Filament action: admin can intervene on stalled bookings (NEVER auto-replace per FR-17)
-- [ ] Pest tests: full negotiation loop covering all three types
+### Day 2 — Filament + Admin Intervention + Tests
+- [ ] Filament: BookingsMonitor (with per-type filter), BookingItemFulfillment
+- [ ] Admin intervention: monitor stalled bookings (NEVER auto-replace per FR-17)
+- [ ] Pest: full negotiation loop covering all three types
+- [ ] Pest: modification with diff_snapshot
+- [ ] Pest: idempotency on submit (same key → same response)
 
-### End of W4 — Deliverables
-- Customer can search services with `product_type` facet
-- Customer creates draft → adds items → submits booking
-- Vendor accepts / modifies / rejects via API
-- Admin monitors via Filament
+**CUT-LIST:**
+- Defer admin intervention workflow → Phase 7.0
+- Defer modification expiration timers → Phase 5.0
 
-### W4 Cut-list (if behind)
-- Defer Meilisearch sync to a queued job (run sync manually for testing)
-- Skip booking_snapshots versioning (use latest snapshot only)
-- Defer admin intervention workflow to W7
+**EXIT CRITERIA:**
+- ✅ Customer → submit → vendor accepts/modifies/rejects → customer re-approves → confirmed
+- ✅ All state transitions logged
+- ✅ Loop works (multiple modifications allowed)
+
+**BLOCKS:** Phase 4.0 (payment requires confirmed booking)
 
 ---
 
-## Phase 4 — Payments & Settlement (Week 5)
+## PHASE 4.0 — Payments: Paymob Gateway (2 days, Week 5)
 
-**Goal:** Customer pays for confirmed bookings via Paymob. Commissions calculated. Vendors see wallet balance. Withdrawals work.
+**GOAL:** Customer pays for confirmed booking. Webhook captures payment.
 
-### Day 21
-- [ ] `PaymentGateway` interface in `Modules/Payments/Domain/Contracts/`
-- [ ] `PaymobGateway` implementation in `Infrastructure/Gateways/`
-- [ ] Webhook endpoint `/webhooks/paymob` with signature verification
+**PRD COVERAGE:** FR-30 (partial — payment side)
+
+**ADR REQUIRED:** `ADR-0008-payments-module.md`
+
+**TABLES TOUCHED:** payments, payment_attempts, idempotency_keys, gateway_webhook_logs
+
+**DELIVERABLE:** Customer pays → Paymob redirects → webhook fires → `payments.status = captured`. Booking `payment_status = paid`.
+
+**DAYS:**
+
+### Day 1 — Gateway Adapter + Webhook
+- [ ] Write ADR-0008
+- [ ] `PaymentGateway` interface + `PaymobGateway` implementation
+- [ ] Webhook endpoint `/webhooks/paymob` with HMAC signature verification
 - [ ] `idempotency_keys` table + middleware
+- [ ] Migration: payments, payment_attempts, gateway_webhook_logs
 
-### Days 22-23
-- [ ] Payments migrations: payments, payment_attempts, refunds, idempotency_keys
+### Day 2 — Actions + Tests
 - [ ] `InitiatePaymentAction`, `CapturePaymentAction`, `ProcessPaymobWebhookAction`
-- [ ] Per-type refund policies via `RefundPolicyService::policyFor(ProductType)`:
-  - Rental: 24h before event_starts_at (configurable)
+- [ ] Booking `payment_status` listener: `PaymentCaptured` → update booking
+- [ ] Pest: webhook signature verification (valid + invalid)
+- [ ] Pest: idempotency under concurrent requests
+- [ ] Pest: full payment flow (initiate → webhook → captured)
+
+**CUT-LIST:**
+- Defer split payments — single payment per booking for now
+- Defer GCC adapters (Tabby, Tamara) — Phase 2
+
+**EXIT CRITERIA:**
+- ✅ Test card succeeds in Paymob sandbox
+- ✅ Webhook updates payment + booking
+- ✅ Bad signature webhook rejected
+- ✅ Idempotency works
+
+**BLOCKS:** Phase 4.1, 4.2
+
+---
+
+## PHASE 4.1 — Payments: Refunds (per-type) (1 day, Week 5)
+
+**GOAL:** Refund flow works with per-type policies.
+
+**PRD COVERAGE:** Tech Decisions §11 (per-type refund policies)
+
+**TABLES TOUCHED:** refunds
+
+**DELIVERABLE:** Admin refunds rental booking → 24h-before-event check → refund processed via gateway.
+
+**DAYS:**
+
+### Day 1 — Refund Service + Actions + Tests
+- [ ] Migration: refunds
+- [ ] `RefundPolicyService::policyFor(ProductType)`:
+  - Rental: 24h before `event_starts_at` (configurable)
   - Sale: until item enters `in_preparation` state
   - Digital: per `is_refundable_after_delivery` flag
+- [ ] `InitiateRefundAction`, `ProcessRefundAction`
+- [ ] Filament: refund button on Booking with per-type validation
+- [ ] Pest: rental refund window enforcement (3 cases: >24h, exactly 24h, <24h)
+- [ ] Pest: sale refund blocked after `in_preparation`
+- [ ] Pest: digital refund per service flag
 
-### Days 24-25
-- [ ] Settlement migrations: commissions, commission_rates, wallets, wallet_ledger (append-only), withdrawals, settlement_runs
-- [ ] Commission rate resolution: `(category × type) → (category × NULL) → (NULL × type) → (NULL × NULL)` — most specific wins
-- [ ] `CalculateCommissionAction`, `CreditVendorWalletAction`, `RequestWithdrawalAction`, `ApproveWithdrawalAction`
-- [ ] Filament Resources: Withdrawals Queue, Wallets & Ledger Viewer, Commission Rules
+**CUT-LIST:**
+- Defer partial refunds — full or none for now
 
-### End of W5 — Deliverables
-- End-to-end booking → payment → commission → vendor wallet credit
-- Admin processes withdrawal via Filament with proof upload
-- All three product types tested through full payment cycle
+**EXIT CRITERIA:**
+- ✅ Each product type's refund policy enforced correctly
+- ✅ Refund updates wallet ledger (negative entry)
+- ✅ Pest covers all 3 types
 
-### W5 Cut-list (if behind)
-- Defer split payments (one payment per booking)
-- Defer GCC gateway adapters (Tabby, Tamara) — stay Paymob-only
-- Defer settlement runs (manual reconciliation OK for soft launch)
+**BLOCKS:** Phase 4.2 (settlement uses refunds)
 
 ---
 
-## Phase 5 — Communications + Reviews + Loyalty (Week 6)
+## PHASE 4.2 — Settlement: Wallets + Commissions + Withdrawals (3 days, Week 5-6)
 
-**Goal:** Notifications fire on key events. Reviews work. Per-vendor loyalty rules.
+**GOAL:** Vendor sees wallet balance, requests withdrawal, admin approves with bank transfer proof.
 
-### Day 26
-- [ ] Communication module migrations: notification_templates, notification_dispatches, notification_preferences, chat_message_log, chat_moderation_flags, marketing_campaigns, campaign_recipients
+**PRD COVERAGE:** FR-28, FR-29, FR-30
+
+**ADR REQUIRED:** `ADR-0009-settlement-module.md`
+
+**TABLES TOUCHED:** wallets, wallet_ledger, commissions, commission_rates, withdrawals, settlement_runs
+
+**DELIVERABLE:** Booking captured → commission calculated (per category × type rate) → vendor wallet credited → vendor requests withdrawal → admin approves with proof upload.
+
+**DAYS:**
+
+### Day 1 — Schema + Commission Logic
+- [ ] Write ADR-0009
+- [ ] Migrations: wallets, wallet_ledger, commissions, commission_rates, withdrawals, settlement_runs
+- [ ] `CalculateCommissionAction` with most-specific match: `(category × type) → (category × NULL) → (NULL × type) → (NULL × NULL)`
+- [ ] Listener on `PaymentCaptured`: calculate commission, credit vendor wallet
+
+### Day 2 — Withdrawal Flow
+- [ ] `RequestWithdrawalAction`, `ApproveWithdrawalAction`, `RejectWithdrawalAction`
+- [ ] Filament: WithdrawalsQueue, WalletLedgerViewer, CommissionRules
+- [ ] Bank proof upload (Spatie Media Library, private bucket)
+
+### Day 3 — Tests
+- [ ] Pest: commission rate resolution (all 4 cases of specificity)
+- [ ] Pest: per-type commission different rates work
+- [ ] Pest: wallet ledger append-only (no updates)
+- [ ] Pest: withdrawal flow (request → approve → paid)
+- [ ] Pest: refund reverses wallet credit
+
+**CUT-LIST:**
+- Defer settlement_runs (manual reconciliation OK for soft launch)
+- Defer auto-approval rules
+
+**EXIT CRITERIA:**
+- ✅ Commission per (category × type) working with all 4 fallback levels
+- ✅ Wallet credit on payment, debit on refund
+- ✅ Admin approves withdrawal with proof
+- ✅ Pest covers all 3 types' commission flows
+
+**BLOCKS:** Phase 7.1 (smoke test needs full money cycle)
+
+---
+
+## PHASE 5.0 — Communication: Notifications (2 days, Week 6)
+
+**GOAL:** Notifications fire on key events via push/email/SMS/WhatsApp in user's locale.
+
+**PRD COVERAGE:** FR-23 to FR-26
+
+**ADR REQUIRED:** `ADR-0010-communication-module.md`
+
+**TABLES TOUCHED:** notification_templates, notification_dispatches, notification_preferences
+
+**DELIVERABLE:** Customer pays → push + email + SMS fire in customer's locale. Per-type events (`rental.delivery_scheduled`, etc.) work.
+
+**DAYS:**
+
+### Day 1 — Schema + Channels
+- [ ] Write ADR-0010
+- [ ] Migrations: notification_templates, notification_dispatches, notification_preferences
 - [ ] `DispatchNotificationAction` selects template by `(event_key × channel × audience × locale)`
-- [ ] Channel adapters: push (FCM), email (Mailgun/Mailchimp), SMS (Vonage or local), WhatsApp (Cloud API)
+- [ ] Channel adapters: FCM (push), Mailgun/Mailchimp (email), Vonage (SMS), WhatsApp Cloud API (WA)
+- [ ] Templates seeded with EN+AR for: booking.submitted, booking.modified, booking.confirmed, payment.captured
 
-### Day 27
-- [ ] Per-type notification events:
-  - `rental.delivery_scheduled`, `rental.setup_started`, `rental.teardown_completed`
-  - `sale.preparation_started`, `sale.out_for_delivery`, `sale.delivered`
-  - `digital.delivered`, `digital.redeemed`, `digital.expiring_soon`
-- [ ] Cross-type events: `booking.submitted`, `booking.modified`, `booking.confirmed`, `payment.captured`
-- [ ] Templates seeded with EN + AR content
-- [ ] Filament Resource: Notification Templates with translatable plugin
+### Day 2 — Per-type Events + Filament
+- [ ] Per-type events: rental.delivery_scheduled, sale.preparation_started, digital.delivered, digital.expiring_soon
+- [ ] Filament: NotificationTemplates with translatable plugin
+- [ ] Pest: dispatch with correct locale
+- [ ] Pest: per-type event templates resolve correctly
+- [ ] Pest: notification_preferences (user disabled marketing → not sent)
 
-### Day 28
-- [ ] Reviews module: service_reviews, vendor_reviews, review_responses
+**CUT-LIST:**
+- Defer WhatsApp templates (use stub) — Phase 1.5
+- Defer scheduled/recurring notifications
+
+**EXIT CRITERIA:**
+- ✅ Booking events trigger notifications
+- ✅ User locale respected
+- ✅ All 4 channels can dispatch
+- ✅ Pest covers per-type events
+
+**BLOCKS:** Phase 5.1, 5.2 (use notifications)
+
+---
+
+## PHASE 5.1 — Reviews (1 day, Week 6)
+
+**GOAL:** Customer rates service + vendor after booking complete. Admin moderates.
+
+**PRD COVERAGE:** Software Description §3 (reviews at item + vendor level)
+
+**TABLES TOUCHED:** service_reviews, vendor_reviews, review_responses, review_moderation_log
+
+**DELIVERABLE:** Customer submits service review → admin approves → service rating updates.
+
+**DAYS:**
+
+### Day 1 — Reviews + Moderation
+- [ ] Migrations: service_reviews, vendor_reviews, review_responses, review_moderation_log
 - [ ] `SubmitReviewAction`, `RespondToReviewAction`, `ModerateReviewAction`
-- [ ] Aggregation triggers (update vendor average rating)
-- [ ] Filament: Reviews Moderation page
+- [ ] Listener: on review approved → update vendor/service rating averages
+- [ ] Filament: ReviewModerationPage
+- [ ] Pest: only completed bookings reviewable
+- [ ] Pest: one review per booking_item / booking_vendor
 
-### Day 29
-- [ ] Loyalty module (per vendor): loyalty_programs, loyalty_rules, loyalty_ledger (append-only), loyalty_redemptions
-- [ ] `CalculateLoyaltyPointsAction` (after booking completion)
-- [ ] `RedeemLoyaltyPointsAction` (during booking)
-- [ ] Filament: Loyalty Programs (per-vendor config)
+**CUT-LIST:**
+- Defer vendor responses to reviews — Phase 6.0
+- Defer review locale auto-detection — assume customer's preferred_locale
 
-### Day 30
-- [ ] Marketing campaigns: Filament Campaign Builder
-- [ ] Push/SMS/WA/email campaign dispatch via queue
-- [ ] Test all channels in EN + AR
+**EXIT CRITERIA:**
+- ✅ Customer submits review only after booking_item completed
+- ✅ Admin moderates → rating updates
+- ✅ Pest tests pass
 
-### End of W6 — Deliverables
-- Notifications fire correctly per event × channel × locale
-- Reviews end-to-end with admin moderation
-- Loyalty points credited on completed bookings
-- Marketing campaigns dispatchable from Filament
-
-### W6 Cut-list (if behind)
-- Defer Marketing Campaigns to Phase 1.5
-- Defer review responses (vendor reply to review) to W7
-- WhatsApp can be stubbed in Phase 1 — Mailchimp + email + push enough for soft launch
+**BLOCKS:** None (independent of booking flow)
 
 ---
 
-## Phase 6 — Reporting + Excel Import Replication + Hardening Setup (Week 7)
+## PHASE 5.2 — Loyalty (per-vendor) (2 days, Week 6)
 
-**Goal:** Reports work. Excel imports cover all three types. Audit log is queryable. Phase 1 features are functionally complete.
+**GOAL:** Each vendor configures their own loyalty rules. Customer earns points per vendor.
 
-### Day 31
-- [ ] Reporting module: read models / aggregate views
+**PRD COVERAGE:** Software Description (loyalty per-vendor locked)
+
+**ADR REQUIRED:** Already in ADR-0005 (Catalog) or new mini-ADR
+
+**TABLES TOUCHED:** loyalty_programs, loyalty_rules, loyalty_ledger, loyalty_redemptions
+
+**DELIVERABLE:** Vendor sets up loyalty program (1 point per EGP, 100 points = 10 EGP). Customer earns on completion. Customer redeems on next booking.
+
+**DAYS:**
+
+### Day 1 — Schema + Earning
+- [ ] Migrations: loyalty_programs, loyalty_rules, loyalty_ledger (append-only), loyalty_redemptions
+- [ ] `CalculateLoyaltyPointsAction` (after booking_item completed)
+- [ ] Listener on `BookingCompleted` → credit loyalty
+- [ ] Filament: LoyaltyPrograms (per-vendor config)
+
+### Day 2 — Redemption + Tests
+- [ ] `RedeemLoyaltyPointsAction` (during booking creation)
+- [ ] Validation: max_redeem_pct, min_points_to_redeem
+- [ ] Pest: earn rules (per-vendor isolated)
+- [ ] Pest: redemption math
+- [ ] Pest: expiration (if configured)
+
+**CUT-LIST:**
+- Defer referral rules — Phase 1.5
+- Defer expiration cleanup job — Phase 7.0
+
+**EXIT CRITERIA:**
+- ✅ Vendor configures program independently
+- ✅ Customer balance per-vendor (not global)
+- ✅ Redemption affects booking total
+
+**BLOCKS:** None
+
+---
+
+## PHASE 5.3 — Marketing Campaigns (1 day, Week 7)
+
+**GOAL:** Admin creates push/SMS/email/WhatsApp campaign in EN+AR, dispatches to segment.
+
+**PRD COVERAGE:** FR-23 to FR-27
+
+**TABLES TOUCHED:** campaigns, campaign_runs, campaign_recipients
+
+**DELIVERABLE:** Admin creates "10% off Rentals this week" campaign → dispatches to all customers who booked rentals in last 30 days → segments by locale → sends correct template.
+
+**DAYS:**
+
+### Day 1 — Builder + Dispatch
+- [ ] Migrations: campaigns, campaign_runs, campaign_recipients
+- [ ] Filament Campaign Builder (segment, channel, template)
+- [ ] Queue dispatch job
+- [ ] Pest: segment resolution (e.g., "rented in last 30 days")
+- [ ] Pest: per-locale template selection
+- [ ] Pest: respects notification_preferences (opt-out)
+
+**CUT-LIST:**
+- Defer A/B testing — Phase 2
+- Defer scheduling (send now only) — Phase 1.5
+
+**EXIT CRITERIA:**
+- ✅ Admin builds campaign for specific segment
+- ✅ All 4 channels dispatch
+- ✅ Locale respected per recipient
+
+**BLOCKS:** None
+
+---
+
+## PHASE 6.0 — Reports + Audit Log (2 days, Week 7)
+
+**GOAL:** Admin sees per-type breakdowns + queryable audit log.
+
+**PRD COVERAGE:** Software Description §6 (reporting per-type)
+
+**TABLES TOUCHED:** audit_logs (already exists), event_outbox
+
+**DELIVERABLE:** Filament dashboard with "Bookings by type", "Revenue by period", "Inventory utilization (rental)", "Redemption rate (digital)". Audit log searchable.
+
+**DAYS:**
+
+### Day 1 — Reports
+- [ ] Read models / aggregate queries
 - [ ] `BookingsByTypeReport`, `RevenueByPeriodReport`, `TopVendorsReport`, `InventoryUtilizationReport` (rental), `RedemptionRateReport` (digital)
-- [ ] Filament Reports & Dashboards page with per-type breakdown widgets
+- [ ] Filament Dashboard widgets per-type
 
-### Day 32
-- [ ] Sale Excel importer: `SaleServicesImport` + Action + Filament UI
-- [ ] Digital Excel importer: `DigitalServicesImport` + Action + Filament UI
-- [ ] Conditional validation per type (e.g., `lead_time_hours` required when `is_made_to_order = true`)
+### Day 2 — Audit + Outbox
+- [ ] spatie/laravel-activitylog wired into all state transitions
+- [ ] Filament AuditLogViewer with filtering
+- [ ] event_outbox processor command
+- [ ] Pest: report numbers correct per type
+- [ ] Pest: audit captures every state transition
 
-### Day 33
-- [ ] Audit log infrastructure (spatie/laravel-activitylog)
-- [ ] Audit Log Viewer in Filament with filtering by entity, user, date range
-- [ ] CMS pages module: terms, privacy, about, contact (translatable)
-- [ ] CMS Filament Resource
+**CUT-LIST:**
+- Defer InventoryUtilizationReport — Phase 1.5
 
-### Day 34
-- [ ] Performance pass:
-  - N+1 audit (use Laravel Debugbar locally)
-  - Add missing indexes per slow query log
-  - Eager-load on heavy queries
-- [ ] Cache configuration: Redis for sessions, queues, cache, model caching where useful
+**EXIT CRITERIA:**
+- ✅ Admin sees per-type metrics
+- ✅ Audit log queryable by entity, user, date
+- ✅ event_outbox processes pending events
 
-### Day 35
-- [ ] 2FA for admin: `TwoFactorAuthAction` (TOTP via Google Authenticator)
-- [ ] Test idempotency under concurrent load (basic)
-
-### End of W7 — Deliverables
-- All Phase 1 features functionally complete
-- All three product type Excel templates working
-- Reports rendering with per-type breakdowns
-- Audit log queryable
-
-### W7 Cut-list (if behind)
-- Defer 2FA to Phase 1.5 (use strong passwords + IP allowlist for admin)
-- Defer Inventory Utilization report (Phase 1.5)
-- Skip caching layer (revisit when load testing reveals need)
+**BLOCKS:** Phase 7.2 (docs reference reports)
 
 ---
 
-## Phase 7 — Hardening + Staging Deploy (Week 8)
+## PHASE 6.1 — Sale + Digital Excel Imports (1 day, Week 7)
 
-**Goal:** Production-ready Phase 1 backend + admin. Deployed to staging. Smoke tests pass. Ready for soft launch with first vendors.
+**GOAL:** Replicate Phase 2.4 pattern for sale + digital types.
 
-### Day 36
-- [ ] Security audit:
-  - Rate limiting on auth, payments, search (Laravel built-in)
-  - CORS lockdown
-  - CSRF on stateful routes
-  - SQL injection check (review all `whereRaw` and `DB::raw`)
-  - Mass assignment audit
-- [ ] Backup configured (spatie/laravel-backup → separate S3 bucket)
+**PRD COVERAGE:** FR-22
 
-### Day 37
-- [ ] Test coverage gap analysis:
-  - Pest run with `--coverage` flag
-  - Target: 70%+ on Action classes, 80%+ on Models, 60%+ overall
-  - Fill critical gaps (auth, payments, three-product-types)
+**DELIVERABLE:** Vendor uploads `sales.xlsx` and `digital.xlsx` separately. Per-type validation enforced.
 
-### Day 38
-- [ ] Staging deploy via GitHub Actions:
-  - Build Docker image, push to ghcr.io
-  - SSH deploy to Hetzner staging
-  - Caddy + automatic HTTPS
-  - Database migration in deploy
-  - Health check endpoint `/up`
+**DAYS:**
 
-### Day 39
-- [ ] End-to-end smoke tests:
-  - Vendor registers → admin approves per type → vendor creates service per type → customer books → vendor accepts/modifies → customer pays → admin sees commission → vendor withdraws
-  - Run for all three product types
-  - Run in EN and AR locales
+### Day 1 — Two Importers + Tests
+- [ ] `SaleServicesImport` + `ImportSaleServicesFromExcelAction`
+- [ ] `DigitalServicesImport` + `ImportDigitalServicesFromExcelAction`
+- [ ] Conditional validation per type
+- [ ] Filament UI for each
+- [ ] Pest: sale Excel happy path + invalid → no commit
+- [ ] Pest: digital Excel happy path + invalid → no commit
 
-### Day 40
-- [ ] Documentation pass:
-  - README.md (project setup)
-  - API documentation (Scribe or stubbed OpenAPI)
-  - Filament admin user guide for the eventual ops team
-  - Runbook (deploy, rollback, common ops)
-- [ ] **Phase 1 retrospective:** what worked, what didn't, what to fix in Phase 1.5
+**CUT-LIST:** None (this IS the cut-from-Phase-2.4 work)
 
-### End of W8 — Deliverables
-- Phase 1 backend + admin in production-ready state on staging
-- Smoke tests passing for all 3 product types in EN + AR
-- Backup running daily
-- Documentation in place
-- **Ready for first 5 vendors to onboard for soft launch**
+**EXIT CRITERIA:**
+- ✅ All 3 product types importable from Excel
+- ✅ No partial commits
+- ✅ Per-type validation rules enforced
 
-### W8 Cut-list (if behind)
-- Defer 80% test coverage target to Phase 1.5 (60% is acceptable for soft launch with monitoring)
-- Defer Scribe/OpenAPI docs (just keep an internal Postman collection)
+**BLOCKS:** None
 
 ---
 
-## After Phase 1 — what comes next
+## PHASE 6.2 — CMS Pages + Settings (1 day, Week 7)
 
-These are NOT Phase 1, but you should know they exist so you don't accidentally over-build:
+**GOAL:** Admin edits Terms/Privacy/About/Contact pages in Filament. App settings configurable.
 
-### Phase 1.5 (mobile-and-web phase, ~8-12 weeks)
-- Customer Flutter app (browse, book, pay, chat, reviews)
-- Vendor Flutter app (manage services, accept bookings, wallet, withdrawals)
-- Customer Next.js web (catalog browse, booking, account)
-- Mobile push setup (FCM credentials, deep linking)
+**PRD COVERAGE:** Software Description §5 (CMS pages)
 
-### Phase 2 (after Phase 1 + 1.5 stable, ~12+ weeks)
-- Vendor subscription tiers (silver/gold/bronze)
-- Platform-owned package products
-- Dispute resolution engine
-- Per-category card layout templates
-- Vendor page slider
-- Vendor QR / barcode catalog
-- Advanced tax invoicing
-- Multi-currency activation (schema is ready; just enable conversion)
-- GCC gateway expansion (Tabby, Tamara, HyperPay)
+**TABLES TOUCHED:** cms_pages, app_settings, feature_flags
+
+**DELIVERABLE:** Admin edits Terms in EN+AR via TipTap editor. Customer API returns published version.
+
+**DAYS:**
+
+### Day 1 — CMS + Settings
+- [ ] Migrations: cms_pages, app_settings, feature_flags
+- [ ] Filament CMSPagesResource with TipTap editor
+- [ ] Filament Settings page (using filament/spatie-laravel-settings-plugin)
+- [ ] API: `GET /api/v1/cms/pages/{slug}`
+- [ ] Pest: published-only filter, locale resolution
+
+**CUT-LIST:** None
+
+**EXIT CRITERIA:**
+- ✅ Admin edits Terms in EN+AR
+- ✅ Customer API serves correct locale
+- ✅ Settings panel works
+
+**BLOCKS:** None
 
 ---
 
-## Daily discipline (for the 8 weeks)
+## PHASE 7.0 — Hardening: Performance + Security (2 days, Week 8)
 
-These habits are what make 8 weeks possible. Skip them and you'll need 12.
+**GOAL:** App performant + secure for soft launch.
 
-1. **One module per day max** — avoid context-switching
-2. **Tests with the code, not after** — Pest while modules are fresh
-3. **Commit at end of every day** — even WIP
-4. **End-of-week deploy to staging** — catch deployment issues weekly, not at the end
-5. **Run `php artisan pint` and `phpstan` daily** — auto-runs via the post-edit-pint hook anyway
-6. **Spec-guard hook warnings → fix within the same session**
-7. **No new packages mid-week without entry in `10_Package_List.md`**
-8. **Friday afternoon: 1-hour review of the week's commits + plan Monday**
+**PRD COVERAGE:** NFR (security, performance)
 
-If you hit a wall, **ask Claude Code to do `/scope-audit <feature>` before adding anything new**. Discipline > velocity.
+**TABLES TOUCHED:** None (perf indexes only)
+
+**DELIVERABLE:** Rate limits in place, no N+1s, security audit clean.
+
+**DAYS:**
+
+### Day 1 — Security
+- [ ] Rate limiting: auth (5/min), payments (10/min), search (60/min)
+- [ ] CORS lockdown (only known frontend domains)
+- [ ] CSRF on stateful routes
+- [ ] SQL injection check (audit `whereRaw` and `DB::raw`)
+- [ ] Mass assignment audit (`$fillable`/`$guarded` review)
+- [ ] 2FA for admin (TOTP)
+
+### Day 2 — Performance
+- [ ] N+1 audit (Laravel Debugbar)
+- [ ] Add missing indexes per slow query log
+- [ ] Eager-load on heavy queries
+- [ ] Redis caching (sessions, model caching where useful)
+- [ ] spatie/laravel-backup configured (daily DB to S3)
+
+**CUT-LIST:**
+- Defer 80% test coverage to Phase 1.5
+
+**EXIT CRITERIA:**
+- ✅ Rate limits work
+- ✅ Zero high-severity findings in security audit
+- ✅ N+1 queries eliminated in critical paths
+- ✅ Backup runs successfully
+
+**BLOCKS:** Phase 7.1
+
+---
+
+## PHASE 7.1 — Staging Deploy + Smoke Tests (2 days, Week 8)
+
+**GOAL:** Production-equivalent staging working with full E2E test.
+
+**PRD COVERAGE:** Production readiness
+
+**DELIVERABLE:** `https://staging.instaparty.com/admin` works. Smoke test passes for all 3 types in EN+AR.
+
+**DAYS:**
+
+### Day 1 — Deploy Pipeline
+- [ ] GitHub Actions: build Docker, push to ghcr.io
+- [ ] SSH deploy to Hetzner CCX13
+- [ ] Caddy + automatic HTTPS
+- [ ] Migration in deploy script
+- [ ] Health check `/up`
+
+### Day 2 — Smoke Tests
+- [ ] E2E manual test: register vendor → admin approves rental → vendor creates rental → customer books → vendor accepts → customer pays → commission credited → vendor withdraws → admin approves
+- [ ] Repeat for sale type
+- [ ] Repeat for digital type
+- [ ] All flows in EN
+- [ ] All flows in AR (RTL UI in Filament)
+
+**CUT-LIST:** None (this is launch readiness)
+
+**EXIT CRITERIA:**
+- ✅ Staging URL accessible over HTTPS
+- ✅ All 3 product types pass full lifecycle
+- ✅ EN + AR both work end-to-end
+- ✅ Deploy is repeatable (run pipeline twice, same result)
+
+**BLOCKS:** Phase 7.2
+
+---
+
+## PHASE 7.2 — Documentation + Retrospective (1 day, Week 8)
+
+**GOAL:** Project documented for ops handoff. Lessons learned for Phase 1.5.
+
+**PRD COVERAGE:** Delivery readiness
+
+**DELIVERABLE:** README, API docs, admin guide, runbook, retrospective doc.
+
+**DAYS:**
+
+### Day 1 — Docs + Retro
+- [ ] README.md (project overview + setup)
+- [ ] API docs via Scribe (run `php artisan scribe:generate`)
+- [ ] Filament admin user guide for ops team
+- [ ] Runbook: deploy, rollback, common operations
+- [ ] **Retrospective doc:** what worked, what didn't, what to fix in Phase 1.5
+
+**CUT-LIST:**
+- Defer Scribe → keep internal Postman collection only
+
+**EXIT CRITERIA:**
+- ✅ README builds correctly
+- ✅ API docs reflect actual endpoints
+- ✅ Admin user can find their way around `/admin`
+- ✅ Retrospective drives Phase 1.5 priorities
+
+**BLOCKS:** Phase 1.5 kickoff
+
+---
+
+## Daily Discipline (unchanged from v1)
+
+1. **One micro-phase per chunk** — finish the 1-3 day phase fully before starting the next
+2. **Tests with the code, not after** — Pest tests are Day-3 work, not "later"
+3. **Commit at end of every day** even WIP
+4. **End-of-phase deploy to staging** — small enough to test deploy each phase
+5. **Run `php artisan pint` and `phpstan` daily** (auto via post-edit hook)
+6. **Spec-guard hook warnings → fix in same session**
+7. **No new packages without entry in `10_Package_List.md`**
+8. **End of every Friday: 1-hour review + plan next Monday's micro-phase**
+
+---
+
+## How to Use This Plan with Claude Code
+
+### Starting a phase
+
+```
+START PHASE X.Y — {Name}
+
+[Use the optimized prompt from earlier conversation]
+```
+
+Claude Code:
+1. Reads CLAUDE.md, this file, schema, etc.
+2. Restates phase goal + tables + ADR + tests
+3. Plans tasks with file paths and citations
+4. Waits for "go"
+
+### Mid-phase resume
+
+```
+RESUME PHASE X.Y
+
+[Use the resume prompt]
+```
+
+Claude Code shows last completed task, next task, failing tests.
+
+### End of phase
+
+```
+1. Verify all exit criteria pass
+2. Commit with conventional format
+3. Update phase index above (mark done)
+4. Move to next phase
+```
+
+### When behind
+
+Reference the per-phase cut-list. **Cut features, not quality.** Quality cut = bug in production = lost vendors.
+
+---
+
+## Comparison: v1 → v2
+
+**Same:**
+- Total scope (8 weeks, ~40 days, all 60 tables, all 13 modules)
+- Final deliverable (production-ready Phase 1)
+- Tech stack (locked)
+- Source-of-truth hierarchy
+- Cut-list philosophy
+
+**Different:**
+- 8 phases → 16 phases
+- 5-7 days/phase → 1-3 days/phase
+- "Catalog" as one phase → "Catalog Foundation" + "Rental" + "Sale" + "Digital" + "Excel"
+- "Discovery + Booking" → "Discovery" + "Booking Draft" + "Booking Negotiation"
+- "Payments + Settlement" → "Paymob Gateway" + "Refunds" + "Settlement"
+- "Communications + Reviews + Loyalty" → 4 separate phases
+- One ADR per major module → one ADR per phase (forces granular thinking)
+
+**Why this matters for AI:**
+- Claude Code can hold 1-3 day's worth of context cleanly
+- Each phase has ONE deliverable to focus on
+- ADR per phase prevents scope drift
+- `/scope-audit` works better on small phases
+
+---
+
+## Archive Note
+
+The original `09_Phasing_Plan.md` is still valid as a high-level overview but **this v2 file is the executable plan**. When in doubt, follow v2 day-by-day tasks.

@@ -1,0 +1,176 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Modules\Identity\Domain\Models;
+
+use App\Modules\Identity\Domain\Enums\ApprovalStatus;
+use App\Modules\Identity\Domain\Enums\BusinessType;
+use App\Modules\Shared\Domain\Concerns\HasPublicId;
+use App\Modules\Shared\Domain\Enums\ProductType;
+use Database\Factories\VendorProfileFactory;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Carbon;
+use Spatie\Translatable\HasTranslations;
+
+/**
+ * @property int $id
+ * @property string $public_id
+ * @property int $user_id
+ * @property array<string, string> $business_name
+ * @property string $slug
+ * @property array<string, string>|null $bio
+ * @property string|null $logo_path
+ * @property string|null $cover_path
+ * @property BusinessType|null $business_type
+ * @property string|null $commercial_register_no
+ * @property string|null $tax_id
+ * @property string|null $national_id
+ * @property int $primary_governorate_id
+ * @property int $primary_city_id
+ * @property array<string, string>|null $address_line
+ * @property string|null $latitude
+ * @property string|null $longitude
+ * @property ApprovalStatus $approval_status
+ * @property Carbon|null $approved_at
+ * @property int|null $approved_by
+ * @property Carbon|null $rejected_at
+ * @property int|null $rejected_by
+ * @property Carbon|null $suspended_at
+ * @property int|null $suspended_by
+ * @property array<string, string>|null $rejection_reason
+ * @property string|null $bank_name
+ * @property string|null $bank_account_holder
+ * @property string|null $bank_iban
+ * @property string|null $bank_swift_bic
+ * @property string|null $bank_branch
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ * @property Carbon|null $deleted_at
+ * @property-read User|null $user
+ * @property-read Collection<int, VendorApprovedProductType> $approvedTypes
+ *
+ * @method static \Illuminate\Database\Eloquent\Builder<static> pending()
+ * @method static \Illuminate\Database\Eloquent\Builder<static> approved()
+ * @method static \Illuminate\Database\Eloquent\Builder<static> approvedForType(\App\Modules\Shared\Domain\Enums\ProductType $type)
+ */
+class VendorProfile extends Model
+{
+    /** @use HasFactory<VendorProfileFactory> */
+    use HasFactory, HasPublicId, HasTranslations, SoftDeletes;
+
+    /** @var array<int, string> */
+    public $translatable = ['business_name', 'bio', 'address_line', 'rejection_reason'];
+
+    protected $fillable = [
+        'public_id',
+        'user_id',
+        'business_name',
+        'slug',
+        'bio',
+        'logo_path',
+        'cover_path',
+        'business_type',
+        'commercial_register_no',
+        'tax_id',
+        'national_id',
+        'primary_governorate_id',
+        'primary_city_id',
+        'address_line',
+        'latitude',
+        'longitude',
+        'approval_status',
+        'approved_at',
+        'approved_by',
+        'rejected_at',
+        'rejected_by',
+        'suspended_at',
+        'suspended_by',
+        'rejection_reason',
+        'bank_name',
+        'bank_account_holder',
+        'bank_iban',
+        'bank_swift_bic',
+        'bank_branch',
+    ];
+
+    public function getRouteKeyName(): string
+    {
+        return 'public_id';
+    }
+
+    protected static function newFactory(): VendorProfileFactory
+    {
+        return VendorProfileFactory::new();
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function documents(): HasMany
+    {
+        return $this->hasMany(VendorDocument::class);
+    }
+
+    public function approvedTypes(): HasMany
+    {
+        return $this->hasMany(VendorApprovedProductType::class)->whereNull('revoked_at');
+    }
+
+    public function approvedProductTypes(): HasMany
+    {
+        return $this->hasMany(VendorApprovedProductType::class);
+    }
+
+    public function businessHours(): HasMany
+    {
+        return $this->hasMany(VendorBusinessHour::class);
+    }
+
+    public function coverageAreas(): HasMany
+    {
+        return $this->hasMany(VendorCoverageArea::class);
+    }
+
+    public function scopePending(Builder $query): Builder
+    {
+        return $query->where('approval_status', ApprovalStatus::Pending->value);
+    }
+
+    public function scopeApproved(Builder $query): Builder
+    {
+        return $query->where('approval_status', ApprovalStatus::Approved->value);
+    }
+
+    public function scopeApprovedForType(Builder $query, ProductType $type): Builder
+    {
+        return $query->where('approval_status', ApprovalStatus::Approved->value)->whereHas(
+            'approvedTypes',
+            fn (Builder $q) => $q->where('product_type', $type->value)
+        );
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'approval_status' => ApprovalStatus::class,
+            'business_type' => BusinessType::class,
+            'approved_at' => 'datetime',
+            'rejected_at' => 'datetime',
+            'suspended_at' => 'datetime',
+            'latitude' => 'decimal:7',
+            'longitude' => 'decimal:7',
+            'rating_avg' => 'decimal:2',
+            'rating_count' => 'integer',
+            'response_time_avg_minutes' => 'integer',
+        ];
+    }
+}

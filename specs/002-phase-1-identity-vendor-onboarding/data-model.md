@@ -10,7 +10,7 @@
 ### User (extends Authenticatable)
 
 **Table**: `users` (framework-managed + Spatie HasRoles)
-**Traits**: `HasRoles`, `HasUlids`, `SoftDeletes`, `HasFactory`
+**Traits**: `HasRoles`, `HasApiTokens`, `HasPublicId`, `SoftDeletes`, `HasFactory`
 **Public identifier**: `public_id` CHAR(26) ULID
 
 | Field | Type | Notes |
@@ -42,7 +42,7 @@
 ### VendorProfile
 
 **Table**: `vendor_profiles`
-**Traits**: `HasUlids`, `SoftDeletes`, `HasTranslations`, `HasMedia` (for logo/cover — Phase 2)
+**Traits**: `HasPublicId`, `SoftDeletes`, `HasTranslations`, `HasMedia` (for logo/cover — Phase 2)
 **Translatable**: `['business_name', 'bio', 'address_line', 'rejection_reason']`
 
 | Field | Type | Notes |
@@ -67,6 +67,10 @@
 | approval_status | ENUM(pending,approved,rejected,suspended) DEFAULT pending | |
 | approved_at | TIMESTAMP NULL | |
 | approved_by | BIGINT FK users NULL | |
+| rejected_at | TIMESTAMP NULL | |
+| rejected_by | BIGINT FK users NULL | |
+| suspended_at | TIMESTAMP NULL | |
+| suspended_by | BIGINT FK users NULL | |
 | rejection_reason | JSON NULL | translatable |
 | bank_name | VARCHAR(120) NULL | |
 | bank_account_holder | VARCHAR(160) NULL | |
@@ -91,7 +95,7 @@
 - `scopeApprovedForType(ProductType $type)` — joins vendor_approved_product_types
 
 **Casts**:
-- `approval_status` → `VendorApprovalStatus` enum
+- `approval_status` → `ApprovalStatus` enum
 - `business_type` → `BusinessType` enum
 
 ---
@@ -99,7 +103,7 @@
 ### VendorDocument
 
 **Table**: `vendor_documents`
-**Traits**: `HasUlids`
+**Traits**: `HasPublicId`
 
 | Field | Type | Notes |
 |---|---|---|
@@ -202,7 +206,7 @@
 ### CustomerAddress
 
 **Table**: `customer_addresses`
-**Traits**: `HasUlids`, `SoftDeletes`
+**Traits**: `HasPublicId`, `SoftDeletes`
 
 | Field | Type | Notes |
 |---|---|---|
@@ -263,10 +267,10 @@
 ### VendorProfile.approval_status
 
 ```
-pending → approved    (ApproveVendorAction)
-pending → rejected    (RejectVendorAction — admin)
-approved → suspended  (SuspendVendorAction — admin, Phase 2 cut-list)
-rejected → pending    (vendor resubmits — Phase 2 cut-list)
+pending → approved    (ApproveVendorProfileAction)
+pending → rejected    (RejectVendorProfileAction — admin)
+approved → suspended  (SuspendVendorAction — admin, Phase 1 scope per FR-I14)
+rejected → pending    (vendor resubmits — deferred to Phase 2)
 ```
 
 ### VendorDocument.status
@@ -291,9 +295,10 @@ active row → revoked (revoked_at set)                     → RevokeVendorType
 |---|---|---|
 | `CustomerRegistered` | `{user_id, public_id, email, locale}` | RegisterCustomerAction |
 | `VendorRegistered` | `{user_id, vendor_profile_id, public_id}` | RegisterVendorAction |
-| `VendorApproved` | `{vendor_profile_id, approved_by}` | ApproveVendorAction |
+| `VendorApproved` | `{vendor_profile_id, approved_by}` | ApproveVendorProfileAction |
 | `VendorApprovedForType` | `{vendor_profile_id, product_type, approved_by}` | ApproveVendorForTypeAction |
-| `VendorRejected` | `{vendor_profile_id, reason, rejected_by}` | RejectVendorAction |
+| `VendorRejected` | `{vendor_profile_id, reason, rejected_by}` | RejectVendorProfileAction |
+| `VendorSuspended` | `{vendor_profile_id, suspended_by}` | SuspendVendorAction — triggers RevokeAllVendorTypesOnStatusChange |
 | `VendorTypeRevoked` | `{vendor_profile_id, product_type, reason, revoked_by}` | RevokeVendorTypeAction |
 | `PhoneVerified` | `{user_id}` | VerifyPhoneAction |
 

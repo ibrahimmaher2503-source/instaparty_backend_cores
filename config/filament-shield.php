@@ -17,7 +17,7 @@ return [
     'tenant_model' => null,
 
     'auth_provider_model' => [
-        'fqcn' => 'App\\Models\\User',
+        'fqcn' => 'App\\Modules\\Identity\\Domain\\Models\\User',
     ],
 
     'super_admin' => [

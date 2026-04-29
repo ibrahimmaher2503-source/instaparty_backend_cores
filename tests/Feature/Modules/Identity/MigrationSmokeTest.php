@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-use App\Models\User;
 use App\Modules\Geography\Domain\Models\City;
 use App\Modules\Geography\Domain\Models\Governorate;
 use App\Modules\Geography\Domain\Models\Region;
+use App\Modules\Identity\Domain\Models\User;
 use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;

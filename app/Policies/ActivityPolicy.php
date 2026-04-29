@@ -2,9 +2,9 @@
 
 namespace App\Policies;
 
-use App\Models\User;
-use Illuminate\Auth\Access\HandlesAuthorization;
+use App\Modules\Identity\Domain\Models\User;
 use Spatie\Activitylog\Models\Activity;
+use Illuminate\Auth\Access\HandlesAuthorization;
 
 class ActivityPolicy
 {

@@ -1,13 +1,45 @@
-# Feature Specification: Phase 1 — Identity & Vendor Onboarding
+# Feature Specification: Identity & Vendor Onboarding (Phases 0.2 + 1.0 + 1.1)
 
 **Feature Branch**: `002-identity-vendor-onboarding`
 **Created**: 2026-04-27
+**Updated**: 2026-04-28
 **Status**: Draft
-**Phase**: Phase 1 (Week 2, Days 6–8)
+**Phases**: Phase 0.2 (Week 1, Day 5) → Phase 1.0 (Week 2, Days 1–3) → Phase 1.1 (Week 2, Days 4–5)
+
+---
+
+## Phase Dependency Map
+
+```
+Phase 0.2 — Identity Migrations + MoneyCast
+    ↓ (all Phase 1 modules requiring money columns depend on this)
+Phase 1.0 — Identity Core: Models + Auth
+    ↓ (vendor must exist before creating services)
+Phase 1.1 — Vendor Onboarding + Approval
+    ↓ (vendor must be approved per type before Phase 2.x service creation)
+Phase 2.x — Catalog (service creation per approved type)
+```
 
 ---
 
 ## User Scenarios & Testing *(mandatory)*
+
+### User Story 0 — Infrastructure Foundation: Identity Schema + Money Cast (Priority: P0)
+
+The development team can run `php artisan migrate:fresh` on a clean database and have all 10 Identity tables created in the correct dependency order with FK constraints to Geography. A `MoneyCast` value object is available in the Shared module so that any future money column (e.g., `delivery_fee_minor`) is returned as a `Brick\Money\Money` object from any model, never as a raw integer.
+
+**Why this priority**: Every subsequent phase (auth, catalog, payments, settlement) depends on the schema being in place and money handling being correct. This is the load-bearing floor under all other stories.
+
+**Independent Test**: On a blank DB, run `php artisan migrate:fresh` — all Identity tables exist, FK constraints are live, and a unit test confirms `MoneyCast` round-trips `(5000, 'EGP')` ↔ `Money::of(50, 'EGP')`.
+
+**Acceptance Scenarios**:
+
+1. **Given** a blank database, **When** `php artisan migrate:fresh` runs, **Then** all 10 Identity tables (`users`, `vendor_profiles`, `vendor_documents`, `vendor_approved_product_types`, `vendor_business_hours`, `vendor_coverage_areas`, `customer_profiles`, `user_devices`, `two_factor_secrets`, `customer_addresses`) exist with correct schema
+2. **Given** the Identity schema is migrated, **When** a city row is deleted that has a vendor coverage area referencing it, **Then** the deletion is rejected by the FK constraint (restrictOnDelete)
+3. **Given** a model with `deposit_minor` (BIGINT) and `deposit_currency` (CHAR 3) columns, **When** accessed via `MoneyCast`, **Then** the getter returns `Brick\Money\Money::ofMinor(value, currency)` and the setter converts a `Money` object back to integer minor units
+4. **Given** a null value in a money column, **When** accessed via `MoneyCast`, **Then** null is returned (nullable money support)
+
+---
 
 ### User Story 1 — Customer Registration & Authentication (Priority: P1)
 
@@ -111,6 +143,15 @@ An approved vendor can update their business profile (name, bio, coverage areas,
 
 ### Functional Requirements
 
+#### Phase 0.2 — Schema Foundation
+
+- **FR-I00a**: All 10 Identity table migrations MUST run in dependency order (`users` before `vendor_profiles`, Geography `cities` before `vendor_coverage_areas`, etc.) without errors on a blank MySQL 8 database with `utf8mb4_unicode_ci` charset
+- **FR-I00b**: Every FK from Identity tables to `cities.id` MUST use `restrictOnDelete()` — cascade is forbidden unless explicitly domain-correct
+- **FR-I00c**: `MoneyCast` in `app/Modules/Shared/Domain/Casts/MoneyCast` MUST convert a `({field}_minor BIGINT, {field}_currency CHAR(3))` column pair to/from `Brick\Money\Money` — getter: `Money::ofMinor(minor, currency)`, setter: stores integer minor units; null money columns MUST return null without throwing
+- **FR-I00d**: ADR-0003 (`docs/adr/ADR-0003-identity-module.md`) Phase 0 sections MUST be finalized and committed before Phase 1.0 work begins
+
+#### Phase 1.0 — Identity Core
+
 - **FR-I01**: System MUST allow customers to register with email + phone + password; phone OTP verification required before booking
 - **FR-I02**: System MUST allow vendors to register with full business profile; approval_status starts at `pending`
 - **FR-I03**: Vendors MUST be able to upload documents (CR, tax card, national ID, IBAN proof) stored via `Storage::disk('s3-private')` with signed URL access only (15-min TTL); metadata (`file_path`, `file_name`, `doc_type`, `status`) stored on `vendor_documents` table — NOT via MediaLibrary; accepted MIME types: `application/pdf`, `image/jpeg`, `image/png`; max file size: 10 MB
@@ -127,11 +168,17 @@ An approved vendor can update their business profile (name, bio, coverage areas,
 - **FR-I14**: When `approval_status` transitions to `suspended` or `rejected`, the system MUST auto-revoke ALL active `vendor_approved_product_types` rows and revoke the corresponding Spatie permissions; implemented as `RevokeAllVendorTypesOnStatusChange` listener on `VendorSuspended` and `VendorRejected` events (fires via `DB::afterCommit`)
 - **FR-I15**: OTP send requests MUST be rate-limited to 3 attempts per phone number per 10-minute window; after 3 failed attempts the phone is locked out for 60 minutes; lockout enforced via Redis (key `otp_lockout:{phone_e164}`, TTL 3600s); applies from Phase 1 (stub) through Phase 5 (real SMS)
 
+#### Phase 1.1 — Vendor Onboarding + Approval (Filament Queue)
+
+- **FR-I16**: Filament Vendor Approval Queue MUST display all vendors with `approval_status = pending`, filterable by submission date and governorate
+- **FR-I17**: `VendorProfileResource` in Filament MUST expose per-type approve/revoke action buttons for each product type (rental, sale, digital); each button calls the corresponding Action class — no business logic in the Filament closure
+- **FR-I18**: Document upload for CR, tax card, and IBAN proof MUST be accessible from the Filament vendor detail page via Spatie MediaLibrary (gallery view); original documents remain on `s3-private` — the Filament view uses signed URLs only
+
 ### Key Entities
 
 - **User**: Single users table for all 3 roles; Spatie roles (customer, vendor, admin); ULID public_id
 - **VendorProfile**: 1:1 to user; translatable business_name, bio, address_line; approval_status ENUM; FK to governorates + cities
-- **VendorDocument**: Belongs to vendor_profile; document_type ENUM; stored via MediaLibrary
+- **VendorDocument**: Belongs to vendor_profile; document_type ENUM; stored via `Storage::disk('s3-private')` with signed URL access (15-min TTL); `file_path`/`file_name` on `vendor_documents` table — NOT via MediaLibrary
 - **VendorApprovedProductType**: per-(vendor_profile, product_type) approval log with revocation support; UNIQUE on (vendor_profile_id, product_type, revoked_at)
 - **VendorBusinessHour**: Weekly schedule per vendor; day_of_week + open/close times
 - **VendorCoverageArea**: Cities the vendor serves; optional delivery fee per city (money columns)
@@ -144,18 +191,32 @@ An approved vendor can update their business profile (name, bio, coverage areas,
 
 ### Measurable Outcomes
 
+#### Phase 0.2 Exit Gate
+
+- **SC-000a**: `php artisan migrate:fresh` completes without errors on a blank database (CI must pass this check)
+- **SC-000b**: Attempting to delete a Geography city that has at least one `vendor_coverage_areas` row referencing it fails with a database constraint error — verified by automated test
+- **SC-000c**: `MoneyCast` unit test passes: `(50000, 'EGP')` round-trips through `MoneyCast::get()` and `MoneyCast::set()` without loss of precision
+
+#### Phase 1.0 Exit Gate
+
 - **SC-001**: A new vendor can complete the full registration + document upload flow in under 5 minutes via API
 - **SC-002**: Admin can approve a vendor for all 3 product types via Filament in under 2 minutes (3 button clicks)
 - **SC-003**: API responses for all Identity endpoints return correct locale (EN/AR) based on Accept-Language header — 100% of responses
 - **SC-004**: Pest test suite covers happy path, 401, 403, validation, and locale for every Identity endpoint — test run completes in under 60 seconds
-- **SC-005**: Vendor without type approval receives 403 when attempting service creation (enforced by Spatie Gate, not just middleware)
+
+#### Phase 1.1 Exit Gate
+
+- **SC-005**: Vendor without type approval receives 403 when attempting service creation (enforced by Spatie Gate, not just middleware) — Phase 1 verifies `Gate::check()`/`hasPermissionTo()` returns `false`; full 403 on the service creation endpoint is a Phase 2 integration test
 - **SC-006**: All approval/revocation actions appear in the audit log with actor, timestamp, and changed values
 - **SC-007**: The 4th OTP send attempt within 10 minutes returns 429 with a `Retry-After` header — verified by automated test
+- **SC-008**: Admin Filament Vendor Approval Queue shows all pending vendors and allows per-type approval/revocation within 3 clicks per type
 
 ---
 
 ## Assumptions
 
+- `MoneyCast` lives in `app/Modules/Shared/Domain/Casts/MoneyCast` and is globally available to all modules; it is not a model-specific cast — models declare it via `protected $casts`
+- Phase 0.2 delivers schema only (migrations + MoneyCast); no models, no actions, no routes — these are Phase 1.0 deliverables
 - Phone OTP is stubbed in Phase 1 (always succeeds with code "000000" in test/dev environments); real SMS gateway wired in Phase 5 (Week 6)
 - Admin 2FA (TOTP) is deferred to Phase 6 (Week 7) per ADR-0003 §10 cut-list; `two_factor_secrets` migration exists but EnableTwoFactorAction is not implemented in Phase 1
 - Vendor business hours UI in Filament is deferred to Phase 2 (Catalog phase) per ADR-0003 §10; the API endpoint and migration are included in Phase 1

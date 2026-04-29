@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace App\Providers\Filament;
 
+use BezhanSalleh\FilamentLanguageSwitch\LanguageSwitch;
 use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
+use Filament\Navigation\NavigationGroup;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Filament\Pages;
@@ -24,6 +26,15 @@ use Rmsramos\Activitylog\ActivitylogPlugin;
 
 class AdminPanelProvider extends PanelProvider
 {
+    public function boot(): void
+    {
+        LanguageSwitch::configureUsing(function (LanguageSwitch $switch): void {
+            $switch
+                ->locales(['en', 'ar'])
+                ->visible(insidePanels: true);
+        });
+    }
+
     public function panel(Panel $panel): Panel
     {
         return $panel
@@ -45,13 +56,14 @@ class AdminPanelProvider extends PanelProvider
                 Widgets\FilamentInfoWidget::class,
             ])
             ->navigationGroups([
-                'Geography',
-                'Identity',
-                'Catalog',
-                'Booking',
-                'Payments',
-                'Reports',
-                'Settings',
+                NavigationGroup::make()->label(fn (): string => __('admin.nav.groups.geography')),
+                NavigationGroup::make()->label(fn (): string => __('admin.nav.groups.identity')),
+                NavigationGroup::make()->label(fn (): string => __('admin.nav.groups.vendor_onboarding')),
+                NavigationGroup::make()->label(fn (): string => __('admin.nav.groups.catalog')),
+                NavigationGroup::make()->label(fn (): string => __('admin.nav.groups.booking')),
+                NavigationGroup::make()->label(fn (): string => __('admin.nav.groups.payments')),
+                NavigationGroup::make()->label(fn (): string => __('admin.nav.groups.reports')),
+                NavigationGroup::make()->label(fn (): string => __('admin.nav.groups.settings')),
             ])
             ->plugins([
                 FilamentShieldPlugin::make(),

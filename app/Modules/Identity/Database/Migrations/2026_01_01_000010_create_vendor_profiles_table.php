@@ -38,6 +38,10 @@ return new class extends Migration
             $table->enum('approval_status', ['pending', 'approved', 'rejected', 'suspended'])->default('pending');
             $table->timestamp('approved_at')->nullable();
             $table->foreignId('approved_by')->nullable()->constrained('users')->nullOnDelete();
+            $table->timestamp('rejected_at')->nullable();
+            $table->foreignId('rejected_by')->nullable()->constrained('users')->nullOnDelete();
+            $table->timestamp('suspended_at')->nullable();
+            $table->foreignId('suspended_by')->nullable()->constrained('users')->nullOnDelete();
             $table->json('rejection_reason')->nullable();
 
             $table->string('bank_name', 120)->nullable();

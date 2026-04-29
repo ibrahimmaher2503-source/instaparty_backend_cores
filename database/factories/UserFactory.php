@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Database\Factories;
 
-use App\Models\User;
+use App\Modules\Identity\Domain\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -14,6 +14,8 @@ use Illuminate\Support\Str;
  */
 class UserFactory extends Factory
 {
+    protected $model = User::class;
+
     protected static ?string $password;
 
     public function definition(): array
@@ -37,6 +39,29 @@ class UserFactory extends Factory
     {
         return $this->state(fn (array $attributes) => [
             'email_verified_at' => null,
+            'phone_verified_at' => null,
         ]);
+    }
+
+    public function phoneVerified(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'phone_verified_at' => now(),
+        ]);
+    }
+
+    public function asCustomer(): static
+    {
+        return $this->afterCreating(fn (User $user) => $user->assignRole('customer'));
+    }
+
+    public function asVendor(): static
+    {
+        return $this->afterCreating(fn (User $user) => $user->assignRole('vendor'));
+    }
+
+    public function asAdmin(): static
+    {
+        return $this->afterCreating(fn (User $user) => $user->assignRole('admin'));
     }
 }

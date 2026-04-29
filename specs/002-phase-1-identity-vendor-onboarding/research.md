@@ -1,6 +1,7 @@
-# Research: Phase 1 — Identity & Vendor Onboarding
+# Research: Identity & Vendor Onboarding (Phases 0.2 + 1.0 + 1.1)
 
 **Date**: 2026-04-27
+**Updated**: 2026-04-28
 **Status**: Complete — no NEEDS CLARIFICATION markers remain
 
 ---
@@ -105,3 +106,61 @@ return DB::transaction(function () use ($dto) {
     return $user;
 });
 ```
+
+
+---
+
+## R8 — MoneyCast Implementation Contract (Phase 0.2)
+
+**Decision**: Custom `CastsAttributes` class in `app/Modules/Shared/Domain/Casts/MoneyCast.php`. Constructor receives a comma-separated column pair: `MoneyCast::class . ':delivery_fee_minor,delivery_fee_currency'`.
+
+**Rationale**: Laravel's built-in `AsValueObject` doesn't support paired columns. `Brick\Money` doesn't need Eloquent coupling — the cast bridges the two cleanly. Keeping it in `Shared/Domain/Casts/` makes it importable by any module without cross-module model imports.
+
+**Interface**:
+```php
+class MoneyCast implements CastsAttributes
+{
+    public function __construct(
+        protected string $minorField,
+        protected string $currencyField,
+    ) {}
+
+    public function get(Model $model, string $key, mixed $value, array $attributes): ?Money
+    {
+        if ($attributes[$this->minorField] === null) return null;
+        return Money::ofMinor($attributes[$this->minorField], $attributes[$this->currencyField]);
+    }
+
+    public function set(Model $model, string $key, mixed $value, array $attributes): array
+    {
+        if ($value === null) return [$this->minorField => null, $this->currencyField => null];
+        return [
+            $this->minorField   => $value->getMinorAmount()->toInt(),
+            $this->currencyField => $value->getCurrency()->getCurrencyCode(),
+        ];
+    }
+}
+```
+
+**Alternatives considered**: `spatie/laravel-money` — rejected (not on `10_Package_List.md`; adds a package when a 20-line cast achieves the same result).
+
+---
+
+## R9 — Identity Migration Dependency Order (Phase 0.2)
+
+**Decision**: Migrations run in this exact order to satisfy FK constraints:
+
+1. `users` — Laravel framework default (already exists)
+2. `vendor_profiles` — FK to `users`, `governorates`, `cities`
+3. `vendor_documents` — FK to `vendor_profiles`, `users` (reviewed_by)
+4. `vendor_approved_product_types` — FK to `vendor_profiles`, `users`
+5. `vendor_business_hours` — FK to `vendor_profiles`
+6. `vendor_coverage_areas` — FK to `vendor_profiles`, `cities` (owned by Geography migration 000005 — must already exist)
+7. `customer_profiles` — FK to `users`
+8. `customer_addresses` — FK to `users`, `cities`
+9. `user_devices` — FK to `users`
+10. `two_factor_secrets` — FK to `users`
+
+**Cross-module FK note**: `vendor_profiles.primary_city_id` and `vendor_coverage_areas.city_id` and `customer_addresses.city_id` all FK to `cities` — Geography module migrations must run before Identity. `IdentityServiceProvider` uses `loadMigrationsFrom()` which respects alphabetical timestamp order within the module, not across modules. The `DatabaseSeeder` must call `Geography` migrations first via `migrate:fresh` ordering.
+
+**Alternatives considered**: Deferring FK constraints — rejected (CLAUDE.md §conventions rule 13 mandates declared FK constraints).

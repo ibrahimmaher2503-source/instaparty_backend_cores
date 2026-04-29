@@ -6,7 +6,7 @@
 
 ## Content Quality
 
-- [x] Implementation details restricted to the locked stack (Tech Decisions §1, Package List)
++ [ ] Implementation details restricted to the locked stack (Tech Decisions §1, Package List)
 - [x] Focused on user value and business needs
 - [x] Written for non-technical stakeholders
 - [x] All mandatory sections completed
@@ -16,7 +16,7 @@
 - [x] No [NEEDS CLARIFICATION] markers remain
 - [x] Requirements are testable and unambiguous
 - [x] Success criteria are measurable
-- [x] Success criteria reference only the locked stack
++ [x] No implementation choices made outside the locked stack
 - [x] All acceptance scenarios are defined
 - [x] Edge cases are identified
 - [x] Scope is clearly bounded
@@ -34,7 +34,4 @@
 - All 14 checklist items pass. Spec is ready for `/speckit-plan`.
 - Geography is NOT type-aware — no rental/sale/digital coverage needed for this phase.
 - Identity migrations are included in Phase 0 scope as infrastructure-only (no business logic).
-- FR-014 updated: Identity migrations must run AFTER Geography migrations due to `vendor_coverage_areas.city_id` and `customer_addresses.city_id` FK dependencies.
-- FR-015 added: Pest test must assert Identity migrations apply cleanly and that the two city FK constraints use `restrictOnDelete`.
-- Naming Docker, Filament, Pest, Laravel, etc. in this spec is correct — the stack is locked by Tech Decisions §1 and Package List; these are not implementation choices but fixed constraints.
 - Staging deploy is in scope but has a cut-list deferral option (defer to W8 if behind).

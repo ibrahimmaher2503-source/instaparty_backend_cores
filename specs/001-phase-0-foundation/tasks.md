@@ -32,7 +32,7 @@ Modular monolith — all domain code under `app/Modules/{Name}/`. Framework code
 ---
 
 ## Phase 2: Foundational (Blocking Prerequisites)
-
+//
 **Purpose**: Core infrastructure that MUST be complete before any user story work begins: users table extended, MoneyCast, Filament installed and configured, roles seeder, dev-env command.
 
 **CRITICAL**: No user story work can begin until this phase is complete.
@@ -126,7 +126,7 @@ Modular monolith — all domain code under `app/Modules/{Name}/`. Framework code
 **Independent Test**: Push a commit with a deliberate Pint violation; confirm CI fails on the lint step. Fix and push; confirm CI passes end-to-end.
 
 - [X] T044 [US2] Create `.github/workflows/ci.yml`: trigger on `push` and `pull_request`; steps: `actions/checkout`, `shivammathur/setup-php@v2` (PHP 8.3, extensions: pdo_mysql, redis, mbstring, xml, bcmath, gd), `composer install --no-interaction`, start MySQL 8 service container (`MYSQL_ROOT_PASSWORD`, `MYSQL_DATABASE`, `MYSQL_USER`, `MYSQL_PASSWORD` from env), wait for MySQL ready, `php artisan key:generate`, `php artisan migrate --force`, `./vendor/bin/pest --ci`, `./vendor/bin/pint --test`, `./vendor/bin/phpstan analyse --no-progress`; all credentials read from `${{ secrets.* }}` — never hardcoded
-- [~] T045 [P] [US2] Add a `## CI / GitHub Actions Secrets` section to `.env.example` listing every secret required: `CI_DB_PASSWORD`, `CI_REDIS_URL`, `STAGING_SSH_KEY`, `STAGING_HOST`, `STAGING_USER` — document purpose and format for each; confirm all locale, Sanctum, Scout, and Storage variables from T005 are also present (they must already be there — this task only adds the CI-specific block) — **BLOCKED**: `.env*` writes denied by `.claude/settings.json`. Manual step: add CI secrets block to `.env.example`.
+- [ ] T045 [P] [US2] Add a `## CI / GitHub Actions Secrets` section to `.env.example` listing every secret required: `CI_DB_PASSWORD`, `CI_REDIS_URL`, `STAGING_SSH_KEY`, `STAGING_HOST`, `STAGING_USER` — document purpose and format for each; confirm all locale, Sanctum, Scout, and Storage variables from T005 are also present (they must already be there — this task only adds the CI-specific block)
 
 **Checkpoint**: Push to `master`; GitHub Actions passes all four steps (install → migrate → pest → pint → phpstan) within 5 minutes.
 
@@ -140,9 +140,9 @@ Modular monolith — all domain code under `app/Modules/{Name}/`. Framework code
 
 **Independent Test**: Visit `https://staging.instaparty.com/admin`, log in with admin credentials, confirm Egypt governorates are listed.
 
-- [X] T046 [US4] Create `docker-compose.prod.yml` at repo root: services for `app` (production image), `mysql`, `redis`; named volumes for persistence; environment variables read from `.env` on the server (not baked into the image)
-- [X] T047 [P] [US4] Create `Caddyfile` at repo root: `staging.instaparty.com { reverse_proxy app:8000 }` — Caddy handles TLS via Let's Encrypt automatically
-- [X] T048 [US4] Add staging deploy job to `.github/workflows/ci.yml` (runs only on `master` branch, after CI job passes): SSH to Hetzner server via `appleboy/ssh-action`, `git pull`, `docker compose -f docker-compose.prod.yml up -d --build`, `docker compose exec app php artisan migrate --force`; server address, user, and SSH key from GitHub Secrets
+- [ ] T046 [US4] Create `docker-compose.prod.yml` at repo root: services for `app` (production image), `mysql`, `redis`; named volumes for persistence; environment variables read from `.env` on the server (not baked into the image)
+- [ ] T047 [P] [US4] Create `Caddyfile` at repo root: `staging.instaparty.com { reverse_proxy app:8000 }` — Caddy handles TLS via Let's Encrypt automatically
+- [ ] T048 [US4] Add staging deploy job to `.github/workflows/ci.yml` (runs only on `master` branch, after CI job passes): SSH to Hetzner server via `appleboy/ssh-action`, `git pull`, `docker compose -f docker-compose.prod.yml up -d --build`, `docker compose exec app php artisan migrate --force`; server address, user, and SSH key from GitHub Secrets
 
 **Checkpoint**: `https://staging.instaparty.com/admin` loads over HTTPS; admin login works; Geography Resources display Egypt data.
 
@@ -152,11 +152,11 @@ Modular monolith — all domain code under `app/Modules/{Name}/`. Framework code
 
 **Purpose**: Final integration, seeder wiring, and validation pass.
 
-- [X] T049 Update `database/seeders/DatabaseSeeder.php` to call all seeders in dependency order: `RolesAndPermissionsSeeder` → `AdminUserSeeder` → `EgyptGeographySeeder`; confirm `php artisan migrate --seed` runs cleanly end-to-end
-- [~] T050 [P] Add `Telescope` to `.env.example` — **BLOCKED**: `.env*` writes denied by `.claude/settings.json`. Manual step: append `TELESCOPE_ENABLED=false` to `.env.example`. with `TELESCOPE_ENABLED=false` for production; confirm `laravel/telescope` is only active when `APP_ENV=local`
-- [~] T051 Follow `specs/001-phase-0-foundation/quickstart.md` — **MANUAL VALIDATION**: requires `docker compose up`, `php artisan migrate --seed`, browser visit to `/admin`. Run locally; not automatable from this session. steps 1-6 on a clean database (drop and recreate); confirm every step succeeds and the admin panel shows correct bilingual geography
-- [X] T052 [P] Run `./vendor/bin/pint` + `./vendor/bin/phpstan analyse` one final time; fix any remaining violations before marking phase complete
-- [~] T053 [P] Run `php artisan shield:generate --all` — **MANUAL POST-MIGRATE**: requires `php artisan migrate` first (needs `permissions` table). Run locally after T051. one final time to ensure all permissions are regenerated after any resource changes; commit the result
+- [ ] T049 Update `database/seeders/DatabaseSeeder.php` to call all seeders in dependency order: `RolesAndPermissionsSeeder` → `AdminUserSeeder` → `EgyptGeographySeeder`; confirm `php artisan migrate --seed` runs cleanly end-to-end
+- [ ] T050 [P] Add `Telescope` to `.env.example` with `TELESCOPE_ENABLED=false` for production; confirm `laravel/telescope` is only active when `APP_ENV=local`
+- [ ] T051 Follow `specs/001-phase-0-foundation/quickstart.md` steps 1-6 on a clean database (drop and recreate); confirm every step succeeds and the admin panel shows correct bilingual geography
+- [ ] T052 [P] Run `./vendor/bin/pint` + `./vendor/bin/phpstan analyse` one final time; fix any remaining violations before marking phase complete
+- [ ] T053 [P] Run `php artisan shield:generate --all` one final time to ensure all permissions are regenerated after any resource changes; commit the result
 
 ---
 

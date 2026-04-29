@@ -21,7 +21,7 @@ class CityFactory extends Factory
         return [
             'public_id' => (string) Str::ulid(),
             'region_id' => Region::factory(),
-            'governorate_id' => fn (array $attrs) => Region::find($attrs['region_id'])->governorate_id,
+            'governorate_id' => fn (array $attrs) => Region::findOrFail($attrs['region_id'])->governorate_id,
             'name' => ['en' => fake()->city(), 'ar' => fake()->city()],
             'latitude' => fake()->randomFloat(7, 22, 31),
             'longitude' => fake()->randomFloat(7, 25, 35),

@@ -29,9 +29,27 @@ class RegionResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-map-pin';
 
-    protected static ?string $navigationGroup = 'Geography';
-
     protected static ?int $navigationSort = 3;
+
+    public static function getNavigationGroup(): ?string
+    {
+        return __('admin.nav.groups.geography');
+    }
+
+    public static function getNavigationLabel(): string
+    {
+        return __('geography.regions');
+    }
+
+    public static function getModelLabel(): string
+    {
+        return __('geography.region');
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('geography.regions');
+    }
 
     public static function getTranslatableLocales(): array
     {
@@ -44,21 +62,25 @@ class RegionResource extends Resource
             Section::make(__('geography.region'))
                 ->schema([
                     Select::make('governorate_id')
+                        ->label(__('geography.governorate'))
                         ->relationship('governorate', 'name->en')
                         ->searchable()
                         ->preload()
                         ->required(),
 
                     TextInput::make('name')
+                        ->label(__('geography.columns.name'))
                         ->required()
                         ->maxLength(255),
 
                     TextInput::make('sort_order')
+                        ->label(__('geography.columns.sort_order'))
                         ->numeric()
                         ->default(0)
                         ->minValue(0),
 
                     Toggle::make('is_active')
+                        ->label(__('geography.columns.is_active'))
                         ->default(true),
                 ])
                 ->columns(2),
@@ -70,29 +92,36 @@ class RegionResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('name')
+                    ->label(__('geography.columns.name'))
                     ->searchable()
                     ->sortable(),
 
                 TextColumn::make('governorate.name')
+                    ->label(__('geography.columns.governorate'))
                     ->searchable()
                     ->sortable(),
 
                 TextColumn::make('sort_order')
+                    ->label(__('geography.columns.sort_order'))
                     ->sortable(),
 
                 IconColumn::make('is_active')
+                    ->label(__('geography.columns.is_active'))
                     ->boolean()
                     ->sortable(),
 
                 TextColumn::make('created_at')
+                    ->label(__('geography.columns.created_at'))
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->defaultSort('sort_order')
             ->filters([
-                TernaryFilter::make('is_active'),
+                TernaryFilter::make('is_active')
+                    ->label(__('geography.filters.is_active')),
                 SelectFilter::make('governorate_id')
+                    ->label(__('geography.filters.governorate'))
                     ->relationship('governorate', 'name->en')
                     ->searchable()
                     ->preload(),

@@ -13,7 +13,8 @@ When this document conflicts with anything else (chat, older notes, training dat
 | Pattern | Modular Monolith |
 | Module location | `app/Modules/{ModuleName}/` |
 | Module isolation | Domain events, repository interfaces, no cross-module model imports |
-| Modules in Phase 1 | Identity, Catalog, Discovery, Booking, Negotiation, Payments, Settlement, Reviews, Communication, Reporting, Shared |
+Modules in Phase 1: Identity, Catalog, Discovery, Booking, Negotiation, 
+Payments, Settlement, Reviews, Communication, Reporting, Geography, Shared
 | Inter-module communication | Domain events via Laravel event system |
 | Events fire | After `DB::transaction` commit only (`DB::afterCommit` or queued listeners) |
 | Layer organization (per module) | Domain → Application → Infrastructure → Http → Filament |
@@ -23,10 +24,47 @@ When this document conflicts with anything else (chat, older notes, training dat
 | Module service provider | Registers routes, migrations, translations, listeners, Filament resources, policies |
 
 ---
+### 1.1 Geography Module (NEW — Phase 1 Foundation)
+
 
 ## 2. Product Types — Central Domain Architecture
 
 This section is the locked reference for how the three product types are modeled and implemented. For full per-type schemas, lifecycles, and behaviors, see `09_Three_Product_Types.md`.
+
+
+| Concern | Decision |
+|---|---|
+| Module purpose | Owns all geographic data and location hierarchy |
+| Tables owned | countries, governorates, regions, cities |
+| Translations | JSON columns (`name` via spatie/laravel-translatable) |
+| Relationships | cities → regions → governorates → countries |
+| Vendor coverage | `vendor_coverage_areas` pivot (vendor_profile_id ↔ city_id) |
+| Ownership rule | No other module defines or mutates geographic tables directly |
+
+#### Exposed Contracts
+
+- `GeographyRepository` (Domain/Contracts)
+    - `findCityById(int $id)`
+    - `findCityByPublicId(string $publicId)`
+    - `listCitiesByGovernorate(int $governorateId)`
+    - `searchCities(string $query)`
+
+#### Cross-Module Usage
+
+| Module | Usage |
+|---|---|
+| Catalog | vendor coverage areas |
+| Discovery | location filters |
+| Booking | delivery/service location |
+| Reporting | geo aggregation |
+| Admin | settings (cities, regions, governorates) |
+
+#### Rules
+
+- Geography is **read-heavy, write-rare**
+- No soft deletes (append-only or restricted delete via admin)
+- Updates to geography MUST trigger search re-index jobs (Meilisearch sync)
+
 
 ### 2.1 The Three Types
 
@@ -212,23 +250,14 @@ This section is the locked reference for how the three product types are modeled
 | Local dev | MinIO in Docker |
 | Public bucket | `instaparty-public` (CDN-fronted) |
 | Private bucket | `instaparty-private` (signed URLs only) |
-| Library | `spatie/laravel-medialibrary` — gallery-style use cases only (see strategy below) |
+| Library | spatie/laravel-medialibrary |
 | Image conversions | thumb (200px), medium (600px), large (1200px), webp variants |
 | Disk driver | `s3` with custom endpoint for Spaces |
 | Use path style endpoint | `false` for Spaces, `true` for MinIO |
+| Vendor documents | Private bucket, signed URLs only |
+| Settlement proofs | Private bucket |
+| Service images | Public bucket with CDN |
 | Chat media | Firebase Storage (separate from app storage) |
-
-### Per-asset storage strategy (LOCKED)
-
-| Asset | Storage method | Bucket | Access |
-|---|---|---|---|
-| Service images (galleries) | `spatie/laravel-medialibrary` — `HasMedia`, `gallery` collection | `instaparty-public` | CDN public URL |
-| Vendor profile avatar / cover | `spatie/laravel-medialibrary` — `HasMedia`, `avatar`/`cover` collection | `instaparty-public` | CDN public URL |
-| Vendor documents (CR, tax card, national ID, IBAN proof) | Direct `Storage::disk('s3-private')->putFileAs(...)` — `file_path`/`file_name` on `vendor_documents` table | `instaparty-private` | Signed URL (15-min TTL) |
-| Settlement proofs | Direct `Storage::disk('s3-private')->putFileAs(...)` — explicit columns on `withdrawals` table | `instaparty-private` | Signed URL (15-min TTL) |
-| Chat media | Firebase Storage | Firebase project | Firebase download URL |
-
-**Rationale for split strategy**: `spatie/laravel-medialibrary` excels at gallery-style use cases where image conversions, collections, and media ordering are needed. Vendor documents and settlement proofs are **entities with review state** — they have their own tables (`vendor_documents`, `withdrawals`) with `status`, `reviewed_by`, `reviewed_at`, `review_notes` columns. Coupling these to MediaLibrary's morph relation adds complexity without benefit. Direct S3 with explicit `file_path`/`file_name` columns keeps the review workflow in one table and avoids joining to the `media` table for every query.
 
 ---
 
@@ -327,7 +356,7 @@ For full template column lists per type, see `09_Three_Product_Types.md` §10.
 
 ### 13.1 Filament Resources Required (Phase 1)
 
-- Settings (occasions, categories, regions, cities, governorates)
+- Settings (occasions, categories, regions, cities, governorates) (Settings resources are owned by their respective modules — geography-related resources belong to Geography module)
 - Users
 - Vendor Profiles + Vendor Approval Queue (with per-type approval)
 - Service Categories & Field Schemas (per category × type)

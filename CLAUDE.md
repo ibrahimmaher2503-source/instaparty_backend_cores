@@ -1,4 +1,4 @@
-﻿# InstaParty — Project Memory (Constitution)
+# InstaParty — Project Memory (Constitution)
 
 > Loaded by Claude Code at every session start. Treat as the project's constitution.
 > If anything in this file conflicts with a chat instruction, **this file wins** unless explicitly overridden by Ibrahim in chat.
@@ -34,7 +34,16 @@ Modular rules (auto-loaded by Claude Code on file-glob match):
 - `.claude/rules/modules.md` — when editing anything in `app/Modules/`
 - `.claude/rules/product-types.md` — when editing Catalog/Booking/Discovery/Reviews/Imports
 
+Reference Architecture Decisions (ADR):
+- docs/adr/ADR-001-geography-module.md — Geography module introduction, ownership, and boundaries
 ---
+
+## Architecture Decision Records (ADR)
+
+All significant architectural decisions are documented in `/docs/adr`.
+
+Current ADRs:
+- ADR-001: Geography Module Introduction and Ownership (`docs/adr/ADR-001-geography-module.md`)
 
 ## Stack & Architecture (LOCKED — Tech Decisions §1)
 
@@ -119,7 +128,8 @@ app/Modules/{Name}/
     └── {Name}ServiceProvider.php
 ```
 
-Phase 1 modules: **Identity, Catalog, Discovery, Booking, Negotiation, Payments, Settlement, Reviews, Communication, Reporting, Shared.**
+Phase 1 modules: Identity, Catalog, Discovery, Booking, Negotiation, 
+Payments, Settlement, Reviews, Communication, Reporting, Geography, Shared.
 
 ---
 
@@ -140,7 +150,11 @@ Phase 1 modules: **Identity, Catalog, Discovery, Booking, Negotiation, Payments,
 13. **Foreign keys** always declared. `ON DELETE CASCADE` only when domain-correct; default to `restrictOnDelete()`.
 14. **Soft deletes** ONLY on tables listed in Tech Decisions §4 (users, vendor_profiles, services, bookings, reviews, categories, customer_addresses).
 15. **Append-only** (no soft delete, no UPDATE except status fields): `wallet_ledger`, `audit_logs`, `payments`, `commissions`, `withdrawals` (status only), `booking_state_transitions`, `event_outbox`, `analytics_events`, `loyalty_ledger`.
+## Module Ownership Rules
 
+- Each table MUST have exactly one owning module
+- Geography module exclusively owns all location tables (countries, governorates, regions, cities)
+- Cross-module access MUST go through contracts (no direct model imports)
 ---
 
 ## Testing Conventions (Pest)
@@ -333,8 +347,6 @@ Detailed rules: `.claude/rules/filament.md` (resource shape) + `.claude/rules/fi
 - "Should I build this now?" → `docs/specs/09_Phasing_Plan.md`
 - "Can I install this package?" → `docs/specs/10_Package_List.md`
 - Filament UI components → `.claude/rules/filament-components.md` (auto-loads)
-- "Why was this decided this way?" → `docs/adr/`
-- **Starting a new module → ALWAYS create an ADR using `docs/adr/templates/0002-new-module.md` BEFORE writing migrations**
 
 ---
 
