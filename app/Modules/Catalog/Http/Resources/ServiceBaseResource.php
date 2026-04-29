@@ -19,7 +19,7 @@ class ServiceBaseResource extends JsonResource
             'product_type' => $this->product_type->value,
             'name' => $this->getTranslation('name', app()->getLocale()),
             'short_description' => $this->getTranslation('short_description', app()->getLocale()),
-            'category_id' => $this->category_id,
+            // TODO: expose category public_id after eager-loading in action
             'status' => $this->status->value,
             'base_price' => [
                 'minor' => $this->base_price_minor,

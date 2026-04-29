@@ -16,7 +16,7 @@ class DigitalServiceController
 {
     public function store(CreateDigitalServiceRequest $request, CreateDigitalServiceAction $action): JsonResponse
     {
-        $vendor = $request->user()->vendorProfile;
+        $vendor = $request->user()->vendorProfile()->firstOrFail();
         $service = $action->execute(CreateDigitalServiceDTO::fromRequest($request, $vendor->id));
 
         return ApiResponse::success(new DigitalServiceResource($service), [], 201);

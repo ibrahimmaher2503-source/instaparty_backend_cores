@@ -16,7 +16,7 @@ class RentalServiceController
 {
     public function store(CreateRentalServiceRequest $request, CreateRentalServiceAction $action): JsonResponse
     {
-        $vendor = $request->user()->vendorProfile;
+        $vendor = $request->user()->vendorProfile()->firstOrFail();
         $service = $action->execute(CreateRentalServiceDTO::fromRequest($request, $vendor->id));
 
         return ApiResponse::success(new RentalServiceResource($service), [], 201);

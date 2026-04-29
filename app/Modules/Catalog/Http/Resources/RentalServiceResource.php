@@ -23,11 +23,13 @@ class RentalServiceResource extends ServiceBaseResource
                 'default_rental_duration_hours' => $detail?->default_rental_duration_hours,
                 'setup_time_minutes' => $detail?->setup_time_minutes,
                 'teardown_time_minutes' => $detail?->teardown_time_minutes,
-                'security_deposit' => $detail !== null ? [
-                    'minor' => $detail->security_deposit_minor,
-                    'currency' => $detail->security_deposit_currency,
-                    'display' => \Brick\Money\Money::ofMinor($detail->security_deposit_minor, $detail->security_deposit_currency)->formatTo(app()->getLocale()),
-                ] : null,
+                'security_deposit' => $detail !== null && $detail->security_deposit_minor > 0
+                    ? [
+                        'minor'    => $detail->security_deposit_minor,
+                        'currency' => $detail->security_deposit_currency,
+                        'display'  => \Brick\Money\Money::ofMinor($detail->security_deposit_minor, $detail->security_deposit_currency)->formatTo(app()->getLocale()),
+                    ]
+                    : null,
                 'minimum_space_sqm' => $detail?->minimum_space_sqm,
             ],
         ]);

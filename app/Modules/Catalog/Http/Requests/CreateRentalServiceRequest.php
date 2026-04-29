@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Modules\Catalog\Http\Requests;
 
+use App\Modules\Catalog\Domain\Enums\ProductType;
 use Illuminate\Foundation\Http\FormRequest;
 
 /**
@@ -25,7 +26,8 @@ class CreateRentalServiceRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return $this->user()?->vendorProfile?->approvedTypes->contains('product_type', 'rental') ?? false;
+        $vendor = $this->user()?->vendorProfile;
+        return $vendor?->approvedTypes->contains('product_type', ProductType::Rental) ?? false;
     }
 
     /**

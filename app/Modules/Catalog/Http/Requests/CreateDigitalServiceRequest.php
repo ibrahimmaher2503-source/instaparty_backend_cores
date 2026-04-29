@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Modules\Catalog\Http\Requests;
 
+use App\Modules\Catalog\Domain\Enums\ProductType;
 use Illuminate\Foundation\Http\FormRequest;
 
 /**
@@ -23,7 +24,8 @@ class CreateDigitalServiceRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return $this->user()?->vendorProfile?->approvedTypes->contains('product_type', 'digital') ?? false;
+        $vendor = $this->user()?->vendorProfile;
+        return $vendor?->approvedTypes->contains('product_type', ProductType::Digital) ?? false;
     }
 
     /**
@@ -42,7 +44,7 @@ class CreateDigitalServiceRequest extends FormRequest
             'base_price_minor'            => ['required', 'integer', 'min:0'],
             'delivery_method'             => ['required', 'string', 'in:email,sms,whatsapp,link'],
             'has_expiry'                  => ['boolean'],
-            'expiry_days_after_purchase'  => ['required_if:has_expiry,true', 'integer', 'min:1', 'max:3650'],
+            'expiry_days_after_purchase'  => ['nullable', 'required_if:has_expiry,true', 'integer', 'min:1', 'max:3650'],
             'is_refundable_after_delivery'=> ['boolean'],
             'redemption_url_template'     => ['nullable', 'string', 'max:2048'],
         ];

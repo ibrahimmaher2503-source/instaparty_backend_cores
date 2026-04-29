@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Modules\Catalog\Http\Requests;
 
+use App\Modules\Catalog\Domain\Enums\ProductType;
 use Illuminate\Foundation\Http\FormRequest;
 
 /**
@@ -24,7 +25,8 @@ class CreateSaleServiceRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return $this->user()?->vendorProfile?->approvedTypes->contains('product_type', 'sale') ?? false;
+        $vendor = $this->user()?->vendorProfile;
+        return $vendor?->approvedTypes->contains('product_type', ProductType::Sale) ?? false;
     }
 
     /**
@@ -43,7 +45,7 @@ class CreateSaleServiceRequest extends FormRequest
             'base_price_minor'       => ['required', 'integer', 'min:0'],
             'is_perishable'          => ['boolean'],
             'is_made_to_order'       => ['boolean'],
-            'lead_time_hours'        => ['required_if:is_made_to_order,true', 'integer', 'min:1', 'max:720'],
+            'lead_time_hours'        => ['nullable', 'required_if:is_made_to_order,true', 'integer', 'min:1', 'max:720'],
             'stock_quantity'         => ['nullable', 'integer', 'min:1'],
             'customization_fields'   => ['nullable', 'array'],
             'customization_fields.*' => ['array'],

@@ -16,7 +16,7 @@ class SaleServiceController
 {
     public function store(CreateSaleServiceRequest $request, CreateSaleServiceAction $action): JsonResponse
     {
-        $vendor = $request->user()->vendorProfile;
+        $vendor = $request->user()->vendorProfile()->firstOrFail();
         $service = $action->execute(CreateSaleServiceDTO::fromRequest($request, $vendor->id));
 
         return ApiResponse::success(new SaleServiceResource($service), [], 201);
