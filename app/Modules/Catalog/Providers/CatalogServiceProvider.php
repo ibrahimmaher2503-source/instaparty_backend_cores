@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace App\Modules\Catalog\Providers;
 
+use App\Modules\Catalog\Application\Listeners\ArchiveServicesOnTypeRevokedListener;
+use App\Modules\Identity\Domain\Events\VendorTypeRevoked;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 
 class CatalogServiceProvider extends ServiceProvider
@@ -18,5 +21,7 @@ class CatalogServiceProvider extends ServiceProvider
         $this->loadRoutesFrom(__DIR__.'/../Routes/customer.php');
         $this->loadRoutesFrom(__DIR__.'/../Routes/vendor.php');
         $this->loadRoutesFrom(__DIR__.'/../Routes/admin.php');
+
+        Event::listen(VendorTypeRevoked::class, ArchiveServicesOnTypeRevokedListener::class);
     }
 }

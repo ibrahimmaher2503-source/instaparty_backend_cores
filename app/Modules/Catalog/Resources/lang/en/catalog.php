@@ -70,6 +70,17 @@ return [
     'is_refundable_after_delivery'   => 'Refundable After Delivery',
     'redemption_url_template'        => 'Redemption URL Template',
 
+    // Translatable content section
+    'translatable_fields' => 'Content (Translatable)',
+
+    // Status nested array (for use in Filament filter options and display)
+    'status' => [
+        'draft'          => 'Draft',
+        'pending_review' => 'Pending Review',
+        'published'      => 'Published',
+        'archived'       => 'Archived',
+    ],
+
     // Excel import
     'import_file_label'       => 'Excel File (.xlsx, .xls, .csv)',
     'import_button'           => 'Import',

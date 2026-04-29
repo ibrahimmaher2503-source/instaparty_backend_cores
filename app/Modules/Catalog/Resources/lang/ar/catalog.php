@@ -70,6 +70,17 @@ return [
     'is_refundable_after_delivery'   => 'قابل للاسترداد بعد التسليم',
     'redemption_url_template'        => 'نموذج رابط الاستبدال',
 
+    // Translatable content section
+    'translatable_fields' => 'المحتوى (قابل للترجمة)',
+
+    // Status nested array (for use in Filament filter options and display)
+    'status' => [
+        'draft'          => 'مسودة',
+        'pending_review' => 'قيد المراجعة',
+        'published'      => 'منشور',
+        'archived'       => 'مؤرشف',
+    ],
+
     // Excel import
     'import_file_label'       => 'ملف إكسل (.xlsx, .xls, .csv)',
     'import_button'           => 'استيراد',
