@@ -12,7 +12,6 @@ use Filament\Forms\Components\KeyValue;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
-use Filament\Forms\Components\Tabs;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
@@ -60,10 +59,21 @@ class SaleServiceResource extends Resource
     public static function form(Form $form): Form
     {
         return $form->schema([
-            Tabs::make('Translations')
-                ->tabs([
-                    Tabs\Tab::make('English')->schema(static::translatableFields('en')),
-                    Tabs\Tab::make('العربية')->schema(static::translatableFields('ar')),
+            Section::make(__('catalog.translatable_fields'))
+                ->schema([
+                    TextInput::make('name')
+                        ->required()
+                        ->maxLength(255)
+                        ->label(__('catalog.name')),
+                    Textarea::make('short_description')
+                        ->required()
+                        ->maxLength(1000)
+                        ->rows(3)
+                        ->label(__('catalog.short_description')),
+                    Textarea::make('long_description')
+                        ->maxLength(5000)
+                        ->rows(5)
+                        ->label(__('catalog.long_description')),
                 ])
                 ->columnSpanFull(),
 
@@ -77,6 +87,7 @@ class SaleServiceResource extends Resource
                         ->label(__('catalog.category')),
                     TextInput::make('base_price_minor')
                         ->label(__('catalog.base_price'))
+                        ->helperText('In piastres — 10000 = 100.00 EGP')
                         ->numeric()
                         ->minValue(0)
                         ->required(),
@@ -140,6 +151,15 @@ class SaleServiceResource extends Resource
                     ->searchable(query: fn (Builder $query, string $search): Builder => $query->whereJsonContains('name->en', $search)->orWhereJsonContains('name->ar', $search))
                     ->limit(40)
                     ->label(__('catalog.name')),
+                TextColumn::make('product_type')
+                    ->badge()
+                    ->color(fn (ProductType $state): string => match ($state) {
+                        ProductType::Rental  => 'warning',
+                        ProductType::Sale    => 'success',
+                        ProductType::Digital => 'info',
+                    })
+                    ->formatStateUsing(fn (ProductType $state) => $state->label())
+                    ->label(__('catalog.product_type')),
                 TextColumn::make('status')
                     ->badge()
                     ->color(fn (ServiceStatus $state): string => $state->color())
@@ -171,25 +191,6 @@ class SaleServiceResource extends Resource
                 RestoreAction::make(),
             ])
             ->bulkActions([]);
-    }
-
-    private static function translatableFields(string $locale = 'en'): array
-    {
-        return [
-            TextInput::make('name.'.$locale)
-                ->required()
-                ->maxLength(255)
-                ->label('Name ('.strtoupper($locale).')'),
-            Textarea::make('short_description.'.$locale)
-                ->required()
-                ->maxLength(1000)
-                ->rows(3)
-                ->label('Short Description ('.strtoupper($locale).')'),
-            Textarea::make('long_description.'.$locale)
-                ->maxLength(5000)
-                ->rows(5)
-                ->label('Long Description ('.strtoupper($locale).')'),
-        ];
     }
 
     public static function getPages(): array
