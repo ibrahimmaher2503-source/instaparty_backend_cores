@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Modules\Catalog\Domain\Models;
 
 use App\Modules\Catalog\Database\Factories\ServiceRentalDetailFactory;
-use Brick\Money\Money;
+use App\Modules\Shared\Domain\Casts\MoneyCast;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -41,18 +41,9 @@ class ServiceRentalDetail extends Model
         'default_rental_duration_hours' => 'integer',
         'setup_time_minutes'            => 'integer',
         'teardown_time_minutes'         => 'integer',
-        'security_deposit_minor'        => 'integer',
+        'security_deposit'              => MoneyCast::class . ':security_deposit',
         'minimum_space_sqm'             => 'integer',
     ];
-
-    // -------------------------------------------------------------------------
-    // Accessors
-    // -------------------------------------------------------------------------
-
-    public function getSecurityDepositAttribute(): Money
-    {
-        return Money::ofMinor($this->security_deposit_minor, $this->security_deposit_currency);
-    }
 
     // -------------------------------------------------------------------------
     // Relationships
