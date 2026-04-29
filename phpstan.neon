@@ -22,6 +22,14 @@ parameters:
         -
             message: '#Access to an undefined property .+::\$(id|public_id|name|created_at|updated_at|deleted_at|.+_id|.+_at)\.#'
             path: app/*
+        # Eloquent cast columns not visible to PHPStan static analysis
+        -
+            message: '#Access to an undefined property .+::\$(product_type|status|hold_type|stock_quantity|is_perishable|is_made_to_order|lead_time_hours|customization_fields|requires_electricity|requires_outdoor_space|default_rental_duration_hours|setup_time_minutes|teardown_time_minutes|security_deposit_minor|security_deposit_currency|minimum_space_sqm|delivery_method|has_expiry|expiry_days_after_purchase|is_refundable_after_delivery|redemption_url_template|base_price_minor|base_price_currency|quantity|reserved_starts_at|reserved_ends_at|expires_at)\.#'
+            path: app/*
+        # match on Eloquent cast enum returns mixed at PHPStan level 8 without @property
+        -
+            message: '#Match expression does not handle remaining value: mixed#'
+            path: app/Modules/Catalog/Application/Actions/HoldServiceInventoryAction.php
         # Sanctum's currentAccessToken() PHPDoc claims PersonalAccessToken,
         # but at runtime returns TransientToken for cookie auth — runtime guard required
         -
