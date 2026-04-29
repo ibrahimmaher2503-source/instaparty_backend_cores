@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Modules\Catalog\Domain\Models;
 
 use App\Modules\Catalog\Database\Factories\CategoryFactory;
+use App\Modules\Catalog\Domain\Enums\ProductType;
 use App\Modules\Shared\Domain\Concerns\HasPublicId;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -74,8 +75,8 @@ class Category extends Model
         return $query->where('is_active', true);
     }
 
-    public function scopeForProductType(Builder $query, string $type): Builder
+    public function scopeForProductType(Builder $query, ProductType $type): Builder
     {
-        return $query->whereJsonContains('allowed_product_types', $type);
+        return $query->whereJsonContains('allowed_product_types', $type->value);
     }
 }

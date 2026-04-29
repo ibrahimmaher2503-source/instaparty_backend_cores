@@ -16,5 +16,6 @@ class CatalogServiceProvider extends ServiceProvider
         $this->loadTranslationsFrom(__DIR__ . '/../Resources/lang', 'catalog');
         $this->loadRoutesFrom(__DIR__ . '/../Routes/customer.php');
         $this->loadRoutesFrom(__DIR__ . '/../Routes/vendor.php');
+        $this->loadRoutesFrom(__DIR__ . '/../Routes/admin.php');
     }
 }

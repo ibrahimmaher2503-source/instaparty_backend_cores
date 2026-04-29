@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Modules\Catalog\Domain\Models;
 
 use App\Modules\Catalog\Database\Factories\CategoryFieldSchemaFactory;
+use App\Modules\Catalog\Domain\Enums\ProductType;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -37,6 +38,7 @@ class CategoryFieldSchema extends Model
     public array $translatable = ['field_label'];
 
     protected $casts = [
+        'product_type'     => ProductType::class,
         'options'          => 'array',
         'validation_rules' => 'array',
         'is_required'      => 'boolean',
