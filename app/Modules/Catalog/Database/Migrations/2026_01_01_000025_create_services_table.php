@@ -29,6 +29,7 @@ return new class extends Migration
 
             $table->json('name');
             $table->json('short_description');
+            $table->json('long_description')->nullable();
 
             $table->string('slug');
 

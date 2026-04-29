@@ -43,8 +43,8 @@ return new class extends Migration
             // cart: now+15min, payment: now+24h
             $table->dateTime('expires_at');
 
-            // Phase 3.1 will add the FK constraint — column only for now
-            $table->unsignedBigInteger('booking_item_id')->nullable();
+            // Phase 3.1 will add the FK constraint — column + index only for now
+            $table->unsignedBigInteger('booking_item_id')->nullable()->index();
 
             $table->timestamps();
 

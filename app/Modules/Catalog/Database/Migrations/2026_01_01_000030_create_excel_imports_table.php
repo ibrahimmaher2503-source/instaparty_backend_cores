@@ -36,6 +36,9 @@ return new class extends Migration
             $table->unsignedInteger('error_rows')->default(0);
 
             $table->timestamps();
+
+            // Vendor import queue filter
+            $table->index(['vendor_profile_id', 'status']);
         });
     }
 
