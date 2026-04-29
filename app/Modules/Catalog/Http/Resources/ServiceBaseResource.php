@@ -24,7 +24,7 @@ class ServiceBaseResource extends JsonResource
             'base_price' => [
                 'minor' => $this->base_price_minor,
                 'currency' => $this->base_price_currency,
-                'display' => number_format($this->base_price_minor / 100, 2).' '.$this->base_price_currency,
+                'display' => \Brick\Money\Money::ofMinor($this->base_price_minor, $this->base_price_currency)->formatTo(app()->getLocale()),
             ],
             'is_featured' => $this->is_featured,
             'created_at' => $this->created_at?->toIso8601String(),

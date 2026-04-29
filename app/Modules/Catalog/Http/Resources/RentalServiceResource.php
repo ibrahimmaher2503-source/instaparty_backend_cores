@@ -26,7 +26,7 @@ class RentalServiceResource extends ServiceBaseResource
                 'security_deposit' => $detail !== null ? [
                     'minor' => $detail->security_deposit_minor,
                     'currency' => $detail->security_deposit_currency,
-                    'display' => number_format($detail->security_deposit_minor / 100, 2).' '.($detail->security_deposit_currency ?? 'EGP'),
+                    'display' => \Brick\Money\Money::ofMinor($detail->security_deposit_minor, $detail->security_deposit_currency)->formatTo(app()->getLocale()),
                 ] : null,
                 'minimum_space_sqm' => $detail?->minimum_space_sqm,
             ],

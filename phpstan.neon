@@ -16,8 +16,6 @@ parameters:
         - database/migrations/*activity_log* (?)
 
     ignoreErrors:
-        - identifier: missingType.iterableValue
-        - identifier: missingType.generics
         # Eloquent dynamic attribute access on models — PHPStan can't infer columns
         -
             message: '#Access to an undefined property .+::\$(id|public_id|name|created_at|updated_at|deleted_at|.+_id|.+_at)\.#'
@@ -46,3 +44,10 @@ parameters:
         -
             message: '#Unreachable statement - code above always terminates#'
             path: app/Modules/Identity/Application/Actions/LogoutAction.php
+        # user() is always non-null behind auth:sanctum middleware — PHPStan cannot infer middleware guarantees
+        -
+            message: '#Cannot access property \$vendorProfile on .+User\|null\.#'
+            path: app/Modules/Catalog/Http/Controllers/Vendor/*
+        -
+            message: '#Cannot access property \$id on .+VendorProfile\|null\.#'
+            path: app/Modules/Catalog/Http/Controllers/Vendor/*

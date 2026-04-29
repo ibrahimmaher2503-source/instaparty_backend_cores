@@ -24,7 +24,7 @@ class CreateSaleServiceRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return true;
+        return $this->user()?->vendorProfile?->approvedTypes->contains('product_type', 'sale') ?? false;
     }
 
     /**

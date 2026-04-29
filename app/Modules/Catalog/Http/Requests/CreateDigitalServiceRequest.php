@@ -23,7 +23,7 @@ class CreateDigitalServiceRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return true;
+        return $this->user()?->vendorProfile?->approvedTypes->contains('product_type', 'digital') ?? false;
     }
 
     /**

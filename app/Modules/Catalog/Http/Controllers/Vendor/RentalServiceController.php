@@ -6,7 +6,6 @@ namespace App\Modules\Catalog\Http\Controllers\Vendor;
 
 use App\Modules\Catalog\Application\Actions\CreateRentalServiceAction;
 use App\Modules\Catalog\Application\DTOs\CreateRentalServiceDTO;
-use App\Modules\Catalog\Domain\Enums\ProductType;
 use App\Modules\Catalog\Http\Requests\CreateRentalServiceRequest;
 use App\Modules\Catalog\Http\Requests\UpdateRentalServiceRequest;
 use App\Modules\Catalog\Http\Resources\RentalServiceResource;
@@ -18,7 +17,6 @@ class RentalServiceController
     public function store(CreateRentalServiceRequest $request, CreateRentalServiceAction $action): JsonResponse
     {
         $vendor = $request->user()->vendorProfile;
-        abort_unless($vendor?->approvedTypes->contains('product_type', ProductType::Rental), 403);
         $service = $action->execute(CreateRentalServiceDTO::fromRequest($request, $vendor->id));
 
         return ApiResponse::success(new RentalServiceResource($service), [], 201);

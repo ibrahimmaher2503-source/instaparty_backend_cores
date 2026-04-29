@@ -6,7 +6,6 @@ namespace App\Modules\Catalog\Http\Controllers\Vendor;
 
 use App\Modules\Catalog\Application\Actions\CreateSaleServiceAction;
 use App\Modules\Catalog\Application\DTOs\CreateSaleServiceDTO;
-use App\Modules\Catalog\Domain\Enums\ProductType;
 use App\Modules\Catalog\Http\Requests\CreateSaleServiceRequest;
 use App\Modules\Catalog\Http\Requests\UpdateSaleServiceRequest;
 use App\Modules\Catalog\Http\Resources\SaleServiceResource;
@@ -18,7 +17,6 @@ class SaleServiceController
     public function store(CreateSaleServiceRequest $request, CreateSaleServiceAction $action): JsonResponse
     {
         $vendor = $request->user()->vendorProfile;
-        abort_unless($vendor?->approvedTypes->contains('product_type', ProductType::Sale), 403);
         $service = $action->execute(CreateSaleServiceDTO::fromRequest($request, $vendor->id));
 
         return ApiResponse::success(new SaleServiceResource($service), [], 201);
