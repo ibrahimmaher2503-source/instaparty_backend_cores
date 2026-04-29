@@ -7,6 +7,7 @@ namespace App\Modules\Catalog\Application\Actions;
 use App\Modules\Catalog\Application\DTOs\CreateRentalServiceDTO;
 use App\Modules\Catalog\Domain\Enums\ProductType;
 use App\Modules\Catalog\Domain\Enums\ServiceStatus;
+use App\Modules\Catalog\Domain\Events\RentalServiceCreated;
 use App\Modules\Catalog\Domain\Models\Service;
 use App\Modules\Catalog\Domain\Models\ServiceRentalDetail;
 use Illuminate\Support\Facades\DB;
@@ -42,7 +43,10 @@ class CreateRentalServiceAction
                 'minimum_space_sqm'             => $dto->minimumSpaceSqm,
             ]);
 
-            return $service->load('rentalDetail');
+            $loaded = $service->load('rentalDetail');
+            DB::afterCommit(fn () => event(new RentalServiceCreated($loaded)));
+
+            return $loaded;
         });
     }
 }

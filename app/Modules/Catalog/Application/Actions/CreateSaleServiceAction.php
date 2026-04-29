@@ -7,6 +7,7 @@ namespace App\Modules\Catalog\Application\Actions;
 use App\Modules\Catalog\Application\DTOs\CreateSaleServiceDTO;
 use App\Modules\Catalog\Domain\Enums\ProductType;
 use App\Modules\Catalog\Domain\Enums\ServiceStatus;
+use App\Modules\Catalog\Domain\Events\SaleServiceCreated;
 use App\Modules\Catalog\Domain\Models\Service;
 use App\Modules\Catalog\Domain\Models\ServiceSaleDetail;
 use Illuminate\Support\Facades\DB;
@@ -39,7 +40,10 @@ class CreateSaleServiceAction
                 'customization_fields' => $dto->customizationFields,
             ]);
 
-            return $service->load('saleDetail');
+            $loaded = $service->load('saleDetail');
+            DB::afterCommit(fn () => event(new SaleServiceCreated($loaded)));
+
+            return $loaded;
         });
     }
 }

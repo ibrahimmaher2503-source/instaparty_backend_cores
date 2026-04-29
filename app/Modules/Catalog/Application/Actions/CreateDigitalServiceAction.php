@@ -7,6 +7,7 @@ namespace App\Modules\Catalog\Application\Actions;
 use App\Modules\Catalog\Application\DTOs\CreateDigitalServiceDTO;
 use App\Modules\Catalog\Domain\Enums\ProductType;
 use App\Modules\Catalog\Domain\Enums\ServiceStatus;
+use App\Modules\Catalog\Domain\Events\DigitalServiceCreated;
 use App\Modules\Catalog\Domain\Models\Service;
 use App\Modules\Catalog\Domain\Models\ServiceDigitalDetail;
 use Illuminate\Support\Facades\DB;
@@ -39,7 +40,10 @@ class CreateDigitalServiceAction
                 'redemption_url_template'      => $dto->redemptionUrlTemplate,
             ]);
 
-            return $service->load('digitalDetail');
+            $loaded = $service->load('digitalDetail');
+            DB::afterCommit(fn () => event(new DigitalServiceCreated($loaded)));
+
+            return $loaded;
         });
     }
 }

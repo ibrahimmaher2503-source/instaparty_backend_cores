@@ -62,7 +62,7 @@ class ImportRentalServicesFromExcelAction
                         'excel_import_id' => $excelImport->id,
                         'row_number'      => $error['row'],
                         'field'           => $error['field'],
-                        'message'         => $error['messages'],
+                        'message'         => $error['message'], // bilingual: {en: ..., ar: ...}
                     ]);
                 }
             });
@@ -70,7 +70,11 @@ class ImportRentalServicesFromExcelAction
             return $excelImport->refresh();
         }
 
-        // 5b. All rows valid — create all services in a single transaction
+        // 5b. All rows valid — create all services in a single transaction.
+        // Note: createRentalServiceAction::execute() opens its own DB::transaction internally.
+        // Laravel uses MySQL savepoints for nested transactions; the inner DB::afterCommit()
+        // callbacks are correctly deferred to the outer commit boundary, which is the intended
+        // single-boundary design for the import.
         DB::transaction(function () use ($excelImport, $rows, $totalRows, $vendorProfileId): void {
             foreach ($rows as $row) {
                 $dto = new CreateRentalServiceDTO(
@@ -104,40 +108,51 @@ class ImportRentalServicesFromExcelAction
 
     /**
      * Validate all rows and return a flat collection of error entries.
+     * Each error carries a bilingual `message` array: {en: string, ar: string}.
      *
      * @param  Collection<int, Collection<string, mixed>>  $rows
-     * @return Collection<int, array{row: int, field: string, messages: array<string>}>
+     * @return Collection<int, array{row: int, field: string, message: array{en: string, ar: string}}>
      */
     private function validateAllRows(Collection $rows): Collection
     {
         $errors = collect();
+        $rules  = [
+            'name_en'                       => ['required', 'string', 'max:255'],
+            'name_ar'                       => ['required', 'string', 'max:255'],
+            'short_description_en'          => ['required', 'string', 'max:1000'],
+            'short_description_ar'          => ['required', 'string', 'max:1000'],
+            'base_price_minor'              => ['required', 'integer', 'min:0'],
+            'requires_electricity'          => ['required', 'boolean'],
+            'requires_outdoor_space'        => ['required', 'boolean'],
+            'default_rental_duration_hours' => ['required', 'integer', 'min:1'],
+            'setup_time_minutes'            => ['nullable', 'integer', 'min:0'],
+            'teardown_time_minutes'         => ['nullable', 'integer', 'min:0'],
+            'security_deposit_minor'        => ['nullable', 'integer', 'min:0'],
+            'minimum_space_sqm'             => ['nullable', 'integer', 'min:1'],
+            'category_id'                   => ['required', 'integer', 'min:1'],
+        ];
 
         foreach ($rows as $index => $row) {
-            $rowNumber  = $index + 2; // +2 because row 1 is the header
-            $rowArray   = $row->toArray();
+            $rowNumber = $index + 2; // +2 because row 1 is the header
+            $rowArray  = $row->toArray();
 
-            $validator = Validator::make($rowArray, [
-                'name_en'                       => ['required', 'string', 'max:255'],
-                'name_ar'                       => ['required', 'string', 'max:255'],
-                'short_description_en'          => ['required', 'string', 'max:1000'],
-                'short_description_ar'          => ['required', 'string', 'max:1000'],
-                'base_price_minor'              => ['required', 'integer', 'min:0'],
-                'requires_electricity'          => ['required', 'boolean'],
-                'requires_outdoor_space'        => ['required', 'boolean'],
-                'default_rental_duration_hours' => ['required', 'integer', 'min:1'],
-                'setup_time_minutes'            => ['nullable', 'integer', 'min:0'],
-                'teardown_time_minutes'         => ['nullable', 'integer', 'min:0'],
-                'security_deposit_minor'        => ['nullable', 'integer', 'min:0'],
-                'minimum_space_sqm'             => ['nullable', 'integer', 'min:1'],
-                'category_id'                   => ['required', 'integer', 'min:1'],
-            ]);
+            // Run validation in English
+            $enErrors = Validator::make($rowArray, $rules)->errors()->toArray();
 
-            if ($validator->fails()) {
-                foreach ($validator->errors()->toArray() as $field => $messages) {
+            if (! empty($enErrors)) {
+                // Run again in Arabic to collect translated messages
+                app()->setLocale('ar');
+                $arErrors = Validator::make($rowArray, $rules)->errors()->toArray();
+                app()->setLocale('en');
+
+                foreach ($enErrors as $field => $enMessages) {
                     $errors->push([
-                        'row'      => $rowNumber,
-                        'field'    => $field,
-                        'messages' => $messages,
+                        'row'     => $rowNumber,
+                        'field'   => $field,
+                        'message' => [
+                            'en' => implode(' ', $enMessages),
+                            'ar' => implode(' ', $arErrors[$field] ?? $enMessages),
+                        ],
                     ]);
                 }
             }
