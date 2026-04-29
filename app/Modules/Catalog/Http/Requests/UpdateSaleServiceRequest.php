@@ -43,7 +43,7 @@ class UpdateSaleServiceRequest extends FormRequest
             'base_price_minor'       => ['sometimes', 'required', 'integer', 'min:0'],
             'is_perishable'          => ['sometimes', 'boolean'],
             'is_made_to_order'       => ['sometimes', 'boolean'],
-            'lead_time_hours'        => ['required_if:is_made_to_order,true', 'integer', 'min:1', 'max:720'],
+            'lead_time_hours'        => ['sometimes', 'required_if:is_made_to_order,true', 'integer', 'min:1', 'max:720'],
             'stock_quantity'         => ['sometimes', 'nullable', 'integer', 'min:1'],
             'customization_fields'   => ['sometimes', 'nullable', 'array'],
             'customization_fields.*' => ['array'],

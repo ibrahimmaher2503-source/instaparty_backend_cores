@@ -42,7 +42,7 @@ class UpdateDigitalServiceRequest extends FormRequest
             'base_price_minor'            => ['sometimes', 'required', 'integer', 'min:0'],
             'delivery_method'             => ['sometimes', 'required', 'string', 'in:email,sms,whatsapp,link'],
             'has_expiry'                  => ['sometimes', 'boolean'],
-            'expiry_days_after_purchase'  => ['required_if:has_expiry,true', 'integer', 'min:1', 'max:3650'],
+            'expiry_days_after_purchase'  => ['sometimes', 'required_if:has_expiry,true', 'integer', 'min:1', 'max:3650'],
             'is_refundable_after_delivery'=> ['sometimes', 'boolean'],
             'redemption_url_template'     => ['sometimes', 'nullable', 'string', 'max:2048'],
         ];
