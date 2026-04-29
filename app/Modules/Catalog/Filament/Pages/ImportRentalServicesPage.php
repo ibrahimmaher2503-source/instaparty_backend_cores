@@ -6,7 +6,6 @@ namespace App\Modules\Catalog\Filament\Pages;
 
 use App\Modules\Catalog\Application\Actions\ImportRentalServicesFromExcelAction;
 use App\Modules\Catalog\Domain\Models\ExcelImport;
-use App\Modules\Identity\Domain\Models\VendorProfile;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
@@ -14,6 +13,7 @@ use Filament\Forms\Form;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 
 class ImportRentalServicesPage extends Page implements HasForms
 {
@@ -61,7 +61,6 @@ class ImportRentalServicesPage extends Page implements HasForms
     {
         $data = $this->form->getState();
 
-        /** @var VendorProfile|null $vendor */
         $vendor = auth()->user()?->vendorProfile;
 
         if ($vendor === null) {
@@ -73,8 +72,8 @@ class ImportRentalServicesPage extends Page implements HasForms
             return;
         }
 
-        $path = storage_path('app/'.$data['file']);
-        $file = new UploadedFile($path, basename($path), null, null, true);
+        $absolutePath = Storage::disk('local')->path($data['file']);
+        $file = new UploadedFile($absolutePath, basename($absolutePath), null, null, true);
 
         $this->lastImport = $action->execute($file, $vendor->id, app()->getLocale());
 

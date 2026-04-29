@@ -61,6 +61,7 @@ class AdminPanelProvider extends PanelProvider
                 NavigationGroup::make()->label(fn (): string => __('admin.nav.groups.geography')),
                 NavigationGroup::make()->label(fn (): string => __('admin.nav.groups.identity')),
                 NavigationGroup::make()->label(fn (): string => __('admin.nav.groups.vendor_onboarding')),
+                NavigationGroup::make('Services')->icon('heroicon-o-cube'),
                 NavigationGroup::make()->label(fn (): string => __('admin.nav.groups.catalog')),
                 NavigationGroup::make()->label(fn (): string => __('admin.nav.groups.booking')),
                 NavigationGroup::make()->label(fn (): string => __('admin.nav.groups.payments')),
