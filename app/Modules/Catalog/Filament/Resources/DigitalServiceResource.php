@@ -8,6 +8,7 @@ use App\Modules\Catalog\Domain\Enums\ProductType;
 use App\Modules\Catalog\Domain\Enums\ServiceStatus;
 use App\Modules\Catalog\Domain\Models\Service;
 use App\Modules\Catalog\Filament\Resources\DigitalServiceResource\Pages;
+use App\Modules\Discovery\Filament\Actions\ReindexServicesAction;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
@@ -187,6 +188,9 @@ class DigitalServiceResource extends Resource
             ->filters([
                 SelectFilter::make('status')->options(ServiceStatus::class),
                 TrashedFilter::make(),
+            ])
+            ->headerActions([
+                ReindexServicesAction::make(),
             ])
             ->actions([
                 EditAction::make(),
