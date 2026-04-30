@@ -231,3 +231,22 @@ Phase 6 parallel batch (once T039 is done):
 | Parallel opportunities | 22 tasks marked [P] |
 
 **Suggested MVP scope**: Phase 1 + Phase 2 + Phase 3 (US1) — bilingual search working end-to-end.
+
+---
+
+## ⏳ Pending Manual Steps (run when Meilisearch is available)
+
+These require Docker running with the Meilisearch service:
+
+```bash
+# 1. Import all published services into the search index
+php artisan scout:import "App\Modules\Catalog\Domain\Models\Service"
+
+# 2. Register manage_search_index permission in Filament Shield
+php artisan shield:generate --all
+
+# 3. Run all Discovery tests (requires Meilisearch in Docker)
+./vendor/bin/pest --group=discovery
+```
+
+See `specs/004-discovery-meilisearch/quickstart.md` for full smoke test commands.
