@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Database\Factories;
 
+use App\Modules\Geography\Domain\Models\City;
+use App\Modules\Geography\Domain\Models\Governorate;
 use App\Modules\Identity\Domain\Enums\ApprovalStatus;
 use App\Modules\Identity\Domain\Enums\BusinessType;
 use App\Modules\Identity\Domain\Models\User;
@@ -32,8 +34,8 @@ class VendorProfileFactory extends Factory
             'slug' => Str::slug($businessNameEn).'-'.Str::lower(Str::random(6)),
             'bio' => null,
             'business_type' => BusinessType::Individual->value,
-            'primary_governorate_id' => 1,
-            'primary_city_id' => 1,
+            'primary_governorate_id' => Governorate::factory(),
+            'primary_city_id' => City::factory(),
             'approval_status' => ApprovalStatus::Pending->value,
         ];
     }

@@ -44,3 +44,7 @@ parameters:
         -
             message: '#Unreachable statement - code above always terminates#'
             path: app/Modules/Identity/Application/Actions/LogoutAction.php
+        # Larastan can't infer DB::transaction() closure return type when never-typed private methods are called inside
+        -
+            message: '#Parameter \#1 \$callback of static method Illuminate\\Database\\Connection::transaction\(\) contains unresolvable type\.#'
+            path: app/Modules/Booking/Application/Actions/RemoveItemFromBookingAction.php
