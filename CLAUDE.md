@@ -1,4 +1,4 @@
-# InstaParty — Project Memory (Constitution)
+﻿# InstaParty — Project Memory (Constitution)
 
 > Loaded by Claude Code at every session start. Treat as the project's constitution.
 > If anything in this file conflicts with a chat instruction, **this file wins** unless explicitly overridden by Ibrahim in chat.
