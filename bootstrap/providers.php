@@ -1,5 +1,6 @@
 <?php
 
+use App\Modules\Booking\Providers\BookingServiceProvider;
 use App\Modules\Catalog\Providers\CatalogServiceProvider;
 use App\Modules\Discovery\Providers\DiscoveryServiceProvider;
 use App\Modules\Geography\Providers\GeographyServiceProvider;
@@ -15,5 +16,6 @@ return [
     IdentityServiceProvider::class,
     CatalogServiceProvider::class,
     DiscoveryServiceProvider::class,
+    BookingServiceProvider::class,
     AdminPanelProvider::class,
 ];

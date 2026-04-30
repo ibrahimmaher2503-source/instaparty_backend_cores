@@ -4,14 +4,19 @@ declare(strict_types=1);
 
 namespace App\Modules\Catalog\Providers;
 
+use App\Modules\Booking\Domain\Contracts\CatalogServiceReader;
 use App\Modules\Catalog\Application\Listeners\ArchiveServicesOnTypeRevokedListener;
+use App\Modules\Catalog\Infrastructure\Repositories\EloquentCatalogServiceReader;
 use App\Modules\Identity\Domain\Events\VendorTypeRevoked;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 
 class CatalogServiceProvider extends ServiceProvider
 {
-    public function register(): void {}
+    public function register(): void
+    {
+        $this->app->bind(CatalogServiceReader::class, EloquentCatalogServiceReader::class);
+    }
 
     public function boot(): void
     {
