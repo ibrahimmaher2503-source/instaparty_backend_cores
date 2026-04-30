@@ -10,7 +10,7 @@ use App\Modules\Identity\Application\Actions\SuspendVendorAction;
 use App\Modules\Identity\Domain\Enums\ApprovalStatus;
 use App\Modules\Identity\Domain\Models\VendorProfile;
 use App\Modules\Identity\Filament\Resources\VendorProfileResource;
-use App\Modules\Shared\Domain\Enums\ProductType;
+use App\Modules\Catalog\Domain\Enums\ProductType;
 use Filament\Actions\Action;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;

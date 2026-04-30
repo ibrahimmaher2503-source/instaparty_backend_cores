@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Modules\Identity\Domain\Events;
 
-use App\Modules\Identity\Domain\Models\VendorApprovedProductType;
+use App\Modules\Catalog\Domain\Enums\ProductType;
 use Illuminate\Foundation\Events\Dispatchable;
 
 class VendorTypeRevoked
@@ -12,7 +12,8 @@ class VendorTypeRevoked
     use Dispatchable;
 
     public function __construct(
-        public readonly VendorApprovedProductType $approval,
+        public readonly int $vendorProfileId,
+        public readonly ProductType $productType,
         public readonly ?int $revokedBy = null,
         public readonly ?array $reason = null,
     ) {}
