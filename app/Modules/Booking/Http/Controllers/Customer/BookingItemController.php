@@ -20,7 +20,7 @@ class BookingItemController
         if ($booking === null) {
             return ApiResponse::error('Booking not found', 404);
         }
-        $item = app(AddItemToBookingAction::class)->execute($request->toDTO($booking->id, auth()->id()));
+        $item = app(AddItemToBookingAction::class)->execute($request->toDTO($booking->id, (int) auth()->id()));
 
         return ApiResponse::success(new BookingItemResource($item), [], 201);
     }
@@ -31,7 +31,7 @@ class BookingItemController
         if ($booking === null) {
             return ApiResponse::error('Booking not found', 404);
         }
-        $result = app(RemoveItemFromBookingAction::class)->execute($booking->id, auth()->id(), $itemPublicId);
+        $result = app(RemoveItemFromBookingAction::class)->execute($booking->id, (int) auth()->id(), $itemPublicId);
 
         return ApiResponse::success($result);
     }

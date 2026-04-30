@@ -6,6 +6,9 @@ namespace App\Modules\Shared\Domain\Concerns;
 
 use Illuminate\Support\Str;
 
+/**
+ * @property string $public_id
+ */
 trait HasPublicId
 {
     public static function bootHasPublicId(): void

@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Modules\Booking\Console\Commands;
 
-use App\Modules\Catalog\Domain\Enums\ReservationStatus;
-use App\Modules\Catalog\Domain\Models\ServiceInventoryReservation;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 
@@ -19,14 +17,19 @@ class ReleaseExpiredReservationsCommand extends Command
     {
         $released = 0;
 
-        ServiceInventoryReservation::where('status', ReservationStatus::Held)
+        DB::table('service_inventory_reservations')
+            ->where('status', 'held')
             ->where('expires_at', '<', now())
+            ->orderBy('id')
             ->chunkById(200, function ($reservations) use (&$released): void {
                 foreach ($reservations as $reservation) {
                     DB::transaction(function () use ($reservation, &$released): void {
-                        $reservation->update([
-                            'status' => ReservationStatus::Expired,
-                        ]);
+                        DB::table('service_inventory_reservations')
+                            ->where('id', $reservation->id)
+                            ->update([
+                                'status' => 'expired',
+                                'updated_at' => now(),
+                            ]);
                         $released++;
                     });
                 }

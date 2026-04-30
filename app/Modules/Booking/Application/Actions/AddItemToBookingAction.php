@@ -48,11 +48,17 @@ class AddItemToBookingAction
             $effectiveStart = $dto->effectiveStartsAt ?? $booking->event_starts_at;
             $effectiveEnd = $dto->effectiveEndsAt ?? $booking->event_ends_at;
 
-            $reservationId = match ($service->productType) {
-                ProductType::Rental => $this->reserveRental($service, $dto, $effectiveStart, $effectiveEnd),
-                ProductType::Sale => $this->reserveSale($service, $dto),
-                ProductType::Digital => null,
-            };
+            if ($service->productType === ProductType::Rental) {
+                if ($effectiveStart === null || $effectiveEnd === null) {
+                    $this->abortWith(Response::HTTP_UNPROCESSABLE_ENTITY, 'Rental items require event_starts_at and event_ends_at');
+                }
+                $reservationId = $this->reserveRental($service, $dto, $effectiveStart, $effectiveEnd);
+            } else {
+                $reservationId = match ($service->productType) {
+                    ProductType::Sale => $this->reserveSale($service, $dto),
+                    ProductType::Digital => null,
+                };
+            }
 
             $initialStatus = match ($service->productType) {
                 ProductType::Rental => 'pending_delivery',

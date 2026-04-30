@@ -44,7 +44,11 @@ parameters:
         -
             message: '#Unreachable statement - code above always terminates#'
             path: app/Modules/Identity/Application/Actions/LogoutAction.php
-        # Larastan can't infer DB::transaction() closure return type when never-typed private methods are called inside
+        # Eloquent relationship/factory return types require verbose generics — Larastan level 8 limitation across Booking models
         -
-            message: '#Parameter \#1 \$callback of static method Illuminate\\Database\\Connection::transaction\(\) contains unresolvable type\.#'
-            path: app/Modules/Booking/Application/Actions/RemoveItemFromBookingAction.php
+            message: '#(uses|return type with|has parameter .+ with) generic (class|trait) .+ (but does not specify|does not specify) its types#'
+            path: app/Modules/Booking/*
+        # spatie/laravel-model-states State generic type not inferable without explicit annotation
+        -
+            message: '#(return type with|extends) generic class Spatie\\ModelStates\\State#'
+            path: app/Modules/Booking/*

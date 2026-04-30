@@ -8,5 +8,4 @@ Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote');
 
-Schedule::command('catalog:release-expired-reservations')->everyMinute();
 Schedule::command('booking:release-expired-reservations')->everyMinute()->withoutOverlapping();

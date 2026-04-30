@@ -23,7 +23,7 @@ beforeEach(function (): void {
     $this->seed(IdentityRolesSeeder::class);
 });
 
-function makeCustomer(): User
+function makeBookingCustomer(): User
 {
     return User::factory()->asCustomer()->create(['timezone' => 'Africa/Cairo']);
 }
@@ -66,7 +66,7 @@ function makePublishedService(ProductType $type, array $overrides = []): Service
 }
 
 it('adds a rental item and creates a reservation', function (): void {
-    $customer = makeCustomer();
+    $customer = makeBookingCustomer();
     $booking  = makeDraftBooking($customer);
     $service  = makePublishedService(ProductType::Rental);
 
@@ -85,7 +85,7 @@ it('adds a rental item and creates a reservation', function (): void {
 })->group('booking', 'add-item', 'rental');
 
 it('adds a sale item and creates a stock reservation', function (): void {
-    $customer = makeCustomer();
+    $customer = makeBookingCustomer();
     $booking  = makeDraftBooking($customer);
     $service  = makePublishedService(ProductType::Sale);
     ServiceSaleDetail::factory()->create(['service_id' => $service->id, 'stock_quantity' => 10]);
@@ -105,7 +105,7 @@ it('adds a sale item and creates a stock reservation', function (): void {
 })->group('booking', 'add-item', 'sale');
 
 it('adds a digital item without creating a reservation', function (): void {
-    $customer = makeCustomer();
+    $customer = makeBookingCustomer();
     $booking  = makeDraftBooking($customer);
     $service  = makePublishedService(ProductType::Digital);
 
@@ -123,7 +123,7 @@ it('adds a digital item without creating a reservation', function (): void {
 })->group('booking', 'add-item', 'digital');
 
 it('adds two items from same vendor into one booking_vendor row', function (): void {
-    $customer = makeCustomer();
+    $customer = makeBookingCustomer();
     $booking  = makeDraftBooking($customer);
     $vendor   = \App\Modules\Identity\Domain\Models\VendorProfile::factory()->create();
     $category = Category::factory()->create();
@@ -155,7 +155,7 @@ it('adds two items from same vendor into one booking_vendor row', function (): v
 })->group('booking', 'add-item');
 
 it('adds items from two vendors creating two booking_vendor rows', function (): void {
-    $customer = makeCustomer();
+    $customer = makeBookingCustomer();
     $booking  = makeDraftBooking($customer);
     $service1 = makePublishedService(ProductType::Digital);
     $service2 = makePublishedService(ProductType::Digital);
@@ -174,7 +174,7 @@ it('adds items from two vendors creating two booking_vendor rows', function (): 
 })->group('booking', 'add-item');
 
 it('returns 409 when adding to a non-draft booking', function (): void {
-    $customer = makeCustomer();
+    $customer = makeBookingCustomer();
     $booking  = makeDraftBooking($customer);
     $booking->update(['lifecycle_status' => LifecycleStatus::Submitted]);
     $service = makePublishedService(ProductType::Digital);
@@ -186,8 +186,8 @@ it('returns 409 when adding to a non-draft booking', function (): void {
 })->group('booking', 'add-item');
 
 it('returns 403 when adding to another user\'s booking', function (): void {
-    $customer = makeCustomer();
-    $other    = makeCustomer();
+    $customer = makeBookingCustomer();
+    $other    = makeBookingCustomer();
     $booking  = makeDraftBooking($other);
     $service  = makePublishedService(ProductType::Digital);
 
