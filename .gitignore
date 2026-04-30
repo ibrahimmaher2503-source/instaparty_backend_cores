@@ -24,3 +24,6 @@ Homestead.yaml
 Thumbs.db
 .worktrees/
 tests/.pest-baseline.xml
+
+# Claude Code session log
+.claude/session-log.md
