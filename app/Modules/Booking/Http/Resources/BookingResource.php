@@ -10,6 +10,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 /** @mixin \App\Modules\Booking\Domain\Models\Booking */
 class BookingResource extends JsonResource
 {
+    /** @return array<string, mixed> */
     public function toArray(Request $request): array
     {
         $tz = auth()->user()->timezone ?? 'Africa/Cairo';
@@ -29,16 +30,20 @@ class BookingResource extends JsonResource
             'total_minor' => $this->total_minor,
             'currency' => $this->total_currency ?? 'EGP',
             'vendors' => BookingVendorResource::collection($this->whenLoaded('vendors')),
-            'address' => $this->whenLoaded('address', fn () => [
-                'city_id' => $this->address->city_id,
-                'address_line' => $this->address->address_line,
-                'building' => $this->address->building,
-                'floor' => $this->address->floor,
-                'apartment' => $this->address->apartment,
-                'landmark' => $this->address->landmark,
-                'recipient_name' => $this->address->recipient_name,
-                'recipient_phone_e164' => $this->address->recipient_phone_e164,
-            ]),
+            'address' => $this->whenLoaded('address', function () {
+                /** @var \App\Modules\Booking\Domain\Models\BookingAddress $address */
+                $address = $this->address;
+                return [
+                    'city_id' => $address->city_id,
+                    'address_line' => $address->address_line,
+                    'building' => $address->building,
+                    'floor' => $address->floor,
+                    'apartment' => $address->apartment,
+                    'landmark' => $address->landmark,
+                    'recipient_name' => $address->recipient_name,
+                    'recipient_phone_e164' => $address->recipient_phone_e164,
+                ];
+            }),
         ];
     }
 }

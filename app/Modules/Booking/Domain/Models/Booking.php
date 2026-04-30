@@ -7,6 +7,7 @@ namespace App\Modules\Booking\Domain\Models;
 use App\Modules\Booking\Domain\Enums\FulfillmentStatus;
 use App\Modules\Booking\Domain\Enums\LifecycleStatus;
 use App\Modules\Booking\Domain\Enums\PaymentStatus;
+use App\Modules\Shared\Domain\Casts\MoneyCast;
 use App\Modules\Shared\Domain\Concerns\HasPublicId;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -36,6 +37,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property \Illuminate\Support\Carbon|null $event_starts_at
  * @property \Illuminate\Support\Carbon|null $event_ends_at
  * @property BookingAddress|null $address
+ * @property \Illuminate\Database\Eloquent\Collection<int, BookingVendor> $vendors
  */
 class Booking extends Model
 {
@@ -67,6 +69,12 @@ class Booking extends Model
         'confirmed_at' => 'datetime',
         'cancelled_at' => 'datetime',
         'theme' => 'array',
+        'subtotal' => MoneyCast::class . ':subtotal',
+        'delivery_total' => MoneyCast::class . ':delivery_total',
+        'discount_total' => MoneyCast::class . ':discount_total',
+        'loyalty_redeemed' => MoneyCast::class . ':loyalty_redeemed',
+        'total' => MoneyCast::class . ':total',
+        'amount_paid' => MoneyCast::class . ':amount_paid',
     ];
 
     public function address(): HasOne
@@ -74,6 +82,7 @@ class Booking extends Model
         return $this->hasOne(BookingAddress::class);
     }
 
+    /** @return HasMany<BookingVendor, $this> */
     public function vendors(): HasMany
     {
         return $this->hasMany(BookingVendor::class);

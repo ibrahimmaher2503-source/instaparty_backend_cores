@@ -12,13 +12,15 @@ class RecalculateBookingTotalsListener
 {
     public function handle(BookingItemAdded|BookingItemRemoved $event): void
     {
-        $bookingVendorId = $event instanceof BookingItemAdded
-            ? $event->item->booking_vendor_id
-            : $event->bookingVendorId;
-
-        $bookingId = $event instanceof BookingItemAdded
-            ? ($event->item->bookingVendor ?? $event->item->load('bookingVendor')->bookingVendor)->booking_id
-            : $event->bookingId;
+        if ($event instanceof BookingItemAdded) {
+            $bookingVendorId = $event->item->booking_vendor_id;
+            /** @var \App\Modules\Booking\Domain\Models\BookingVendor $vendor */
+            $vendor = $event->item->bookingVendor ?? $event->item->load('bookingVendor')->bookingVendor;
+            $bookingId = $vendor->booking_id;
+        } else {
+            $bookingVendorId = $event->bookingVendorId;
+            $bookingId = $event->bookingId;
+        }
 
         // Update booking_vendor subtotal
         DB::statement('

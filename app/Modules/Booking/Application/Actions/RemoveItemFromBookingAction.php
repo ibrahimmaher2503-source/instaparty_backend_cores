@@ -16,6 +16,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class RemoveItemFromBookingAction
 {
+    /** @return array<string, mixed> */
     public function execute(int $bookingId, int $customerId, string $itemPublicId): array
     {
         return DB::transaction(function () use ($bookingId, $customerId, $itemPublicId): array {
@@ -48,6 +49,8 @@ class RemoveItemFromBookingAction
                 ->where('status', ReservationStatus::Held->value)
                 ->update([
                     'status' => ReservationStatus::Released->value,
+                    'released_at' => now(),
+                    'release_reason' => 'customer_cancelled',
                     'updated_at' => now(),
                 ]);
 

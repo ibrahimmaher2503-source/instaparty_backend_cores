@@ -1,0 +1,94 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Modules\Booking\Http\Controllers\Vendor;
+
+use App\Modules\Booking\Application\Actions\VendorAcceptBookingAction;
+use App\Modules\Booking\Application\Actions\VendorModifyBookingAction;
+use App\Modules\Booking\Application\Actions\VendorRejectBookingAction;
+use App\Modules\Booking\Application\DTOs\VendorModifyDTO;
+use App\Modules\Booking\Domain\Enums\ModificationProposalKind;
+use App\Modules\Booking\Domain\Enums\VendorSubStatus;
+use App\Modules\Booking\Domain\Models\BookingModification;
+use App\Modules\Booking\Domain\Models\BookingVendor;
+use App\Modules\Booking\Http\Requests\VendorModifyRequest;
+use App\Modules\Booking\Http\Requests\VendorRejectRequest;
+use App\Modules\Booking\Http\Resources\BookingModificationResource;
+use App\Modules\Booking\Http\Resources\BookingVendorResource;
+use App\Modules\Identity\Domain\Models\VendorProfile;
+use App\Modules\Shared\Http\ApiResponse;
+use Illuminate\Http\JsonResponse;
+
+class BookingController
+{
+    private function vendorProfileId(): int
+    {
+        /** @var \App\Modules\Identity\Domain\Models\User $user */
+        $user = auth()->user();
+        /** @var VendorProfile $profile */
+        $profile = $user->vendorProfile;
+        return $profile->id;
+    }
+
+    public function index(): JsonResponse
+    {
+        $vendorProfileId = $this->vendorProfileId();
+
+        $bookingVendors = BookingVendor::with('items')
+            ->where('vendor_profile_id', $vendorProfileId)
+            ->where('sub_status', VendorSubStatus::Pending)
+            ->get();
+
+        return ApiResponse::success(BookingVendorResource::collection($bookingVendors));
+    }
+
+    public function accept(string $bookingVendorPublicId): JsonResponse
+    {
+        $bookingVendor = BookingVendor::where('public_id', $bookingVendorPublicId)->firstOrFail();
+
+        $result = app(VendorAcceptBookingAction::class)->execute((int) $bookingVendor->id, $this->vendorProfileId());
+
+        return ApiResponse::success(new BookingVendorResource($result));
+    }
+
+    public function modify(VendorModifyRequest $request, string $bookingVendorPublicId): JsonResponse
+    {
+        $bookingVendor = BookingVendor::where('public_id', $bookingVendorPublicId)->firstOrFail();
+
+        $result = app(VendorModifyBookingAction::class)->execute(new VendorModifyDTO(
+            bookingVendorId:   (int) $bookingVendor->id,
+            vendorProfileId:   $this->vendorProfileId(),
+            proposedByUserId:  (int) auth()->id(),
+            proposalKind:      ModificationProposalKind::from($request->validated('proposal_kind')),
+            changes:           $request->validated('changes'),
+            vendorExplanation: $request->validated('vendor_explanation'),
+        ));
+
+        return ApiResponse::success(new BookingModificationResource($result), [], 201);
+    }
+
+    public function modifications(string $bookingVendorPublicId): JsonResponse
+    {
+        $bookingVendor = BookingVendor::where('public_id', $bookingVendorPublicId)
+            ->where('vendor_profile_id', $this->vendorProfileId())
+            ->firstOrFail();
+
+        $modifications = BookingModification::where('booking_vendor_id', $bookingVendor->id)->latest()->get();
+
+        return ApiResponse::success(BookingModificationResource::collection($modifications));
+    }
+
+    public function reject(VendorRejectRequest $request, string $bookingVendorPublicId): JsonResponse
+    {
+        $bookingVendor = BookingVendor::where('public_id', $bookingVendorPublicId)->firstOrFail();
+
+        $result = app(VendorRejectBookingAction::class)->execute(
+            (int) $bookingVendor->id,
+            $this->vendorProfileId(),
+            $request->validated('rejection_reason')
+        );
+
+        return ApiResponse::success(new BookingVendorResource($result));
+    }
+}

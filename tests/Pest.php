@@ -7,3 +7,5 @@ use Tests\TestCase;
 
 uses(TestCase::class, RefreshDatabase::class)->in('Feature');
 uses(TestCase::class)->in('Architecture');
+
+require_once __DIR__ . '/Feature/Modules/Booking/BookingTestHelpers.php';

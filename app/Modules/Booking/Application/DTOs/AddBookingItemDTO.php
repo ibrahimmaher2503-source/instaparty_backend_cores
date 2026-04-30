@@ -15,6 +15,7 @@ final readonly class AddBookingItemDTO
         public int $quantity,
         public ?Carbon $effectiveStartsAt,
         public ?Carbon $effectiveEndsAt,
+        /** @var array<string, mixed>|null */
         public ?array $customizationData,
     ) {}
 }

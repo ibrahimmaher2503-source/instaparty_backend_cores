@@ -10,6 +10,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 /** @mixin \App\Modules\Booking\Domain\Models\BookingItem */
 class BookingItemResource extends JsonResource
 {
+    /** @return array<string, mixed> */
     public function toArray(Request $request): array
     {
         $locale = str_starts_with($request->header('Accept-Language', 'ar'), 'en') ? 'en' : 'ar';

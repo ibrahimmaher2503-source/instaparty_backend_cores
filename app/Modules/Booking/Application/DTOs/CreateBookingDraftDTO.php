@@ -14,6 +14,7 @@ final readonly class CreateBookingDraftDTO
         public Carbon $eventStartsAt,
         public Carbon $eventEndsAt,
         public ?int $guestCount,
+        /** @var array<string, mixed>|null */
         public ?array $theme,
         public ?string $celebrantName,
         public ?string $celebrantDob,
