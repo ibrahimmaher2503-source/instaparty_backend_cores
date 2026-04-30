@@ -23,3 +23,6 @@ Homestead.json
 Homestead.yaml
 Thumbs.db
 .worktrees/
+
+# Claude Code session log
+.claude/session-log.md
