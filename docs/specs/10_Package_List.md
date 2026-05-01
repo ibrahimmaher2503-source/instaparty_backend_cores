@@ -259,7 +259,7 @@ composer require --dev \
   spatie/laravel-ignition:^2.8 \
   laravel/telescope:^5.2 \
   driftingly/rector-laravel:^2.0 \
-  knuckleswtf/scribe:^4.0
+  knuckleswtf/scribe:^5.9
 ```
 
 | Package | Purpose |
