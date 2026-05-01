@@ -9,7 +9,7 @@ use App\Modules\Identity\Domain\Events\VendorApprovedForType;
 use App\Modules\Identity\Domain\Models\User;
 use App\Modules\Identity\Domain\Models\VendorApprovedProductType;
 use App\Modules\Identity\Domain\Models\VendorProfile;
-use App\Modules\Shared\Domain\Enums\ProductType;
+use App\Modules\Catalog\Domain\Enums\ProductType;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 

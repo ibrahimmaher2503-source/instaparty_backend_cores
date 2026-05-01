@@ -6,7 +6,7 @@ namespace Database\Factories;
 
 use App\Modules\Identity\Domain\Models\VendorApprovedProductType;
 use App\Modules\Identity\Domain\Models\VendorProfile;
-use App\Modules\Shared\Domain\Enums\ProductType;
+use App\Modules\Catalog\Domain\Enums\ProductType;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**

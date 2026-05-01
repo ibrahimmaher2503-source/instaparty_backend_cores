@@ -1,0 +1,233 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Modules\Booking\Application\Actions;
+
+use App\Modules\Booking\Application\DTOs\CustomerModificationDecisionDTO;
+use App\Modules\Booking\Domain\Enums\LifecycleStatus;
+use App\Modules\Booking\Domain\Enums\ModificationChangeKind;
+use App\Modules\Booking\Domain\Enums\ModificationStatus;
+use App\Modules\Booking\Domain\Enums\VendorSubStatus;
+use App\Modules\Booking\Domain\Events\BookingConfirmed;
+use App\Modules\Booking\Domain\Events\CustomerModificationDecided;
+use App\Modules\Booking\Domain\Models\Booking;
+use App\Modules\Booking\Domain\Models\BookingItem;
+use App\Modules\Booking\Domain\Models\BookingModification;
+use App\Modules\Booking\Domain\Models\BookingModificationItem; // used in applyAdd
+use App\Modules\Booking\Domain\Models\BookingStateTransition;
+use App\Modules\Booking\Domain\Models\BookingVendor;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
+
+class CustomerConfirmModifiedBookingAction
+{
+    public function execute(CustomerModificationDecisionDTO $dto): Booking
+    {
+        $cached = $this->getCachedIdempotencyResponse($dto);
+        if ($cached !== null) {
+            return $cached;
+        }
+
+        return DB::transaction(function () use ($dto): Booking {
+            $booking = Booking::query()->where('id', $dto->bookingId)->lockForUpdate()->firstOrFail();
+
+            abort_if(
+                $booking->customer_id !== $dto->customerId,
+                Response::HTTP_FORBIDDEN
+            );
+
+            /** @var BookingModification|null $modification */
+            $modification = BookingModification::with(['items', 'bookingVendor'])
+                ->where('public_id', $dto->modificationPublicId)
+                ->whereHas('bookingVendor', fn ($q) => $q->where('booking_id', $booking->id))
+                ->lockForUpdate()
+                ->first();
+
+            abort_if($modification === null, Response::HTTP_NOT_FOUND);
+
+            abort_if(
+                $modification->status !== ModificationStatus::Pending,
+                Response::HTTP_CONFLICT,
+                'Modification is not in pending status'
+            );
+
+            /** @var BookingVendor $bookingVendor */
+            $bookingVendor = $modification->bookingVendor;
+
+            if ($dto->decision === 'accepted') {
+                $this->applyModificationItems($modification);
+
+                $modification->update([
+                    'status'               => ModificationStatus::CustomerAccepted,
+                    'customer_decision_at' => now(),
+                ]);
+
+                $this->recalculateVendorSubtotal($bookingVendor);
+
+                // Advance this vendor's sub_status to accepted
+                $bookingVendor->update([
+                    'sub_status'   => VendorSubStatus::Accepted,
+                    'responded_at' => now(),
+                ]);
+
+                BookingStateTransition::create([
+                    'transitionable_type' => BookingVendor::class,
+                    'transitionable_id'   => $bookingVendor->id,
+                    'from_state'          => VendorSubStatus::Modified->value,
+                    'to_state'            => VendorSubStatus::Accepted->value,
+                    'trigger_kind'        => 'customer',
+                    'triggered_by'        => $dto->customerId,
+                ]);
+
+                $allAccepted = ! BookingVendor::where('booking_id', $booking->id)
+                    ->where('sub_status', '!=', VendorSubStatus::Accepted->value)
+                    ->exists();
+
+                if ($allAccepted) {
+                    $booking->update([
+                        'lifecycle_status' => LifecycleStatus::Confirmed,
+                        'confirmed_at'     => now(),
+                    ]);
+
+                    BookingStateTransition::create([
+                        'transitionable_type' => Booking::class,
+                        'transitionable_id'   => $booking->id,
+                        'from_state'          => LifecycleStatus::CustomerReview->value,
+                        'to_state'            => LifecycleStatus::Confirmed->value,
+                        'trigger_kind'        => 'system',
+                    ]);
+                } else {
+                    $booking->update(['lifecycle_status' => LifecycleStatus::VendorReview]);
+
+                    BookingStateTransition::create([
+                        'transitionable_type' => Booking::class,
+                        'transitionable_id'   => $booking->id,
+                        'from_state'          => LifecycleStatus::CustomerReview->value,
+                        'to_state'            => LifecycleStatus::VendorReview->value,
+                        'trigger_kind'        => 'system',
+                    ]);
+                }
+            } else {
+                $modification->update([
+                    'status'               => ModificationStatus::CustomerRejected,
+                    'customer_decision_at' => now(),
+                ]);
+
+                $bookingVendor->update(['sub_status' => VendorSubStatus::Pending]);
+
+                BookingStateTransition::create([
+                    'transitionable_type' => BookingVendor::class,
+                    'transitionable_id'   => $bookingVendor->id,
+                    'from_state'          => VendorSubStatus::Modified->value,
+                    'to_state'            => VendorSubStatus::Pending->value,
+                    'trigger_kind'        => 'customer',
+                    'triggered_by'        => $dto->customerId,
+                ]);
+
+                $booking->update(['lifecycle_status' => LifecycleStatus::VendorReview]);
+
+                BookingStateTransition::create([
+                    'transitionable_type' => Booking::class,
+                    'transitionable_id'   => $booking->id,
+                    'from_state'          => LifecycleStatus::CustomerReview->value,
+                    'to_state'            => LifecycleStatus::VendorReview->value,
+                    'trigger_kind'        => 'system',
+                ]);
+            }
+
+            $booking->refresh();
+            $bookingConfirmed = $booking->lifecycle_status === LifecycleStatus::Confirmed;
+
+            DB::afterCommit(function () use ($modification, $dto, $booking, $bookingConfirmed): void {
+                event(new CustomerModificationDecided($modification, $dto->decision));
+                if ($bookingConfirmed) {
+                    event(new BookingConfirmed($booking));
+                }
+                $this->storeIdempotencyResponse($dto, $booking);
+            });
+
+            return $booking;
+        });
+    }
+
+    private function applyModificationItems(BookingModification $modification): void
+    {
+        foreach ($modification->items as $modItem) {
+            /** @var BookingModificationItem $modItem */
+            match ($modItem->change_kind) {
+                ModificationChangeKind::Update => $this->applyUpdate($modItem),
+                ModificationChangeKind::Add    => $this->applyAdd($modItem, $modification->booking_vendor_id),
+                ModificationChangeKind::Remove => $this->applyRemove($modItem),
+            };
+        }
+    }
+
+    private function applyUpdate(BookingModificationItem $modItem): void
+    {
+        if ($modItem->target_booking_item_id === null) {
+            return;
+        }
+
+        $item = BookingItem::find($modItem->target_booking_item_id);
+        if ($item !== null) {
+            $item->update($modItem->payload);
+            $item->update(['line_total_minor' => $item->unit_price_minor * $item->quantity]);
+        }
+    }
+
+    private function applyAdd(BookingModificationItem $modItem, int $bookingVendorId): void
+    {
+        BookingItem::create(array_merge(
+            ['public_id' => (string) Str::ulid(), 'booking_vendor_id' => $bookingVendorId],
+            $modItem->payload
+        ));
+    }
+
+    private function applyRemove(BookingModificationItem $modItem): void
+    {
+        if ($modItem->target_booking_item_id !== null) {
+            BookingItem::where('id', $modItem->target_booking_item_id)->delete();
+        }
+    }
+
+    private function recalculateVendorSubtotal(BookingVendor $bookingVendor): void
+    {
+        $subtotal = BookingItem::where('booking_vendor_id', $bookingVendor->id)->sum('line_total_minor');
+        $bookingVendor->update(['subtotal_minor' => $subtotal]);
+    }
+
+    private function getCachedIdempotencyResponse(CustomerModificationDecisionDTO $dto): ?Booking
+    {
+        $row = DB::table('idempotency_keys')
+            ->where('key', $dto->idempotencyKey)
+            ->where('route', 'bookings.modifications.decide')
+            ->where('user_id', $dto->customerId)
+            ->where('expires_at', '>', now())
+            ->first();
+
+        if ($row === null) {
+            return null;
+        }
+
+        /** @var array<string,mixed> $response */
+        $response = json_decode($row->response, true);
+        return Booking::find((int) ($response['booking_id'] ?? 0));
+    }
+
+    private function storeIdempotencyResponse(CustomerModificationDecisionDTO $dto, Booking $booking): void
+    {
+        DB::table('idempotency_keys')->upsert(
+            [
+                'key'        => $dto->idempotencyKey,
+                'route'      => 'bookings.modifications.decide',
+                'user_id'    => $dto->customerId,
+                'response'   => json_encode(['booking_id' => $booking->id]),
+                'expires_at' => now()->addHours(24),
+            ],
+            ['key', 'route', 'user_id'],
+            ['response', 'expires_at']
+        );
+    }
+}
