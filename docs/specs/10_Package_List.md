@@ -258,7 +258,8 @@ composer require --dev \
   mockery/mockery:^1.6 \
   spatie/laravel-ignition:^2.8 \
   laravel/telescope:^5.2 \
-  driftingly/rector-laravel:^2.0
+  driftingly/rector-laravel:^2.0 \
+  knuckleswtf/scribe:^4.0
 ```
 
 | Package | Purpose |
@@ -274,6 +275,7 @@ composer require --dev \
 | `spatie/laravel-ignition` | Pretty error pages (dev only) |
 | `laravel/telescope` | Local debugging — disabled in production |
 | `driftingly/rector-laravel` | Automated upgrade rules (use sparingly) |
+| `knuckleswtf/scribe` | Auto-generate API documentation from PHPDoc annotations (`@bodyParam`, `@response`); consumed by the Flutter mobile team |
 
 ---
 
@@ -302,7 +304,7 @@ Don't `composer require` everything at once. Install in this order so each step 
 1. Foundation (Laravel, Sanctum, Scout, Reverb, Predis)
 2. Spatie Permission + Translatable + Media Library + Tags
 3. Brick/Money + Spatie Data + Spatie Model States + Spatie ActivityLog + Spatie Backup
-4. Dev tools (Pest, Pint, Larastan, Collision, Faker, Mockery, Ignition, Telescope, Rector-Laravel)
+4. Dev tools (Pest, Pint, Larastan, Collision, Faker, Mockery, Ignition, Telescope, Rector-Laravel, Scribe)
 
 ### Day 2
 5. Filament v3 core + Shield + translatable plugin + media-library plugin + tags plugin + activitylog plugin + settings plugin + tiptap editor + language switch + filament-excel + fullcalendar
@@ -336,6 +338,14 @@ Both are good. `brick/money` has stricter type discipline, better Laravel docs i
 
 ### Why `kreait/laravel-firebase` and not raw Firebase REST?
 You're already integrating Firebase for chat (Firestore) and push (FCM). One SDK for both, with Laravel auth handling, beats two custom HTTP clients.
+
+### Why `knuckleswtf/scribe` and not `dedoc/scramble` or hand-maintained Postman?
+The Flutter mobile team needs an authoritative, machine-readable API contract that stays in sync with the Laravel codebase. Scribe generates OpenAPI + a browsable HTML reference directly from `@bodyParam` PHPDoc on Form Requests and `@response` PHPDoc on API Resources — the same annotations the InstaParty API documentation rules already mandate (see `AGENTS.md` §7 and `.specify/memory/constitution.md`). Alternatives considered:
+
+- **`dedoc/scramble`** — promising but less mature in 2026; weaker support for translatable JSON bodies and the `ApiResponse` envelope, and its inferred-type approach fights our explicit `@bodyParam` discipline.
+- **Hand-maintained Postman** — doesn't scale past ~30 endpoints and drifts from code within a sprint. We keep Postman/Bruno collections (`docs/api/collections/`) for *manual smoke testing*, not as the contract source of truth.
+
+Scribe is dev-only — it generates static artifacts at build time. No runtime cost in production.
 
 ### Why Filament v3 and not v4 if v4 is out?
 Pin to v3 for Phase 1 — Filament v4's plugin ecosystem may not have caught up by your launch window. Upgrade in Phase 2 once plugins are stable.
