@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Modules\Catalog\Domain\Enums\ProductType;
 use App\Modules\Geography\Database\Seeders\EgyptGeographySeeder;
 use App\Modules\Identity\Application\Actions\ApproveVendorForTypeAction;
 use App\Modules\Identity\Application\Actions\ApproveVendorProfileAction;
@@ -16,7 +17,6 @@ use App\Modules\Identity\Domain\Events\VendorTypeRevoked;
 use App\Modules\Identity\Domain\Models\User;
 use App\Modules\Identity\Domain\Models\VendorApprovedProductType;
 use App\Modules\Identity\Domain\Models\VendorProfile;
-use App\Modules\Catalog\Domain\Enums\ProductType;
 use Database\Seeders\IdentityRolesSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Cache;
