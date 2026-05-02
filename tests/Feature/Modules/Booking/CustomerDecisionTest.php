@@ -6,9 +6,10 @@ use App\Modules\Booking\Domain\Enums\LifecycleStatus;
 use App\Modules\Booking\Domain\Enums\ModificationStatus;
 use App\Modules\Booking\Domain\Enums\VendorSubStatus;
 use App\Modules\Booking\Domain\Models\Booking;
-use App\Modules\Booking\Domain\Models\BookingVendor;
+use App\Modules\Identity\Domain\Models\User;
 use Database\Seeders\IdentityRolesSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 uses(RefreshDatabase::class);
@@ -118,7 +119,7 @@ it('booking_state_transitions has row to confirmed after customer accepts', func
         ['Idempotency-Key' => (string) Str::uuid()]
     );
 
-    expect(\Illuminate\Support\Facades\DB::table('booking_state_transitions')
+    expect(DB::table('booking_state_transitions')
         ->where('transitionable_type', Booking::class)
         ->where('transitionable_id', $booking->id)
         ->where('to_state', 'confirmed')
@@ -136,7 +137,7 @@ it('idempotency: duplicate decision key returns same response', function (): voi
         ['Idempotency-Key' => $idempotencyKey]
     )->assertOk();
 
-    $transitionCount = \Illuminate\Support\Facades\DB::table('booking_state_transitions')
+    $transitionCount = DB::table('booking_state_transitions')
         ->where('transitionable_type', Booking::class)
         ->where('transitionable_id', $booking->id)
         ->where('to_state', 'confirmed')
@@ -148,7 +149,7 @@ it('idempotency: duplicate decision key returns same response', function (): voi
         ['Idempotency-Key' => $idempotencyKey]
     )->assertOk();
 
-    $transitionCountAfter = \Illuminate\Support\Facades\DB::table('booking_state_transitions')
+    $transitionCountAfter = DB::table('booking_state_transitions')
         ->where('transitionable_type', Booking::class)
         ->where('transitionable_id', $booking->id)
         ->where('to_state', 'confirmed')
@@ -159,7 +160,7 @@ it('idempotency: duplicate decision key returns same response', function (): voi
 
 it('returns 403 when another customer tries to decide', function (): void {
     ['booking' => $booking, 'modification' => $mod] = makeBookingWithPendingModification();
-    $otherCustomer = \App\Modules\Identity\Domain\Models\User::factory()->asCustomer()->create(['timezone' => 'Africa/Cairo']);
+    $otherCustomer = User::factory()->asCustomer()->create(['timezone' => 'Africa/Cairo']);
 
     $this->actingAs($otherCustomer)->postJson(
         "/api/v1/customer/bookings/{$booking->public_id}/modifications/{$mod->public_id}/decide",

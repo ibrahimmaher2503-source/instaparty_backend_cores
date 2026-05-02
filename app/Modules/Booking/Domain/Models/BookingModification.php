@@ -7,10 +7,10 @@ namespace App\Modules\Booking\Domain\Models;
 use App\Modules\Booking\Domain\Enums\ModificationProposalKind;
 use App\Modules\Booking\Domain\Enums\ModificationStatus;
 use App\Modules\Shared\Domain\Concerns\HasPublicId;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Foundation\Auth\User;
 
 /**
  * @property int $id
@@ -19,12 +19,12 @@ use Illuminate\Foundation\Auth\User;
  * @property int $proposed_by
  * @property ModificationProposalKind $proposal_kind
  * @property ModificationStatus $status
- * @property \Carbon\Carbon|null $customer_decision_at
- * @property \Carbon\Carbon|null $expires_at
+ * @property Carbon|null $customer_decision_at
+ * @property Carbon|null $expires_at
  * @property array<string,string>|null $vendor_explanation
  * @property array<string,mixed> $diff_snapshot
- * @property \Carbon\Carbon $created_at
- * @property \Carbon\Carbon $updated_at
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
  */
 class BookingModification extends Model
 {
@@ -46,12 +46,12 @@ class BookingModification extends Model
     protected function casts(): array
     {
         return [
-            'proposal_kind'        => ModificationProposalKind::class,
-            'status'               => ModificationStatus::class,
-            'vendor_explanation'   => 'array',
-            'diff_snapshot'        => 'array',
+            'proposal_kind' => ModificationProposalKind::class,
+            'status' => ModificationStatus::class,
+            'vendor_explanation' => 'array',
+            'diff_snapshot' => 'array',
             'customer_decision_at' => 'datetime',
-            'expires_at'           => 'datetime',
+            'expires_at' => 'datetime',
         ];
     }
 

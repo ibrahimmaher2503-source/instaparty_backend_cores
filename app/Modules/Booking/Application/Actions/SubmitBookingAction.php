@@ -85,12 +85,15 @@ class SubmitBookingAction
         });
     }
 
+    private function requestHash(SubmitBookingDTO $dto): string
+    {
+        return hash('sha256', 'bookings.submit|'.$dto->customerId.'|'.$dto->bookingId);
+    }
+
     private function getCachedIdempotencyResponse(SubmitBookingDTO $dto): ?Booking
     {
         $row = DB::table('idempotency_keys')
             ->where('key', $dto->idempotencyKey)
-            ->where('route', 'bookings.submit')
-            ->where('user_id', $dto->customerId)
             ->where('expires_at', '>', now())
             ->first();
 
@@ -98,25 +101,28 @@ class SubmitBookingAction
             return null;
         }
 
-        /** @var array<string,mixed> $response */
-        $response = json_decode($row->response, true);
-        $bookingId = (int) ($response['booking_id'] ?? 0);
+        if (! hash_equals($row->request_hash, $this->requestHash($dto))) {
+            abort(Response::HTTP_CONFLICT, 'Idempotency key conflict');
+        }
+
+        /** @var array<string,mixed> $body */
+        $body = json_decode($row->response_body, true) ?? [];
+        $bookingId = (int) ($body['booking_id'] ?? 0);
 
         return Booking::with('vendors')->find($bookingId);
     }
 
     private function storeIdempotencyResponse(SubmitBookingDTO $dto, Booking $booking): void
     {
-        DB::table('idempotency_keys')->upsert(
-            [
-                'key' => $dto->idempotencyKey,
-                'route' => 'bookings.submit',
-                'user_id' => $dto->customerId,
-                'response' => json_encode(['booking_id' => $booking->id]),
-                'expires_at' => now()->addHours(24),
-            ],
-            ['key', 'route', 'user_id'],
-            ['response', 'expires_at']
-        );
+        DB::table('idempotency_keys')->insertOrIgnore([
+            'key' => $dto->idempotencyKey,
+            'user_id' => $dto->customerId,
+            'route' => 'bookings.submit',
+            'request_hash' => $this->requestHash($dto),
+            'response_status' => Response::HTTP_OK,
+            'response_body' => json_encode(['booking_id' => $booking->id]),
+            'expires_at' => now()->addHours(24),
+            'created_at' => now(),
+        ]);
     }
 }

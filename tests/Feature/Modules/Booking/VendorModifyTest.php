@@ -3,13 +3,14 @@
 declare(strict_types=1);
 
 use App\Modules\Booking\Domain\Enums\LifecycleStatus;
-use App\Modules\Booking\Domain\Enums\ModificationStatus;
 use App\Modules\Booking\Domain\Enums\VendorSubStatus;
 use App\Modules\Booking\Domain\Models\Booking;
 use App\Modules\Booking\Domain\Models\BookingModification;
 use App\Modules\Booking\Domain\Models\BookingVendor;
+use App\Modules\Identity\Domain\Models\VendorProfile;
 use Database\Seeders\IdentityRolesSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\DB;
 
 uses(RefreshDatabase::class);
 
@@ -23,13 +24,13 @@ it('vendor modifies → sub_status becomes modified', function (): void {
     $response = $this->actingAs($vendor->user)->postJson(
         "/api/v1/vendor/booking-vendors/{$bv->public_id}/modify",
         [
-            'proposal_kind'      => 'change_price',
+            'proposal_kind' => 'change_price',
             'vendor_explanation' => ['en' => 'Updated pricing', 'ar' => 'تسعير محدث'],
-            'changes'            => [
+            'changes' => [
                 [
-                    'change_kind'           => 'update',
+                    'change_kind' => 'update',
                     'target_item_public_id' => $item->public_id,
-                    'payload'               => ['unit_price_minor' => 60000],
+                    'payload' => ['unit_price_minor' => 60000],
                 ],
             ],
         ]
@@ -48,11 +49,11 @@ it('vendor modifies → booking lifecycle_status becomes customer_review', funct
         "/api/v1/vendor/booking-vendors/{$bv->public_id}/modify",
         [
             'proposal_kind' => 'change_price',
-            'changes'       => [
+            'changes' => [
                 [
-                    'change_kind'           => 'update',
+                    'change_kind' => 'update',
                     'target_item_public_id' => $item->public_id,
-                    'payload'               => ['unit_price_minor' => 60000],
+                    'payload' => ['unit_price_minor' => 60000],
                 ],
             ],
         ]
@@ -69,11 +70,11 @@ it('modification has diff_snapshot with before and after', function (): void {
         "/api/v1/vendor/booking-vendors/{$bv->public_id}/modify",
         [
             'proposal_kind' => 'change_price',
-            'changes'       => [
+            'changes' => [
                 [
-                    'change_kind'           => 'update',
+                    'change_kind' => 'update',
                     'target_item_public_id' => $item->public_id,
-                    'payload'               => ['unit_price_minor' => 75000],
+                    'payload' => ['unit_price_minor' => 75000],
                 ],
             ],
         ]
@@ -95,24 +96,24 @@ it('booking_state_transitions has row to modified after vendor modifies', functi
         "/api/v1/vendor/booking-vendors/{$bv->public_id}/modify",
         [
             'proposal_kind' => 'change_price',
-            'changes'       => [
+            'changes' => [
                 [
-                    'change_kind'           => 'update',
+                    'change_kind' => 'update',
                     'target_item_public_id' => $item->public_id,
-                    'payload'               => ['unit_price_minor' => 60000],
+                    'payload' => ['unit_price_minor' => 60000],
                 ],
             ],
         ]
     );
 
-    expect(\Illuminate\Support\Facades\DB::table('booking_state_transitions')
+    expect(DB::table('booking_state_transitions')
         ->where('transitionable_type', BookingVendor::class)
         ->where('transitionable_id', $bv->id)
         ->where('to_state', 'modified')
         ->exists()
     )->toBeTrue();
 
-    expect(\Illuminate\Support\Facades\DB::table('booking_state_transitions')
+    expect(DB::table('booking_state_transitions')
         ->where('transitionable_type', Booking::class)
         ->where('transitionable_id', $booking->id)
         ->where('to_state', 'customer_review')
@@ -125,11 +126,11 @@ it('returns 409 when a pending modification already exists', function (): void {
 
     $payload = [
         'proposal_kind' => 'change_price',
-        'changes'       => [
+        'changes' => [
             [
-                'change_kind'           => 'update',
+                'change_kind' => 'update',
                 'target_item_public_id' => $item->public_id,
-                'payload'               => ['unit_price_minor' => 60000],
+                'payload' => ['unit_price_minor' => 60000],
             ],
         ],
     ];
@@ -150,17 +151,17 @@ it('returns 409 when a pending modification already exists', function (): void {
 
 it('returns 403 when wrong vendor tries to modify', function (): void {
     ['bookingVendor' => $bv, 'item' => $item] = makeSubmittedBookingWithVendor();
-    $otherVendor = \App\Modules\Identity\Domain\Models\VendorProfile::factory()->approved()->create();
+    $otherVendor = VendorProfile::factory()->approved()->create();
 
     $this->actingAs($otherVendor->user)->postJson(
         "/api/v1/vendor/booking-vendors/{$bv->public_id}/modify",
         [
             'proposal_kind' => 'change_price',
-            'changes'       => [
+            'changes' => [
                 [
-                    'change_kind'           => 'update',
+                    'change_kind' => 'update',
                     'target_item_public_id' => $item->public_id,
-                    'payload'               => ['unit_price_minor' => 60000],
+                    'payload' => ['unit_price_minor' => 60000],
                 ],
             ],
         ]
@@ -175,11 +176,11 @@ it('returns 409 when vendor modifies non-pending booking_vendor', function (): v
         "/api/v1/vendor/booking-vendors/{$bv->public_id}/modify",
         [
             'proposal_kind' => 'change_price',
-            'changes'       => [
+            'changes' => [
                 [
-                    'change_kind'           => 'update',
+                    'change_kind' => 'update',
                     'target_item_public_id' => $item->public_id,
-                    'payload'               => ['unit_price_minor' => 60000],
+                    'payload' => ['unit_price_minor' => 60000],
                 ],
             ],
         ]
@@ -193,11 +194,11 @@ it('returns 401 when unauthenticated on modify', function (): void {
         "/api/v1/vendor/booking-vendors/{$bv->public_id}/modify",
         [
             'proposal_kind' => 'change_price',
-            'changes'       => [
+            'changes' => [
                 [
-                    'change_kind'           => 'update',
+                    'change_kind' => 'update',
                     'target_item_public_id' => $item->public_id,
-                    'payload'               => ['unit_price_minor' => 60000],
+                    'payload' => ['unit_price_minor' => 60000],
                 ],
             ],
         ]

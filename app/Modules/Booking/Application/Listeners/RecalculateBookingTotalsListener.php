@@ -6,6 +6,7 @@ namespace App\Modules\Booking\Application\Listeners;
 
 use App\Modules\Booking\Domain\Events\BookingItemAdded;
 use App\Modules\Booking\Domain\Events\BookingItemRemoved;
+use App\Modules\Booking\Domain\Models\BookingVendor;
 use Illuminate\Support\Facades\DB;
 
 class RecalculateBookingTotalsListener
@@ -14,7 +15,7 @@ class RecalculateBookingTotalsListener
     {
         if ($event instanceof BookingItemAdded) {
             $bookingVendorId = $event->item->booking_vendor_id;
-            /** @var \App\Modules\Booking\Domain\Models\BookingVendor $vendor */
+            /** @var BookingVendor $vendor */
             $vendor = $event->item->bookingVendor ?? $event->item->load('bookingVendor')->bookingVendor;
             $bookingId = $vendor->booking_id;
         } else {

@@ -19,10 +19,10 @@ class ReleaseInventoryOnCancellationListener
             ->where('booking_vendors.booking_id', $booking->id)
             ->where('service_inventory_reservations.status', 'held')
             ->update([
-                'service_inventory_reservations.status'         => 'released',
-                'service_inventory_reservations.released_at'    => now(),
+                'service_inventory_reservations.status' => 'released',
+                'service_inventory_reservations.released_at' => now(),
                 'service_inventory_reservations.release_reason' => 'booking_cancelled',
-                'service_inventory_reservations.updated_at'     => now(),
+                'service_inventory_reservations.updated_at' => now(),
             ]);
     }
 }

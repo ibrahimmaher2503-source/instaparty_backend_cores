@@ -19,7 +19,7 @@ class ConfirmInventoryReservationsListener
             ->where('booking_vendors.booking_id', $booking->id)
             ->where('service_inventory_reservations.status', 'held')
             ->update([
-                'service_inventory_reservations.status'     => 'confirmed',
+                'service_inventory_reservations.status' => 'confirmed',
                 'service_inventory_reservations.updated_at' => now(),
             ]);
     }

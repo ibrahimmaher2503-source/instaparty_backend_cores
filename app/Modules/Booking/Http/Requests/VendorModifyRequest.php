@@ -21,14 +21,14 @@ class VendorModifyRequest extends FormRequest
         $proposalKinds = array_column(ModificationProposalKind::cases(), 'value');
 
         return [
-            'proposal_kind'             => ['required', 'string', Rule::in($proposalKinds)],
-            'vendor_explanation'        => ['nullable', 'array'],
-            'vendor_explanation.en'     => ['nullable', 'string', 'max:500'],
-            'vendor_explanation.ar'     => ['nullable', 'string', 'max:500'],
-            'changes'                   => ['required', 'array', 'min:1'],
-            'changes.*.change_kind'     => ['required', 'string', Rule::in(['add', 'remove', 'update'])],
+            'proposal_kind' => ['required', 'string', Rule::in($proposalKinds)],
+            'vendor_explanation' => ['nullable', 'array'],
+            'vendor_explanation.en' => ['nullable', 'string', 'max:500'],
+            'vendor_explanation.ar' => ['nullable', 'string', 'max:500'],
+            'changes' => ['required', 'array', 'min:1'],
+            'changes.*.change_kind' => ['required', 'string', Rule::in(['add', 'remove', 'update'])],
             'changes.*.target_item_public_id' => ['nullable', 'string'],
-            'changes.*.payload'         => ['nullable', 'array'],
+            'changes.*.payload' => ['nullable', 'array'],
         ];
     }
 }

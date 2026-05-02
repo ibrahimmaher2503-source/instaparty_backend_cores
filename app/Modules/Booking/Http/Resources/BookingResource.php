@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace App\Modules\Booking\Http\Resources;
 
+use App\Modules\Booking\Domain\Models\Booking;
+use App\Modules\Booking\Domain\Models\BookingAddress;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-/** @mixin \App\Modules\Booking\Domain\Models\Booking */
+/** @mixin Booking */
 class BookingResource extends JsonResource
 {
     /** @return array<string, mixed> */
@@ -31,8 +33,9 @@ class BookingResource extends JsonResource
             'currency' => $this->total_currency ?? 'EGP',
             'vendors' => BookingVendorResource::collection($this->whenLoaded('vendors')),
             'address' => $this->whenLoaded('address', function () {
-                /** @var \App\Modules\Booking\Domain\Models\BookingAddress $address */
+                /** @var BookingAddress $address */
                 $address = $this->address;
+
                 return [
                     'city_id' => $address->city_id,
                     'address_line' => $address->address_line,

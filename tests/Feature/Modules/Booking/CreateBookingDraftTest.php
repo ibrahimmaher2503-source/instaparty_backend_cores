@@ -39,15 +39,15 @@ function bookingCity(): City
 function validBookingPayload(string $occasionPublicId, string $cityPublicId): array
 {
     return [
-        'occasion_id'     => $occasionPublicId,
+        'occasion_id' => $occasionPublicId,
         'event_starts_at' => now()->addDays(30)->toIso8601String(),
-        'event_ends_at'   => now()->addDays(30)->addHours(5)->toIso8601String(),
-        'guest_count'     => 50,
-        'address'         => [
-            'city_id'               => $cityPublicId,
-            'address_line'          => '12 Nile St',
-            'recipient_name'        => 'Aya Maher',
-            'recipient_phone_e164'  => '+201012345678',
+        'event_ends_at' => now()->addDays(30)->addHours(5)->toIso8601String(),
+        'guest_count' => 50,
+        'address' => [
+            'city_id' => $cityPublicId,
+            'address_line' => '12 Nile St',
+            'recipient_name' => 'Aya Maher',
+            'recipient_phone_e164' => '+201012345678',
         ],
     ];
 }
@@ -57,9 +57,9 @@ function validBookingPayload(string $occasionPublicId, string $cityPublicId): ar
 // ---------------------------------------------------------------------------
 
 it('creates a draft booking and returns 201', function (): void {
-    $user     = bookingCustomerUser();
+    $user = bookingCustomerUser();
     $occasion = bookingOccasion();
-    $city     = bookingCity();
+    $city = bookingCity();
 
     $response = $this->actingAs($user)
         ->postJson('/api/v1/customer/bookings', validBookingPayload($occasion->public_id, $city->public_id));
@@ -74,9 +74,9 @@ it('returns 401 for unauthenticated request', function (): void {
 })->group('booking', 'draft');
 
 it('returns 422 when event_starts_at is missing', function (): void {
-    $user     = bookingCustomerUser();
+    $user = bookingCustomerUser();
     $occasion = bookingOccasion();
-    $city     = bookingCity();
+    $city = bookingCity();
 
     $payload = validBookingPayload($occasion->public_id, $city->public_id);
     unset($payload['event_starts_at']);
@@ -85,9 +85,9 @@ it('returns 422 when event_starts_at is missing', function (): void {
 })->group('booking', 'draft');
 
 it('returns 422 when address.city_id is missing', function (): void {
-    $user     = bookingCustomerUser();
+    $user = bookingCustomerUser();
     $occasion = bookingOccasion();
-    $city     = bookingCity();
+    $city = bookingCity();
 
     $payload = validBookingPayload($occasion->public_id, $city->public_id);
     unset($payload['address']['city_id']);
@@ -105,9 +105,9 @@ it('returns 422 when occasion_id is missing', function (): void {
 })->group('booking', 'draft');
 
 it('creates a booking_snapshots row with version 1', function (): void {
-    $user     = bookingCustomerUser();
+    $user = bookingCustomerUser();
     $occasion = bookingOccasion();
-    $city     = bookingCity();
+    $city = bookingCity();
 
     $response = $this->actingAs($user)
         ->postJson('/api/v1/customer/bookings', validBookingPayload($occasion->public_id, $city->public_id));
@@ -115,7 +115,7 @@ it('creates a booking_snapshots row with version 1', function (): void {
     $response->assertStatus(201);
 
     $publicId = $response->json('data.public_id');
-    $booking  = Booking::where('public_id', $publicId)->first();
+    $booking = Booking::where('public_id', $publicId)->first();
 
     expect(
         BookingSnapshot::where('booking_id', $booking->id)->where('version', 1)->exists()
@@ -123,9 +123,9 @@ it('creates a booking_snapshots row with version 1', function (): void {
 })->group('booking', 'draft');
 
 it('creates a booking_state_transitions row with to_state=draft', function (): void {
-    $user     = bookingCustomerUser();
+    $user = bookingCustomerUser();
     $occasion = bookingOccasion();
-    $city     = bookingCity();
+    $city = bookingCity();
 
     $response = $this->actingAs($user)
         ->postJson('/api/v1/customer/bookings', validBookingPayload($occasion->public_id, $city->public_id));
@@ -133,7 +133,7 @@ it('creates a booking_state_transitions row with to_state=draft', function (): v
     $response->assertStatus(201);
 
     $publicId = $response->json('data.public_id');
-    $booking  = Booking::where('public_id', $publicId)->first();
+    $booking = Booking::where('public_id', $publicId)->first();
 
     expect(
         BookingStateTransition::where('transitionable_id', $booking->id)
@@ -143,9 +143,9 @@ it('creates a booking_state_transitions row with to_state=draft', function (): v
 })->group('booking', 'draft');
 
 it('stores a reference_no with IP- prefix', function (): void {
-    $user     = bookingCustomerUser();
+    $user = bookingCustomerUser();
     $occasion = bookingOccasion();
-    $city     = bookingCity();
+    $city = bookingCity();
 
     $response = $this->actingAs($user)
         ->postJson('/api/v1/customer/bookings', validBookingPayload($occasion->public_id, $city->public_id));
@@ -155,9 +155,9 @@ it('stores a reference_no with IP- prefix', function (): void {
 })->group('booking', 'draft');
 
 it('show returns the booking for the owning customer', function (): void {
-    $user     = bookingCustomerUser();
+    $user = bookingCustomerUser();
     $occasion = bookingOccasion();
-    $city     = bookingCity();
+    $city = bookingCity();
 
     $create = $this->actingAs($user)
         ->postJson('/api/v1/customer/bookings', validBookingPayload($occasion->public_id, $city->public_id));
@@ -171,10 +171,10 @@ it('show returns the booking for the owning customer', function (): void {
 })->group('booking', 'draft');
 
 it('show returns 404 for another customer', function (): void {
-    $owner    = bookingCustomerUser();
-    $other    = bookingCustomerUser();
+    $owner = bookingCustomerUser();
+    $other = bookingCustomerUser();
     $occasion = bookingOccasion();
-    $city     = bookingCity();
+    $city = bookingCity();
 
     $create = $this->actingAs($owner)
         ->postJson('/api/v1/customer/bookings', validBookingPayload($occasion->public_id, $city->public_id));

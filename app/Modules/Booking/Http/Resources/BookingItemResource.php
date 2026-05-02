@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace App\Modules\Booking\Http\Resources;
 
+use App\Modules\Booking\Domain\Models\BookingItem;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-/** @mixin \App\Modules\Booking\Domain\Models\BookingItem */
+/** @mixin BookingItem */
 class BookingItemResource extends JsonResource
 {
     /** @return array<string, mixed> */

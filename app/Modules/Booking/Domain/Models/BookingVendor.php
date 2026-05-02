@@ -7,6 +7,8 @@ namespace App\Modules\Booking\Domain\Models;
 use App\Modules\Booking\Domain\Enums\VendorSubStatus;
 use App\Modules\Shared\Domain\Casts\MoneyCast;
 use App\Modules\Shared\Domain\Concerns\HasPublicId;
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -18,8 +20,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property Booking|null $booking
  * @property int $vendor_profile_id
  * @property VendorSubStatus $sub_status
- * @property \Carbon\Carbon|null $response_deadline
- * @property \Carbon\Carbon|null $responded_at
+ * @property Carbon|null $response_deadline
+ * @property Carbon|null $responded_at
  * @property int $subtotal_minor
  * @property string $subtotal_currency
  * @property int $delivery_fee_minor
@@ -29,9 +31,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property int $vendor_payout_minor
  * @property string $vendor_payout_currency
  * @property array<string,string>|null $rejection_reason
- * @property \Carbon\Carbon $created_at
- * @property \Carbon\Carbon $updated_at
- * @property \Illuminate\Database\Eloquent\Collection<int, BookingItem> $items
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ * @property Collection<int, BookingItem> $items
  */
 class BookingVendor extends Model
 {
@@ -53,10 +55,10 @@ class BookingVendor extends Model
         'responded_at' => 'datetime',
         'rejection_reason' => 'array',
         'vendor_notes' => 'array',
-        'subtotal' => MoneyCast::class . ':subtotal',
-        'delivery_fee' => MoneyCast::class . ':delivery_fee',
-        'commission' => MoneyCast::class . ':commission',
-        'vendor_payout' => MoneyCast::class . ':vendor_payout',
+        'subtotal' => MoneyCast::class.':subtotal',
+        'delivery_fee' => MoneyCast::class.':delivery_fee',
+        'commission' => MoneyCast::class.':commission',
+        'vendor_payout' => MoneyCast::class.':vendor_payout',
     ];
 
     /** @return BelongsTo<Booking, $this> */

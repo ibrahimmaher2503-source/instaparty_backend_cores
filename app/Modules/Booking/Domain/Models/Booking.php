@@ -10,12 +10,14 @@ use App\Modules\Booking\Domain\Enums\PaymentStatus;
 use App\Modules\Shared\Domain\Casts\MoneyCast;
 use App\Modules\Shared\Domain\Concerns\HasPublicId;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Carbon;
 
 /**
  * @property string $reference_no
@@ -34,10 +36,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string $amount_paid_currency
  * @property int|null $guest_count
  * @property string|null $cancelled_by
- * @property \Illuminate\Support\Carbon|null $event_starts_at
- * @property \Illuminate\Support\Carbon|null $event_ends_at
+ * @property Carbon|null $event_starts_at
+ * @property Carbon|null $event_ends_at
  * @property BookingAddress|null $address
- * @property \Illuminate\Database\Eloquent\Collection<int, BookingVendor> $vendors
+ * @property Collection<int, BookingVendor> $vendors
  */
 class Booking extends Model
 {
@@ -57,6 +59,7 @@ class Booking extends Model
         'total_minor', 'total_currency',
         'amount_paid_minor', 'amount_paid_currency',
         'submitted_at', 'confirmed_at', 'cancelled_at', 'cancelled_by',
+        'payment_hold_expires_at',
     ];
 
     protected $casts = [
@@ -65,16 +68,17 @@ class Booking extends Model
         'fulfillment_status' => FulfillmentStatus::class,
         'event_starts_at' => 'datetime',
         'event_ends_at' => 'datetime',
+        'payment_hold_expires_at' => 'datetime',
         'submitted_at' => 'datetime',
         'confirmed_at' => 'datetime',
         'cancelled_at' => 'datetime',
         'theme' => 'array',
-        'subtotal' => MoneyCast::class . ':subtotal',
-        'delivery_total' => MoneyCast::class . ':delivery_total',
-        'discount_total' => MoneyCast::class . ':discount_total',
-        'loyalty_redeemed' => MoneyCast::class . ':loyalty_redeemed',
-        'total' => MoneyCast::class . ':total',
-        'amount_paid' => MoneyCast::class . ':amount_paid',
+        'subtotal' => MoneyCast::class.':subtotal',
+        'delivery_total' => MoneyCast::class.':delivery_total',
+        'discount_total' => MoneyCast::class.':discount_total',
+        'loyalty_redeemed' => MoneyCast::class.':loyalty_redeemed',
+        'total' => MoneyCast::class.':total',
+        'amount_paid' => MoneyCast::class.':amount_paid',
     ];
 
     public function address(): HasOne
