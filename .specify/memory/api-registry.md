@@ -29,6 +29,11 @@ If a row needs more nuance than the table can carry (multi-step flows, idempoten
 | Method | Endpoint | Module | Phase | Auth | Roles | Request Body | Response | Documented |
 |---|---|---|---|---|---|---|---|---|
 | <!-- first row goes here once Phase 1.0 ships --> | | | | | | | | |
+| POST | /api/v1/customer/bookings/{bookingPublicId}/payments | Payments | 4.0 | sanctum-token | customer | InitiatePaymentRequest | ApiResponse{data: Payment init payload, meta, errors} | 📝 partial |
+| GET | /api/v1/customer/payments/{paymentPublicId} | Payments | 4.0 | sanctum-token | customer | — | ApiResponse{data: PaymentResource, meta, errors} | 📝 partial |
+| POST | /api/v1/webhooks/paymob | Payments | 4.0 | none | — | PaymobWebhookRequest | ApiResponse{data, meta, errors} | 📝 partial |
+| POST | /api/v1/admin/bookings/{bookingPublicId}/refunds | Payments | 4.1 | sanctum-token | admin | InitiateRefundRequest | ApiResponse{data: Refund init payload, meta, errors} | 📝 partial |
+| GET | /api/v1/admin/refunds/{refundPublicId} | Payments | 4.1 | sanctum-token | admin | — | ApiResponse{data: RefundResource, meta, errors} | 📝 partial |
 
 ---
 
