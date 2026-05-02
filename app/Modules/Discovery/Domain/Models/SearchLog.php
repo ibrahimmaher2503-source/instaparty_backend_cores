@@ -21,7 +21,7 @@ class SearchLog extends Model
     ];
 
     protected $casts = [
-        'filters'       => 'array',
+        'filters' => 'array',
         'results_count' => 'integer',
     ];
 }

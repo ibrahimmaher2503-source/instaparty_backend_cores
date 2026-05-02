@@ -27,7 +27,7 @@ class AddToWishlistAction
 
             WishlistItem::firstOrCreate([
                 'wishlist_id' => $wishlist->id,
-                'service_id'  => $service->id,
+                'service_id' => $service->id,
             ]);
 
             return $wishlist->load('items');

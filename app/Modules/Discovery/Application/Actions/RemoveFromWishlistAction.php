@@ -13,7 +13,7 @@ class RemoveFromWishlistAction
 {
     public function execute(int $userId, string $servicePublicId): void
     {
-        $service  = Service::where('public_id', $servicePublicId)->firstOrFail();
+        $service = Service::where('public_id', $servicePublicId)->firstOrFail();
         $wishlist = Wishlist::where('user_id', $userId)->firstOrFail();
 
         $deleted = WishlistItem::where('wishlist_id', $wishlist->id)

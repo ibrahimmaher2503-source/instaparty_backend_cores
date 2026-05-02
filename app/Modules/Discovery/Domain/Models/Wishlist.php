@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Modules\Discovery\Domain\Models;
 
+use App\Modules\Identity\Domain\Models\User;
 use App\Modules\Shared\Domain\Concerns\HasPublicId;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -23,7 +24,7 @@ class Wishlist extends Model
 
     public function user(): BelongsTo
     {
-        return $this->belongsTo(\App\Modules\Identity\Domain\Models\User::class);
+        return $this->belongsTo(User::class);
     }
 
     public function items(): HasMany

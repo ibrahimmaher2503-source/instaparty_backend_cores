@@ -8,11 +8,11 @@ use App\Modules\Catalog\Domain\Models\Service;
 
 it('toSearchableArray contains required bilingual fields', function (): void {
     $service = Service::factory()->make([
-        'name'                => ['en' => 'Bouncy Castle', 'ar' => 'نطاطة'],
-        'short_description'   => ['en' => 'Fun castle', 'ar' => 'نطاطة ممتعة'],
-        'status'              => ServiceStatus::Published,
-        'product_type'        => ProductType::Rental,
-        'base_price_minor'    => 150000,
+        'name' => ['en' => 'Bouncy Castle', 'ar' => 'نطاطة'],
+        'short_description' => ['en' => 'Fun castle', 'ar' => 'نطاطة ممتعة'],
+        'status' => ServiceStatus::Published,
+        'product_type' => ProductType::Rental,
+        'base_price_minor' => 150000,
         'base_price_currency' => 'EGP',
     ]);
 

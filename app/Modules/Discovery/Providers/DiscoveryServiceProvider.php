@@ -6,6 +6,7 @@ namespace App\Modules\Discovery\Providers;
 
 use App\Modules\Catalog\Domain\Events\ServiceArchived;
 use App\Modules\Catalog\Domain\Events\ServicePublished;
+use App\Modules\Catalog\Domain\Models\Service;
 use App\Modules\Discovery\Application\Listeners\LogSearchQueryListener;
 use App\Modules\Discovery\Application\Listeners\ServiceIndexListener;
 use App\Modules\Discovery\Domain\Contracts\SearchRepository;
@@ -13,6 +14,7 @@ use App\Modules\Discovery\Domain\Events\ServiceSearchPerformed;
 use App\Modules\Discovery\Infrastructure\Repositories\EloquentSearchRepository;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
+use Meilisearch\Client;
 
 class DiscoveryServiceProvider extends ServiceProvider
 {
@@ -26,9 +28,9 @@ class DiscoveryServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        $this->loadMigrationsFrom(__DIR__ . '/../Database/Migrations');
-        $this->loadTranslationsFrom(__DIR__ . '/../Resources/lang', 'discovery');
-        $this->loadRoutesFrom(__DIR__ . '/../Routes/customer.php');
+        $this->loadMigrationsFrom(__DIR__.'/../Database/Migrations');
+        $this->loadTranslationsFrom(__DIR__.'/../Resources/lang', 'discovery');
+        $this->loadRoutesFrom(__DIR__.'/../Routes/customer.php');
 
         Event::listen(ServicePublished::class, [ServiceIndexListener::class, 'handlePublished']);
         Event::listen(ServiceArchived::class, [ServiceIndexListener::class, 'handleArchived']);
@@ -40,10 +42,10 @@ class DiscoveryServiceProvider extends ServiceProvider
     private function configureMeilisearchIndex(): void
     {
         try {
-            /** @var \Meilisearch\Client $client */
-            $client = app(\Meilisearch\Client::class);
+            /** @var Client $client */
+            $client = app(Client::class);
 
-            $indexName = (new \App\Modules\Catalog\Domain\Models\Service())->searchableAs();
+            $indexName = (new Service)->searchableAs();
 
             $client->index($indexName)->updateSettings([
                 'searchableAttributes' => [

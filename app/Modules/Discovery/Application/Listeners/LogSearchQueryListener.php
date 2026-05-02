@@ -13,10 +13,10 @@ class LogSearchQueryListener implements ShouldQueue
     public function handle(ServiceSearchPerformed $event): void
     {
         SearchLog::create([
-            'user_id'       => $event->userId,
-            'query'         => $event->query ?? '',
-            'locale'        => $event->locale,
-            'filters'       => $event->filtersApplied,
+            'user_id' => $event->userId,
+            'query' => $event->query ?? '',
+            'locale' => $event->locale,
+            'filters' => $event->filtersApplied,
             'results_count' => $event->resultsCount,
         ]);
     }

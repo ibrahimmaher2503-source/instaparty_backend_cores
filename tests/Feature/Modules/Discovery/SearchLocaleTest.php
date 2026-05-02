@@ -7,7 +7,7 @@ use App\Modules\Catalog\Domain\Models\Service;
 
 it('Arabic Accept-Language header returns name in Arabic', function (): void {
     Service::factory()->create([
-        'name'   => ['en' => 'Bouncy Castle', 'ar' => 'نطاطة'],
+        'name' => ['en' => 'Bouncy Castle', 'ar' => 'نطاطة'],
         'status' => ServiceStatus::Published,
     ]);
 
@@ -23,7 +23,7 @@ it('Arabic Accept-Language header returns name in Arabic', function (): void {
 
 it('English Accept-Language header returns name in English', function (): void {
     Service::factory()->create([
-        'name'   => ['en' => 'Bouncy Castle', 'ar' => 'نطاطة'],
+        'name' => ['en' => 'Bouncy Castle', 'ar' => 'نطاطة'],
         'status' => ServiceStatus::Published,
     ]);
 
