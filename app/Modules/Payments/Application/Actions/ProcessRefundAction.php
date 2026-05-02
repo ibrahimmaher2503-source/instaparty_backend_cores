@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 declare(strict_types=1);
 
@@ -8,6 +8,7 @@ use App\Modules\Payments\Domain\Contracts\PaymentGateway;
 use App\Modules\Payments\Domain\Enums\PaymentStatus;
 use App\Modules\Payments\Domain\Events\RefundCompleted;
 use App\Modules\Payments\Domain\Events\RefundFailed;
+use App\Modules\Payments\Domain\Models\Payment;
 use App\Modules\Payments\Domain\Models\Refund;
 use App\Modules\Payments\Infrastructure\Repositories\EloquentRefundRepository;
 use Brick\Money\Money;
@@ -21,7 +22,7 @@ class ProcessRefundAction
     {
         DB::transaction(function () use ($refundId): void {
             $refund = Refund::query()->lockForUpdate()->findOrFail($refundId);
-            $payment = \App\Modules\Payments\Domain\Models\Payment::query()->findOrFail($refund->payment_id);
+            $payment = Payment::query()->findOrFail($refund->payment_id);
             $this->refunds->markProcessing($refund);
 
             $result = $this->gateway->refund($payment, Money::ofMinor($refund->amount_minor, $refund->amount_currency));
@@ -29,6 +30,7 @@ class ProcessRefundAction
                 $this->refunds->markCompleted($refund, (string) $result->gatewayRef, now());
                 $payment->update(['status' => PaymentStatus::Refunded]);
                 DB::afterCommit(fn () => event(new RefundCompleted($refund->id, $payment->id, $payment->booking_id, $refund->amount_minor, $refund->amount_currency, $refund->reason_code->value)));
+
                 return;
             }
 

@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 declare(strict_types=1);
 
@@ -22,7 +22,7 @@ class Refund extends Model
     public array $translatable = ['reason_notes'];
 
     protected $casts = [
-        'amount' => MoneyCast::class . ':amount',
+        'amount' => MoneyCast::class.':amount',
         'reason_code' => RefundReasonCode::class,
         'status' => RefundStatus::class,
         'reason_notes' => 'array',

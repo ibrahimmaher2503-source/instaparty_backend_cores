@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 declare(strict_types=1);
 
@@ -25,11 +25,11 @@ class RefundPolicyService
     private function rentalPolicy(string $itemStatus, ?Carbon $eventStartsAt): RefundPolicy
     {
         if ($itemStatus === 'setup') {
-            return RefundPolicy::denied('rental_in_setup', 'refunds.policy.rental_in_setup');
+            return RefundPolicy::denied('rental_in_setup', 'payments::refunds.policy.rental_in_setup');
         }
 
         if ($eventStartsAt !== null && $eventStartsAt->lt(now()->addHours(24))) {
-            return RefundPolicy::denied('rental_window_closed', 'refunds.policy.rental_window_closed');
+            return RefundPolicy::denied('rental_window_closed', 'payments::refunds.policy.rental_window_closed');
         }
 
         return RefundPolicy::allowed();
@@ -39,8 +39,8 @@ class RefundPolicyService
     {
         return match ($itemStatus) {
             'pending', 'confirmed' => RefundPolicy::allowed(),
-            'in_preparation' => RefundPolicy::denied('sale_in_preparation', 'refunds.policy.sale_in_preparation'),
-            default => RefundPolicy::denied('sale_unavailable', 'refunds.policy.sale_in_preparation'),
+            'in_preparation' => RefundPolicy::denied('sale_in_preparation', 'payments::refunds.policy.sale_in_preparation'),
+            default => RefundPolicy::denied('sale_unavailable', 'payments::refunds.policy.sale_in_preparation'),
         };
     }
 
@@ -51,11 +51,11 @@ class RefundPolicyService
         }
 
         if ($serviceId === null) {
-            return RefundPolicy::denied('digital_post_delivery', 'refunds.policy.digital_post_delivery');
+            return RefundPolicy::denied('digital_post_delivery', 'payments::refunds.policy.digital_post_delivery');
         }
 
         return $this->catalogReader->isDigitalRefundableAfterDelivery($serviceId)
             ? RefundPolicy::allowed()
-            : RefundPolicy::denied('digital_post_delivery', 'refunds.policy.digital_post_delivery');
+            : RefundPolicy::denied('digital_post_delivery', 'payments::refunds.policy.digital_post_delivery');
     }
 }

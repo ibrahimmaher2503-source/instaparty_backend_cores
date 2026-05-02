@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 declare(strict_types=1);
 
@@ -12,12 +12,13 @@ use App\Modules\Payments\Domain\Contracts\PaymentGateway;
 use App\Modules\Payments\Domain\Models\Payment;
 use App\Modules\Payments\Infrastructure\Support\RedactPciFields;
 use Brick\Money\Money;
+use Illuminate\Support\Str;
 
 class PaymobGateway implements PaymentGateway
 {
     public function initiate(InitiatePaymentDto $dto): PaymentIntentDto
     {
-        $gatewayRef = 'PMB-'.(string) \Illuminate\Support\Str::ulid();
+        $gatewayRef = 'PMB-'.(string) Str::ulid();
 
         return new PaymentIntentDto(
             gatewayRef: $gatewayRef,
@@ -54,7 +55,7 @@ class PaymobGateway implements PaymentGateway
     {
         return new RefundResultDto(
             success: true,
-            gatewayRef: 'PMB-RFD-'.(string) \Illuminate\Support\Str::ulid(),
+            gatewayRef: 'PMB-RFD-'.(string) Str::ulid(),
             failureMessage: null,
         );
     }

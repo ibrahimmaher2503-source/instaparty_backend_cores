@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 declare(strict_types=1);
 
@@ -15,7 +15,6 @@ class InitiateRefundDto extends Data
         public int $initiatedBy,
         public RefundReasonCode $reasonCode,
         public array $reasonNotes,
-        public string $idempotencyKey,
-        public string $route,
+        public ?int $requestedAmountMinor = null,
     ) {}
 }
