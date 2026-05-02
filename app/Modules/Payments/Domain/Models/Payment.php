@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 declare(strict_types=1);
 
@@ -24,7 +24,7 @@ class Payment extends Model
     public array $translatable = ['failure_message'];
 
     protected $casts = [
-        'amount' => MoneyCast::class . ':amount',
+        'amount' => MoneyCast::class.':amount',
         'method' => PaymentMethod::class,
         'status' => PaymentStatus::class,
         'captured_at' => 'datetime',

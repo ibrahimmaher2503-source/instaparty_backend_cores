@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 declare(strict_types=1);
 
@@ -8,13 +8,14 @@ use App\Modules\Payments\Application\DTOs\InitiateRefundDto;
 use App\Modules\Payments\Domain\Enums\RefundStatus;
 use App\Modules\Payments\Domain\Models\Refund;
 use Carbon\Carbon;
+use Illuminate\Support\Str;
 
 class EloquentRefundRepository
 {
     public function create(InitiateRefundDto $dto, int $amountMinor, string $amountCurrency): Refund
     {
         return Refund::create([
-            'public_id' => (string) \Illuminate\Support\Str::ulid(),
+            'public_id' => (string) Str::ulid(),
             'payment_id' => $dto->paymentId,
             'booking_id' => $dto->bookingId,
             'amount_minor' => $amountMinor,

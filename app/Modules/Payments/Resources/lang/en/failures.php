@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 return [
     'insufficient_funds' => 'Payment was declined due to insufficient funds.',

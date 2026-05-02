@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 declare(strict_types=1);
 
@@ -14,6 +14,7 @@ class RedactPciFields
         foreach ($payload as $key => $value) {
             if (in_array(strtolower((string) $key), self::FORBIDDEN, true)) {
                 $result[$key] = '[REDACTED]';
+
                 continue;
             }
 

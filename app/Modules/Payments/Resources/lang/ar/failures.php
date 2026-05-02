@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 return [
     'insufficient_funds' => 'تم رفض الدفع بسبب عدم كفاية الرصيد.',
