@@ -1,0 +1,29 @@
+meta {
+  name: 02 Show payment
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/api/v1/customer/payments/{{paymentPublicId}}
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{authToken}}
+}
+
+headers {
+  Accept-Language: en
+}
+
+docs {
+  Customer fetches the current state of a payment intent (status, captured_at, failure_code).
+}
+
+tests {
+  test("status is 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+}

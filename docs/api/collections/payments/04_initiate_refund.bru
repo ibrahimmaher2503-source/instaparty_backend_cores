@@ -1,0 +1,51 @@
+meta {
+  name: 04 Initiate refund (admin)
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{baseUrl}}/api/v1/admin/bookings/{{bookingPublicId}}/refunds
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+headers {
+  Accept-Language: en
+  Idempotency-Key: 22222222-2222-2222-2222-222222222222
+}
+
+body:json {
+  {
+    "reason_code": "customer_request",
+    "reason_notes": {
+      "en": "Customer requested a refund.",
+      "ar": "طلب العميل استرجاع المبلغ."
+    }
+  }
+}
+
+docs {
+  Admin issues a full refund on a captured payment. Phase 1 supports only full refunds (`amount_minor`
+  is optional and must equal the captured amount).
+
+  Per-product-type policy enforced server-side (rental ≥24h before event + not in setup;
+  sale before in_preparation; digital per `is_refundable_after_delivery` flag).
+
+  Bilingual reason_notes are required (both `en` and `ar`).
+
+  Arabic example:
+    Accept-Language: ar
+    body:
+      "reason_notes": { "en": "Customer request", "ar": "طلب العميل" }
+}
+
+tests {
+  test("status is 201", function() {
+    expect(res.getStatus()).to.equal(201);
+  });
+}
