@@ -13,8 +13,8 @@ enum ProductType: string
     public function label(): string
     {
         return match ($this) {
-            self::Rental  => __('catalog.product_type_rental'),
-            self::Sale    => __('catalog.product_type_sale'),
+            self::Rental => __('catalog.product_type_rental'),
+            self::Sale => __('catalog.product_type_sale'),
             self::Digital => __('catalog.product_type_digital'),
         };
     }

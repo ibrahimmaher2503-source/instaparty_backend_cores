@@ -18,19 +18,19 @@ class CategoryFieldSchemaFactory extends Factory
     public function definition(): array
     {
         return [
-            'category_id'      => Category::factory(),
-            'product_type'     => $this->faker->randomElement(['rental', 'sale', 'digital']),
-            'field_key'        => $this->faker->unique()->word(),
-            'field_label'      => [
+            'category_id' => Category::factory(),
+            'product_type' => $this->faker->randomElement(['rental', 'sale', 'digital']),
+            'field_key' => $this->faker->unique()->word(),
+            'field_label' => [
                 'en' => $this->faker->words(2, true),
                 'ar' => $this->faker->words(2, true),
             ],
-            'field_type'       => $this->faker->randomElement(['text', 'number', 'boolean', 'select', 'multiselect', 'date']),
-            'options'          => null,
-            'is_required'      => false,
-            'is_filterable'    => false,
+            'field_type' => $this->faker->randomElement(['text', 'number', 'boolean', 'select', 'multiselect', 'date']),
+            'options' => null,
+            'is_required' => false,
+            'is_filterable' => false,
             'validation_rules' => null,
-            'sort_order'       => $this->faker->numberBetween(0, 50),
+            'sort_order' => $this->faker->numberBetween(0, 50),
         ];
     }
 }

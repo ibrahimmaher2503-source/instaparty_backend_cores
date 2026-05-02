@@ -45,8 +45,8 @@ class Category extends Model
 
     protected $casts = [
         'allowed_product_types' => 'array',
-        'is_active'             => 'boolean',
-        'sort_order'            => 'integer',
+        'is_active' => 'boolean',
+        'sort_order' => 'integer',
     ];
 
     public function parent(): BelongsTo

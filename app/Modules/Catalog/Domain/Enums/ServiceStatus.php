@@ -13,26 +13,26 @@ enum ServiceStatus: string
 
     public function label(): string
     {
-        return __('catalog.status_' . $this->value);
+        return __('catalog.status_'.$this->value);
     }
 
     public function color(): string
     {
         return match ($this) {
-            self::Draft         => 'gray',
+            self::Draft => 'gray',
             self::PendingReview => 'warning',
-            self::Published     => 'success',
-            self::Archived      => 'danger',
+            self::Published => 'success',
+            self::Archived => 'danger',
         };
     }
 
     public function canTransitionTo(self $next): bool
     {
         return match ($this) {
-            self::Draft         => $next === self::PendingReview,
+            self::Draft => $next === self::PendingReview,
             self::PendingReview => $next === self::Published || $next === self::Draft,
-            self::Published     => $next === self::Archived || $next === self::Draft,
-            self::Archived      => $next === self::Draft,
+            self::Published => $next === self::Archived || $next === self::Draft,
+            self::Archived => $next === self::Draft,
         };
     }
 }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Modules\Catalog\Domain\Models;
 
 use App\Modules\Catalog\Domain\Enums\ProductType;
+use App\Modules\Identity\Domain\Models\VendorProfile;
 use App\Modules\Shared\Domain\Concerns\HasPublicId;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -29,11 +30,11 @@ class ExcelImport extends Model
     ];
 
     protected $casts = [
-        'product_type'   => ProductType::class,
-        'status'         => 'string',
-        'total_rows'     => 'integer',
-        'imported_rows'  => 'integer',
-        'error_rows'     => 'integer',
+        'product_type' => ProductType::class,
+        'status' => 'string',
+        'total_rows' => 'integer',
+        'imported_rows' => 'integer',
+        'error_rows' => 'integer',
     ];
 
     // -------------------------------------------------------------------------
@@ -45,7 +46,7 @@ class ExcelImport extends Model
      */
     public function vendor(): BelongsTo
     {
-        return $this->belongsTo(\App\Modules\Identity\Domain\Models\VendorProfile::class, 'vendor_profile_id');
+        return $this->belongsTo(VendorProfile::class, 'vendor_profile_id');
     }
 
     public function errors(): HasMany

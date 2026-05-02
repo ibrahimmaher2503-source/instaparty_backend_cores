@@ -7,6 +7,7 @@ namespace App\Modules\Catalog\Domain\Models;
 use App\Modules\Catalog\Database\Factories\ServiceFactory;
 use App\Modules\Catalog\Domain\Enums\ProductType;
 use App\Modules\Catalog\Domain\Enums\ServiceStatus;
+use App\Modules\Identity\Domain\Models\VendorProfile;
 use App\Modules\Shared\Domain\Casts\MoneyCast;
 use App\Modules\Shared\Domain\Concerns\HasPublicId;
 use Illuminate\Database\Eloquent\Builder;
@@ -54,10 +55,10 @@ class Service extends Model implements HasMedia
     public array $translatable = ['name', 'short_description', 'long_description'];
 
     protected $casts = [
-        'product_type'  => ProductType::class,
-        'status'        => ServiceStatus::class,
-        'is_featured'   => 'boolean',
-        'base_price'    => MoneyCast::class . ':base_price',
+        'product_type' => ProductType::class,
+        'status' => ServiceStatus::class,
+        'is_featured' => 'boolean',
+        'base_price' => MoneyCast::class.':base_price',
     ];
 
     public function registerMediaCollections(): void
@@ -76,7 +77,7 @@ class Service extends Model implements HasMedia
      */
     public function vendor(): BelongsTo
     {
-        return $this->belongsTo(\App\Modules\Identity\Domain\Models\VendorProfile::class, 'vendor_profile_id');
+        return $this->belongsTo(VendorProfile::class, 'vendor_profile_id');
     }
 
     public function category(): BelongsTo
@@ -153,28 +154,28 @@ class Service extends Model implements HasMedia
     public function toSearchableArray(): array
     {
         return [
-            'id'                     => $this->id,
-            'public_id'              => $this->public_id,
-            'name_en'                => $this->getTranslation('name', 'en'),
-            'name_ar'                => $this->getTranslation('name', 'ar'),
-            'short_description_en'   => $this->getTranslation('short_description', 'en'),
-            'short_description_ar'   => $this->getTranslation('short_description', 'ar'),
-            'product_type'           => $this->product_type->value,
-            'category_id'            => $this->category_id,
-            'vendor_id'              => $this->vendor_profile_id,
-            'occasion_ids'           => $this->category?->occasions->pluck('id')->toArray() ?? [],
-            'price_minor'            => $this->base_price_minor,
-            'currency'               => $this->base_price_currency,
-            'status'                 => $this->status->value,
-            'is_active'              => $this->status === ServiceStatus::Published,
-            'rating_avg'             => (float) ($this->rating_avg ?? 0),
-            'vendor_rating'          => (float) (optional($this->vendor)->rating_avg ?? 0.0),
-            'requires_electricity'   => optional($this->rentalDetail)->requires_electricity,
+            'id' => $this->id,
+            'public_id' => $this->public_id,
+            'name_en' => $this->getTranslation('name', 'en'),
+            'name_ar' => $this->getTranslation('name', 'ar'),
+            'short_description_en' => $this->getTranslation('short_description', 'en'),
+            'short_description_ar' => $this->getTranslation('short_description', 'ar'),
+            'product_type' => $this->product_type->value,
+            'category_id' => $this->category_id,
+            'vendor_id' => $this->vendor_profile_id,
+            'occasion_ids' => $this->category?->occasions->pluck('id')->toArray() ?? [],
+            'price_minor' => $this->base_price_minor,
+            'currency' => $this->base_price_currency,
+            'status' => $this->status->value,
+            'is_active' => $this->status === ServiceStatus::Published,
+            'rating_avg' => (float) ($this->rating_avg ?? 0),
+            'vendor_rating' => (float) (optional($this->vendor)->rating_avg ?? 0.0),
+            'requires_electricity' => optional($this->rentalDetail)->requires_electricity,
             'requires_outdoor_space' => optional($this->rentalDetail)->requires_outdoor_space,
-            'is_perishable'          => optional($this->saleDetail)->is_perishable,
-            'allows_customization'   => optional($this->saleDetail)->allows_customization,
-            'delivery_method'        => optional($this->digitalDetail)->delivery_method?->value,
-            'has_expiry'             => optional($this->digitalDetail)->has_expiry,
+            'is_perishable' => optional($this->saleDetail)->is_perishable,
+            'allows_customization' => optional($this->saleDetail)->allows_customization,
+            'delivery_method' => optional($this->digitalDetail)->delivery_method?->value,
+            'has_expiry' => optional($this->digitalDetail)->has_expiry,
         ];
     }
 }

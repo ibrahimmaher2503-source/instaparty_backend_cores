@@ -13,6 +13,6 @@ enum ReservationStatus: string
 
     public function label(): string
     {
-        return __('catalog.reservation_status_' . $this->value);
+        return __('catalog.reservation_status_'.$this->value);
     }
 }

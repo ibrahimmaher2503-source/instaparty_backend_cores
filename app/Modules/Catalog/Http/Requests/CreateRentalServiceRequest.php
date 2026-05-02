@@ -27,6 +27,7 @@ class CreateRentalServiceRequest extends FormRequest
     public function authorize(): bool
     {
         $vendor = $this->user()?->vendorProfile;
+
         return $vendor?->approvedTypes->contains('product_type', ProductType::Rental) ?? false;
     }
 
@@ -36,21 +37,21 @@ class CreateRentalServiceRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name'                          => ['required', 'array'],
-            'name.en'                       => ['required', 'string', 'max:255'],
-            'name.ar'                       => ['required', 'string', 'max:255'],
-            'short_description'             => ['required', 'array'],
-            'short_description.en'          => ['required', 'string', 'max:500'],
-            'short_description.ar'          => ['required', 'string', 'max:500'],
-            'category_id'                   => ['required', 'integer', 'exists:categories,id'],
-            'base_price_minor'              => ['required', 'integer', 'min:0'],
-            'requires_electricity'          => ['boolean'],
-            'requires_outdoor_space'        => ['boolean'],
+            'name' => ['required', 'array'],
+            'name.en' => ['required', 'string', 'max:255'],
+            'name.ar' => ['required', 'string', 'max:255'],
+            'short_description' => ['required', 'array'],
+            'short_description.en' => ['required', 'string', 'max:500'],
+            'short_description.ar' => ['required', 'string', 'max:500'],
+            'category_id' => ['required', 'integer', 'exists:categories,id'],
+            'base_price_minor' => ['required', 'integer', 'min:0'],
+            'requires_electricity' => ['boolean'],
+            'requires_outdoor_space' => ['boolean'],
             'default_rental_duration_hours' => ['required', 'integer', 'min:1', 'max:168'],
-            'setup_time_minutes'            => ['integer', 'min:0', 'max:1440'],
-            'teardown_time_minutes'         => ['integer', 'min:0', 'max:1440'],
-            'security_deposit_minor'        => ['integer', 'min:0'],
-            'minimum_space_sqm'             => ['nullable', 'integer', 'min:1'],
+            'setup_time_minutes' => ['integer', 'min:0', 'max:1440'],
+            'teardown_time_minutes' => ['integer', 'min:0', 'max:1440'],
+            'security_deposit_minor' => ['integer', 'min:0'],
+            'minimum_space_sqm' => ['nullable', 'integer', 'min:1'],
         ];
     }
 }

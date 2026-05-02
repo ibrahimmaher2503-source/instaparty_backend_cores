@@ -23,18 +23,18 @@ class ServiceFactory extends Factory
         $name = $this->faker->words(3, true);
 
         return [
-            'public_id'           => (string) Str::ulid(),
-            'vendor_profile_id'   => 1, // overridden in tests
-            'category_id'         => 1, // overridden in tests
-            'product_type'        => $productType,
-            'name'                => ['en' => $name, 'ar' => $name . ' (ar)'],
-            'short_description'   => ['en' => $this->faker->sentence(), 'ar' => $this->faker->sentence()],
-            'long_description'    => ['en' => $this->faker->paragraph(), 'ar' => $this->faker->paragraph()],
-            'slug'                => Str::slug($name . '-' . $this->faker->unique()->numberBetween(100, 999)),
-            'status'              => ServiceStatus::Draft,
-            'base_price_minor'    => $this->faker->numberBetween(10000, 500000),
+            'public_id' => (string) Str::ulid(),
+            'vendor_profile_id' => 1, // overridden in tests
+            'category_id' => 1, // overridden in tests
+            'product_type' => $productType,
+            'name' => ['en' => $name, 'ar' => $name.' (ar)'],
+            'short_description' => ['en' => $this->faker->sentence(), 'ar' => $this->faker->sentence()],
+            'long_description' => ['en' => $this->faker->paragraph(), 'ar' => $this->faker->paragraph()],
+            'slug' => Str::slug($name.'-'.$this->faker->unique()->numberBetween(100, 999)),
+            'status' => ServiceStatus::Draft,
+            'base_price_minor' => $this->faker->numberBetween(10000, 500000),
             'base_price_currency' => 'EGP',
-            'is_featured'         => false,
+            'is_featured' => false,
         ];
     }
 

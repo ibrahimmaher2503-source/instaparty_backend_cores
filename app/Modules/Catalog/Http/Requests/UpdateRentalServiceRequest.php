@@ -34,21 +34,21 @@ class UpdateRentalServiceRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name'                          => ['sometimes', 'required', 'array'],
-            'name.en'                       => ['sometimes', 'required', 'string', 'max:255'],
-            'name.ar'                       => ['sometimes', 'required', 'string', 'max:255'],
-            'short_description'             => ['sometimes', 'required', 'array'],
-            'short_description.en'          => ['sometimes', 'required', 'string', 'max:500'],
-            'short_description.ar'          => ['sometimes', 'required', 'string', 'max:500'],
-            'category_id'                   => ['sometimes', 'required', 'integer', 'exists:categories,id'],
-            'base_price_minor'              => ['sometimes', 'required', 'integer', 'min:0'],
-            'requires_electricity'          => ['sometimes', 'boolean'],
-            'requires_outdoor_space'        => ['sometimes', 'boolean'],
+            'name' => ['sometimes', 'required', 'array'],
+            'name.en' => ['sometimes', 'required', 'string', 'max:255'],
+            'name.ar' => ['sometimes', 'required', 'string', 'max:255'],
+            'short_description' => ['sometimes', 'required', 'array'],
+            'short_description.en' => ['sometimes', 'required', 'string', 'max:500'],
+            'short_description.ar' => ['sometimes', 'required', 'string', 'max:500'],
+            'category_id' => ['sometimes', 'required', 'integer', 'exists:categories,id'],
+            'base_price_minor' => ['sometimes', 'required', 'integer', 'min:0'],
+            'requires_electricity' => ['sometimes', 'boolean'],
+            'requires_outdoor_space' => ['sometimes', 'boolean'],
             'default_rental_duration_hours' => ['sometimes', 'required', 'integer', 'min:1', 'max:168'],
-            'setup_time_minutes'            => ['sometimes', 'integer', 'min:0', 'max:1440'],
-            'teardown_time_minutes'         => ['sometimes', 'integer', 'min:0', 'max:1440'],
-            'security_deposit_minor'        => ['sometimes', 'integer', 'min:0'],
-            'minimum_space_sqm'             => ['sometimes', 'nullable', 'integer', 'min:1'],
+            'setup_time_minutes' => ['sometimes', 'integer', 'min:0', 'max:1440'],
+            'teardown_time_minutes' => ['sometimes', 'integer', 'min:0', 'max:1440'],
+            'security_deposit_minor' => ['sometimes', 'integer', 'min:0'],
+            'minimum_space_sqm' => ['sometimes', 'nullable', 'integer', 'min:1'],
         ];
     }
 }

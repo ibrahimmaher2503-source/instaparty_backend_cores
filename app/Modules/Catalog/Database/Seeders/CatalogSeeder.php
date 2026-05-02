@@ -15,18 +15,18 @@ class CatalogSeeder extends Seeder
     {
         $occasions = [
             [
-                'code'        => 'birthday',
-                'name'        => ['en' => 'Birthday', 'ar' => 'عيد ميلاد'],
+                'code' => 'birthday',
+                'name' => ['en' => 'Birthday', 'ar' => 'عيد ميلاد'],
                 'description' => ['en' => 'Birthday celebrations', 'ar' => 'الاحتفالات بأعياد الميلاد'],
             ],
             [
-                'code'        => 'wedding',
-                'name'        => ['en' => 'Wedding', 'ar' => 'زفاف'],
+                'code' => 'wedding',
+                'name' => ['en' => 'Wedding', 'ar' => 'زفاف'],
                 'description' => ['en' => 'Wedding ceremonies and receptions', 'ar' => 'حفلات الزفاف والأعراس'],
             ],
             [
-                'code'        => 'engagement',
-                'name'        => ['en' => 'Engagement', 'ar' => 'خطوبة'],
+                'code' => 'engagement',
+                'name' => ['en' => 'Engagement', 'ar' => 'خطوبة'],
                 'description' => ['en' => 'Engagement parties and celebrations', 'ar' => 'حفلات الخطوبة والاحتفالات'],
             ],
         ];
@@ -35,27 +35,27 @@ class CatalogSeeder extends Seeder
             $occasion = Occasion::firstOrCreate(
                 ['code' => $occasionData['code']],
                 [
-                    'public_id'   => (string) Str::ulid(),
-                    'name'        => $occasionData['name'],
+                    'public_id' => (string) Str::ulid(),
+                    'name' => $occasionData['name'],
                     'description' => $occasionData['description'],
-                    'sort_order'  => $index,
-                    'is_active'   => true,
+                    'sort_order' => $index,
+                    'is_active' => true,
                 ]
             );
 
             $category = Category::firstOrCreate(
-                ['code' => $occasionData['code'] . '-general'],
+                ['code' => $occasionData['code'].'-general'],
                 [
-                    'public_id'             => (string) Str::ulid(),
-                    'parent_id'             => null,
-                    'name'                  => [
-                        'en' => 'General ' . $occasionData['name']['en'],
-                        'ar' => 'عام ' . $occasionData['name']['ar'],
+                    'public_id' => (string) Str::ulid(),
+                    'parent_id' => null,
+                    'name' => [
+                        'en' => 'General '.$occasionData['name']['en'],
+                        'ar' => 'عام '.$occasionData['name']['ar'],
                     ],
-                    'description'           => null,
+                    'description' => null,
                     'allowed_product_types' => ['rental', 'sale', 'digital'],
-                    'sort_order'            => 0,
-                    'is_active'             => true,
+                    'sort_order' => 0,
+                    'is_active' => true,
                 ]
             );
 

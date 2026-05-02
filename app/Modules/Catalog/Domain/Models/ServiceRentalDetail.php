@@ -36,13 +36,13 @@ class ServiceRentalDetail extends Model
     ];
 
     protected $casts = [
-        'requires_electricity'          => 'boolean',
-        'requires_outdoor_space'        => 'boolean',
+        'requires_electricity' => 'boolean',
+        'requires_outdoor_space' => 'boolean',
         'default_rental_duration_hours' => 'integer',
-        'setup_time_minutes'            => 'integer',
-        'teardown_time_minutes'         => 'integer',
-        'security_deposit'              => MoneyCast::class . ':security_deposit',
-        'minimum_space_sqm'             => 'integer',
+        'setup_time_minutes' => 'integer',
+        'teardown_time_minutes' => 'integer',
+        'security_deposit' => MoneyCast::class.':security_deposit',
+        'minimum_space_sqm' => 'integer',
     ];
 
     // -------------------------------------------------------------------------

@@ -17,12 +17,12 @@ class ServiceDigitalDetailFactory extends Factory
     public function definition(): array
     {
         return [
-            'delivery_method'              => $this->faker->randomElement(['email', 'sms', 'whatsapp', 'link']),
-            'has_expiry'                   => $this->faker->boolean(),
-            'expiry_days_after_purchase'   => $this->faker->numberBetween(7, 365),
+            'delivery_method' => $this->faker->randomElement(['email', 'sms', 'whatsapp', 'link']),
+            'has_expiry' => $this->faker->boolean(),
+            'expiry_days_after_purchase' => $this->faker->numberBetween(7, 365),
             'is_refundable_after_delivery' => false,
-            'redemption_url_template'      => null,
-            'code_pool_id'                 => null,
+            'redemption_url_template' => null,
+            'code_pool_id' => null,
         ];
     }
 }

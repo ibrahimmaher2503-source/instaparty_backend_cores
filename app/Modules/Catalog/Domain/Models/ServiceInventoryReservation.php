@@ -40,13 +40,13 @@ class ServiceInventoryReservation extends Model
     ];
 
     protected $casts = [
-        'product_type'        => ProductType::class,
-        'hold_type'           => HoldType::class,
-        'status'              => ReservationStatus::class,
-        'reserved_starts_at'  => 'datetime',
-        'reserved_ends_at'    => 'datetime',
-        'expires_at'          => 'datetime',
-        'quantity'            => 'integer',
+        'product_type' => ProductType::class,
+        'hold_type' => HoldType::class,
+        'status' => ReservationStatus::class,
+        'reserved_starts_at' => 'datetime',
+        'reserved_ends_at' => 'datetime',
+        'expires_at' => 'datetime',
+        'quantity' => 'integer',
     ];
 
     // -------------------------------------------------------------------------

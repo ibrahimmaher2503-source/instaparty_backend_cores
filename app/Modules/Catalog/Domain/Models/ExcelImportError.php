@@ -20,7 +20,7 @@ class ExcelImportError extends Model
     ];
 
     protected $casts = [
-        'message'    => 'array',
+        'message' => 'array',
         'row_number' => 'integer',
     ];
 

@@ -26,8 +26,8 @@ class HoldServiceInventoryAction
     ): ServiceInventoryReservation {
         return DB::transaction(function () use ($service, $holdType, $userId, $startsAt, $endsAt, $quantity): ServiceInventoryReservation {
             return match ($service->product_type) {
-                ProductType::Rental  => $this->holdRental($service, $holdType, $userId, $startsAt, $endsAt),
-                ProductType::Sale    => $this->holdSale($service, $holdType, $userId, $quantity),
+                ProductType::Rental => $this->holdRental($service, $holdType, $userId, $startsAt, $endsAt),
+                ProductType::Sale => $this->holdSale($service, $holdType, $userId, $quantity),
                 ProductType::Digital => $this->holdDigital($service, $holdType, $userId),
             };
         });
@@ -60,16 +60,16 @@ class HoldServiceInventoryAction
         }
 
         return ServiceInventoryReservation::create([
-            'public_id'          => Str::ulid()->toBase32(),
-            'service_id'         => $service->id,
-            'user_id'            => $userId,
-            'product_type'       => ProductType::Rental,
-            'hold_type'          => $holdType,
-            'status'             => ReservationStatus::Held,
+            'public_id' => Str::ulid()->toBase32(),
+            'service_id' => $service->id,
+            'user_id' => $userId,
+            'product_type' => ProductType::Rental,
+            'hold_type' => $holdType,
+            'status' => ReservationStatus::Held,
             'reserved_starts_at' => $startsAt,
-            'reserved_ends_at'   => $endsAt,
-            'quantity'           => 1,
-            'expires_at'         => now()->addMinutes($holdType->ttlMinutes()),
+            'reserved_ends_at' => $endsAt,
+            'quantity' => 1,
+            'expires_at' => now()->addMinutes($holdType->ttlMinutes()),
         ]);
     }
 
@@ -97,14 +97,14 @@ class HoldServiceInventoryAction
         }
 
         return ServiceInventoryReservation::create([
-            'public_id'    => Str::ulid()->toBase32(),
-            'service_id'   => $service->id,
-            'user_id'      => $userId,
+            'public_id' => Str::ulid()->toBase32(),
+            'service_id' => $service->id,
+            'user_id' => $userId,
             'product_type' => ProductType::Sale,
-            'hold_type'    => $holdType,
-            'status'       => ReservationStatus::Held,
-            'quantity'     => $quantity,
-            'expires_at'   => now()->addMinutes($holdType->ttlMinutes()),
+            'hold_type' => $holdType,
+            'status' => ReservationStatus::Held,
+            'quantity' => $quantity,
+            'expires_at' => now()->addMinutes($holdType->ttlMinutes()),
         ]);
     }
 
@@ -115,14 +115,14 @@ class HoldServiceInventoryAction
     ): ServiceInventoryReservation {
         // Digital services have no stock or time constraints — always create the hold
         return ServiceInventoryReservation::create([
-            'public_id'    => Str::ulid()->toBase32(),
-            'service_id'   => $service->id,
-            'user_id'      => $userId,
+            'public_id' => Str::ulid()->toBase32(),
+            'service_id' => $service->id,
+            'user_id' => $userId,
             'product_type' => ProductType::Digital,
-            'hold_type'    => $holdType,
-            'status'       => ReservationStatus::Held,
-            'quantity'     => 1,
-            'expires_at'   => now()->addMinutes($holdType->ttlMinutes()),
+            'hold_type' => $holdType,
+            'status' => ReservationStatus::Held,
+            'quantity' => 1,
+            'expires_at' => now()->addMinutes($holdType->ttlMinutes()),
         ]);
     }
 }
