@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Modules\Booking\Domain\Models;
 
 use App\Modules\Booking\Domain\Enums\ModificationChangeKind;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -14,7 +15,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int|null $target_booking_item_id
  * @property ModificationChangeKind $change_kind
  * @property array<string,mixed> $payload
- * @property \Carbon\Carbon $created_at
+ * @property Carbon $created_at
  */
 class BookingModificationItem extends Model
 {
@@ -32,8 +33,8 @@ class BookingModificationItem extends Model
     {
         return [
             'change_kind' => ModificationChangeKind::class,
-            'payload'     => 'array',
-            'created_at'  => 'datetime',
+            'payload' => 'array',
+            'created_at' => 'datetime',
         ];
     }
 

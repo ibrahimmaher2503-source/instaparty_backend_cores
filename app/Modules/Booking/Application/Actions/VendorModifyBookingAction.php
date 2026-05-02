@@ -49,13 +49,13 @@ class VendorModifyBookingAction
 
             /** @var BookingModification $modification */
             $modification = BookingModification::create([
-                'public_id'          => (string) Str::ulid(),
-                'booking_vendor_id'  => $bookingVendor->id,
-                'proposed_by'        => $dto->proposedByUserId,
-                'proposal_kind'      => $dto->proposalKind,
-                'status'             => ModificationStatus::Pending,
+                'public_id' => (string) Str::ulid(),
+                'booking_vendor_id' => $bookingVendor->id,
+                'proposed_by' => $dto->proposedByUserId,
+                'proposal_kind' => $dto->proposalKind,
+                'status' => ModificationStatus::Pending,
                 'vendor_explanation' => $dto->vendorExplanation,
-                'diff_snapshot'      => $diffSnapshot,
+                'diff_snapshot' => $diffSnapshot,
             ]);
 
             foreach ($dto->changes as $change) {
@@ -69,24 +69,24 @@ class VendorModifyBookingAction
 
                 BookingModificationItem::create([
                     'booking_modification_id' => $modification->id,
-                    'target_booking_item_id'  => $targetItemId,
-                    'change_kind'             => ModificationChangeKind::from($change['change_kind']),
-                    'payload'                 => $change['payload'],
+                    'target_booking_item_id' => $targetItemId,
+                    'change_kind' => ModificationChangeKind::from($change['change_kind']),
+                    'payload' => $change['payload'],
                 ]);
             }
 
             $bookingVendor->update([
-                'sub_status'   => VendorSubStatus::Modified,
+                'sub_status' => VendorSubStatus::Modified,
                 'responded_at' => now(),
             ]);
 
             BookingStateTransition::create([
                 'transitionable_type' => BookingVendor::class,
-                'transitionable_id'   => $bookingVendor->id,
-                'from_state'          => VendorSubStatus::Pending->value,
-                'to_state'            => VendorSubStatus::Modified->value,
-                'trigger_kind'        => 'vendor',
-                'triggered_by'        => $dto->vendorProfileId,
+                'transitionable_id' => $bookingVendor->id,
+                'from_state' => VendorSubStatus::Pending->value,
+                'to_state' => VendorSubStatus::Modified->value,
+                'trigger_kind' => 'vendor',
+                'triggered_by' => $dto->vendorProfileId,
             ]);
 
             $booking = Booking::query()->where('id', $bookingVendor->booking_id)->lockForUpdate()->firstOrFail();
@@ -95,10 +95,10 @@ class VendorModifyBookingAction
 
             BookingStateTransition::create([
                 'transitionable_type' => Booking::class,
-                'transitionable_id'   => $booking->id,
-                'from_state'          => $previousStatus,
-                'to_state'            => LifecycleStatus::CustomerReview->value,
-                'trigger_kind'        => 'system',
+                'transitionable_id' => $booking->id,
+                'from_state' => $previousStatus,
+                'to_state' => LifecycleStatus::CustomerReview->value,
+                'trigger_kind' => 'system',
             ]);
 
             $modification->load('bookingVendor');
@@ -113,17 +113,17 @@ class VendorModifyBookingAction
     private function buildDiffSnapshot(BookingVendor $bookingVendor, VendorModifyDTO $dto): array
     {
         $currentItems = $bookingVendor->items->map(fn (BookingItem $item) => [
-            'public_id'         => $item->public_id,
-            'unit_price_minor'  => $item->unit_price_minor,
+            'public_id' => $item->public_id,
+            'unit_price_minor' => $item->unit_price_minor,
             'unit_price_currency' => $item->unit_price_currency,
-            'quantity'          => $item->quantity,
+            'quantity' => $item->quantity,
             'effective_starts_at' => $item->effective_starts_at?->toIso8601String(),
-            'effective_ends_at'   => $item->effective_ends_at?->toIso8601String(),
+            'effective_ends_at' => $item->effective_ends_at?->toIso8601String(),
         ])->keyBy('public_id')->all();
 
         $afterItems = $currentItems;
         $subtotalBefore = $bookingVendor->subtotal_minor;
-        $subtotalAfter  = $subtotalBefore;
+        $subtotalAfter = $subtotalBefore;
 
         foreach ($dto->changes as $change) {
             $kind = $change['change_kind'];
@@ -134,22 +134,22 @@ class VendorModifyBookingAction
                     $payload = $change['payload'];
                     $oldPrice = (int) $afterItems[$pubId]['unit_price_minor'];
                     $newPrice = isset($payload['unit_price_minor']) ? (int) $payload['unit_price_minor'] : $oldPrice;
-                    $qty      = (int) $afterItems[$pubId]['quantity'];
+                    $qty = (int) $afterItems[$pubId]['quantity'];
                     $afterItems[$pubId] = array_merge($afterItems[$pubId], $payload);
                     $subtotalAfter += ($newPrice - $oldPrice) * $qty;
                 }
             } elseif ($kind === ModificationChangeKind::Add->value) {
-                $payload  = $change['payload'];
+                $payload = $change['payload'];
                 $newPubId = (string) Str::ulid();
-                $price    = (int) ($payload['unit_price_minor'] ?? 0);
-                $qty      = (int) ($payload['quantity'] ?? 1);
+                $price = (int) ($payload['unit_price_minor'] ?? 0);
+                $qty = (int) ($payload['quantity'] ?? 1);
                 $afterItems[$newPubId] = array_merge(['public_id' => $newPubId], $payload);
                 $subtotalAfter += $price * $qty;
             } elseif ($kind === ModificationChangeKind::Remove->value && isset($change['target_item_public_id'])) {
                 $pubId = $change['target_item_public_id'];
                 if (isset($afterItems[$pubId])) {
                     $price = (int) $afterItems[$pubId]['unit_price_minor'];
-                    $qty   = (int) $afterItems[$pubId]['quantity'];
+                    $qty = (int) $afterItems[$pubId]['quantity'];
                     $subtotalAfter -= $price * $qty;
                     unset($afterItems[$pubId]);
                 }
@@ -158,11 +158,11 @@ class VendorModifyBookingAction
 
         return [
             'before' => [
-                'items'          => array_values($currentItems),
+                'items' => array_values($currentItems),
                 'subtotal_minor' => $subtotalBefore,
             ],
             'after' => [
-                'items'          => array_values($afterItems),
+                'items' => array_values($afterItems),
                 'subtotal_minor' => $subtotalAfter,
             ],
         ];

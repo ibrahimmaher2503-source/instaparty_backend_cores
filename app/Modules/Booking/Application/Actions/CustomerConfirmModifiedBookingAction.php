@@ -60,7 +60,7 @@ class CustomerConfirmModifiedBookingAction
                 $this->applyModificationItems($modification);
 
                 $modification->update([
-                    'status'               => ModificationStatus::CustomerAccepted,
+                    'status' => ModificationStatus::CustomerAccepted,
                     'customer_decision_at' => now(),
                 ]);
 
@@ -68,17 +68,17 @@ class CustomerConfirmModifiedBookingAction
 
                 // Advance this vendor's sub_status to accepted
                 $bookingVendor->update([
-                    'sub_status'   => VendorSubStatus::Accepted,
+                    'sub_status' => VendorSubStatus::Accepted,
                     'responded_at' => now(),
                 ]);
 
                 BookingStateTransition::create([
                     'transitionable_type' => BookingVendor::class,
-                    'transitionable_id'   => $bookingVendor->id,
-                    'from_state'          => VendorSubStatus::Modified->value,
-                    'to_state'            => VendorSubStatus::Accepted->value,
-                    'trigger_kind'        => 'customer',
-                    'triggered_by'        => $dto->customerId,
+                    'transitionable_id' => $bookingVendor->id,
+                    'from_state' => VendorSubStatus::Modified->value,
+                    'to_state' => VendorSubStatus::Accepted->value,
+                    'trigger_kind' => 'customer',
+                    'triggered_by' => $dto->customerId,
                 ]);
 
                 $allAccepted = ! BookingVendor::where('booking_id', $booking->id)
@@ -88,30 +88,30 @@ class CustomerConfirmModifiedBookingAction
                 if ($allAccepted) {
                     $booking->update([
                         'lifecycle_status' => LifecycleStatus::Confirmed,
-                        'confirmed_at'     => now(),
+                        'confirmed_at' => now(),
                     ]);
 
                     BookingStateTransition::create([
                         'transitionable_type' => Booking::class,
-                        'transitionable_id'   => $booking->id,
-                        'from_state'          => LifecycleStatus::CustomerReview->value,
-                        'to_state'            => LifecycleStatus::Confirmed->value,
-                        'trigger_kind'        => 'system',
+                        'transitionable_id' => $booking->id,
+                        'from_state' => LifecycleStatus::CustomerReview->value,
+                        'to_state' => LifecycleStatus::Confirmed->value,
+                        'trigger_kind' => 'system',
                     ]);
                 } else {
                     $booking->update(['lifecycle_status' => LifecycleStatus::VendorReview]);
 
                     BookingStateTransition::create([
                         'transitionable_type' => Booking::class,
-                        'transitionable_id'   => $booking->id,
-                        'from_state'          => LifecycleStatus::CustomerReview->value,
-                        'to_state'            => LifecycleStatus::VendorReview->value,
-                        'trigger_kind'        => 'system',
+                        'transitionable_id' => $booking->id,
+                        'from_state' => LifecycleStatus::CustomerReview->value,
+                        'to_state' => LifecycleStatus::VendorReview->value,
+                        'trigger_kind' => 'system',
                     ]);
                 }
             } else {
                 $modification->update([
-                    'status'               => ModificationStatus::CustomerRejected,
+                    'status' => ModificationStatus::CustomerRejected,
                     'customer_decision_at' => now(),
                 ]);
 
@@ -119,21 +119,21 @@ class CustomerConfirmModifiedBookingAction
 
                 BookingStateTransition::create([
                     'transitionable_type' => BookingVendor::class,
-                    'transitionable_id'   => $bookingVendor->id,
-                    'from_state'          => VendorSubStatus::Modified->value,
-                    'to_state'            => VendorSubStatus::Pending->value,
-                    'trigger_kind'        => 'customer',
-                    'triggered_by'        => $dto->customerId,
+                    'transitionable_id' => $bookingVendor->id,
+                    'from_state' => VendorSubStatus::Modified->value,
+                    'to_state' => VendorSubStatus::Pending->value,
+                    'trigger_kind' => 'customer',
+                    'triggered_by' => $dto->customerId,
                 ]);
 
                 $booking->update(['lifecycle_status' => LifecycleStatus::VendorReview]);
 
                 BookingStateTransition::create([
                     'transitionable_type' => Booking::class,
-                    'transitionable_id'   => $booking->id,
-                    'from_state'          => LifecycleStatus::CustomerReview->value,
-                    'to_state'            => LifecycleStatus::VendorReview->value,
-                    'trigger_kind'        => 'system',
+                    'transitionable_id' => $booking->id,
+                    'from_state' => LifecycleStatus::CustomerReview->value,
+                    'to_state' => LifecycleStatus::VendorReview->value,
+                    'trigger_kind' => 'system',
                 ]);
             }
 
@@ -158,7 +158,7 @@ class CustomerConfirmModifiedBookingAction
             /** @var BookingModificationItem $modItem */
             match ($modItem->change_kind) {
                 ModificationChangeKind::Update => $this->applyUpdate($modItem),
-                ModificationChangeKind::Add    => $this->applyAdd($modItem, $modification->booking_vendor_id),
+                ModificationChangeKind::Add => $this->applyAdd($modItem, $modification->booking_vendor_id),
                 ModificationChangeKind::Remove => $this->applyRemove($modItem),
             };
         }
@@ -198,12 +198,15 @@ class CustomerConfirmModifiedBookingAction
         $bookingVendor->update(['subtotal_minor' => $subtotal]);
     }
 
+    private function requestHash(CustomerModificationDecisionDTO $dto): string
+    {
+        return hash('sha256', 'bookings.modifications.decide|'.$dto->customerId.'|'.$dto->modificationPublicId.'|'.$dto->decision);
+    }
+
     private function getCachedIdempotencyResponse(CustomerModificationDecisionDTO $dto): ?Booking
     {
         $row = DB::table('idempotency_keys')
             ->where('key', $dto->idempotencyKey)
-            ->where('route', 'bookings.modifications.decide')
-            ->where('user_id', $dto->customerId)
             ->where('expires_at', '>', now())
             ->first();
 
@@ -211,23 +214,27 @@ class CustomerConfirmModifiedBookingAction
             return null;
         }
 
-        /** @var array<string,mixed> $response */
-        $response = json_decode($row->response, true);
-        return Booking::find((int) ($response['booking_id'] ?? 0));
+        if (! hash_equals($row->request_hash, $this->requestHash($dto))) {
+            abort(Response::HTTP_CONFLICT, 'Idempotency key conflict');
+        }
+
+        /** @var array<string,mixed> $body */
+        $body = json_decode($row->response_body, true) ?? [];
+
+        return Booking::find((int) ($body['booking_id'] ?? 0));
     }
 
     private function storeIdempotencyResponse(CustomerModificationDecisionDTO $dto, Booking $booking): void
     {
-        DB::table('idempotency_keys')->upsert(
-            [
-                'key'        => $dto->idempotencyKey,
-                'route'      => 'bookings.modifications.decide',
-                'user_id'    => $dto->customerId,
-                'response'   => json_encode(['booking_id' => $booking->id]),
-                'expires_at' => now()->addHours(24),
-            ],
-            ['key', 'route', 'user_id'],
-            ['response', 'expires_at']
-        );
+        DB::table('idempotency_keys')->insertOrIgnore([
+            'key' => $dto->idempotencyKey,
+            'user_id' => $dto->customerId,
+            'route' => 'bookings.modifications.decide',
+            'request_hash' => $this->requestHash($dto),
+            'response_status' => Response::HTTP_OK,
+            'response_body' => json_encode(['booking_id' => $booking->id]),
+            'expires_at' => now()->addHours(24),
+            'created_at' => now(),
+        ]);
     }
 }

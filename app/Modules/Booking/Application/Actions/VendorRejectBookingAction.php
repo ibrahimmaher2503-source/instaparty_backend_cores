@@ -35,7 +35,7 @@ class VendorRejectBookingAction
             );
 
             $updateData = [
-                'sub_status'   => VendorSubStatus::Rejected,
+                'sub_status' => VendorSubStatus::Rejected,
                 'responded_at' => now(),
             ];
             if ($rejectionReason !== null) {
@@ -45,11 +45,11 @@ class VendorRejectBookingAction
 
             BookingStateTransition::create([
                 'transitionable_type' => BookingVendor::class,
-                'transitionable_id'   => $bookingVendor->id,
-                'from_state'          => VendorSubStatus::Pending->value,
-                'to_state'            => VendorSubStatus::Rejected->value,
-                'trigger_kind'        => 'vendor',
-                'triggered_by'        => $vendorProfileId,
+                'transitionable_id' => $bookingVendor->id,
+                'from_state' => VendorSubStatus::Pending->value,
+                'to_state' => VendorSubStatus::Rejected->value,
+                'trigger_kind' => 'vendor',
+                'triggered_by' => $vendorProfileId,
             ]);
 
             $booking = Booking::query()->where('id', $bookingVendor->booking_id)->lockForUpdate()->firstOrFail();
@@ -62,15 +62,15 @@ class VendorRejectBookingAction
             if ($allRejected) {
                 $booking->update([
                     'lifecycle_status' => LifecycleStatus::Cancelled,
-                    'cancelled_at'     => now(),
+                    'cancelled_at' => now(),
                 ]);
 
                 BookingStateTransition::create([
                     'transitionable_type' => Booking::class,
-                    'transitionable_id'   => $booking->id,
-                    'from_state'          => $booking->getOriginal('lifecycle_status') ?? LifecycleStatus::VendorReview->value,
-                    'to_state'            => LifecycleStatus::Cancelled->value,
-                    'trigger_kind'        => 'system',
+                    'transitionable_id' => $booking->id,
+                    'from_state' => $booking->getOriginal('lifecycle_status') ?? LifecycleStatus::VendorReview->value,
+                    'to_state' => LifecycleStatus::Cancelled->value,
+                    'trigger_kind' => 'system',
                 ]);
 
                 $bookingCancelled = true;
@@ -79,10 +79,10 @@ class VendorRejectBookingAction
 
                 BookingStateTransition::create([
                     'transitionable_type' => Booking::class,
-                    'transitionable_id'   => $booking->id,
-                    'from_state'          => LifecycleStatus::VendorReview->value,
-                    'to_state'            => LifecycleStatus::CustomerReview->value,
-                    'trigger_kind'        => 'system',
+                    'transitionable_id' => $booking->id,
+                    'from_state' => LifecycleStatus::VendorReview->value,
+                    'to_state' => LifecycleStatus::CustomerReview->value,
+                    'trigger_kind' => 'system',
                 ]);
             }
 

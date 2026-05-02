@@ -52,9 +52,9 @@ class BookingsMonitorResource extends Resource
                 Tables\Columns\TextColumn::make('lifecycle_status')
                     ->badge()
                     ->color(fn (LifecycleStatus $state): string => match ($state) {
-                        LifecycleStatus::VendorReview   => 'warning',
+                        LifecycleStatus::VendorReview => 'warning',
                         LifecycleStatus::CustomerReview => 'info',
-                        default                         => 'gray',
+                        default => 'gray',
                     })
                     ->formatStateUsing(fn (LifecycleStatus $state) => $state->value)
                     ->label('Status'),
@@ -81,7 +81,7 @@ class BookingsMonitorResource extends Resource
             ->filters([
                 SelectFilter::make('lifecycle_status')
                     ->options([
-                        LifecycleStatus::VendorReview->value   => 'Vendor Review',
+                        LifecycleStatus::VendorReview->value => 'Vendor Review',
                         LifecycleStatus::CustomerReview->value => 'Customer Review',
                     ])
                     ->label('Status'),

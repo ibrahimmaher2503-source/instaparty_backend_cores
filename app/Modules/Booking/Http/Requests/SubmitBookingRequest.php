@@ -6,7 +6,6 @@ namespace App\Modules\Booking\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
-use Illuminate\Support\Facades\Validator;
 
 class SubmitBookingRequest extends FormRequest
 {

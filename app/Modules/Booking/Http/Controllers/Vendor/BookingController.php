@@ -16,6 +16,7 @@ use App\Modules\Booking\Http\Requests\VendorModifyRequest;
 use App\Modules\Booking\Http\Requests\VendorRejectRequest;
 use App\Modules\Booking\Http\Resources\BookingModificationResource;
 use App\Modules\Booking\Http\Resources\BookingVendorResource;
+use App\Modules\Identity\Domain\Models\User;
 use App\Modules\Identity\Domain\Models\VendorProfile;
 use App\Modules\Shared\Http\ApiResponse;
 use Illuminate\Http\JsonResponse;
@@ -24,10 +25,11 @@ class BookingController
 {
     private function vendorProfileId(): int
     {
-        /** @var \App\Modules\Identity\Domain\Models\User $user */
+        /** @var User $user */
         $user = auth()->user();
         /** @var VendorProfile $profile */
         $profile = $user->vendorProfile;
+
         return $profile->id;
     }
 
@@ -57,11 +59,11 @@ class BookingController
         $bookingVendor = BookingVendor::where('public_id', $bookingVendorPublicId)->firstOrFail();
 
         $result = app(VendorModifyBookingAction::class)->execute(new VendorModifyDTO(
-            bookingVendorId:   (int) $bookingVendor->id,
-            vendorProfileId:   $this->vendorProfileId(),
-            proposedByUserId:  (int) auth()->id(),
-            proposalKind:      ModificationProposalKind::from($request->validated('proposal_kind')),
-            changes:           $request->validated('changes'),
+            bookingVendorId: (int) $bookingVendor->id,
+            vendorProfileId: $this->vendorProfileId(),
+            proposedByUserId: (int) auth()->id(),
+            proposalKind: ModificationProposalKind::from($request->validated('proposal_kind')),
+            changes: $request->validated('changes'),
             vendorExplanation: $request->validated('vendor_explanation'),
         ));
 

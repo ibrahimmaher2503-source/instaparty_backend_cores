@@ -5,6 +5,7 @@ declare(strict_types=1);
 use App\Modules\Booking\Domain\Enums\LifecycleStatus;
 use App\Modules\Booking\Domain\Enums\VendorSubStatus;
 use App\Modules\Booking\Domain\Models\Booking;
+use App\Modules\Booking\Domain\Models\BookingItem;
 use App\Modules\Booking\Domain\Models\BookingVendor;
 use App\Modules\Catalog\Domain\Enums\ProductType;
 use App\Modules\Catalog\Domain\Enums\ServiceStatus;
@@ -13,6 +14,7 @@ use App\Modules\Catalog\Domain\Models\Service;
 use App\Modules\Identity\Domain\Models\VendorProfile;
 use Database\Seeders\IdentityRolesSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 uses(RefreshDatabase::class);
@@ -54,7 +56,7 @@ it('booking_state_transitions has row to cancelled after single vendor rejects',
         "/api/v1/vendor/booking-vendors/{$bv->public_id}/reject"
     );
 
-    expect(\Illuminate\Support\Facades\DB::table('booking_state_transitions')
+    expect(DB::table('booking_state_transitions')
         ->where('transitionable_type', Booking::class)
         ->where('transitionable_id', $booking->id)
         ->where('to_state', 'cancelled')
@@ -65,27 +67,27 @@ it('booking_state_transitions has row to cancelled after single vendor rejects',
 it('rental inventory reservation released when booking is cancelled via rejection', function (): void {
     ['customer' => $customer, 'booking' => $booking, 'vendor' => $vendor, 'bookingVendor' => $bv, 'item' => $item] = makeSubmittedBookingWithVendor();
 
-    \Illuminate\Support\Facades\DB::table('service_inventory_reservations')->insert([
-        'public_id'          => (string) Str::ulid(),
-        'service_id'         => $item->service_id,
-        'user_id'            => $customer->id,
-        'booking_item_id'    => $item->id,
-        'product_type'       => 'rental',
-        'hold_type'          => 'payment',
-        'quantity'           => 1,
-        'status'             => 'held',
+    DB::table('service_inventory_reservations')->insert([
+        'public_id' => (string) Str::ulid(),
+        'service_id' => $item->service_id,
+        'user_id' => $customer->id,
+        'booking_item_id' => $item->id,
+        'product_type' => 'rental',
+        'hold_type' => 'payment',
+        'quantity' => 1,
+        'status' => 'held',
         'reserved_starts_at' => now()->addDays(30),
-        'reserved_ends_at'   => now()->addDays(30)->addHours(5),
-        'expires_at'         => now()->addHours(24),
-        'created_at'         => now(),
-        'updated_at'         => now(),
+        'reserved_ends_at' => now()->addDays(30)->addHours(5),
+        'expires_at' => now()->addHours(24),
+        'created_at' => now(),
+        'updated_at' => now(),
     ]);
 
     $this->actingAs($vendor->user)->postJson(
         "/api/v1/vendor/booking-vendors/{$bv->public_id}/reject"
     )->assertOk();
 
-    expect(\Illuminate\Support\Facades\DB::table('service_inventory_reservations')
+    expect(DB::table('service_inventory_reservations')
         ->where('booking_item_id', $item->id)
         ->where('status', 'released')
         ->exists()
@@ -95,50 +97,50 @@ it('rental inventory reservation released when booking is cancelled via rejectio
 it('multi-vendor: first rejects, second still pending → booking goes to customer_review', function (): void {
     ['customer' => $customer, 'booking' => $booking] = makeSubmittedBookingWithVendor();
 
-    $vendor2  = VendorProfile::factory()->approved()->create();
+    $vendor2 = VendorProfile::factory()->approved()->create();
     $category = Category::factory()->create();
     $service2 = Service::factory()->create([
-        'product_type'      => ProductType::Sale,
-        'status'            => ServiceStatus::Published,
+        'product_type' => ProductType::Sale,
+        'status' => ServiceStatus::Published,
         'vendor_profile_id' => $vendor2->id,
-        'category_id'       => $category->id,
+        'category_id' => $category->id,
     ]);
 
     $bv2 = BookingVendor::create([
-        'public_id'              => (string) Str::ulid(),
-        'booking_id'             => $booking->id,
-        'vendor_profile_id'      => $vendor2->id,
-        'sub_status'             => VendorSubStatus::Pending,
-        'response_deadline'      => now()->addHours(24),
-        'subtotal_minor'         => 30000,
-        'subtotal_currency'      => 'EGP',
-        'delivery_fee_minor'     => 0,
-        'delivery_fee_currency'  => 'EGP',
-        'commission_minor'       => 0,
-        'commission_currency'    => 'EGP',
-        'vendor_payout_minor'    => 30000,
+        'public_id' => (string) Str::ulid(),
+        'booking_id' => $booking->id,
+        'vendor_profile_id' => $vendor2->id,
+        'sub_status' => VendorSubStatus::Pending,
+        'response_deadline' => now()->addHours(24),
+        'subtotal_minor' => 30000,
+        'subtotal_currency' => 'EGP',
+        'delivery_fee_minor' => 0,
+        'delivery_fee_currency' => 'EGP',
+        'commission_minor' => 0,
+        'commission_currency' => 'EGP',
+        'vendor_payout_minor' => 30000,
         'vendor_payout_currency' => 'EGP',
     ]);
 
-    \App\Modules\Booking\Domain\Models\BookingItem::create([
-        'public_id'           => (string) Str::ulid(),
-        'booking_vendor_id'   => $bv2->id,
-        'service_id'          => $service2->id,
-        'product_type'        => ProductType::Sale,
-        'name_snapshot'       => ['en' => 'Item 2', 'ar' => 'عنصر 2'],
-        'unit_price_minor'    => 30000,
+    BookingItem::create([
+        'public_id' => (string) Str::ulid(),
+        'booking_vendor_id' => $bv2->id,
+        'service_id' => $service2->id,
+        'product_type' => ProductType::Sale,
+        'name_snapshot' => ['en' => 'Item 2', 'ar' => 'عنصر 2'],
+        'unit_price_minor' => 30000,
         'unit_price_currency' => 'EGP',
-        'line_total_minor'    => 30000,
+        'line_total_minor' => 30000,
         'line_total_currency' => 'EGP',
-        'commission_minor'    => 0,
+        'commission_minor' => 0,
         'commission_currency' => 'EGP',
-        'quantity'            => 1,
-        'item_status'         => 'pending',
-        'commission_bps'      => 0,
+        'quantity' => 1,
+        'item_status' => 'pending',
+        'commission_bps' => 0,
     ]);
 
     // First vendor rejects
-    $bv1     = $booking->vendors()->where('vendor_profile_id', '!=', $vendor2->id)->first();
+    $bv1 = $booking->vendors()->where('vendor_profile_id', '!=', $vendor2->id)->first();
     $vendor1 = VendorProfile::find($bv1->vendor_profile_id);
 
     $this->actingAs($vendor1->user)->postJson(

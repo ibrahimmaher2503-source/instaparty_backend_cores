@@ -10,6 +10,7 @@ use App\Modules\Booking\Domain\States\SaleItemStatus\SaleItemStatus;
 use App\Modules\Catalog\Domain\Enums\ProductType;
 use App\Modules\Shared\Domain\Casts\MoneyCast;
 use App\Modules\Shared\Domain\Concerns\HasPublicId;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Spatie\ModelStates\State;
@@ -20,8 +21,8 @@ use Spatie\ModelStates\State;
  * @property string $public_id
  * @property int $unit_price_minor
  * @property string $unit_price_currency
- * @property \Carbon\Carbon|null $effective_starts_at
- * @property \Carbon\Carbon|null $effective_ends_at
+ * @property Carbon|null $effective_starts_at
+ * @property Carbon|null $effective_ends_at
  * @property int $line_total_minor
  * @property string $line_total_currency
  * @property int $commission_minor
@@ -57,9 +58,9 @@ class BookingItem extends Model
         'has_item_slot_override' => 'boolean',
         'quantity' => 'integer',
         'commission_bps' => 'integer',
-        'unit_price' => MoneyCast::class . ':unit_price',
-        'line_total' => MoneyCast::class . ':line_total',
-        'commission' => MoneyCast::class . ':commission',
+        'unit_price' => MoneyCast::class.':unit_price',
+        'line_total' => MoneyCast::class.':line_total',
+        'commission' => MoneyCast::class.':commission',
     ];
 
     public function bookingVendor(): BelongsTo

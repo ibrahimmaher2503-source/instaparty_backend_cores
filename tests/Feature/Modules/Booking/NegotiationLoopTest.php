@@ -10,6 +10,7 @@ use App\Modules\Booking\Domain\Models\BookingModification;
 use App\Modules\Booking\Domain\Models\BookingSnapshot;
 use Database\Seeders\IdentityRolesSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 uses(RefreshDatabase::class);
@@ -30,7 +31,7 @@ it('full loop: draft → submit → vendor accepts → confirmed', function (): 
     expect($booking->lifecycle_status)->toBe(LifecycleStatus::Confirmed);
 
     // Verify full state transition chain exists
-    $transitions = \Illuminate\Support\Facades\DB::table('booking_state_transitions')
+    $transitions = DB::table('booking_state_transitions')
         ->where('transitionable_type', Booking::class)
         ->where('transitionable_id', $booking->id)
         ->orderBy('id')
@@ -48,11 +49,11 @@ it('full loop: submit → vendor modifies → customer accepts → confirmed', f
         "/api/v1/vendor/booking-vendors/{$bv->public_id}/modify",
         [
             'proposal_kind' => 'change_price',
-            'changes'       => [
+            'changes' => [
                 [
-                    'change_kind'           => 'update',
+                    'change_kind' => 'update',
                     'target_item_public_id' => $item->public_id,
-                    'payload'               => ['unit_price_minor' => 70000],
+                    'payload' => ['unit_price_minor' => 70000],
                 ],
             ],
         ]
@@ -85,11 +86,11 @@ it('full loop: submit → vendor modifies → customer rejects → vendor modifi
         "/api/v1/vendor/booking-vendors/{$bv->public_id}/modify",
         [
             'proposal_kind' => 'change_price',
-            'changes'       => [
+            'changes' => [
                 [
-                    'change_kind'           => 'update',
+                    'change_kind' => 'update',
                     'target_item_public_id' => $item->public_id,
-                    'payload'               => ['unit_price_minor' => 70000],
+                    'payload' => ['unit_price_minor' => 70000],
                 ],
             ],
         ]
@@ -112,11 +113,11 @@ it('full loop: submit → vendor modifies → customer rejects → vendor modifi
         "/api/v1/vendor/booking-vendors/{$bv->public_id}/modify",
         [
             'proposal_kind' => 'change_price',
-            'changes'       => [
+            'changes' => [
                 [
-                    'change_kind'           => 'update',
+                    'change_kind' => 'update',
                     'target_item_public_id' => $item->public_id,
-                    'payload'               => ['unit_price_minor' => 65000],
+                    'payload' => ['unit_price_minor' => 65000],
                 ],
             ],
         ]
@@ -166,11 +167,11 @@ it('booking snapshots are written at each negotiation event', function (): void 
         "/api/v1/vendor/booking-vendors/{$bv->public_id}/modify",
         [
             'proposal_kind' => 'change_price',
-            'changes'       => [
+            'changes' => [
                 [
-                    'change_kind'           => 'update',
+                    'change_kind' => 'update',
                     'target_item_public_id' => $item->public_id,
-                    'payload'               => ['unit_price_minor' => 70000],
+                    'payload' => ['unit_price_minor' => 70000],
                 ],
             ],
         ]

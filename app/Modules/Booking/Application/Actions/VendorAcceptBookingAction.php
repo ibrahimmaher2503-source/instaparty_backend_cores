@@ -34,17 +34,17 @@ class VendorAcceptBookingAction
             );
 
             $bookingVendor->update([
-                'sub_status'   => VendorSubStatus::Accepted,
+                'sub_status' => VendorSubStatus::Accepted,
                 'responded_at' => now(),
             ]);
 
             BookingStateTransition::create([
                 'transitionable_type' => BookingVendor::class,
-                'transitionable_id'   => $bookingVendor->id,
-                'from_state'          => VendorSubStatus::Pending->value,
-                'to_state'            => VendorSubStatus::Accepted->value,
-                'trigger_kind'        => 'vendor',
-                'triggered_by'        => $vendorProfileId,
+                'transitionable_id' => $bookingVendor->id,
+                'from_state' => VendorSubStatus::Pending->value,
+                'to_state' => VendorSubStatus::Accepted->value,
+                'trigger_kind' => 'vendor',
+                'triggered_by' => $vendorProfileId,
             ]);
 
             /** @var Booking $booking */
@@ -58,15 +58,15 @@ class VendorAcceptBookingAction
             if ($allAccepted) {
                 $booking->update([
                     'lifecycle_status' => LifecycleStatus::Confirmed,
-                    'confirmed_at'     => now(),
+                    'confirmed_at' => now(),
                 ]);
 
                 BookingStateTransition::create([
                     'transitionable_type' => Booking::class,
-                    'transitionable_id'   => $booking->id,
-                    'from_state'          => LifecycleStatus::VendorReview->value,
-                    'to_state'            => LifecycleStatus::Confirmed->value,
-                    'trigger_kind'        => 'system',
+                    'transitionable_id' => $booking->id,
+                    'from_state' => LifecycleStatus::VendorReview->value,
+                    'to_state' => LifecycleStatus::Confirmed->value,
+                    'trigger_kind' => 'system',
                 ]);
 
                 $bookingConfirmed = true;

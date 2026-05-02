@@ -24,13 +24,13 @@ class WriteNegotiationSnapshotListener
         BookingSubmittedToVendor|VendorAccepted|VendorModificationProposed|VendorRejected|CustomerModificationDecided|BookingConfirmed|BookingCancelled $event
     ): void {
         $booking = match (true) {
-            $event instanceof BookingSubmittedToVendor    => $event->booking,
-            $event instanceof VendorAccepted              => $event->bookingVendor->booking,
-            $event instanceof VendorModificationProposed  => $event->modification->bookingVendor?->booking,
-            $event instanceof VendorRejected              => $event->bookingVendor->booking,
+            $event instanceof BookingSubmittedToVendor => $event->booking,
+            $event instanceof VendorAccepted => $event->bookingVendor->booking,
+            $event instanceof VendorModificationProposed => $event->modification->bookingVendor?->booking,
+            $event instanceof VendorRejected => $event->bookingVendor->booking,
             $event instanceof CustomerModificationDecided => $event->modification->bookingVendor?->booking,
-            $event instanceof BookingConfirmed            => $event->booking,
-            $event instanceof BookingCancelled            => $event->booking,
+            $event instanceof BookingConfirmed => $event->booking,
+            $event instanceof BookingCancelled => $event->booking,
         };
 
         if ($booking === null) {
@@ -38,13 +38,13 @@ class WriteNegotiationSnapshotListener
         }
 
         $triggerKind = match (true) {
-            $event instanceof BookingSubmittedToVendor    => 'booking_submitted',
-            $event instanceof VendorAccepted              => 'vendor_responded',
-            $event instanceof VendorModificationProposed  => 'vendor_responded',
-            $event instanceof VendorRejected              => 'vendor_responded',
+            $event instanceof BookingSubmittedToVendor => 'booking_submitted',
+            $event instanceof VendorAccepted => 'vendor_responded',
+            $event instanceof VendorModificationProposed => 'vendor_responded',
+            $event instanceof VendorRejected => 'vendor_responded',
             $event instanceof CustomerModificationDecided => 'vendor_responded',
-            $event instanceof BookingConfirmed            => 'booking_confirmed',
-            $event instanceof BookingCancelled            => 'booking_cancelled',
+            $event instanceof BookingConfirmed => 'booking_confirmed',
+            $event instanceof BookingCancelled => 'booking_cancelled',
         };
 
         $latestVersion = DB::table('booking_snapshots')
@@ -54,11 +54,11 @@ class WriteNegotiationSnapshotListener
         $booking->load(['vendors.items', 'address']);
 
         BookingSnapshot::create([
-            'public_id'   => (string) Str::ulid(),
-            'booking_id'  => $booking->id,
-            'version'     => $latestVersion + 1,
+            'public_id' => (string) Str::ulid(),
+            'booking_id' => $booking->id,
+            'version' => $latestVersion + 1,
             'trigger_kind' => $triggerKind,
-            'snapshot'    => $this->buildSnapshot($booking),
+            'snapshot' => $this->buildSnapshot($booking),
         ]);
     }
 
@@ -67,22 +67,22 @@ class WriteNegotiationSnapshotListener
     {
         return [
             'booking' => [
-                'public_id'        => $booking->public_id,
+                'public_id' => $booking->public_id,
                 'lifecycle_status' => $booking->lifecycle_status->value,
-                'total_minor'      => $booking->total_minor,
-                'currency'         => $booking->total_currency,
+                'total_minor' => $booking->total_minor,
+                'currency' => $booking->total_currency,
             ],
             'vendors' => $booking->vendors->map(fn (BookingVendor $v) => [
-                'public_id'         => $v->public_id,
+                'public_id' => $v->public_id,
                 'vendor_profile_id' => $v->vendor_profile_id,
-                'sub_status'        => $v->sub_status->value,
-                'subtotal_minor'    => $v->subtotal_minor,
+                'sub_status' => $v->sub_status->value,
+                'subtotal_minor' => $v->subtotal_minor,
             ])->all(),
             'items' => $booking->vendors->flatMap(fn (BookingVendor $v) => $v->items)->map(fn (BookingItem $i) => [
-                'public_id'        => $i->public_id,
-                'product_type'     => $i->product_type->value,
+                'public_id' => $i->public_id,
+                'product_type' => $i->product_type->value,
                 'unit_price_minor' => $i->unit_price_minor,
-                'quantity'         => $i->quantity,
+                'quantity' => $i->quantity,
             ])->values()->all(),
         ];
     }
