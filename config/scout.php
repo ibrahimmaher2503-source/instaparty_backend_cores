@@ -46,7 +46,7 @@ return [
 
     'queue' => [
         'connection' => env('SCOUT_QUEUE_CONNECTION', false),
-        'queue'      => env('SCOUT_QUEUE_NAME', false),
+        'queue' => env('SCOUT_QUEUE_NAME', false),
     ],
 
     /*
@@ -75,7 +75,7 @@ return [
     */
 
     'chunk' => [
-        'searchable'   => 500,
+        'searchable' => 500,
         'unsearchable' => 500,
     ],
 
@@ -120,7 +120,7 @@ return [
 
     'meilisearch' => [
         'host' => env('MEILISEARCH_HOST', 'http://localhost:7700'),
-        'key'  => env('MEILISEARCH_KEY'),
+        'key' => env('MEILISEARCH_KEY'),
         'index-settings' => [],
     ],
 
@@ -131,7 +131,7 @@ return [
     */
 
     'algolia' => [
-        'id'     => env('ALGOLIA_APP_ID', ''),
+        'id' => env('ALGOLIA_APP_ID', ''),
         'secret' => env('ALGOLIA_SECRET', ''),
     ],
 
@@ -143,16 +143,16 @@ return [
 
     'typesense' => [
         'client-settings' => [
-            'api_key'                => env('TYPESENSE_API_KEY', 'xyz'),
-            'nodes'                  => [
+            'api_key' => env('TYPESENSE_API_KEY', 'xyz'),
+            'nodes' => [
                 [
-                    'host'     => env('TYPESENSE_HOST', 'localhost'),
-                    'port'     => env('TYPESENSE_PORT', '8108'),
-                    'path'     => env('TYPESENSE_PATH', ''),
+                    'host' => env('TYPESENSE_HOST', 'localhost'),
+                    'port' => env('TYPESENSE_PORT', '8108'),
+                    'path' => env('TYPESENSE_PATH', ''),
                     'protocol' => env('TYPESENSE_PROTOCOL', 'http'),
                 ],
             ],
-            'nearest_node'           => null,
+            'nearest_node' => null,
             'connection_timeout_seconds' => env('TYPESENSE_CONNECTION_TIMEOUT_SECONDS', 2),
         ],
         'model-settings' => [],
