@@ -48,6 +48,7 @@ class EloquentCatalogServiceReader implements CatalogServiceReader
     public function resolvePublicId(string $publicId): ?int
     {
         $row = DB::table('services')->where('public_id', $publicId)->whereNull('deleted_at')->first(['id']);
+
         return $row?->id;
     }
 }

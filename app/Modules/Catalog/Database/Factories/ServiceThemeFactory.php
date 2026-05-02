@@ -18,14 +18,14 @@ class ServiceThemeFactory extends Factory
     public function definition(): array
     {
         return [
-            'public_id'  => (string) Str::ulid(),
-            'code'       => $this->faker->unique()->slug(2),
-            'name'       => [
+            'public_id' => (string) Str::ulid(),
+            'code' => $this->faker->unique()->slug(2),
+            'name' => [
                 'en' => $this->faker->words(2, true),
                 'ar' => $this->faker->words(2, true),
             ],
-            'icon_path'  => null,
-            'is_active'  => true,
+            'icon_path' => null,
+            'is_active' => true,
         ];
     }
 }

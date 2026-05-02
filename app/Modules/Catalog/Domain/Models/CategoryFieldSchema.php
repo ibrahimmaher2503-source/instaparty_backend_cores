@@ -38,12 +38,12 @@ class CategoryFieldSchema extends Model
     public array $translatable = ['field_label'];
 
     protected $casts = [
-        'product_type'     => ProductType::class,
-        'options'          => 'array',
+        'product_type' => ProductType::class,
+        'options' => 'array',
         'validation_rules' => 'array',
-        'is_required'      => 'boolean',
-        'is_filterable'    => 'boolean',
-        'sort_order'       => 'integer',
+        'is_required' => 'boolean',
+        'is_filterable' => 'boolean',
+        'sort_order' => 'integer',
     ];
 
     public function category(): BelongsTo

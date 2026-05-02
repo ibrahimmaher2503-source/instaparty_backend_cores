@@ -26,6 +26,7 @@ class CreateSaleServiceRequest extends FormRequest
     public function authorize(): bool
     {
         $vendor = $this->user()?->vendorProfile;
+
         return $vendor?->approvedTypes->contains('product_type', ProductType::Sale) ?? false;
     }
 
@@ -35,19 +36,19 @@ class CreateSaleServiceRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name'                   => ['required', 'array'],
-            'name.en'                => ['required', 'string', 'max:255'],
-            'name.ar'                => ['required', 'string', 'max:255'],
-            'short_description'      => ['required', 'array'],
-            'short_description.en'   => ['required', 'string', 'max:500'],
-            'short_description.ar'   => ['required', 'string', 'max:500'],
-            'category_id'            => ['required', 'integer', 'exists:categories,id'],
-            'base_price_minor'       => ['required', 'integer', 'min:0'],
-            'is_perishable'          => ['boolean'],
-            'is_made_to_order'       => ['boolean'],
-            'lead_time_hours'        => ['nullable', 'required_if:is_made_to_order,true', 'integer', 'min:1', 'max:720'],
-            'stock_quantity'         => ['nullable', 'integer', 'min:1'],
-            'customization_fields'   => ['nullable', 'array'],
+            'name' => ['required', 'array'],
+            'name.en' => ['required', 'string', 'max:255'],
+            'name.ar' => ['required', 'string', 'max:255'],
+            'short_description' => ['required', 'array'],
+            'short_description.en' => ['required', 'string', 'max:500'],
+            'short_description.ar' => ['required', 'string', 'max:500'],
+            'category_id' => ['required', 'integer', 'exists:categories,id'],
+            'base_price_minor' => ['required', 'integer', 'min:0'],
+            'is_perishable' => ['boolean'],
+            'is_made_to_order' => ['boolean'],
+            'lead_time_hours' => ['nullable', 'required_if:is_made_to_order,true', 'integer', 'min:1', 'max:720'],
+            'stock_quantity' => ['nullable', 'integer', 'min:1'],
+            'customization_fields' => ['nullable', 'array'],
             'customization_fields.*' => ['array'],
         ];
     }

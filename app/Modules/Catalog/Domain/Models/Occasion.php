@@ -38,7 +38,7 @@ class Occasion extends Model
     public array $translatable = ['name', 'description'];
 
     protected $casts = [
-        'is_active'  => 'boolean',
+        'is_active' => 'boolean',
         'sort_order' => 'integer',
     ];
 

@@ -32,19 +32,19 @@ class UpdateDigitalServiceRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name'                        => ['sometimes', 'required', 'array'],
-            'name.en'                     => ['sometimes', 'required', 'string', 'max:255'],
-            'name.ar'                     => ['sometimes', 'required', 'string', 'max:255'],
-            'short_description'           => ['sometimes', 'required', 'array'],
-            'short_description.en'        => ['sometimes', 'required', 'string', 'max:500'],
-            'short_description.ar'        => ['sometimes', 'required', 'string', 'max:500'],
-            'category_id'                 => ['sometimes', 'required', 'integer', 'exists:categories,id'],
-            'base_price_minor'            => ['sometimes', 'required', 'integer', 'min:0'],
-            'delivery_method'             => ['sometimes', 'required', 'string', 'in:email,sms,whatsapp,link'],
-            'has_expiry'                  => ['sometimes', 'boolean'],
-            'expiry_days_after_purchase'  => ['sometimes', 'required_if:has_expiry,true', 'integer', 'min:1', 'max:3650'],
-            'is_refundable_after_delivery'=> ['sometimes', 'boolean'],
-            'redemption_url_template'     => ['sometimes', 'nullable', 'string', 'max:2048'],
+            'name' => ['sometimes', 'required', 'array'],
+            'name.en' => ['sometimes', 'required', 'string', 'max:255'],
+            'name.ar' => ['sometimes', 'required', 'string', 'max:255'],
+            'short_description' => ['sometimes', 'required', 'array'],
+            'short_description.en' => ['sometimes', 'required', 'string', 'max:500'],
+            'short_description.ar' => ['sometimes', 'required', 'string', 'max:500'],
+            'category_id' => ['sometimes', 'required', 'integer', 'exists:categories,id'],
+            'base_price_minor' => ['sometimes', 'required', 'integer', 'min:0'],
+            'delivery_method' => ['sometimes', 'required', 'string', 'in:email,sms,whatsapp,link'],
+            'has_expiry' => ['sometimes', 'boolean'],
+            'expiry_days_after_purchase' => ['sometimes', 'required_if:has_expiry,true', 'integer', 'min:1', 'max:3650'],
+            'is_refundable_after_delivery' => ['sometimes', 'boolean'],
+            'redemption_url_template' => ['sometimes', 'nullable', 'string', 'max:2048'],
         ];
     }
 }

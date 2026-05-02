@@ -163,8 +163,8 @@ class RentalServiceResource extends Resource
                 TextColumn::make('product_type')
                     ->badge()
                     ->color(fn (ProductType $state): string => match ($state) {
-                        ProductType::Rental  => 'warning',
-                        ProductType::Sale    => 'success',
+                        ProductType::Rental => 'warning',
+                        ProductType::Sale => 'success',
                         ProductType::Digital => 'info',
                     })
                     ->formatStateUsing(fn (ProductType $state) => $state->label())

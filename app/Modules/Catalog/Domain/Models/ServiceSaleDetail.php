@@ -32,10 +32,10 @@ class ServiceSaleDetail extends Model
     ];
 
     protected $casts = [
-        'is_perishable'        => 'boolean',
-        'is_made_to_order'     => 'boolean',
-        'lead_time_hours'      => 'integer',
-        'stock_quantity'       => 'integer',
+        'is_perishable' => 'boolean',
+        'is_made_to_order' => 'boolean',
+        'lead_time_hours' => 'integer',
+        'stock_quantity' => 'integer',
         'customization_fields' => 'array',
     ];
 

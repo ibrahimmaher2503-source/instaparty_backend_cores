@@ -33,9 +33,9 @@ class ServiceDigitalDetail extends Model
     ];
 
     protected $casts = [
-        'has_expiry'                   => 'boolean',
+        'has_expiry' => 'boolean',
         'is_refundable_after_delivery' => 'boolean',
-        'expiry_days_after_purchase'   => 'integer',
+        'expiry_days_after_purchase' => 'integer',
         // delivery_method left as string — DeliveryMethod enum to be added in a later layer
     ];
 

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Modules\Catalog\Http\Resources;
 
+use Brick\Money\Money;
 use Illuminate\Http\Request;
 
 class RentalServiceResource extends ServiceBaseResource
@@ -25,9 +26,9 @@ class RentalServiceResource extends ServiceBaseResource
                 'teardown_time_minutes' => $detail?->teardown_time_minutes,
                 'security_deposit' => $detail !== null && $detail->security_deposit_minor > 0
                     ? [
-                        'minor'    => $detail->security_deposit_minor,
+                        'minor' => $detail->security_deposit_minor,
                         'currency' => $detail->security_deposit_currency,
-                        'display'  => \Brick\Money\Money::ofMinor($detail->security_deposit_minor, $detail->security_deposit_currency)->formatTo(app()->getLocale()),
+                        'display' => Money::ofMinor($detail->security_deposit_minor, $detail->security_deposit_currency)->formatTo(app()->getLocale()),
                     ]
                     : null,
                 'minimum_space_sqm' => $detail?->minimum_space_sqm,

@@ -17,14 +17,14 @@ class ServiceRentalDetailFactory extends Factory
     public function definition(): array
     {
         return [
-            'requires_electricity'          => $this->faker->boolean(),
-            'requires_outdoor_space'        => $this->faker->boolean(),
+            'requires_electricity' => $this->faker->boolean(),
+            'requires_outdoor_space' => $this->faker->boolean(),
             'default_rental_duration_hours' => $this->faker->numberBetween(2, 8),
-            'setup_time_minutes'            => $this->faker->numberBetween(30, 120),
-            'teardown_time_minutes'         => $this->faker->numberBetween(30, 120),
-            'security_deposit_minor'        => $this->faker->numberBetween(5000, 50000),
-            'security_deposit_currency'     => 'EGP',
-            'minimum_space_sqm'             => $this->faker->numberBetween(10, 100),
+            'setup_time_minutes' => $this->faker->numberBetween(30, 120),
+            'teardown_time_minutes' => $this->faker->numberBetween(30, 120),
+            'security_deposit_minor' => $this->faker->numberBetween(5000, 50000),
+            'security_deposit_currency' => 'EGP',
+            'minimum_space_sqm' => $this->faker->numberBetween(10, 100),
         ];
     }
 }

@@ -5,14 +5,12 @@ declare(strict_types=1);
 use App\Modules\Catalog\Application\Actions\ImportRentalServicesFromExcelAction;
 use App\Modules\Catalog\Domain\Models\Category;
 use App\Modules\Catalog\Domain\Models\ExcelImportError;
-use App\Modules\Catalog\Domain\Models\Service;
 use App\Modules\Geography\Database\Seeders\EgyptGeographySeeder;
-use App\Modules\Identity\Domain\Models\VendorProfile;
 use App\Modules\Identity\Domain\Models\User;
+use App\Modules\Identity\Domain\Models\VendorProfile;
 use Database\Seeders\IdentityRolesSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
-use Maatwebsite\Excel\Facades\Excel;
 
 uses(RefreshDatabase::class);
 
@@ -50,7 +48,7 @@ function makeRentalExcelFile(array $rows): UploadedFile
         'category_id',
     ];
 
-    $path = tempnam(sys_get_temp_dir(), 'rental_import_') . '.csv';
+    $path = tempnam(sys_get_temp_dir(), 'rental_import_').'.csv';
 
     $fp = fopen($path, 'w');
     fputcsv($fp, $headers);
@@ -77,25 +75,26 @@ function makeRentalExcelFile(array $rows): UploadedFile
 function makeApprovedVendor(): VendorProfile
 {
     $user = User::factory()->phoneVerified()->asVendor()->create();
+
     return VendorProfile::factory()->approved()->create(['user_id' => $user->id]);
 }
 
 function validRow(int $categoryId): array
 {
     return [
-        'name_en'                       => 'Test Inflatable EN',
-        'name_ar'                       => 'نفخة اختبار AR',
-        'short_description_en'          => 'Short description EN',
-        'short_description_ar'          => 'وصف قصير AR',
-        'base_price_minor'              => 150000,
-        'requires_electricity'          => 0,
-        'requires_outdoor_space'        => 0,
+        'name_en' => 'Test Inflatable EN',
+        'name_ar' => 'نفخة اختبار AR',
+        'short_description_en' => 'Short description EN',
+        'short_description_ar' => 'وصف قصير AR',
+        'base_price_minor' => 150000,
+        'requires_electricity' => 0,
+        'requires_outdoor_space' => 0,
         'default_rental_duration_hours' => 4,
-        'setup_time_minutes'            => 60,
-        'teardown_time_minutes'         => 30,
-        'security_deposit_minor'        => 5000,
-        'minimum_space_sqm'             => 25,
-        'category_id'                   => $categoryId,
+        'setup_time_minutes' => 60,
+        'teardown_time_minutes' => 30,
+        'security_deposit_minor' => 5000,
+        'minimum_space_sqm' => 25,
+        'category_id' => $categoryId,
     ];
 }
 
@@ -104,7 +103,7 @@ function validRow(int $categoryId): array
 // =========================================================================
 
 it('all valid rows complete the import and create services in DB', function () {
-    $vendor   = makeApprovedVendor();
+    $vendor = makeApprovedVendor();
     $category = Category::factory()->create(['allowed_product_types' => ['rental']]);
 
     $file = makeRentalExcelFile([
@@ -113,7 +112,7 @@ it('all valid rows complete the import and create services in DB', function () {
     ]);
 
     $import = app(ImportRentalServicesFromExcelAction::class)->execute(
-        file:            $file,
+        file: $file,
         vendorProfileId: $vendor->id,
     );
 
@@ -126,7 +125,7 @@ it('all valid rows complete the import and create services in DB', function () {
 })->group('catalog', 'import');
 
 it('one invalid row among valid rows fails the entire import (no partial commit)', function () {
-    $vendor   = makeApprovedVendor();
+    $vendor = makeApprovedVendor();
     $category = Category::factory()->create(['allowed_product_types' => ['rental']]);
 
     // Row 1 is valid; row 2 is missing the required name_en field
@@ -138,7 +137,7 @@ it('one invalid row among valid rows fails the entire import (no partial commit)
     ]);
 
     $import = app(ImportRentalServicesFromExcelAction::class)->execute(
-        file:            $file,
+        file: $file,
         vendorProfileId: $vendor->id,
     );
 
@@ -153,19 +152,19 @@ it('one invalid row among valid rows fails the entire import (no partial commit)
 })->group('catalog', 'import');
 
 it('error messages in excel_import_errors have bilingual shape {en, ar}', function () {
-    $vendor   = makeApprovedVendor();
+    $vendor = makeApprovedVendor();
     $category = Category::factory()->create(['allowed_product_types' => ['rental']]);
 
     // Row with multiple missing required fields
     $badRow = array_merge(validRow($category->id), [
-        'name_en'  => '',
-        'name_ar'  => '',
+        'name_en' => '',
+        'name_ar' => '',
     ]);
 
     $file = makeRentalExcelFile([$badRow]);
 
     $import = app(ImportRentalServicesFromExcelAction::class)->execute(
-        file:            $file,
+        file: $file,
         vendorProfileId: $vendor->id,
     );
 

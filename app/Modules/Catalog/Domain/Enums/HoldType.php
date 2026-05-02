@@ -12,7 +12,7 @@ enum HoldType: string
     public function ttlMinutes(): int
     {
         return match ($this) {
-            self::Cart    => 15,
+            self::Cart => 15,
             self::Payment => 1440,
         };
     }

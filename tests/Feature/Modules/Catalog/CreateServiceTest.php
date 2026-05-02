@@ -4,10 +4,8 @@ declare(strict_types=1);
 
 use App\Modules\Catalog\Domain\Enums\ProductType;
 use App\Modules\Catalog\Domain\Models\Category;
-use App\Modules\Catalog\Domain\Models\Service;
 use App\Modules\Geography\Database\Seeders\EgyptGeographySeeder;
 use App\Modules\Identity\Domain\Models\User;
-use App\Modules\Identity\Domain\Models\VendorApprovedProductType;
 use App\Modules\Identity\Domain\Models\VendorProfile;
 use Database\Factories\VendorApprovedProductTypeFactory;
 use Database\Seeders\IdentityRolesSeeder;
@@ -46,9 +44,9 @@ function makeCustomer(): User
 function baseServicePayload(int $categoryId): array
 {
     return [
-        'name'             => ['en' => 'Test Service EN', 'ar' => 'خدمة اختبار AR'],
+        'name' => ['en' => 'Test Service EN', 'ar' => 'خدمة اختبار AR'],
         'short_description' => ['en' => 'Short desc EN', 'ar' => 'وصف قصير AR'],
-        'category_id'      => $categoryId,
+        'category_id' => $categoryId,
         'base_price_minor' => 150000,
     ];
 }
@@ -61,8 +59,8 @@ it('vendor approved for rental creates a rental service (201 + public_id)', func
     ['user' => $user, 'category' => $category] = makeVendorWithType(ProductType::Rental);
 
     $payload = array_merge(baseServicePayload($category->id), [
-        'requires_electricity'          => false,
-        'requires_outdoor_space'        => false,
+        'requires_electricity' => false,
+        'requires_outdoor_space' => false,
         'default_rental_duration_hours' => 4,
     ]);
 
@@ -127,7 +125,7 @@ it('rental service name is returned in EN locale', function () {
     ['user' => $user, 'category' => $category] = makeVendorWithType(ProductType::Rental);
 
     $payload = array_merge(baseServicePayload($category->id), [
-        'name'                          => ['en' => 'English Name', 'ar' => 'الاسم عربي'],
+        'name' => ['en' => 'English Name', 'ar' => 'الاسم عربي'],
         'default_rental_duration_hours' => 4,
     ]);
 
@@ -143,7 +141,7 @@ it('rental service name is returned in AR locale', function () {
     ['user' => $user, 'category' => $category] = makeVendorWithType(ProductType::Rental);
 
     $payload = array_merge(baseServicePayload($category->id), [
-        'name'                          => ['en' => 'English Name', 'ar' => 'الاسم عربي'],
+        'name' => ['en' => 'English Name', 'ar' => 'الاسم عربي'],
         'default_rental_duration_hours' => 4,
     ]);
 
@@ -167,7 +165,7 @@ it('vendor approved for sale creates a sale service (201 + public_id)', function
     ['user' => $user, 'category' => $category] = makeVendorWithType(ProductType::Sale);
 
     $payload = array_merge(baseServicePayload($category->id), [
-        'is_perishable'    => true,
+        'is_perishable' => true,
         'is_made_to_order' => false,
     ]);
 
@@ -208,10 +206,10 @@ it('missing name.en fails validation for sale service (422)', function () {
     ['user' => $user, 'category' => $category] = makeVendorWithType(ProductType::Sale);
 
     $payload = [
-        'name'              => ['ar' => 'اسم AR فقط'], // missing 'en'
+        'name' => ['ar' => 'اسم AR فقط'], // missing 'en'
         'short_description' => ['en' => 'Short desc EN', 'ar' => 'وصف قصير AR'],
-        'category_id'       => $category->id,
-        'base_price_minor'  => 80000,
+        'category_id' => $category->id,
+        'base_price_minor' => 80000,
     ];
 
     $this->actingAs($user)
@@ -314,7 +312,7 @@ it('digital service name is returned in EN locale', function () {
     ['user' => $user, 'category' => $category] = makeVendorWithType(ProductType::Digital);
 
     $payload = array_merge(baseServicePayload($category->id), [
-        'name'            => ['en' => 'Digital EN', 'ar' => 'رقمي AR'],
+        'name' => ['en' => 'Digital EN', 'ar' => 'رقمي AR'],
         'delivery_method' => 'link',
     ]);
 
@@ -330,7 +328,7 @@ it('digital service name is returned in AR locale', function () {
     ['user' => $user, 'category' => $category] = makeVendorWithType(ProductType::Digital);
 
     $payload = array_merge(baseServicePayload($category->id), [
-        'name'            => ['en' => 'Digital EN', 'ar' => 'رقمي AR'],
+        'name' => ['en' => 'Digital EN', 'ar' => 'رقمي AR'],
         'delivery_method' => 'link',
     ]);
 

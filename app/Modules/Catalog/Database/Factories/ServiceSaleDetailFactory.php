@@ -17,10 +17,10 @@ class ServiceSaleDetailFactory extends Factory
     public function definition(): array
     {
         return [
-            'is_perishable'        => $this->faker->boolean(),
-            'is_made_to_order'     => $this->faker->boolean(),
-            'lead_time_hours'      => $this->faker->numberBetween(24, 168),
-            'stock_quantity'       => $this->faker->numberBetween(1, 100),
+            'is_perishable' => $this->faker->boolean(),
+            'is_made_to_order' => $this->faker->boolean(),
+            'lead_time_hours' => $this->faker->numberBetween(24, 168),
+            'stock_quantity' => $this->faker->numberBetween(1, 100),
             'customization_fields' => [],
         ];
     }

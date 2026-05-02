@@ -18,9 +18,9 @@ class OccasionFactory extends Factory
     public function definition(): array
     {
         return [
-            'public_id'   => (string) Str::ulid(),
-            'code'        => $this->faker->unique()->slug(2),
-            'name'        => [
+            'public_id' => (string) Str::ulid(),
+            'code' => $this->faker->unique()->slug(2),
+            'name' => [
                 'en' => $this->faker->words(2, true),
                 'ar' => $this->faker->words(2, true),
             ],
@@ -28,9 +28,9 @@ class OccasionFactory extends Factory
                 'en' => $this->faker->sentence(),
                 'ar' => $this->faker->sentence(),
             ],
-            'icon_path'   => null,
-            'sort_order'  => $this->faker->numberBetween(0, 100),
-            'is_active'   => true,
+            'icon_path' => null,
+            'sort_order' => $this->faker->numberBetween(0, 100),
+            'is_active' => true,
         ];
     }
 }

@@ -21,27 +21,27 @@ class ServiceInventoryReservationFactory extends Factory
     public function definition(): array
     {
         $start = now()->addDays($this->faker->numberBetween(1, 30));
-        $end   = (clone $start)->addHours($this->faker->numberBetween(2, 8));
+        $end = (clone $start)->addHours($this->faker->numberBetween(2, 8));
 
         return [
-            'public_id'          => (string) Str::ulid(),
-            'service_id'         => 1, // overridden in tests
-            'user_id'            => 1, // overridden in tests
-            'product_type'       => $this->faker->randomElement(ProductType::cases()),
-            'hold_type'          => HoldType::Cart,
-            'status'             => ReservationStatus::Held,
+            'public_id' => (string) Str::ulid(),
+            'service_id' => 1, // overridden in tests
+            'user_id' => 1, // overridden in tests
+            'product_type' => $this->faker->randomElement(ProductType::cases()),
+            'hold_type' => HoldType::Cart,
+            'status' => ReservationStatus::Held,
             'reserved_starts_at' => $start,
-            'reserved_ends_at'   => $end,
-            'quantity'           => 1,
-            'expires_at'         => now()->addMinutes(HoldType::Cart->ttlMinutes()),
-            'booking_item_id'    => null,
+            'reserved_ends_at' => $end,
+            'quantity' => 1,
+            'expires_at' => now()->addMinutes(HoldType::Cart->ttlMinutes()),
+            'booking_item_id' => null,
         ];
     }
 
     public function paymentHold(): static
     {
         return $this->state([
-            'hold_type'  => HoldType::Payment,
+            'hold_type' => HoldType::Payment,
             'expires_at' => now()->addMinutes(HoldType::Payment->ttlMinutes()),
         ]);
     }
@@ -54,7 +54,7 @@ class ServiceInventoryReservationFactory extends Factory
     public function expired(): static
     {
         return $this->state([
-            'status'     => ReservationStatus::Held,
+            'status' => ReservationStatus::Held,
             'expires_at' => now()->subMinutes(5),
         ]);
     }

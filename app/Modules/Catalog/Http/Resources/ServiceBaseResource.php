@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Modules\Catalog\Http\Resources;
 
+use Brick\Money\Money;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -24,7 +25,7 @@ class ServiceBaseResource extends JsonResource
             'base_price' => [
                 'minor' => $this->base_price_minor,
                 'currency' => $this->base_price_currency,
-                'display' => \Brick\Money\Money::ofMinor($this->base_price_minor, $this->base_price_currency)->formatTo(app()->getLocale()),
+                'display' => Money::ofMinor($this->base_price_minor, $this->base_price_currency)->formatTo(app()->getLocale()),
             ],
             'is_featured' => $this->is_featured,
             'created_at' => $this->created_at?->toIso8601String(),
