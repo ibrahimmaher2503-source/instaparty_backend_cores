@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Modules\Identity\Domain\Models;
 
+use App\Modules\Catalog\Domain\Enums\ProductType;
 use App\Modules\Identity\Domain\Enums\ApprovalStatus;
 use App\Modules\Identity\Domain\Enums\BusinessType;
 use App\Modules\Shared\Domain\Concerns\HasPublicId;
-use App\Modules\Catalog\Domain\Enums\ProductType;
 use Database\Factories\VendorProfileFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
