@@ -1,0 +1,42 @@
+meta {
+  name: 03 Paymob webhook
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}/api/v1/webhooks/paymob
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  HMAC: {{paymobHmacSignature}}
+}
+
+body:json {
+  {
+    "type": "TRANSACTION",
+    "obj": {
+      "id": "{{gatewayRef}}",
+      "success": true,
+      "amount_cents": 50000
+    }
+  }
+}
+
+docs {
+  Paymob TRANSACTION webhook. Authenticated via HMAC-SHA512 only (no IP allowlist).
+
+  Tampered HMAC sample (will return 401):
+    HMAC: 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+
+  Replay (same payload + same HMAC twice) is idempotent: only the first call captures the payment.
+}
+
+tests {
+  test("status is 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+}

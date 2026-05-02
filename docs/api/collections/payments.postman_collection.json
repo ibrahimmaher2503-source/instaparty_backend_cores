@@ -1,7 +1,119 @@
-﻿{
+{
   "info": {
-    "name": "InstaParty Payments",
+    "_postman_id": "0b3f4d52-1f10-4a5c-9a6d-payments4041",
+    "name": "InstaParty Payments (Phase 4.0 + 4.1)",
+    "description": "Paymob hosted-checkout + per-product-type refunds. All money in piastres (integer minor units, EGP).",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
-  "item": []
+  "item": [
+    {
+      "name": "Initiate payment",
+      "request": {
+        "method": "POST",
+        "header": [
+          {"key": "Authorization", "value": "Bearer {{authToken}}"},
+          {"key": "Accept-Language", "value": "en"},
+          {"key": "Idempotency-Key", "value": "11111111-1111-1111-1111-111111111111"},
+          {"key": "Content-Type", "value": "application/json"}
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"method\": \"card\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/customer/bookings/{{bookingPublicId}}/payments",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "v1", "customer", "bookings", "{{bookingPublicId}}", "payments"]
+        },
+        "description": "Customer initiates a Paymob hosted-checkout intent. Phase 1 only accepts method=card. Idempotency-Key required (24h replay window)."
+      },
+      "response": []
+    },
+    {
+      "name": "Show payment",
+      "request": {
+        "method": "GET",
+        "header": [
+          {"key": "Authorization", "value": "Bearer {{authToken}}"},
+          {"key": "Accept-Language", "value": "en"}
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/customer/payments/{{paymentPublicId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "v1", "customer", "payments", "{{paymentPublicId}}"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Paymob webhook",
+      "request": {
+        "method": "POST",
+        "header": [
+          {"key": "Content-Type", "value": "application/json"},
+          {"key": "HMAC", "value": "{{paymobHmacSignature}}"}
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"type\": \"TRANSACTION\",\n  \"obj\": {\n    \"id\": \"{{gatewayRef}}\",\n    \"success\": true,\n    \"amount_cents\": 50000\n  }\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/webhooks/paymob",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "v1", "webhooks", "paymob"]
+        },
+        "description": "Paymob TRANSACTION webhook. Authenticated via HMAC-SHA512 only (no IP allowlist). Replay-safe."
+      },
+      "response": []
+    },
+    {
+      "name": "Initiate refund (admin)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {"key": "Authorization", "value": "Bearer {{adminToken}}"},
+          {"key": "Accept-Language", "value": "en"},
+          {"key": "Idempotency-Key", "value": "22222222-2222-2222-2222-222222222222"},
+          {"key": "Content-Type", "value": "application/json"}
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"reason_code\": \"customer_request\",\n  \"reason_notes\": {\n    \"en\": \"Customer requested a refund.\",\n    \"ar\": \"طلب العميل استرجاع المبلغ.\"\n  }\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/admin/bookings/{{bookingPublicId}}/refunds",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "v1", "admin", "bookings", "{{bookingPublicId}}", "refunds"]
+        },
+        "description": "Admin issues a full refund. Phase 1 supports only full refunds. Per-product-type policy enforced server-side."
+      },
+      "response": []
+    },
+    {
+      "name": "Show refund (admin)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {"key": "Authorization", "value": "Bearer {{adminToken}}"},
+          {"key": "Accept-Language", "value": "en"}
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/admin/refunds/{{refundPublicId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "v1", "admin", "refunds", "{{refundPublicId}}"]
+        }
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {"key": "baseUrl", "value": "http://localhost:8000"},
+    {"key": "authToken", "value": ""},
+    {"key": "adminToken", "value": ""},
+    {"key": "bookingPublicId", "value": ""},
+    {"key": "paymentPublicId", "value": ""},
+    {"key": "refundPublicId", "value": ""},
+    {"key": "gatewayRef", "value": ""},
+    {"key": "paymobHmacSignature", "value": ""}
+  ]
 }
