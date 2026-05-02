@@ -13,19 +13,19 @@ class ServiceSearchResultResource extends JsonResource
 {
     public function toArray(Request $request): array
     {
-        $locale   = $request->header('Accept-Language', 'en') === 'ar' ? 'ar' : 'en';
+        $locale = $request->header('Accept-Language', 'en') === 'ar' ? 'ar' : 'en';
         $resource = is_array($this->resource) ? $this->resource : $this->resource->toArray();
 
         return [
-            'public_id'           => $resource['public_id'] ?? null,
-            'name'                => $resource["name_{$locale}"] ?? $resource['name_en'] ?? null,
-            'short_description'   => $resource["short_description_{$locale}"] ?? $resource['short_description_en'] ?? null,
-            'product_type'        => $resource['product_type'] ?? null,
-            'base_price_minor'    => $resource['price_minor'] ?? null,
+            'public_id' => $resource['public_id'] ?? null,
+            'name' => $resource["name_{$locale}"] ?? $resource['name_en'] ?? null,
+            'short_description' => $resource["short_description_{$locale}"] ?? $resource['short_description_en'] ?? null,
+            'product_type' => $resource['product_type'] ?? null,
+            'base_price_minor' => $resource['price_minor'] ?? null,
             'base_price_currency' => $resource['currency'] ?? 'EGP',
-            'rating_avg'          => $resource['rating_avg'] ?? 0,
-            'vendor'              => [
-                'id'         => $resource['vendor_id'] ?? null,
+            'rating_avg' => $resource['rating_avg'] ?? 0,
+            'vendor' => [
+                'id' => $resource['vendor_id'] ?? null,
                 'rating_avg' => $resource['vendor_rating'] ?? 0,
             ],
             'is_wishlisted' => $this->resolveIsWishlisted($resource['id'] ?? null),

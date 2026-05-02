@@ -7,6 +7,7 @@ use App\Modules\Catalog\Domain\Models\Service;
 use App\Modules\Discovery\Domain\Models\Wishlist;
 use App\Modules\Discovery\Domain\Models\WishlistItem;
 use App\Modules\Identity\Domain\Models\User;
+use Illuminate\Support\Str;
 
 beforeEach(function (): void {
     $this->customer = User::factory()->create();
@@ -43,7 +44,7 @@ it('adding same service twice is idempotent', function (): void {
 })->group('discovery', 'wishlist');
 
 it('authenticated customer can remove a service from wishlist', function (): void {
-    $wishlist = Wishlist::create(['user_id' => $this->customer->id, 'public_id' => \Illuminate\Support\Str::ulid(), 'name' => 'Default']);
+    $wishlist = Wishlist::create(['user_id' => $this->customer->id, 'public_id' => Str::ulid(), 'name' => 'Default']);
     WishlistItem::create(['wishlist_id' => $wishlist->id, 'service_id' => $this->service->id]);
 
     $this->actingAs($this->customer)
@@ -54,7 +55,7 @@ it('authenticated customer can remove a service from wishlist', function (): voi
 })->group('discovery', 'wishlist');
 
 it('customer can list wishlist items', function (): void {
-    $wishlist = Wishlist::create(['user_id' => $this->customer->id, 'public_id' => \Illuminate\Support\Str::ulid(), 'name' => 'Default']);
+    $wishlist = Wishlist::create(['user_id' => $this->customer->id, 'public_id' => Str::ulid(), 'name' => 'Default']);
     WishlistItem::create(['wishlist_id' => $wishlist->id, 'service_id' => $this->service->id]);
 
     $this->actingAs($this->customer)

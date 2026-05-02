@@ -11,7 +11,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('wishlists', function (Blueprint $table): void {
-            $table->charset   = 'utf8mb4';
+            $table->charset = 'utf8mb4';
             $table->collation = 'utf8mb4_unicode_ci';
             $table->bigIncrements('id');
             $table->char('public_id', 26)->unique();

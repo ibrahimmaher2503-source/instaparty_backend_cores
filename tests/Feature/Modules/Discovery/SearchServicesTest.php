@@ -2,10 +2,6 @@
 
 declare(strict_types=1);
 
-use App\Modules\Catalog\Domain\Enums\ProductType;
-use App\Modules\Catalog\Domain\Enums\ServiceStatus;
-use App\Modules\Catalog\Domain\Models\Service;
-
 it('search endpoint is publicly accessible', function (): void {
     $this->getJson('/api/v1/customer/services?q=test')
         ->assertStatus(200)

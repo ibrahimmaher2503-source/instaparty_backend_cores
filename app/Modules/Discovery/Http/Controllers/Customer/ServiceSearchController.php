@@ -15,19 +15,19 @@ class ServiceSearchController
 {
     public function __invoke(SearchServicesRequest $request): JsonResponse
     {
-        $dto     = SearchServicesDTO::fromRequest($request);
+        $dto = SearchServicesDTO::fromRequest($request);
         $results = app(SearchServicesAction::class)->execute($dto);
 
         return ApiResponse::success(
             ServiceSearchResultResource::collection($results),
             [
-                'total'           => $results->total(),
-                'current_page'    => $results->currentPage(),
-                'per_page'        => $results->perPage(),
-                'last_page'       => $results->lastPage(),
-                'query'           => $dto->query,
+                'total' => $results->total(),
+                'current_page' => $results->currentPage(),
+                'per_page' => $results->perPage(),
+                'last_page' => $results->lastPage(),
+                'query' => $dto->query,
                 'filters_applied' => array_filter([
-                    'type'     => $dto->type?->value,
+                    'type' => $dto->type?->value,
                     'occasion' => $dto->occasionCode,
                 ]),
             ],

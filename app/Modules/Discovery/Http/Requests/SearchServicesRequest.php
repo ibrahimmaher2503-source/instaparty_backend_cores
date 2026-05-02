@@ -18,15 +18,15 @@ class SearchServicesRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'q'         => ['nullable', 'string', 'max:255'],
-            'type'      => ['nullable', Rule::enum(ProductType::class)],
-            'category'  => ['nullable', 'string'],
-            'occasion'  => ['nullable', 'string'],
-            'vendor'    => ['nullable', 'string'],
+            'q' => ['nullable', 'string', 'max:255'],
+            'type' => ['nullable', Rule::enum(ProductType::class)],
+            'category' => ['nullable', 'string'],
+            'occasion' => ['nullable', 'string'],
+            'vendor' => ['nullable', 'string'],
             'price_max' => ['nullable', 'integer', 'min:0'],
-            'sort'      => ['nullable', Rule::in(['price_asc', 'price_desc', 'rating', 'newest'])],
-            'page'      => ['nullable', 'integer', 'min:1'],
-            'per_page'  => ['nullable', 'integer', 'min:1', 'max:50'],
+            'sort' => ['nullable', Rule::in(['price_asc', 'price_desc', 'rating', 'newest'])],
+            'page' => ['nullable', 'integer', 'min:1'],
+            'per_page' => ['nullable', 'integer', 'min:1', 'max:50'],
         ];
     }
 }

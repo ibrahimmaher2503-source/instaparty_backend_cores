@@ -18,7 +18,7 @@ class WishlistController
     public function index(): JsonResponse
     {
         $wishlist = Wishlist::with('items.service')->where('user_id', auth()->id())->first();
-        $items    = $wishlist?->items ?? collect();
+        $items = $wishlist?->items ?? collect();
 
         return ApiResponse::success(
             WishlistItemResource::collection($items),
@@ -29,8 +29,8 @@ class WishlistController
     public function add(AddToWishlistRequest $request): JsonResponse
     {
         $servicePublicId = $request->validated('service_id');
-        $wishlist        = app(AddToWishlistAction::class)->execute(auth()->id(), $servicePublicId);
-        $item            = WishlistItem::with('service')
+        $wishlist = app(AddToWishlistAction::class)->execute(auth()->id(), $servicePublicId);
+        $item = WishlistItem::with('service')
             ->where('wishlist_id', $wishlist->id)
             ->whereHas('service', fn ($q) => $q->where('public_id', $servicePublicId))
             ->first();
