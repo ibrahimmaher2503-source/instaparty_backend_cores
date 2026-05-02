@@ -2,7 +2,7 @@
 
 **Feature Branch**: `003-catalog-services`  
 **Created**: 2026-04-29  
-**Status**: Draft  
+**Status**: Shipped (retrospective)  
 **ADR**: [ADR-0004 — Catalog Module](../../docs/adr/0004-catalog-module.md) — Accepted  
 **Phases covered**: 2.0 (Foundation), 2.1 (Rental), 2.2 (Sale), 2.3 (Digital + Inventory), 2.4 (Excel Import)
 
