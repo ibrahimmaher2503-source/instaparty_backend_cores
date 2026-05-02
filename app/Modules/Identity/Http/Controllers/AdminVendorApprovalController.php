@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Modules\Identity\Http\Controllers;
 
+use App\Modules\Catalog\Domain\Enums\ProductType;
 use App\Modules\Identity\Application\Actions\ApproveVendorForTypeAction;
 use App\Modules\Identity\Application\Actions\ApproveVendorProfileAction;
 use App\Modules\Identity\Application\Actions\RejectVendorProfileAction;
@@ -14,7 +15,6 @@ use App\Modules\Identity\Http\Requests\ApproveVendorForTypeRequest;
 use App\Modules\Identity\Http\Requests\RejectVendorProfileRequest;
 use App\Modules\Identity\Http\Requests\RevokeVendorTypeRequest;
 use App\Modules\Identity\Http\Resources\VendorProfileResource;
-use App\Modules\Catalog\Domain\Enums\ProductType;
 use App\Modules\Shared\Http\ApiResponse;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
