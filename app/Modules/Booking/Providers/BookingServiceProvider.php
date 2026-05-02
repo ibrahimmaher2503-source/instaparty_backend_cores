@@ -23,6 +23,8 @@ use App\Modules\Booking\Domain\Events\VendorAccepted;
 use App\Modules\Booking\Domain\Events\VendorModificationProposed;
 use App\Modules\Booking\Domain\Events\VendorRejected;
 use App\Modules\Booking\Infrastructure\Repositories\EloquentBookingRepository;
+use App\Modules\Booking\Infrastructure\Repositories\EloquentPaymentsBookingReader;
+use App\Modules\Payments\Domain\Contracts\PaymentsBookingReader;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 
@@ -31,6 +33,7 @@ class BookingServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->bind(BookingRepository::class, EloquentBookingRepository::class);
+        $this->app->bind(PaymentsBookingReader::class, EloquentPaymentsBookingReader::class);
     }
 
     public function boot(): void

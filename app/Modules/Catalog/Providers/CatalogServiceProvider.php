@@ -7,7 +7,9 @@ namespace App\Modules\Catalog\Providers;
 use App\Modules\Booking\Domain\Contracts\CatalogServiceReader;
 use App\Modules\Catalog\Application\Listeners\ArchiveServicesOnTypeRevokedListener;
 use App\Modules\Catalog\Infrastructure\Repositories\EloquentCatalogServiceReader;
+use App\Modules\Catalog\Infrastructure\Repositories\EloquentPaymentsCatalogReader;
 use App\Modules\Identity\Domain\Events\VendorTypeRevoked;
+use App\Modules\Payments\Domain\Contracts\PaymentsCatalogReader;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 
@@ -16,6 +18,7 @@ class CatalogServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->bind(CatalogServiceReader::class, EloquentCatalogServiceReader::class);
+        $this->app->bind(PaymentsCatalogReader::class, EloquentPaymentsCatalogReader::class);
     }
 
     public function boot(): void

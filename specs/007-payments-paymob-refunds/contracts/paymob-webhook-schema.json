@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://instaparty.example/schemas/paymob-webhook.json",
+  "title": "Paymob Transaction Webhook Payload",
+  "description": "Canonical shape InstaParty validates against. Fields outside this schema are accepted but redacted before persistence per PCI SAQ-A scope.",
+  "type": "object",
+  "required": ["type", "obj"],
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["TRANSACTION"]
+    },
+    "obj": {
+      "type": "object",
+      "required": ["id", "success", "amount_cents", "currency", "order", "hmac"],
+      "properties": {
+        "id": {
+          "description": "Paymob transaction id — used as gateway_ref in payments table",
+          "type": "integer"
+        },
+        "success": { "type": "boolean" },
+        "pending": { "type": "boolean" },
+        "is_auth": { "type": "boolean" },
+        "is_capture": { "type": "boolean" },
+        "is_refunded": { "type": "boolean" },
+        "is_voided": { "type": "boolean" },
+        "is_3d_secure": { "type": "boolean" },
+        "is_standalone_payment": { "type": "boolean" },
+        "has_parent_transaction": { "type": "boolean" },
+        "amount_cents": { "type": "integer", "minimum": 0 },
+        "currency": { "type": "string", "minLength": 3, "maxLength": 3 },
+        "captured_amount": { "type": "integer", "minimum": 0 },
+        "error_occured": { "type": "boolean" },
+        "owner": { "type": ["integer", "string"] },
+        "created_at": { "type": "string", "format": "date-time" },
+        "integration_id": { "type": "integer" },
+        "data": {
+          "description": "Gateway-specific failure messages — never shown to end users; mapped to InstaParty failure_code + translatable failure_message via MapPaymobFailureCode.",
+          "type": "object",
+          "additionalProperties": true
+        },
+        "order": {
+          "type": "object",
+          "required": ["id"],
+          "properties": {
+            "id": { "type": "integer" },
+            "merchant_order_id": {
+              "description": "InstaParty's payment public_id (ULID) — primary lookup key on inbound webhooks.",
+              "type": "string"
+            }
+          }
+        },
+        "source_data": {
+          "description": "Card metadata. PAN, CVV, expiry MUST be redacted before persistence.",
+          "type": "object",
+          "properties": {
+            "type": { "type": "string", "enum": ["card", "wallet"] },
+            "sub_type": { "type": "string" },
+            "pan": {
+              "description": "MUST be redacted to '[REDACTED]' before any insert into payment_attempts or gateway_webhook_logs.",
+              "type": "string"
+            }
+          }
+        },
+        "hmac": {
+          "description": "SHA-512 HMAC over the documented field concatenation. Verified via hash_equals.",
+          "type": "string",
+          "pattern": "^[a-f0-9]{128}$"
+        }
+      }
+    }
+  }
+}

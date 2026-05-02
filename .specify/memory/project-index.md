@@ -31,6 +31,7 @@
 | `docs/adr/0001-modular-monolith-pattern.md` | Accepted (2026-04-15) | Modular monolith over microservices for Phase 1 — clean module boundaries enable surgical Phase 2 extraction |
 | `docs/adr/0003-identity-module.md` | Accepted (2026-04-26) | Identity module — vendors, customers, two-step approval gate, per-type approvals, document storage, 2FA |
 | `docs/adr/0004-catalog-module.md` | Accepted (2026-04-29) | Catalog module — polymorphic services + 3 detail tables, per-type Resources/Actions, inventory reservations |
+| `docs/adr/0005-payments-module.md` | Accepted (2026-05-02) | Payments module — Paymob gateway adapter, HMAC-only webhook auth, PCI SAQ-A scope, single `RefundPolicyService` with `match($enum)` |
 | `docs/adr/ADR-001-geography-module.md` | Accepted | Geography as first-class module — owns governorates / regions / cities, exposed via `GeographyRepository` contract |
 | `docs/adr/README.md` | — | ADR log index — naming convention (`NNNN-slug.md`), template location, status lifecycle |
 
@@ -38,10 +39,10 @@
 
 ## Current Phase
 
-**Active:** Phase 3.2 — Booking: Negotiation Loop (just completed — commit `3447460`).
-**Next up:** Phase 4.0 — Payments: Paymob Gateway (2 days, Week 5).
+**Active:** Phase 4.0 + 4.1 — Payments: Paymob Gateway + Refunds (per-type) — spec + plan ready (ADR-0005 Accepted 2026-05-02). Awaiting `/speckit.tasks`.
+**Next up:** Phase 4.2 — Settlement: Wallets + Commissions + Withdrawals (3 days, Week 5–6).
 
-The 26-phase index lives in `docs/specs/09_Phasing_Plan.md`; phases run from `0.0` (Foundation Setup) through `7.2` (Documentation + Retrospective). Active feature branch is `005-booking-draft-items`; spec-kit feature folder is `specs/006-booking-negotiation-loop/`.
+The 26-phase index lives in `docs/specs/09_Phasing_Plan.md`; phases run from `0.0` (Foundation Setup) through `7.2` (Documentation + Retrospective). Active feature branch is `007-payments-paymob-refunds`; spec-kit feature folder is `specs/007-payments-paymob-refunds/`.
 
 ---
 

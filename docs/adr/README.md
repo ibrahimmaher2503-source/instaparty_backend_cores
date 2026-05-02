@@ -83,6 +83,7 @@ cp docs/adr/templates/0001-generic-decision.md \
 | 0002 | (Template للـ modules الجديدة) | Template | [`templates/0002-new-module.md`](./templates/0002-new-module.md) |
 | 0003 | Identity Module (نموذج محلول) | Accepted | [`0003-identity-module.md`](./0003-identity-module.md) |
 | 0004 | Catalog Module | Accepted | [`0004-catalog-module.md`](./0004-catalog-module.md) |
+| 0005 | Payments Module | Accepted | [`0005-payments-module.md`](./0005-payments-module.md) |
 
 > **هذا الجدول لازم يتحدث يدوياً مع كل ADR جديد.** Claude Code هيصرّ على تحديثه كجزء من spec-guard hook (لو فعلت ده).
 
