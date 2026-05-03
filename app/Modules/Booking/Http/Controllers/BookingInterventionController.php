@@ -27,6 +27,14 @@ class BookingInterventionController
 
         Gate::authorize('force_cancel_booking');
 
+        if (! $request->hasHeader('Idempotency-Key')) {
+            return response()->json([
+                'data' => null,
+                'meta' => [],
+                'errors' => [['field' => 'Idempotency-Key', 'message' => 'The Idempotency-Key header is required.']],
+            ], 422);
+        }
+
         $idempotencyKey = $request->header('Idempotency-Key');
 
         if ($idempotencyKey) {
@@ -40,15 +48,23 @@ class BookingInterventionController
             }
         }
 
-        $intervention = $this->forceCancelAction->execute(
-            $booking,
-            new AdminInterventionDTO(
-                bookingId: $booking->id,
-                adminId: auth()->id(),
-                interventionType: InterventionType::ForceCancel,
-                reason: $request->input('reason'),
-            ),
-        );
+        try {
+            $intervention = $this->forceCancelAction->execute(
+                $booking,
+                new AdminInterventionDTO(
+                    bookingId: $booking->id,
+                    adminId: auth()->id(),
+                    interventionType: InterventionType::ForceCancel,
+                    reason: $request->input('reason'),
+                ),
+            );
+        } catch (\DomainException $e) {
+            return response()->json([
+                'data' => null,
+                'meta' => [],
+                'errors' => [['message' => $e->getMessage()]],
+            ], 409);
+        }
 
         $resource = new BookingAdminInterventionResource($intervention->load('booking'));
         $responseBody = ApiResponse::success($resource)->getContent();
