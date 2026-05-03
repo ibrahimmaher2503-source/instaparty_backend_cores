@@ -8,11 +8,7 @@ use App\Modules\Communication\Application\Actions\DispatchNotificationAction;
 use App\Modules\Communication\Application\Listeners\OnBookingConfirmed;
 use App\Modules\Communication\Application\Listeners\OnBookingModified;
 use App\Modules\Communication\Application\Listeners\OnBookingSubmitted;
-use App\Modules\Communication\Application\Listeners\OnDigitalDelivered;
-use App\Modules\Communication\Application\Listeners\OnDigitalExpiringSoon;
 use App\Modules\Communication\Application\Listeners\OnPaymentCaptured;
-use App\Modules\Communication\Application\Listeners\OnRentalDeliveryScheduled;
-use App\Modules\Communication\Application\Listeners\OnSalePreparationStarted;
 use App\Modules\Communication\Domain\Contracts\NotificationDispatcher;
 use App\Modules\Communication\Domain\Enums\NotificationChannel;
 use App\Modules\Communication\Infrastructure\Gateways\FcmPushAdapter;
@@ -61,13 +57,11 @@ class CommunicationServiceProvider extends ServiceProvider
 
     private function registerListeners(): void
     {
-        Event::listen('App\Modules\Booking\Domain\Events\BookingSubmitted', OnBookingSubmitted::class);
-        Event::listen('App\Modules\Booking\Domain\Events\BookingModified', OnBookingModified::class);
+        Event::listen('App\Modules\Booking\Domain\Events\BookingSubmittedToVendor', OnBookingSubmitted::class);
+        Event::listen('App\Modules\Booking\Domain\Events\CustomerModificationDecided', OnBookingModified::class);
         Event::listen('App\Modules\Booking\Domain\Events\BookingConfirmed', OnBookingConfirmed::class);
         Event::listen('App\Modules\Payments\Domain\Events\PaymentCaptured', OnPaymentCaptured::class);
-        Event::listen('App\Modules\Booking\Domain\Events\RentalDeliveryScheduled', OnRentalDeliveryScheduled::class);
-        Event::listen('App\Modules\Booking\Domain\Events\SalePreparationStarted', OnSalePreparationStarted::class);
-        Event::listen('App\Modules\Booking\Domain\Events\DigitalDelivered', OnDigitalDelivered::class);
-        Event::listen('App\Modules\Booking\Domain\Events\DigitalExpiringSoon', OnDigitalExpiringSoon::class);
+        // OnRentalDeliveryScheduled, OnSalePreparationStarted, OnDigitalDelivered, OnDigitalExpiringSoon
+        // are wired in a later phase once those lifecycle events exist in the Booking module.
     }
 }

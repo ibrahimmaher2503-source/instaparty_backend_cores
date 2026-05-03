@@ -38,12 +38,19 @@ class NotificationPreferenceController extends Controller
         string $channel,
         string $eventCategory
     ): JsonResponse {
+        $channelEnum   = NotificationChannel::tryFrom($channel);
+        $categoryEnum  = EventCategory::tryFrom($eventCategory);
+
+        if ($channelEnum === null || $categoryEnum === null) {
+            return ApiResponse::error('Invalid channel or event_category.');
+        }
+
         /** @var User $user */
         $user = $request->user();
         $pref = $this->updateAction->execute(new NotificationPreferenceDTO(
             userId: $user->id,
-            channel: NotificationChannel::from($channel),
-            eventCategory: EventCategory::from($eventCategory),
+            channel: $channelEnum,
+            eventCategory: $categoryEnum,
             isEnabled: $request->boolean('is_enabled'),
             quietHoursStart: $request->input('quiet_hours_start'),
             quietHoursEnd: $request->input('quiet_hours_end'),
@@ -67,12 +74,19 @@ class NotificationPreferenceController extends Controller
         string $channel,
         string $eventCategory
     ): JsonResponse {
+        $channelEnum   = NotificationChannel::tryFrom($channel);
+        $categoryEnum  = EventCategory::tryFrom($eventCategory);
+
+        if ($channelEnum === null || $categoryEnum === null) {
+            return ApiResponse::error('Invalid channel or event_category.');
+        }
+
         /** @var User $user */
         $user = $request->user();
         $pref = $this->updateAction->execute(new NotificationPreferenceDTO(
             userId: $user->id,
-            channel: NotificationChannel::from($channel),
-            eventCategory: EventCategory::from($eventCategory),
+            channel: $channelEnum,
+            eventCategory: $categoryEnum,
             isEnabled: $request->boolean('is_enabled'),
             quietHoursStart: $request->input('quiet_hours_start'),
             quietHoursEnd: $request->input('quiet_hours_end'),
