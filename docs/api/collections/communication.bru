@@ -1,0 +1,84 @@
+meta {
+  name: Communication — Notification Preferences
+  type: collection
+  seq: 5
+}
+
+# Phase 5.0 — Communication: Notification Preferences API
+
+## GET Customer Preferences
+
+get {
+  url: {{base_url}}/api/v1/customer/notification-preferences
+  body: none
+  auth: bearer
+}
+
+headers {
+  Authorization: Bearer {{customer_token}}
+  Accept: application/json
+  Accept-Language: en
+}
+
+# ---
+
+## PUT Customer Preference (update channel/category)
+
+put {
+  url: {{base_url}}/api/v1/customer/notification-preferences/push/booking
+  body: json
+  auth: bearer
+}
+
+headers {
+  Authorization: Bearer {{customer_token}}
+  Accept: application/json
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "is_enabled": false,
+    "quiet_hours_start": "22:00",
+    "quiet_hours_end": "08:00",
+    "timezone": "Africa/Cairo"
+  }
+}
+
+# ---
+
+## GET Vendor Preferences
+
+get {
+  url: {{base_url}}/api/v1/vendor/notification-preferences
+  body: none
+  auth: bearer
+}
+
+headers {
+  Authorization: Bearer {{vendor_token}}
+  Accept: application/json
+  Accept-Language: ar
+}
+
+# ---
+
+## PUT Vendor Preference (update channel/category)
+
+put {
+  url: {{base_url}}/api/v1/vendor/notification-preferences/sms/marketing
+  body: json
+  auth: bearer
+}
+
+headers {
+  Authorization: Bearer {{vendor_token}}
+  Accept: application/json
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "is_enabled": false
+  }
+}

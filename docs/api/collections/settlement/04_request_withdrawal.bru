@@ -1,0 +1,50 @@
+meta {
+  name: 04 Request withdrawal
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{baseUrl}}/api/v1/vendor/withdrawals
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{vendorToken}}
+}
+
+headers {
+  Accept-Language: en
+  Idempotency-Key: 33333333-3333-3333-3333-333333333333
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "amount_minor": 10000,
+    "currency": "EGP",
+    "bank_account": {
+      "bank_name": "CIB",
+      "account_holder_name": "Ahmed Mohamed",
+      "iban": "EG380019000500000000263180002"
+    }
+  }
+}
+
+docs {
+  Vendor requests a withdrawal from their wallet.
+  - Phase 4.2 Settlement module.
+  - Requires settlement.request_withdrawal.own permission.
+  - Idempotency-Key is required (24h replay window).
+  - amount_minor must be >= minimum withdrawal threshold (configured per platform settings).
+  - Only one pending withdrawal is allowed at a time per vendor.
+  - Fails with 422 if wallet balance is insufficient.
+  - Fails with 422 if an existing pending withdrawal exists.
+}
+
+tests {
+  test("status is 201", function() {
+    expect(res.getStatus()).to.equal(201);
+  });
+}

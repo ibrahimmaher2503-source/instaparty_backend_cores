@@ -1,0 +1,32 @@
+meta {
+  name: 01 Get vendor wallet
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/api/v1/vendor/wallet
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{vendorToken}}
+}
+
+headers {
+  Accept-Language: en
+}
+
+docs {
+  Returns the authenticated vendor's wallet balance and pending withdrawal amount.
+  - Phase 4.2 Settlement module.
+  - Requires settlement.view_wallet.own permission.
+  - Money values are integer minor units (piastres). Divide by 100 for EGP display.
+}
+
+tests {
+  test("status is 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+}

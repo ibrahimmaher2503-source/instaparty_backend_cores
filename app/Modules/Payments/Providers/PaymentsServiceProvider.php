@@ -8,6 +8,8 @@ use App\Modules\Booking\Application\Listeners\HandlePaymentFailedListener;
 use App\Modules\Booking\Application\Listeners\UpdateBookingPaymentStatusListener;
 use App\Modules\Payments\Domain\Contracts\PaymentGateway;
 use App\Modules\Payments\Domain\Events\PaymentCaptured;
+use App\Modules\Payments\Infrastructure\Repositories\EloquentSettlementPaymentReader;
+use App\Modules\Settlement\Domain\Contracts\SettlementPaymentReader;
 use App\Modules\Payments\Domain\Events\PaymentFailed;
 use App\Modules\Payments\Domain\Events\RefundCompleted;
 use App\Modules\Payments\Http\Middleware\IdempotencyKeyMiddleware;
@@ -21,6 +23,7 @@ class PaymentsServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->bind(PaymentGateway::class, PaymobGateway::class);
+        $this->app->bind(SettlementPaymentReader::class, EloquentSettlementPaymentReader::class);
     }
 
     public function boot(): void

@@ -2,8 +2,8 @@
 
 namespace App\Modules\Geography\Domain\Policies;
 
-use App\Modules\Geography\Domain\Models\Governorate;
 use App\Modules\Identity\Domain\Models\User;
+use App\Modules\Geography\Domain\Models\Governorate;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class GovernoratePolicy

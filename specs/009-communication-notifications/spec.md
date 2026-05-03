@@ -208,11 +208,11 @@ The system resolves the correct template for rental, sale, and digital fulfillme
 
 ## Success Criteria
 
-- [ ] **SC-001**: Booking event fires → push + email dispatch records created in `notification_dispatches` within the same queue flush cycle (no missed events in integration test).
-- [ ] **SC-002**: Arabic-locale customer receives Arabic notification body; English-locale customer receives English body — verified in Pest locale tests.
-- [ ] **SC-003**: All 4 channel adapters (FCM, Vonage, WhatsApp stub, Mailchimp) can dispatch without throwing uncaught exceptions — verified via mock adapter tests.
-- [ ] **SC-004**: Per-type event keys (`rental.delivery_scheduled`, `sale.preparation_started`, `digital.delivered`, `digital.expiring_soon`) each resolve to their correct distinct template — verified in Pest per-type tests.
-- [ ] **SC-005**: Preference opt-out is respected: disabling `push/marketing` does not block `push/booking` dispatches — verified in Pest preference tests.
+- [X] **SC-001**: Booking event fires → push + email dispatch records created in `notification_dispatches` within the same queue flush cycle (no missed events in integration test).
+- [X] **SC-002**: Arabic-locale customer receives Arabic notification body; English-locale customer receives English body — verified in Pest locale tests.
+- [X] **SC-003**: All 4 channel adapters (FCM, Vonage, WhatsApp stub, Mailchimp) can dispatch without throwing uncaught exceptions — verified via mock adapter tests.
+- [X] **SC-004**: Per-type event keys (`rental.delivery_scheduled`, `sale.preparation_started`, `digital.delivered`, `digital.expiring_soon`) each resolve to their correct distinct template — verified in Pest per-type tests.
+- [X] **SC-005**: Preference opt-out is respected: disabling `push/marketing` does not block `push/booking` dispatches — verified in Pest preference tests.
 
 ---
 

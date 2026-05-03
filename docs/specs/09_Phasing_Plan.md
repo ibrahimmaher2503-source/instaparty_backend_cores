@@ -837,7 +837,7 @@ Same risks as v1, but now mitigated by smaller scope per phase:
 **DELIVERABLE:** Vendor sets up loyalty program (1 point per EGP, 100 points = 10 EGP). Customer earns on completion. Customer redeems on next booking.
 
 **DAYS:**
-
+ 
 ### Day 1 — Schema + Earning
 - [ ] Migrations: loyalty_programs, loyalty_rules, loyalty_ledger (append-only), loyalty_redemptions
 - [ ] `CalculateLoyaltyPointsAction` (after booking_item completed)
@@ -991,6 +991,192 @@ Same risks as v1, but now mitigated by smaller scope per phase:
 **BLOCKS:** None
 
 ---
+
+Phase 6.3 — Admin Customer Management (1 day, Week 7)
+GOAL: Admin can view, edit, suspend, and manage customers + see their full history.
+TABLES TOUCHED: users, customer_profiles (no schema changes — UI only)
+DELIVERABLE: Admin Filament resource for Customers with:
+
+List view with search by phone/email/name
+View profile + addresses + booking history + reviews + loyalty balance per vendor
+Edit profile fields
+Suspend/unsuspend customer
+Force logout (revoke all tokens)
+View activity timeline (audit log filtered by user)
+
+DAYS:
+Day 1 — CustomerResource + Actions
+
+ Filament CustomerResource (under "Users" navigation group)
+ Tabs: Overview, Bookings, Reviews, Wallet (loyalty), Addresses, Activity
+ Actions: SuspendCustomerAction, ForceLogoutCustomerAction, EditCustomerProfileAction
+ Authorization: super-admin + customer-manager role only
+ Pest: suspend customer → can't login
+ Pest: force logout → tokens revoked
+
+EXIT CRITERIA:
+
+✅ Admin finds any customer in <5 seconds via search
+✅ Admin sees customer's full footprint
+✅ Suspend works end-to-end
+
+BLOCKS: None
+
+Phase 6.4 — Admin Vendor Management (full CRUD) (1 day, Week 7)
+GOAL: Admin can fully manage vendors beyond just approval — edit details, manage docs, view stats.
+TABLES TOUCHED: vendor_profiles, vendor_documents, vendor_business_hours, vendor_coverage_areas
+DELIVERABLE: Filament VendorResource (separate from approval queue) with:
+
+List + filter by status, type approvals, governorate
+Edit business info, hours, coverage areas
+Re-upload/replace documents
+Force-revoke type approvals with reason
+View vendor's services, bookings, payments, wallet, reviews
+Impersonate vendor (audit-logged) for debugging
+
+DAYS:
+Day 1 — VendorResource + Actions
+
+ Filament VendorResource (different from VendorApprovalQueueResource)
+ Tabs: Overview, Documents, Services, Bookings, Wallet, Withdrawals, Reviews, Activity
+ Actions: EditVendorProfileAction, UpdateVendorBusinessHoursAction, UpdateVendorCoverageAction, ImpersonateVendorAction (audit-logged)
+ Pest: edit doesn't break approval state
+ Pest: impersonation creates audit entry
+
+EXIT CRITERIA:
+
+✅ Admin edits vendor without losing approval history
+✅ Impersonation always audit-logged
+✅ Per-type revocation with reason captured
+
+BLOCKS: None
+
+Phase 6.5 — Admin Booking Override (2 days, Week 7)
+GOAL: Admin intervenes in stuck bookings — force state transitions, cancel, re-assign (with audit + customer consent).
+TABLES TOUCHED: bookings (status updates), booking_state_transitions (audit), booking_admin_interventions (NEW)
+ADR REQUIRED: ADR-0011-admin-booking-override.md
+DELIVERABLE: Admin can:
+
+Force-cancel a stuck booking (with refund logic)
+Force vendor response timeout
+Propose alternative vendor to customer (per FR-17 — propose only)
+Add admin note to booking
+
+DAYS:
+Day 1 — Schema + Actions
+
+ Write ADR-0011
+ Migration: booking_admin_interventions (booking_id, admin_id, intervention_type, reason, before_state, after_state, customer_consent_status)
+ Actions: ForceCancelBookingAction, TimeoutVendorResponseAction, ProposeAlternativeVendorAction, AddAdminNoteAction
+ Filament: Booking detail page with intervention buttons (gated by permission)
+ Customer consent flow: admin proposes → customer accepts/rejects via API/notification
+
+Day 2 — Tests
+
+ Pest: force-cancel triggers refund per type policy
+ Pest: vendor response timeout transitions state
+ Pest: alternative vendor proposal doesn't auto-replace (FR-17 enforced)
+ Pest: every intervention captured in booking_admin_interventions + booking_state_transitions + audit_logs
+
+EXIT CRITERIA:
+
+✅ Admin can resolve stuck booking
+✅ FR-17 enforced (no auto-replacement)
+✅ Every intervention triple-logged
+
+BLOCKS: None
+
+Phase 6.6 — Admin Financial Operations (2 days, Week 7-8)
+GOAL: Admin can manually adjust wallets, issue refunds, manage commission rates beyond automated flows.
+TABLES TOUCHED: wallet_ledger (append-only entries), refunds (manual), commission_rates (CRUD), wallet_adjustments (NEW)
+ADR REQUIRED: ADR-0012-admin-financial-overrides.md
+DELIVERABLE: Filament panels for:
+
+Manual wallet credit/debit (with reason, audit, dual-approval option)
+Manual refund issuance (outside automated policy)
+Commission rate CRUD (per category × type with effective date ranges)
+Reconciliation report (compare gateway captured vs platform recorded)
+
+DAYS:
+Day 1 — Schema + Wallet Adjustments
+
+ Write ADR-0012
+ Migration: wallet_adjustments (wallet_id, admin_id, amount_minor, reason_code, reason_text, approved_by_admin_id, status)
+ Action: AdjustWalletAction — creates wallet_ledger entry + wallet_adjustments row
+ Filament: WalletAdjustmentsResource with dual-approval toggle (per app_settings)
+ Filament: CommissionRatesResource (full CRUD with effective_from/effective_to)
+
+Day 2 — Manual Refunds + Reconciliation
+
+ Action: IssueManualRefundAction (override per-type policy with explicit reason + audit)
+ Filament: ReconciliationReport (gateway vs ledger diff per period)
+ Action: ExportReconciliationCsvAction
+ Pest: wallet adjustment creates ledger entry, doesn't update existing rows (append-only)
+ Pest: dual-approval blocks single-admin adjustments above threshold
+ Pest: manual refund logs override reason
+
+EXIT CRITERIA:
+
+✅ Admin adjusts wallet with full audit trail
+✅ Dual-approval works above configurable threshold
+✅ Manual refund requires explicit reason
+✅ Reconciliation report identifies discrepancies
+
+BLOCKS: None
+
+Phase 6.7 — Admin Roles & Permissions UI (1 day, Week 8)
+GOAL: Admin can manage roles and permissions visually — assign permissions to roles, users to roles.
+TABLES TOUCHED: roles, permissions, model_has_roles (Spatie tables — no schema changes)
+DELIVERABLE: Filament panels for:
+
+Role CRUD (create custom roles)
+Permission assignment matrix (role × permission grid)
+User-role assignment with effective date
+Permission preview ("what can this user do?")
+
+DAYS:
+Day 1 — Filament + Tests
+
+ Filament RoleResource with permissions matrix
+ Filament UserRolesResource for assignment
+ Filament page: "Permission Preview" (select user → see all effective permissions)
+ Authorization: super-admin only
+ Pest: role creation doesn't break Shield-generated permissions
+ Pest: permission preview matches $user->getAllPermissions()
+
+EXIT CRITERIA:
+
+✅ Admin creates custom role visually
+✅ Permission preview accurate
+✅ Shield-generated permissions preserved
+
+BLOCKS: None
+
+Phase 6.8 — Admin Bulk Operations & Exports (1 day, Week 8)
+GOAL: Admin can do bulk actions across resources + export data to CSV/Excel.
+TABLES TOUCHED: None (UI on existing data)
+DELIVERABLE:
+
+Bulk approve/reject vendors
+Bulk publish/unpublish services
+Bulk export bookings/payments/refunds/commissions to CSV/Excel
+Bulk send notifications to selected users
+
+DAYS:
+Day 1 — Bulk Actions + Exports
+
+ Filament bulk actions on every resource where applicable
+ Export jobs (queued) for: BookingsExport, PaymentsExport, RefundsExport, CommissionsExport, VendorsExport, CustomersExport
+ Export delivered via signed URL email or in-app download
+ Pest: bulk approve 10 vendors in one action
+ Pest: export job runs successfully and produces valid file
+
+EXIT CRITERIA:
+
+✅ Bulk actions work on all major resources
+✅ Exports queue correctly and deliver via email
+✅ CSV/Excel valid and openable
+
 
 ## PHASE 7.0 — Hardening: Performance + Security (2 days, Week 8)
 

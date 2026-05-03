@@ -1,0 +1,437 @@
+openapi: 3.0.3
+info:
+  title: InstaParty Reviews API (Phase 5.1)
+  version: 0.1.0
+  description: |
+    Customer-facing review submission, customer self-management, and public read endpoints.
+    Admin moderation lives in Filament (no public REST in 5.1).
+
+servers:
+  - url: https://api.instaparty.test/api/v1
+    description: Local dev
+  - url: https://staging-api.instaparty.com/api/v1
+    description: Staging
+
+tags:
+  - name: Reviews — Customer
+  - name: Reviews — Public
+
+paths:
+  /customer/booking-items/{bookingItemPublicId}/review:
+    post:
+      tags: [Reviews — Customer]
+      summary: Submit a service review for a completed booking item
+      operationId: submitServiceReview
+      security: [{ sanctum: [] }]
+      parameters:
+        - $ref: '#/components/parameters/AcceptLanguage'
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - name: bookingItemPublicId
+          in: path
+          required: true
+          schema: { $ref: '#/components/schemas/Ulid' }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/SubmitReviewRequest' }
+      responses:
+        '201':
+          description: Review created with status pending
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceReviewEnvelope'
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403':
+          description: Not the booking owner
+          content: { application/json: { schema: { $ref: '#/components/schemas/ErrorEnvelope' } } }
+        '409':
+          description: Review already exists for this booking item
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ErrorEnvelope'
+                  - properties:
+                      errors:
+                        type: array
+                        items:
+                          properties:
+                            code: { enum: [review_already_exists] }
+                            existing_review_public_id: { $ref: '#/components/schemas/Ulid' }
+        '422':
+          description: Validation failed or booking item not completed
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ErrorEnvelope'
+                  - properties:
+                      errors:
+                        type: array
+                        items:
+                          properties:
+                            code:
+                              enum:
+                                - rating_out_of_range
+                                - body_too_long
+                                - booking_item_not_completed
+
+  /customer/booking-vendors/{bookingVendorPublicId}/review:
+    post:
+      tags: [Reviews — Customer]
+      summary: Submit a vendor review when all booking items are completed
+      operationId: submitVendorReview
+      security: [{ sanctum: [] }]
+      parameters:
+        - $ref: '#/components/parameters/AcceptLanguage'
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - name: bookingVendorPublicId
+          in: path
+          required: true
+          schema: { $ref: '#/components/schemas/Ulid' }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/SubmitReviewRequest' }
+      responses:
+        '201':
+          description: Review created
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/VendorReviewEnvelope' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403':
+          description: Not the booking owner
+          content: { application/json: { schema: { $ref: '#/components/schemas/ErrorEnvelope' } } }
+        '409':
+          description: Review already exists for this booking vendor
+          content: { application/json: { schema: { $ref: '#/components/schemas/ErrorEnvelope' } } }
+        '422':
+          description: Validation failed or not all items completed
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ErrorEnvelope'
+                  - properties:
+                      errors:
+                        type: array
+                        items:
+                          properties:
+                            code:
+                              enum:
+                                - rating_out_of_range
+                                - body_too_long
+                                - booking_vendor_items_not_all_completed
+
+  /customer/reviews:
+    get:
+      tags: [Reviews — Customer]
+      summary: List my reviews (any moderation status)
+      operationId: listMyReviews
+      security: [{ sanctum: [] }]
+      parameters:
+        - $ref: '#/components/parameters/AcceptLanguage'
+        - name: cursor
+          in: query
+          schema: { type: string }
+        - name: review_type
+          in: query
+          schema: { type: string, enum: [service, vendor, all], default: all }
+      responses:
+        '200':
+          description: Cursor-paginated list of the customer's own reviews
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/MyReviewsListEnvelope' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+
+  /customer/reviews/{reviewPublicId}:
+    delete:
+      tags: [Reviews — Customer]
+      summary: Soft-delete one of my reviews
+      operationId: deleteOwnReview
+      security: [{ sanctum: [] }]
+      parameters:
+        - $ref: '#/components/parameters/AcceptLanguage'
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - name: reviewPublicId
+          in: path
+          required: true
+          schema: { $ref: '#/components/schemas/Ulid' }
+      responses:
+        '204': { description: Review soft-deleted (idempotent) }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403':
+          description: Review does not belong to authenticated user
+          content: { application/json: { schema: { $ref: '#/components/schemas/ErrorEnvelope' } } }
+        '404': { description: Review not found }
+
+  /public/services/{servicePublicId}/reviews:
+    get:
+      tags: [Reviews — Public]
+      summary: List approved service reviews (cursor paginated, public)
+      operationId: listPublicServiceReviews
+      parameters:
+        - $ref: '#/components/parameters/AcceptLanguage'
+        - name: servicePublicId
+          in: path
+          required: true
+          schema: { $ref: '#/components/schemas/Ulid' }
+        - name: cursor
+          in: query
+          schema: { type: string }
+      responses:
+        '200':
+          description: Cursor-paginated approved reviews
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/PublicServiceReviewsListEnvelope' }
+        '404': { description: Service not found or not published }
+
+  /public/vendors/{vendorPublicId}/reviews:
+    get:
+      tags: [Reviews — Public]
+      summary: List approved vendor reviews (cursor paginated, public)
+      operationId: listPublicVendorReviews
+      parameters:
+        - $ref: '#/components/parameters/AcceptLanguage'
+        - name: vendorPublicId
+          in: path
+          required: true
+          schema: { $ref: '#/components/schemas/Ulid' }
+        - name: cursor
+          in: query
+          schema: { type: string }
+      responses:
+        '200':
+          description: Cursor-paginated approved vendor reviews
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/PublicVendorReviewsListEnvelope' }
+        '404': { description: Vendor not found or not approved }
+
+  /public/services/{servicePublicId}/rating-summary:
+    get:
+      tags: [Reviews — Public]
+      summary: Aggregate rating for a service
+      operationId: getServiceRatingSummary
+      parameters:
+        - name: servicePublicId
+          in: path
+          required: true
+          schema: { $ref: '#/components/schemas/Ulid' }
+      responses:
+        '200':
+          description: Aggregate rating
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/RatingSummaryEnvelope' }
+        '404': { description: Service not found }
+
+  /public/vendors/{vendorPublicId}/rating-summary:
+    get:
+      tags: [Reviews — Public]
+      summary: Aggregate rating for a vendor
+      operationId: getVendorRatingSummary
+      parameters:
+        - name: vendorPublicId
+          in: path
+          required: true
+          schema: { $ref: '#/components/schemas/Ulid' }
+      responses:
+        '200':
+          description: Aggregate rating
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/RatingSummaryEnvelope' }
+        '404': { description: Vendor not found }
+
+components:
+  securitySchemes:
+    sanctum:
+      type: http
+      scheme: bearer
+      bearerFormat: token
+
+  parameters:
+    AcceptLanguage:
+      name: Accept-Language
+      in: header
+      required: false
+      schema:
+        type: string
+        enum: [ar, en]
+        default: ar
+    IdempotencyKey:
+      name: Idempotency-Key
+      in: header
+      required: false
+      description: Optional. When present, identical key + body within 24h replays the cached response.
+      schema:
+        type: string
+        maxLength: 120
+
+  schemas:
+    Ulid:
+      type: string
+      pattern: '^[0-9A-HJKMNP-TV-Z]{26}$'
+      example: '01J9XR2K8HZJVNKQR1WBM7P3CD'
+
+    SubmitReviewRequest:
+      type: object
+      required: [rating]
+      properties:
+        rating:
+          type: integer
+          minimum: 1
+          maximum: 5
+          example: 5
+        body:
+          type: string
+          nullable: true
+          maxLength: 2000
+          example: 'خدمة ممتازة، الفنانين كانوا في الموعد بالظبط.'
+
+    ModerationStatus:
+      type: string
+      enum: [pending, approved, rejected, hidden]
+
+    Locale:
+      type: string
+      enum: [ar, en, mixed]
+
+    ServiceReviewOwn:
+      type: object
+      properties:
+        public_id: { $ref: '#/components/schemas/Ulid' }
+        review_type: { type: string, enum: [service] }
+        service_public_id: { $ref: '#/components/schemas/Ulid' }
+        booking_item_public_id: { $ref: '#/components/schemas/Ulid' }
+        rating: { type: integer, minimum: 1, maximum: 5 }
+        body: { type: string, nullable: true }
+        locale: { $ref: '#/components/schemas/Locale' }
+        moderation_status: { $ref: '#/components/schemas/ModerationStatus' }
+        submitted_at: { type: string, format: date-time }
+        moderated_at: { type: string, format: date-time, nullable: true }
+
+    VendorReviewOwn:
+      type: object
+      properties:
+        public_id: { $ref: '#/components/schemas/Ulid' }
+        review_type: { type: string, enum: [vendor] }
+        vendor_public_id: { $ref: '#/components/schemas/Ulid' }
+        booking_vendor_public_id: { $ref: '#/components/schemas/Ulid' }
+        rating: { type: integer, minimum: 1, maximum: 5 }
+        body: { type: string, nullable: true }
+        locale: { $ref: '#/components/schemas/Locale' }
+        moderation_status: { $ref: '#/components/schemas/ModerationStatus' }
+        submitted_at: { type: string, format: date-time }
+        moderated_at: { type: string, format: date-time, nullable: true }
+
+    PublicReview:
+      type: object
+      properties:
+        public_id: { $ref: '#/components/schemas/Ulid' }
+        rating: { type: integer, minimum: 1, maximum: 5 }
+        body: { type: string, nullable: true }
+        locale: { $ref: '#/components/schemas/Locale' }
+        reviewer_first_name:
+          type: string
+          description: First name only or localized "Verified Customer" fallback.
+          example: 'Ahmed'
+        submitted_at: { type: string, format: date-time }
+
+    RatingSummary:
+      type: object
+      properties:
+        rating_avg: { type: number, format: float, example: 4.62 }
+        rating_count: { type: integer, example: 137 }
+
+    EnvelopeMeta:
+      type: object
+      properties:
+        next_cursor: { type: string, nullable: true }
+        prev_cursor: { type: string, nullable: true }
+
+    EnvelopeError:
+      type: object
+      properties:
+        code: { type: string }
+        message: { type: string }
+
+    ErrorEnvelope:
+      type: object
+      properties:
+        data: { type: 'null' }
+        meta: { type: object }
+        errors:
+          type: array
+          items: { $ref: '#/components/schemas/EnvelopeError' }
+
+    ServiceReviewEnvelope:
+      type: object
+      properties:
+        data: { $ref: '#/components/schemas/ServiceReviewOwn' }
+        meta: { type: object }
+        errors:
+          type: array
+          items: { $ref: '#/components/schemas/EnvelopeError' }
+
+    VendorReviewEnvelope:
+      type: object
+      properties:
+        data: { $ref: '#/components/schemas/VendorReviewOwn' }
+        meta: { type: object }
+        errors:
+          type: array
+          items: { $ref: '#/components/schemas/EnvelopeError' }
+
+    MyReviewsListEnvelope:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            oneOf:
+              - $ref: '#/components/schemas/ServiceReviewOwn'
+              - $ref: '#/components/schemas/VendorReviewOwn'
+            discriminator:
+              propertyName: review_type
+        meta: { $ref: '#/components/schemas/EnvelopeMeta' }
+        errors:
+          type: array
+          items: { $ref: '#/components/schemas/EnvelopeError' }
+
+    PublicServiceReviewsListEnvelope:
+      type: object
+      properties:
+        data:
+          type: array
+          items: { $ref: '#/components/schemas/PublicReview' }
+        meta: { $ref: '#/components/schemas/EnvelopeMeta' }
+        errors:
+          type: array
+          items: { $ref: '#/components/schemas/EnvelopeError' }
+
+    PublicVendorReviewsListEnvelope:
+      $ref: '#/components/schemas/PublicServiceReviewsListEnvelope'
+
+    RatingSummaryEnvelope:
+      type: object
+      properties:
+        data: { $ref: '#/components/schemas/RatingSummary' }
+        meta: { type: object }
+        errors:
+          type: array
+          items: { $ref: '#/components/schemas/EnvelopeError' }
+
+  responses:
+    Unauthorized:
+      description: Missing or invalid Sanctum token
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/ErrorEnvelope' }

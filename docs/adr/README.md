@@ -86,6 +86,7 @@ cp docs/adr/templates/0001-generic-decision.md \
 | 0005 | Payments Module | Accepted | [`0005-payments-module.md`](./0005-payments-module.md) |
 | 0009 | Settlement Module | Accepted | [`0009-settlement-module.md`](./0009-settlement-module.md) |
 | 0010 | Communication Module | Accepted | [`0010-communication-module.md`](./0010-communication-module.md) |
+| 0011 | Reviews Module | Accepted | [`0011-reviews-module.md`](./0011-reviews-module.md) |
 
 > **هذا الجدول لازم يتحدث يدوياً مع كل ADR جديد.** Claude Code هيصرّ على تحديثه كجزء من spec-guard hook (لو فعلت ده).
 

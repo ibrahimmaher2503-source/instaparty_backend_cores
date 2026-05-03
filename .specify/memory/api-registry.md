@@ -39,10 +39,10 @@ If a row needs more nuance than the table can carry (multi-step flows, idempoten
 | GET | /api/v1/vendor/withdrawals | Settlement | 4.2 | sanctum-token | vendor | — | ApiResponse{data: WithdrawalResource[], meta(cursor), errors} | ✅ postman |
 | POST | /api/v1/vendor/withdrawals | Settlement | 4.2 | sanctum-token | vendor | RequestWithdrawalRequest | ApiResponse{data: WithdrawalResource, meta, errors} | ✅ postman |
 | GET | /api/v1/vendor/withdrawals/{public_id} | Settlement | 4.2 | sanctum-token | vendor | — | ApiResponse{data: WithdrawalResource, meta, errors} | ✅ postman |
-| GET | /api/v1/customer/notification-preferences | Communication | 5.0 | sanctum-token | customer | — | ApiResponse{data: NotificationPreferenceResource[], meta, errors} | 📝 partial |
-| PUT | /api/v1/customer/notification-preferences/{channel}/{event_category} | Communication | 5.0 | sanctum-token | customer | UpdateNotificationPreferenceRequest | ApiResponse{data: NotificationPreferenceResource, meta, errors} | 📝 partial |
-| GET | /api/v1/vendor/notification-preferences | Communication | 5.0 | sanctum-token | vendor | — | ApiResponse{data: NotificationPreferenceResource[], meta, errors} | 📝 partial |
-| PUT | /api/v1/vendor/notification-preferences/{channel}/{event_category} | Communication | 5.0 | sanctum-token | vendor | UpdateNotificationPreferenceRequest | ApiResponse{data: NotificationPreferenceResource, meta, errors} | 📝 partial |
+| GET | /api/v1/customer/notification-preferences | Communication | 5.0 | sanctum-token | customer | — | ApiResponse{data: NotificationPreferenceResource[], meta, errors} | ✅ postman |
+| PUT | /api/v1/customer/notification-preferences/{channel}/{event_category} | Communication | 5.0 | sanctum-token | customer | UpdateNotificationPreferenceRequest | ApiResponse{data: NotificationPreferenceResource, meta, errors} | ✅ postman |
+| GET | /api/v1/vendor/notification-preferences | Communication | 5.0 | sanctum-token | vendor | — | ApiResponse{data: NotificationPreferenceResource[], meta, errors} | ✅ postman |
+| PUT | /api/v1/vendor/notification-preferences/{channel}/{event_category} | Communication | 5.0 | sanctum-token | vendor | UpdateNotificationPreferenceRequest | ApiResponse{data: NotificationPreferenceResource, meta, errors} | ✅ postman |
 
 ---
 

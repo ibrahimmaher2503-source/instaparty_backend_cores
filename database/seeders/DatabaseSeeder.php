@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Database\Seeders;
 
+use App\Modules\Communication\Database\Seeders\NotificationTemplateSeeder;
 use App\Modules\Geography\Database\Seeders\EgyptGeographySeeder;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Artisan;
@@ -27,6 +28,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             AdminUserSeeder::class,
             EgyptGeographySeeder::class,
+            NotificationTemplateSeeder::class,
         ]);
     }
 }
