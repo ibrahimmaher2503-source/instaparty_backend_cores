@@ -63,7 +63,7 @@ class WalletLedgerEntry extends Model
     /** @return MorphTo<Model, $this> */
     public function related(): MorphTo
     {
-        return $this->morphTo('related');
+        return $this->morphTo('related', 'related_entity_type', 'related_entity_id');
     }
 
     protected static function newFactory(): WalletLedgerEntryFactory
