@@ -4,11 +4,17 @@ declare(strict_types=1);
 
 namespace App\Modules\Booking\Filament\Resources;
 
+use App\Modules\Booking\Application\Actions\ForceCancelBookingAction;
+use App\Modules\Booking\Application\DTOs\AdminInterventionDTO;
+use App\Modules\Booking\Domain\Enums\InterventionType;
 use App\Modules\Booking\Domain\Enums\LifecycleStatus;
 use App\Modules\Booking\Domain\Models\Booking;
 use App\Modules\Booking\Filament\Resources\BookingsMonitorResource\Pages\ListBookingsMonitor;
+use Filament\Forms\Components\Textarea;
+use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Actions\Action;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -17,15 +23,33 @@ class BookingsMonitorResource extends Resource
 {
     protected static ?string $model = Booking::class;
 
-    protected static ?string $navigationGroup = 'Bookings';
+    protected static ?string $navigationGroup = 'Booking';
 
-    protected static ?string $navigationLabel = 'Negotiation Monitor';
+    protected static ?string $navigationIcon = 'heroicon-o-chat-bubble-left-right';
 
-    protected static ?string $pluralModelLabel = 'Negotiation Monitor';
+    protected static ?int $navigationSort = 20;
 
     protected static ?string $slug = 'bookings-monitor';
 
-    protected static ?int $navigationSort = 1;
+    public static function getNavigationLabel(): string
+    {
+        return __('booking.nav.negotiation_monitor');
+    }
+
+    public static function getModelLabel(): string
+    {
+        return __('booking.models.negotiation_monitor.singular');
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('booking.models.negotiation_monitor.plural');
+    }
+
+    public static function canCreate(): bool
+    {
+        return false;
+    }
 
     public static function getEloquentQuery(): Builder
     {
@@ -43,10 +67,10 @@ class BookingsMonitorResource extends Resource
                 Tables\Columns\TextColumn::make('reference_no')
                     ->searchable()
                     ->sortable()
-                    ->label('Reference'),
+                    ->label(__('booking.columns.reference_no')),
 
-                Tables\Columns\TextColumn::make('customer.name')
-                    ->label('Customer')
+                Tables\Columns\TextColumn::make('customer_id')
+                    ->label(__('booking.columns.customer_id'))
                     ->searchable(),
 
                 Tables\Columns\TextColumn::make('lifecycle_status')
@@ -56,21 +80,21 @@ class BookingsMonitorResource extends Resource
                         LifecycleStatus::CustomerReview => 'info',
                         default => 'gray',
                     })
-                    ->formatStateUsing(fn (LifecycleStatus $state) => $state->value)
-                    ->label('Status'),
+                    ->formatStateUsing(fn (LifecycleStatus $state): string => __('booking.lifecycle_status.'.$state->value))
+                    ->label(__('booking.columns.lifecycle_status')),
 
                 Tables\Columns\TextColumn::make('total_minor')
                     ->money('EGP', divideBy: 100)
                     ->sortable()
-                    ->label('Total'),
+                    ->label(__('booking.columns.total')),
 
                 Tables\Columns\TextColumn::make('submitted_at')
                     ->dateTime()
                     ->sortable()
-                    ->label('Submitted'),
+                    ->label(__('booking.columns.submitted_at')),
 
                 Tables\Columns\TextColumn::make('vendors_min_deadline')
-                    ->label('Nearest Deadline')
+                    ->label(__('booking.columns.nearest_deadline'))
                     ->dateTime()
                     ->sortable()
                     ->getStateUsing(fn (Booking $record): ?string => $record->vendors()
@@ -81,10 +105,46 @@ class BookingsMonitorResource extends Resource
             ->filters([
                 SelectFilter::make('lifecycle_status')
                     ->options([
-                        LifecycleStatus::VendorReview->value => 'Vendor Review',
-                        LifecycleStatus::CustomerReview->value => 'Customer Review',
+                        LifecycleStatus::VendorReview->value => __('booking.lifecycle_status.vendor_review'),
+                        LifecycleStatus::CustomerReview->value => __('booking.lifecycle_status.customer_review'),
                     ])
-                    ->label('Status'),
+                    ->label(__('booking.columns.lifecycle_status')),
+            ])
+            ->actions([
+                Action::make('forceCancel')
+                    ->label(__('booking.force_cancel'))
+                    ->icon('heroicon-o-x-circle')
+                    ->color('danger')
+                    ->requiresConfirmation()
+                    ->modalHeading(__('booking.force_cancel_confirm_heading'))
+                    ->modalDescription(__('booking.force_cancel_confirm_description'))
+                    ->form([
+                        Textarea::make('reason')
+                            ->label(__('booking.force_cancel_reason'))
+                            ->required()
+                            ->minLength(10)
+                            ->maxLength(1000),
+                    ])
+                    ->visible(fn (Booking $record): bool =>
+                        auth()->user()?->can('force_cancel_booking') === true
+                        && $record->lifecycle_status !== LifecycleStatus::Completed
+                    )
+                    ->action(function (Booking $record, array $data): void {
+                        app(ForceCancelBookingAction::class)->execute(
+                            $record,
+                            new AdminInterventionDTO(
+                                bookingId: $record->id,
+                                adminId: (int) auth()->id(),
+                                interventionType: InterventionType::ForceCancel,
+                                reason: $data['reason'],
+                            ),
+                        );
+
+                        Notification::make()
+                            ->title(__('booking.force_cancelled_successfully'))
+                            ->success()
+                            ->send();
+                    }),
             ])
             ->defaultSort('submitted_at', 'desc')
             ->paginated([25, 50, 100]);

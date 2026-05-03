@@ -2,10 +2,11 @@
 
 declare(strict_types=1);
 
+use App\Modules\Booking\Http\Controllers\BookingInterventionController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth:sanctum', 'role:admin'])
     ->prefix('api/v1/admin')
     ->group(function (): void {
-        // Admin booking routes
+        Route::post('bookings/{bookingPublicId}/force-cancel', [BookingInterventionController::class, 'forceCancel']);
     });

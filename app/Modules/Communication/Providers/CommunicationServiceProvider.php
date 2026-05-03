@@ -8,6 +8,7 @@ use App\Modules\Booking\Domain\Contracts\BookingHistoryReader;
 use App\Modules\Booking\Infrastructure\Repositories\EloquentBookingHistoryReader;
 use App\Modules\Communication\Application\Actions\DispatchNotificationAction;
 use App\Modules\Communication\Application\Listeners\OnBookingConfirmed;
+use App\Modules\Communication\Application\Listeners\OnBookingForceCancelledNotifyListener;
 use App\Modules\Communication\Application\Listeners\OnBookingModified;
 use App\Modules\Communication\Application\Listeners\OnBookingSubmitted;
 use App\Modules\Communication\Application\Listeners\OnPaymentCaptured;
@@ -66,6 +67,7 @@ class CommunicationServiceProvider extends ServiceProvider
         Event::listen('App\Modules\Booking\Domain\Events\CustomerModificationDecided', OnBookingModified::class);
         Event::listen('App\Modules\Booking\Domain\Events\BookingConfirmed', OnBookingConfirmed::class);
         Event::listen('App\Modules\Payments\Domain\Events\PaymentCaptured', OnPaymentCaptured::class);
+        Event::listen('App\Modules\Booking\Domain\Events\BookingForceCancelled', OnBookingForceCancelledNotifyListener::class);
         // OnRentalDeliveryScheduled, OnSalePreparationStarted, OnDigitalDelivered, OnDigitalExpiringSoon
         // are wired in a later phase once those lifecycle events exist in the Booking module.
     }
