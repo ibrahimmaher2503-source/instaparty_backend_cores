@@ -1,0 +1,379 @@
+openapi: 3.1.0
+info:
+  title: InstaParty — Payments API (Phase 4.0 + 4.1)
+  version: 0.1.0
+  description: |
+    Payment initiation, Paymob webhook capture, and admin refund endpoints.
+    All responses follow the standard `{ data, meta, errors }` envelope.
+    All path params are `public_id` ULIDs (CHAR(26)), never internal `id`.
+    Money is integer minor units paired with a 3-letter currency code.
+    Translatable fields are returned in `Accept-Language` (en | ar).
+
+servers:
+  - url: https://api.instaparty.example/api/v1
+    description: Production
+  - url: http://localhost:8000/api/v1
+    description: Local dev
+
+security:
+  - sanctumCookie: []
+  - sanctumToken: []
+
+tags:
+  - name: Payments — Customer
+  - name: Payments — Webhook
+  - name: Refunds — Admin
+
+paths:
+  /customer/bookings/{bookingUlid}/payments:
+    post:
+      tags: [Payments — Customer]
+      summary: Initiate payment for a confirmed booking
+      operationId: initiatePayment
+      parameters:
+        - $ref: '#/components/parameters/BookingUlid'
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/AcceptLanguage'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InitiatePaymentRequest'
+      responses:
+        '200':
+          description: Payment intent created — replay of an idempotent request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InitiatePaymentResponse'
+        '201':
+          description: Payment intent created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InitiatePaymentResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          description: Idempotency key reused with a different request body, or another pending payment exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+
+  /customer/payments/{paymentUlid}:
+    get:
+      tags: [Payments — Customer]
+      summary: Show a payment (owner only)
+      operationId: showPayment
+      parameters:
+        - $ref: '#/components/parameters/PaymentUlid'
+        - $ref: '#/components/parameters/AcceptLanguage'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data: { $ref: '#/components/schemas/Payment' }
+                  meta: { type: object }
+                  errors: { type: array, items: {} }
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /webhooks/paymob:
+    post:
+      tags: [Payments — Webhook]
+      summary: Paymob webhook receiver (HMAC-SHA512 verified)
+      description: |
+        Paymob's webhook endpoint. No Sanctum auth.
+        Authentication is via the `HMAC` header which carries an SHA-512 HMAC
+        of a documented field concatenation using the shared `PAYMOB_HMAC_SECRET`.
+        Constant-time comparison via `hash_equals`.
+      operationId: paymobWebhook
+      security: []
+      parameters:
+        - in: header
+          name: HMAC
+          required: true
+          schema:
+            type: string
+            pattern: '^[a-f0-9]{128}$'
+            description: Lowercase hex SHA-512 (128 chars)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymobWebhookPayload'
+      responses:
+        '200':
+          description: Acknowledged (always returned for valid signatures, even on unknown gateway_ref)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    enum: [true]
+        '401':
+          description: Invalid HMAC signature
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    enum: [invalid_signature]
+
+  /admin/bookings/{bookingUlid}/refunds:
+    post:
+      tags: [Refunds — Admin]
+      summary: Initiate a full refund (admin only)
+      operationId: initiateRefund
+      parameters:
+        - $ref: '#/components/parameters/BookingUlid'
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/AcceptLanguage'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InitiateRefundRequest'
+      responses:
+        '201':
+          description: Refund created and processed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data: { $ref: '#/components/schemas/Refund' }
+                  meta: { type: object }
+                  errors: { type: array, items: {} }
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          description: Refund policy violation (per-product-type) or validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /admin/refunds/{refundUlid}:
+    get:
+      tags: [Refunds — Admin]
+      summary: Show a refund (admin only)
+      operationId: showRefund
+      parameters:
+        - $ref: '#/components/parameters/RefundUlid'
+        - $ref: '#/components/parameters/AcceptLanguage'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data: { $ref: '#/components/schemas/Refund' }
+                  meta: { type: object }
+                  errors: { type: array, items: {} }
+
+components:
+  securitySchemes:
+    sanctumCookie:
+      type: apiKey
+      in: cookie
+      name: instaparty_session
+    sanctumToken:
+      type: http
+      scheme: bearer
+
+  parameters:
+    BookingUlid:
+      name: bookingUlid
+      in: path
+      required: true
+      schema:
+        type: string
+        pattern: '^[0-9A-HJKMNP-TV-Z]{26}$'
+    PaymentUlid:
+      name: paymentUlid
+      in: path
+      required: true
+      schema:
+        type: string
+        pattern: '^[0-9A-HJKMNP-TV-Z]{26}$'
+    RefundUlid:
+      name: refundUlid
+      in: path
+      required: true
+      schema:
+        type: string
+        pattern: '^[0-9A-HJKMNP-TV-Z]{26}$'
+    IdempotencyKey:
+      name: Idempotency-Key
+      in: header
+      required: true
+      schema:
+        type: string
+        maxLength: 190
+    AcceptLanguage:
+      name: Accept-Language
+      in: header
+      required: false
+      schema:
+        type: string
+        enum: [en, ar]
+        default: ar
+
+  responses:
+    Unauthorized:
+      description: Authentication required
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Forbidden:
+      description: Caller is not allowed to perform this action
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Resource not found or not visible to caller
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    UnprocessableEntity:
+      description: Validation failed
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+  schemas:
+    InitiatePaymentRequest:
+      type: object
+      required: [method]
+      properties:
+        method:
+          type: string
+          enum: [card]
+          description: Phase 1 supports `card` only.
+
+    InitiatePaymentResponse:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            payment: { $ref: '#/components/schemas/Payment' }
+            redirect_url:
+              type: string
+              format: uri
+              description: Paymob hosted-checkout URL — redirect the customer here.
+        meta: { type: object }
+        errors: { type: array, items: {} }
+
+    InitiateRefundRequest:
+      type: object
+      required: [reason_code, reason_notes]
+      properties:
+        reason_code:
+          type: string
+          enum: [customer_request, vendor_cancellation, service_unavailable, duplicate_charge, admin_discretion]
+        reason_notes:
+          type: object
+          required: [en, ar]
+          properties:
+            en: { type: string, maxLength: 500 }
+            ar: { type: string, maxLength: 500 }
+
+    Payment:
+      type: object
+      properties:
+        public_id: { type: string, pattern: '^[0-9A-HJKMNP-TV-Z]{26}$' }
+        booking_public_id: { type: string }
+        gateway: { type: string, example: paymob }
+        amount_minor: { type: integer, format: int64, minimum: 0, example: 125000 }
+        amount_currency: { type: string, minLength: 3, maxLength: 3, example: EGP }
+        method: { type: string, enum: [card, wallet, installment, cash_on_delivery, transfer] }
+        status: { type: string, enum: [pending, authorized, captured, failed, refunded, partially_refunded, voided] }
+        captured_at: { type: string, format: date-time, nullable: true }
+        failure_code: { type: string, nullable: true }
+        failure_message:
+          type: string
+          nullable: true
+          description: Translated to Accept-Language locale at the API Resource layer.
+        created_at: { type: string, format: date-time }
+
+    Refund:
+      type: object
+      properties:
+        public_id: { type: string, pattern: '^[0-9A-HJKMNP-TV-Z]{26}$' }
+        payment_public_id: { type: string }
+        booking_public_id: { type: string }
+        amount_minor: { type: integer, format: int64 }
+        amount_currency: { type: string, minLength: 3, maxLength: 3 }
+        reason_code:
+          type: string
+          enum: [customer_request, vendor_cancellation, service_unavailable, duplicate_charge, admin_discretion]
+        reason_notes:
+          type: string
+          nullable: true
+          description: Translated to Accept-Language locale at the API Resource layer.
+        status: { type: string, enum: [pending, processing, completed, failed] }
+        processed_at: { type: string, format: date-time, nullable: true }
+        created_at: { type: string, format: date-time }
+
+    PaymobWebhookPayload:
+      type: object
+      description: Canonical Paymob webhook shape — see contracts/paymob-webhook-schema.json for the full schema.
+      properties:
+        type: { type: string, example: TRANSACTION }
+        obj:
+          type: object
+          required: [id, success, amount_cents, currency]
+          properties:
+            id: { type: integer }
+            success: { type: boolean }
+            amount_cents: { type: integer }
+            currency: { type: string }
+            order:
+              type: object
+              properties:
+                id: { type: integer }
+                merchant_order_id: { type: string }
+
+    Error:
+      type: object
+      properties:
+        data: { type: 'null' }
+        meta: { type: object }
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              code: { type: string, example: refund_policy_violation }
+              message: { type: string, description: Human-readable, locale-converted }
+              field: { type: string, nullable: true }

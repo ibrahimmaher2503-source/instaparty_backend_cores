@@ -1,0 +1,123 @@
+{
+  "info": {
+    "name": "InstaParty — Communication (Phase 5.0)",
+    "description": "Notification Preferences API endpoints for customer and vendor roles.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "base_url", "value": "http://localhost:8000" },
+    { "key": "customer_token", "value": "" },
+    { "key": "vendor_token", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Customer",
+      "item": [
+        {
+          "name": "GET /api/v1/customer/notification-preferences",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{customer_token}}" },
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Accept-Language", "value": "en" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/customer/notification-preferences",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "customer", "notification-preferences"]
+            },
+            "description": "List all notification preferences for the authenticated customer. Missing preferences default to is_enabled=true."
+          },
+          "response": [
+            {
+              "name": "200 — Success (EN)",
+              "status": "OK",
+              "code": 200,
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": "{\"data\":[{\"channel\":\"push\",\"event_category\":\"booking\",\"is_enabled\":true,\"quiet_hours_start\":null,\"quiet_hours_end\":null,\"timezone\":null}],\"meta\":{},\"errors\":[]}"
+            }
+          ]
+        },
+        {
+          "name": "PUT /api/v1/customer/notification-preferences/{channel}/{event_category}",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{customer_token}}" },
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"is_enabled\":false,\"quiet_hours_start\":\"22:00\",\"quiet_hours_end\":\"08:00\",\"timezone\":\"Africa/Cairo\"}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/customer/notification-preferences/push/marketing",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "customer", "notification-preferences", "push", "marketing"]
+            },
+            "description": "Update a single notification preference for channel+event_category. System category cannot be disabled (returns 422)."
+          },
+          "response": [
+            {
+              "name": "200 — Updated",
+              "status": "OK",
+              "code": 200,
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": "{\"data\":{\"channel\":\"push\",\"event_category\":\"marketing\",\"is_enabled\":false,\"quiet_hours_start\":\"22:00\",\"quiet_hours_end\":\"08:00\",\"timezone\":\"Africa/Cairo\"},\"meta\":{},\"errors\":[]}"
+            },
+            {
+              "name": "422 — System category cannot be disabled",
+              "status": "Unprocessable Entity",
+              "code": 422,
+              "body": "{\"data\":null,\"meta\":{},\"errors\":[{\"field\":\"is_enabled\",\"code\":\"system_notifications_cannot_be_disabled\",\"message\":\"System notifications cannot be disabled.\"}]}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Vendor",
+      "item": [
+        {
+          "name": "GET /api/v1/vendor/notification-preferences",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{vendor_token}}" },
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Accept-Language", "value": "ar" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/vendor/notification-preferences",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "vendor", "notification-preferences"]
+            },
+            "description": "List all notification preferences for the authenticated vendor."
+          }
+        },
+        {
+          "name": "PUT /api/v1/vendor/notification-preferences/{channel}/{event_category}",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{vendor_token}}" },
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"is_enabled\":false}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/vendor/notification-preferences/sms/marketing",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "vendor", "notification-preferences", "sms", "marketing"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+meta {
+  name: 05 Show withdrawal
+  type: http
+  seq: 5
+}
+
+get {
+  url: {{baseUrl}}/api/v1/vendor/withdrawals/{{withdrawalPublicId}}
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{vendorToken}}
+}
+
+headers {
+  Accept-Language: en
+}
+
+docs {
+  Returns details of a specific withdrawal request.
+  - Phase 4.2 Settlement module.
+  - Requires settlement.view_withdrawals.own permission.
+  - Vendor can only view their own withdrawals (403 otherwise).
+  - Path parameter is the withdrawal public_id (ULID).
+}
+
+tests {
+  test("status is 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+}

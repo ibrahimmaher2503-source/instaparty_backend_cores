@@ -1,0 +1,106 @@
+{
+  "info": {
+    "_postman_id": "1c8f9e23-4b7a-4d1e-8a3c-settlement4200",
+    "name": "InstaParty Settlement (Phase 4.2)",
+    "description": "Vendor wallet, ledger, and withdrawal endpoints. All money in piastres (integer minor units, EGP). Idempotency-Key required on POST /vendor/withdrawals.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Get vendor wallet",
+      "request": {
+        "method": "GET",
+        "header": [
+          {"key": "Authorization", "value": "Bearer {{vendorToken}}"},
+          {"key": "Accept-Language", "value": "en"}
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/vendor/wallet",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "v1", "vendor", "wallet"]
+        },
+        "description": "Returns the authenticated vendor's wallet balance and pending withdrawal amount. Requires settlement.view_wallet.own permission."
+      },
+      "response": []
+    },
+    {
+      "name": "Get wallet ledger",
+      "request": {
+        "method": "GET",
+        "header": [
+          {"key": "Authorization", "value": "Bearer {{vendorToken}}"},
+          {"key": "Accept-Language", "value": "en"}
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/vendor/wallet/ledger",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "v1", "vendor", "wallet", "ledger"]
+        },
+        "description": "Returns cursor-paginated ledger entries for the authenticated vendor's wallet. Money values are integer minor units. Use meta.next_cursor for subsequent pages."
+      },
+      "response": []
+    },
+    {
+      "name": "List withdrawals",
+      "request": {
+        "method": "GET",
+        "header": [
+          {"key": "Authorization", "value": "Bearer {{vendorToken}}"},
+          {"key": "Accept-Language", "value": "en"}
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/vendor/withdrawals",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "v1", "vendor", "withdrawals"]
+        },
+        "description": "Returns cursor-paginated list of the authenticated vendor's withdrawal requests. Requires settlement.view_withdrawals.own permission."
+      },
+      "response": []
+    },
+    {
+      "name": "Request withdrawal",
+      "request": {
+        "method": "POST",
+        "header": [
+          {"key": "Authorization", "value": "Bearer {{vendorToken}}"},
+          {"key": "Accept-Language", "value": "en"},
+          {"key": "Idempotency-Key", "value": "33333333-3333-3333-3333-333333333333"},
+          {"key": "Content-Type", "value": "application/json"}
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"amount_minor\": 10000,\n  \"currency\": \"EGP\",\n  \"bank_account\": {\n    \"bank_name\": \"CIB\",\n    \"account_holder_name\": \"Ahmed Mohamed\",\n    \"iban\": \"EG380019000500000000263180002\"\n  }\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/vendor/withdrawals",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "v1", "vendor", "withdrawals"]
+        },
+        "description": "Vendor requests a withdrawal from their wallet. Idempotency-Key required (24h replay window). Only one pending withdrawal allowed at a time. Fails 422 on insufficient balance or existing pending withdrawal."
+      },
+      "response": []
+    },
+    {
+      "name": "Show withdrawal",
+      "request": {
+        "method": "GET",
+        "header": [
+          {"key": "Authorization", "value": "Bearer {{vendorToken}}"},
+          {"key": "Accept-Language", "value": "en"}
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/vendor/withdrawals/{{withdrawalPublicId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "v1", "vendor", "withdrawals", "{{withdrawalPublicId}}"]
+        },
+        "description": "Returns details of a specific withdrawal request. Vendor can only view their own withdrawals (403 otherwise)."
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {"key": "baseUrl", "value": "http://localhost:8000"},
+    {"key": "vendorToken", "value": ""},
+    {"key": "withdrawalPublicId", "value": ""}
+  ]
+}

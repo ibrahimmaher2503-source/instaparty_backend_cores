@@ -1,0 +1,32 @@
+meta {
+  name: 03 List withdrawals
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/api/v1/vendor/withdrawals
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{vendorToken}}
+}
+
+headers {
+  Accept-Language: en
+}
+
+docs {
+  Returns paginated list of the authenticated vendor's withdrawal requests.
+  - Phase 4.2 Settlement module.
+  - Requires settlement.view_withdrawals.own permission.
+  - Cursor-paginated; use meta.next_cursor for subsequent pages.
+}
+
+tests {
+  test("status is 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+}

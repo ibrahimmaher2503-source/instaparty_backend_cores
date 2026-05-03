@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace App\Modules\Identity\Filament\Resources\VendorProfileResource\Pages;
 
+use App\Modules\Catalog\Domain\Enums\ProductType;
 use App\Modules\Identity\Application\Actions\ApproveVendorForTypeAction;
 use App\Modules\Identity\Application\Actions\RevokeVendorTypeAction;
 use App\Modules\Identity\Application\Actions\SuspendVendorAction;
 use App\Modules\Identity\Domain\Enums\ApprovalStatus;
 use App\Modules\Identity\Domain\Models\VendorProfile;
 use App\Modules\Identity\Filament\Resources\VendorProfileResource;
-use App\Modules\Shared\Domain\Enums\ProductType;
 use Filament\Actions\Action;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;

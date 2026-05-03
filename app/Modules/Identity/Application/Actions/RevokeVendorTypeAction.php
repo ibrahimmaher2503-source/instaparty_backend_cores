@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Modules\Identity\Application\Actions;
 
+use App\Modules\Catalog\Domain\Enums\ProductType;
 use App\Modules\Identity\Domain\Events\VendorTypeRevoked;
 use App\Modules\Identity\Domain\Models\User;
 use App\Modules\Identity\Domain\Models\VendorApprovedProductType;
 use App\Modules\Identity\Domain\Models\VendorProfile;
-use App\Modules\Shared\Domain\Enums\ProductType;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 
@@ -52,7 +52,12 @@ class RevokeVendorTypeAction
             $log->withProperties(['product_type' => $productType->value, 'permissions_revoked' => $permissions, 'reason' => $revokeReason])
                 ->log('revoked_vendor_type');
 
-            DB::afterCommit(fn () => event(new VendorTypeRevoked($row)));
+            DB::afterCommit(fn () => event(new VendorTypeRevoked(
+                vendorProfileId: $vendorProfile->id,
+                productType: $productType,
+                revokedBy: $actorId,
+                reason: $revokeReason,
+            )));
 
             return $row;
         });

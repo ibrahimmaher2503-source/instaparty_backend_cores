@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace App\Providers\Filament;
 
+use App\Modules\Catalog\Filament\Pages\ImportRentalServicesPage;
 use BezhanSalleh\FilamentLanguageSwitch\LanguageSwitch;
 use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
-use Filament\Navigation\NavigationGroup;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use Filament\Navigation\NavigationGroup;
 use Filament\Pages;
 use Filament\Panel;
 use Filament\PanelProvider;
@@ -49,6 +50,7 @@ class AdminPanelProvider extends PanelProvider
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->pages([
                 Pages\Dashboard::class,
+                ImportRentalServicesPage::class,
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
@@ -59,6 +61,7 @@ class AdminPanelProvider extends PanelProvider
                 NavigationGroup::make()->label(fn (): string => __('admin.nav.groups.geography')),
                 NavigationGroup::make()->label(fn (): string => __('admin.nav.groups.identity')),
                 NavigationGroup::make()->label(fn (): string => __('admin.nav.groups.vendor_onboarding')),
+                NavigationGroup::make('Services')->icon('heroicon-o-cube'),
                 NavigationGroup::make()->label(fn (): string => __('admin.nav.groups.catalog')),
                 NavigationGroup::make()->label(fn (): string => __('admin.nav.groups.booking')),
                 NavigationGroup::make()->label(fn (): string => __('admin.nav.groups.payments')),

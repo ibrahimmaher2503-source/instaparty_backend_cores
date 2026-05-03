@@ -1,0 +1,33 @@
+meta {
+  name: 02 Get wallet ledger
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/api/v1/vendor/wallet/ledger
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{vendorToken}}
+}
+
+headers {
+  Accept-Language: en
+}
+
+docs {
+  Returns paginated ledger entries for the authenticated vendor's wallet.
+  - Phase 4.2 Settlement module.
+  - Requires settlement.view_wallet.own permission.
+  - Cursor-paginated; use meta.next_cursor for subsequent pages.
+  - Money values are integer minor units (piastres).
+}
+
+tests {
+  test("status is 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+}
