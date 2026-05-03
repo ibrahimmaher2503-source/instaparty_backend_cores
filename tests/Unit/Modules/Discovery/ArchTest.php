@@ -10,6 +10,6 @@ test('Discovery module does not import Booking or Payments models')
         'App\Modules\Settlement\Domain\Models',
     ]);
 
-test('SearchLog has no updated_at')
-    ->expect('App\Modules\Discovery\Domain\Models\SearchLog')
-    ->toHaveProperty('UPDATED_AT');
+test('SearchLog has no updated_at', function () {
+    expect(\App\Modules\Discovery\Domain\Models\SearchLog::UPDATED_AT)->toBeNull();
+});
