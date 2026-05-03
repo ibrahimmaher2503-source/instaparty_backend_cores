@@ -1,6 +1,7 @@
 <?php
 
 use App\Modules\Catalog\Providers\CatalogServiceProvider;
+use App\Modules\Discovery\Providers\DiscoveryServiceProvider;
 use App\Modules\Geography\Providers\GeographyServiceProvider;
 use App\Modules\Identity\Providers\IdentityServiceProvider;
 use App\Modules\Shared\Providers\SharedServiceProvider;
@@ -13,5 +14,6 @@ return [
     GeographyServiceProvider::class,
     IdentityServiceProvider::class,
     CatalogServiceProvider::class,
+    DiscoveryServiceProvider::class,
     AdminPanelProvider::class,
 ];
