@@ -84,6 +84,8 @@ cp docs/adr/templates/0001-generic-decision.md \
 | 0003 | Identity Module (نموذج محلول) | Accepted | [`0003-identity-module.md`](./0003-identity-module.md) |
 | 0004 | Catalog Module | Accepted | [`0004-catalog-module.md`](./0004-catalog-module.md) |
 | 0005 | Payments Module | Accepted | [`0005-payments-module.md`](./0005-payments-module.md) |
+| 0009 | Settlement Module | Accepted | [`0009-settlement-module.md`](./0009-settlement-module.md) |
+| 0010 | Communication Module | Accepted | [`0010-communication-module.md`](./0010-communication-module.md) |
 
 > **هذا الجدول لازم يتحدث يدوياً مع كل ADR جديد.** Claude Code هيصرّ على تحديثه كجزء من spec-guard hook (لو فعلت ده).
 
