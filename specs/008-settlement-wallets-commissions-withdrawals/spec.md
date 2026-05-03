@@ -4,7 +4,7 @@
 **Created**: 2026-05-03  
 **Status**: Draft  
 **Phase**: 4.2 (3 days, Week 5–6) per `docs/specs/09_Phasing_Plan.md`  
-**ADR**: [ADR-0009 — Settlement Module](../../docs/adr/0009-settlement-module.md) — *to be drafted on Day 1*  
+**ADR**: [ADR-0009 — Settlement Module](../../docs/adr/0009-settlement-module.md) — *Accepted 2026-05-03*  
 **PRD coverage**: FR-28 (vendor wallet visibility), FR-29 (admin approves withdrawals), FR-30 (commission deduction + financial tracking)  
 **Input**: User description: *"Phase 4.2 — Settlement module: vendor wallets and commissions on captured payments, plus withdrawal flow with admin approval and bank-transfer proof upload. Six tables: wallets, wallet_ledger, commissions, commission_rates, withdrawals, settlement_runs. Listener on PaymentCaptured calculates commission and credits vendor wallet; refund reverses both. Admin Filament: WithdrawalsQueue, WalletLedgerViewer, CommissionRules. PRD covers FR-28, FR-29, FR-30. ADR-0009 to be drafted on Day 1. Cut-list: defer settlement_runs auto-reconciliation, defer auto-approval rules."*
 

@@ -34,7 +34,7 @@
 - [x] Phase ID matches `09_Phasing_Plan.md` *(Phase 4.2)*
 - [x] FR numbers from `01_PRD.md` cited *(FR-28, FR-29, FR-30)*
 - [x] Table names from `11_DB_Schema.md` cited *(wallets, wallet_ledger, commissions, commission_rates, withdrawals, settlement_runs — all 6)*
-- [x] ADR reference present *(ADR-0009 — Settlement Module, to be drafted on Day 1)*
+- [x] ADR reference present *(ADR-0009 — Settlement Module, Accepted 2026-05-03)*
 - [x] User stories per role present *(vendor: US1, US2, US3; admin: US4, US6; cross-cutting: US5)*
 - [x] Acceptance scenarios in Given/When/Then format *(every scenario uses the format)*
 - [x] Constitution Check (16 principles) included with PASS/FAIL reasoning
