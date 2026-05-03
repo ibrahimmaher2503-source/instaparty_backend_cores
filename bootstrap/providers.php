@@ -7,6 +7,8 @@ use App\Modules\Geography\Providers\GeographyServiceProvider;
 use App\Modules\Identity\Providers\IdentityServiceProvider;
 use App\Modules\Payments\Providers\PaymentsServiceProvider;
 use App\Modules\Communication\Providers\CommunicationServiceProvider;
+use App\Modules\Reviews\Providers\ReviewsServiceProvider;
+use App\Modules\Loyalty\Providers\LoyaltyServiceProvider;
 use App\Modules\Settlement\Providers\SettlementServiceProvider;
 use App\Modules\Shared\Providers\SharedServiceProvider;
 use App\Providers\AppServiceProvider;
@@ -23,5 +25,7 @@ return [
     PaymentsServiceProvider::class,
     SettlementServiceProvider::class,
     CommunicationServiceProvider::class,
+    ReviewsServiceProvider::class,
+    LoyaltyServiceProvider::class,
     AdminPanelProvider::class,
 ];

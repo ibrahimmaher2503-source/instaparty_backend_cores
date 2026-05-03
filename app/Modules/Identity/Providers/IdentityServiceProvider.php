@@ -9,6 +9,8 @@ use App\Modules\Identity\Domain\Contracts\OtpGatewayInterface;
 use App\Modules\Identity\Domain\Events\VendorRejected;
 use App\Modules\Identity\Domain\Events\VendorSuspended;
 use App\Modules\Identity\Infrastructure\Gateways\StubOtpGateway;
+use App\Modules\Identity\Infrastructure\Repositories\EloquentVendorRatingWriter;
+use App\Modules\Reviews\Domain\Contracts\VendorRatingWriter;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 
@@ -17,6 +19,7 @@ class IdentityServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->bind(OtpGatewayInterface::class, StubOtpGateway::class);
+        $this->app->singleton(VendorRatingWriter::class, EloquentVendorRatingWriter::class);
     }
 
     public function boot(): void

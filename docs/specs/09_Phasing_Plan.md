@@ -837,7 +837,7 @@ Same risks as v1, but now mitigated by smaller scope per phase:
 **DELIVERABLE:** Vendor sets up loyalty program (1 point per EGP, 100 points = 10 EGP). Customer earns on completion. Customer redeems on next booking.
 
 **DAYS:**
- 
+
 ### Day 1 — Schema + Earning
 - [ ] Migrations: loyalty_programs, loyalty_rules, loyalty_ledger (append-only), loyalty_redemptions
 - [ ] `CalculateLoyaltyPointsAction` (after booking_item completed)
@@ -1177,7 +1177,6 @@ EXIT CRITERIA:
 ✅ Exports queue correctly and deliver via email
 ✅ CSV/Excel valid and openable
 
-
 ## PHASE 7.0 — Hardening: Performance + Security (2 days, Week 8)
 
 **GOAL:** App performant + secure for soft launch.
@@ -1255,6 +1254,496 @@ EXIT CRITERIA:
 ---
 
 ## PHASE 7.2 — Documentation + Retrospective (1 day, Week 8)
+
+
+PHASE 8.0 — Admin Service Moderation & Publish Workflow (2 days)
+
+GOAL: Admin can moderate new services and material edits for all three product types before they become customer-visible.
+
+PRD COVERAGE: FR-19, FR-22, FR-29; Admin Journey step 6–8 (receive new services/material edits, review, approve/publish or reject/request edit).
+
+ADR REQUIRED: ADR-0013-admin-service-moderation.md
+
+DEPENDS ON:
+
+Phase 2.1 / 2.2 / 2.3 service creation flows
+Locked cross-type actions and per-type service resources
+Existing services.status lifecycle and admin permissions like service.moderate / per-type publish permissions.
+
+TABLES TOUCHED:
+services only. No new moderation tables in Phase 1. Use existing status, moderation_notes, moderated_at, moderated_by.
+
+DELIVERABLE:
+Admin sees pending rental/sale/digital services in Filament, reviews them, then approves and publishes or rejects with notes. Material edits on published services send them back to moderation.
+
+DAYS:
+
+Day 1 — Moderation state flow + actions
+ Write ADR-0013-admin-service-moderation.md
+ Reuse locked services.status flow: draft → pending_review → published → rejected → archived
+ Define “material edit” set: price, category, title, short/long description, core media
+ Implement SubmitServiceForReviewAction
+ Implement ModerateServiceAction
+ Implement PublishServiceAction
+ Implement ArchiveServiceAction
+ Material edits on published service trigger status back to pending_review
+ “Request changes” is represented as rejected + bilingual moderation_notes
+Day 2 — Filament queues + tests
+ Add moderation queue views to RentalServiceResource, SaleServiceResource, DigitalServiceResource
+ Add filters: pending_review, rejected, published, archived
+ Add admin bulk actions: approve selected / reject selected / archive selected
+ Pest: approve service
+ Pest: reject service with moderation notes
+ Pest: material edit returns service to pending_review
+ Pest: non-material edit does not bypass moderation rules
+ Pest: all three types covered
+
+CUT-LIST:
+Defer richer moderation history timeline to Phase 1.5; current source of truth remains services fields + audit_logs.
+
+EXIT CRITERIA:
+
+✅ Admin can review pending services for all 3 product types
+✅ Approve/publish works from Filament
+✅ Reject-with-notes works in EN/AR
+✅ Material edits always re-enter moderation
+✅ Pest covers rental, sale, digital
+
+BLOCKS: 8.1, 8.5, 8.9
+
+PHASE 8.1 — Admin Active Ops Dashboard & Queues (1 day)
+
+GOAL: Admin has a single daily operations dashboard for critical states and queue entry points.
+
+PRD COVERAGE: FR-29 and Admin Journey dashboard/start loop: alerts, overdue bookings, pending approvals, services awaiting moderation, general KPIs.
+
+ADR REQUIRED: None. Fits existing Reporting + Filament dashboard pattern.
+
+DEPENDS ON:
+
+Phase 1.1 vendor approval queue
+Phase 8.0 service moderation queue
+Phase 4.0 / 4.2 payment + withdrawals
+Existing reporting/dashboard patterns from 5.3 and 6.0.
+
+TABLES TOUCHED:
+No schema change. Read-only aggregates from vendor_profiles, vendor_approved_product_types, services, booking_vendors, payments, withdrawals, chat_moderation_flags, audit_logs.
+
+DELIVERABLE:
+Filament ops dashboard with widgets for pending vendor approvals, pending service moderation, overdue vendor responses, payment failures, pending withdrawals, and suspicious chat/compliance flags.
+
+DAYS:
+
+Day 1 — Widgets + routing + tests
+ Build AdminOpsDashboard
+ Widget: pending vendor approvals
+ Widget: pending service moderation
+ Widget: overdue vendor responses using booking_vendors.response_deadline
+ Widget: failed/at-risk payments
+ Widget: pending withdrawals
+ Widget: chat/compliance flags
+ Add severity sort and “stale for X hours”
+ Add click-through links into filtered resources
+ Pest: widget counts correct
+ Pest: overdue logic correct
+ Pest: queue links route to correct filters
+
+CUT-LIST:
+Defer personalized admin dashboard layouts to Phase 1.5.
+
+EXIT CRITERIA:
+
+✅ One /admin dashboard shows all core operational queues
+✅ Overdue vendor-response widget respects 24h SLA
+✅ Every widget links to a real queue view
+✅ Counts match underlying data
+
+BLOCKS: 8.8, 8.9
+
+PHASE 8.2 — Restricted Chat, Compliance & Off-Platform Prevention (2 days)
+
+GOAL: Admin can monitor risky conversations, freeze threads, and review off-platform contact violations without editing user chat content.
+
+PRD COVERAGE: NFR auditability + Admin Journey steps 10–15: monitor restricted chat, keep logs, send escalations, prevent off-platform communication.
+
+ADR REQUIRED: ADR-0014-chat-compliance-admin-oversight.md
+
+DEPENDS ON:
+
+Locked chat architecture: actual chat in Firestore, metadata/audit in MySQL
+Phase 5.0 notifications for escalations
+Phase 3.2 / 6.5 intervention flows for stuck bookings.
+
+TABLES TOUCHED:
+chat_threads, chat_message_log, chat_moderation_flags, optionally notification_dispatches for escalations. No chat_messages table.
+
+DELIVERABLE:
+Admin can review flagged messages, freeze/unfreeze a thread, inspect the append-only audit mirror, and escalate a case, while never editing message content.
+
+DAYS:
+
+Day 1 — Rules + moderation actions
+ Write ADR-0014-chat-compliance-admin-oversight.md
+ Confirm Firestore listener writes to chat_message_log
+ Add regex/heuristics for phone numbers, emails, social handles, external links
+ Implement FlagSuspiciousMessageAction
+ Implement FreezeChatThreadAction
+ Implement UnfreezeChatThreadAction
+ Implement EscalateChatCaseAction
+ Use chat_threads.status = open|locked|closed
+ Add bilingual escalation templates if needed
+Day 2 — Filament queue + tests
+ Build ChatModerationQueue
+ Filter by flag type: phone, email, external_link, profanity, other
+ Thread detail page shows audit mirror only
+ Add booking/vendor/customer context side panel
+ Pest: phone pattern flags message
+ Pest: email pattern flags message
+ Pest: locked thread blocks further send flow
+ Pest: admin can inspect audit history
+ Pest: admin cannot edit message content
+ Pest: flagged thread appears in moderation queue
+
+CUT-LIST:
+Defer ML-based abuse detection; keep regex/heuristic rules only in Phase 1.
+
+EXIT CRITERIA:
+
+✅ Suspicious messages are flagged automatically
+✅ Admin can freeze/unfreeze threads
+✅ Audit mirror is visible and append-only
+✅ No admin path exists to edit chat content
+✅ Escalation can trigger notifications
+
+BLOCKS: 8.8, 8.9
+
+PHASE 8.3 — Offer Governance (campaign-backed in Phase 1) (1 day)
+
+GOAL: Admin can govern platform/vendor promotional offers in a Phase 1-safe way using campaigns and settings, without adding an unlocked pricing engine.
+
+PRD COVERAGE: FR-23 to FR-27; Admin Journey “manage discounts & promos,” but constrained by Phase 1 locked schema and existing campaign infrastructure.
+
+ADR REQUIRED: ADR-0015-offer-governance-phase1.md
+
+DEPENDS ON:
+
+Phase 5.3 Marketing Campaigns
+campaigns, campaign_runs, campaign_recipients, notification_templates, notification_preferences, app_settings, feature_flags
+No new promo_codes / discount_rules engine in Phase 1.
+
+TABLES TOUCHED:
+campaigns, campaign_runs, campaign_recipients, notification_templates, notification_preferences, app_settings, feature_flags.
+
+DELIVERABLE:
+Admin can create and govern promotional offers as campaign-based messages and homepage/app exposure, targeted by vendor, category, product type, and locale.
+
+DAYS:
+
+Day 1 — Governance layer + tests
+ Write ADR-0015-offer-governance-phase1.md
+ Add “Offer Governance” admin page over existing campaigns
+ Add campaign presets: platform-wide, vendor-specific, category-specific, type-specific
+ Add optional homepage/banner exposure toggle via feature_flags / app_settings
+ Add locale-aware preview
+ Add approval note / internal offer policy notes
+ Pest: vendor segment selection works
+ Pest: category/type targeting works
+ Pest: locale-specific template resolution works
+ Pest: opt-out respected through notification_preferences
+
+CUT-LIST:
+Full promo codes, basket pricing rules, usage caps, and booking-time discount math defer to Phase 1.5 or later, after Tech Decisions + DB Schema are updated.
+
+EXIT CRITERIA:
+
+✅ Admin can run a platform-wide or vendor-targeted offer campaign
+✅ Offer messaging respects locale
+✅ Offer visibility can be feature-flagged
+✅ No unlocked discount schema is introduced
+
+BLOCKS: 8.9
+
+PHASE 8.4 — Tax Invoice Request Oversight & Settlement Linking (1 day)
+
+GOAL: Admin can track invoice-requested bookings and link them to finance and settlement review in a Phase 1-safe way.
+
+PRD COVERAGE: Admin Journey “track tax invoices & related settlements,” with the explicit constraint that tax handling is foundational in Phase 1 and advanced invoicing is Phase 2.
+
+ADR REQUIRED: None. This is an oversight layer over existing finance data.
+
+DEPENDS ON:
+
+Booking fields tax_invoice_required, tax_invoice_name, tax_invoice_id
+Payments, refunds, withdrawals, settlement runs
+Existing reporting/filtering patterns.
+
+TABLES TOUCHED:
+bookings, payments, refunds, withdrawals, settlement_runs, optionally app_settings for filter defaults. No tax_invoices table in Phase 1.
+
+DELIVERABLE:
+Admin page listing invoice-requested bookings with filters into payment/refund/withdrawal/settlement records and a foundational export/report.
+
+DAYS:
+
+Day 1 — Oversight page + filters + tests
+ Build TaxInvoiceRequestsPage
+ Show booking reference, customer, vendor split, tax invoice name, tax invoice id, payment status
+ Add finance filters: paid / refunded / withdrawn / settled
+ Allow admin to update or confirm booking-level tax_invoice_id
+ Add export for invoice-requested booking finance summary
+ Pest: booking with tax_invoice_required=true appears correctly
+ Pest: invoice identifier persists on booking
+ Pest: settlement/refund views filter correctly for invoice-requested bookings
+
+CUT-LIST:
+Real invoice line items, fiscal adjustments, PDF issuance, and accounting-grade reconciliation defer to Phase 2.
+
+EXIT CRITERIA:
+
+✅ Admin can find every booking that requested a tax invoice
+✅ Admin can link invoice identifiers at booking level
+✅ Related payment/refund/settlement records are discoverable
+✅ Export/report works for Phase 1 oversight
+
+BLOCKS: 8.9
+
+PHASE 8.5 — Content Safety & Policy-Violating Content Removal (1 day)
+
+GOAL: Admin can hide or remove fake, misleading, or policy-violating content after publication.
+
+PRD COVERAGE: Admin Journey “delete / hide fake or policy-violating content,” plus content moderation for reviews and CMS-managed content.
+
+ADR REQUIRED: ADR-0016-content-safety-enforcement.md
+
+DEPENDS ON:
+
+Phase 8.0 moderation flow
+Phase 5.1 reviews
+Phase 6.2 CMS pages
+audit_logs for enforcement traceability.
+
+TABLES TOUCHED:
+services, service_reviews, vendor_reviews, review_moderation_log, cms_pages, media, audit_logs. No new content_reports or content_enforcement_actions tables in Phase 1.
+
+DELIVERABLE:
+Admin can archive a service, moderate/hide a review, unpublish a CMS page, and remove problematic vendor media, with every action audited.
+
+DAYS:
+
+Day 1 — Enforcement actions + tests
+ Write ADR-0016-content-safety-enforcement.md
+ Implement HideServiceAction using services.status = archived
+ Implement RestoreServiceAction back to moderation or published state by policy
+ Extend review moderation tools for hide/remove
+ Implement HideCmsPageAction via cms_pages.is_published = false
+ Implement RemoveVendorMediaAction using Spatie Media Library + audit log
+ Pest: archived service disappears from customer API
+ Pest: unpublished CMS page disappears from public API
+ Pest: enforcement action is audit-logged
+ Pest: restored service follows allowed moderation path
+
+CUT-LIST:
+User-facing report/appeal workflow defers to Phase 1.5.
+
+EXIT CRITERIA:
+
+✅ Admin can hide live services
+✅ Admin can moderate/remove reviews
+✅ Admin can unpublish CMS content
+✅ Every enforcement action is audit-logged
+
+BLOCKS: 8.9
+
+PHASE 8.6 — Loyalty Governance & Vendor Rule Oversight (1 day)
+
+GOAL: Admin can oversee vendor loyalty programs while respecting the locked rule that loyalty is per-vendor only.
+
+PRD COVERAGE: Admin Journey “manage loyalty rules,” constrained to per-vendor configurable loyalty in the locked docs.
+
+ADR REQUIRED: None. This is governance over existing loyalty schema.
+
+DEPENDS ON:
+
+Phase 5.2 Loyalty (per-vendor)
+Existing admin settings/reporting patterns
+Locked no-platform-wide-loyalty rule.
+
+TABLES TOUCHED:
+loyalty_programs, loyalty_rules, loyalty_ledger, loyalty_redemptions, optionally audit_logs. No platform_loyalty_settings.
+
+DELIVERABLE:
+Admin can inspect, filter, activate/deactivate, and audit vendor loyalty programs and detect outlier redemption behavior.
+
+DAYS:
+
+Day 1 — Oversight views + tests
+ Build LoyaltyProgramsAdminView
+ Build LoyaltyRulesAdminView
+ Add filters: active/inactive, high redemption rate, expired, vendor-specific
+ Add admin action to suspend or reactivate a vendor loyalty program
+ Show per-vendor balances and redemption totals
+ Pest: loyalty remains isolated per vendor
+ Pest: admin can deactivate/reactivate vendor program
+ Pest: redemption math still respects vendor rules
+ Pest: no global loyalty configuration path exists
+
+CUT-LIST:
+Cross-vendor loyalty analytics can defer to Phase 1.5.
+
+EXIT CRITERIA:
+
+✅ Admin can review any vendor loyalty program
+✅ Admin can disable abusive or misconfigured vendor programs
+✅ Loyalty remains strictly per-vendor
+✅ Tests prove no platform-wide rule leakage
+
+BLOCKS: 8.7, 8.9
+
+PHASE 8.7 — Admin Review & Policy Oversight Hub (1 day)
+
+GOAL: Admin can monitor review health, policy thresholds, and vendor reputation risk from one place.
+
+PRD COVERAGE: Reviews + Admin Journey “review ratings, reviews, percentages, policies.”
+
+ADR REQUIRED: None. Built on existing Reviews + Settings + Reporting layers.
+
+DEPENDS ON:
+
+Phase 5.1 Reviews
+Phase 6.0 Reports + Audit Log
+Phase 8.6 loyalty oversight for cross-vendor quality view if desired.
+
+TABLES TOUCHED:
+service_reviews, vendor_reviews, review_responses, review_moderation_log, vendor_profiles, optionally app_settings for thresholds.
+
+DELIVERABLE:
+Admin oversight hub showing flagged reviews, low-rating vendors, repeated complaint patterns, moderation backlog, and configurable risk thresholds.
+
+DAYS:
+
+Day 1 — Oversight hub + tests
+ Build ReviewPolicyOversightHub
+ Add panels: flagged reviews, low-rating vendors, repeated complaint vendors, unresolved moderation items
+ Add thresholds in app_settings: minimum vendor rating, repeat complaint count, moderation SLA
+ Add drill-down links into review moderation pages
+ Pest: low-rating vendor enters alert list
+ Pest: repeat complaint threshold flags vendor
+ Pest: threshold changes in app_settings affect hub results
+
+CUT-LIST:
+Sentiment analysis or NLP clustering defers to Phase 1.5.
+
+EXIT CRITERIA:
+
+✅ Admin sees reviews + vendor reputation risk in one hub
+✅ Threshold-based alerts work
+✅ Existing moderation pages remain source of action
+✅ Tests confirm threshold behavior
+
+BLOCKS: 8.8, 8.9
+
+PHASE 8.8 — Admin Daily Operations Runbook Actions (1 day)
+
+GOAL: Admin has a repeatable daily ops page with explicit acknowledgment and resolution actions, not just passive dashboards.
+
+PRD COVERAGE: Admin Journey “continue daily operations” and return-to-dashboard operational loop.
+
+ADR REQUIRED: None. Uses existing audit and queue infrastructure.
+
+DEPENDS ON:
+
+Phase 8.1 dashboard/queues
+Phase 8.2 chat compliance
+Phase 8.7 oversight hub
+Existing audit_logs and queue resources.
+
+TABLES TOUCHED:
+No new checklist table. Use existing data + audit_logs. Optionally use event_outbox for follow-up jobs.
+
+DELIVERABLE:
+Daily admin operations page showing unresolved critical items with actions such as acknowledge alert and resolve issue, all logged through audit trails.
+
+DAYS:
+
+Day 1 — Daily ops page + actions + tests
+ Build DailyOpsPage
+ Sections: pending approvals, pending moderation, overdue bookings, pending withdrawals, flagged chat issues, low-rating alerts
+ Implement AcknowledgeAlertAction
+ Implement ResolveOperationalIssueAction
+ Log every acknowledgment/resolution into audit_logs
+ Add “still unresolved” logic so items remain visible until state changes
+ Pest: unresolved critical items remain visible
+ Pest: acknowledge is audit-logged
+ Pest: resolve is audit-logged
+ Pest: totals match underlying queues
+
+CUT-LIST:
+Per-admin checklists and shift handoff notes defer to Phase 1.5.
+
+EXIT CRITERIA:
+
+✅ Admin has one daily-ops screen
+✅ Critical items can be acknowledged/resolved
+✅ Nothing disappears without a real underlying state change
+✅ Audit trail exists for all ops actions
+
+BLOCKS: 8.9
+
+PHASE 8.9 — Full Admin Journey Smoke Test (1 day)
+
+GOAL: Prove that the complete admin journey works end-to-end on staging, not just isolated resources.
+
+PRD COVERAGE: Final validation of Admin Journey steps across moderation, intervention, compliance, settlements, content safety, reviews, and daily ops.
+
+ADR REQUIRED: None.
+
+DEPENDS ON:
+All phases 8.0–8.8 plus existing staging flow in Phase 7.1.
+
+TABLES TOUCHED:
+No schema change. End-to-end verification only.
+
+DELIVERABLE:
+A documented pass/fail admin smoke checklist with evidence for the full admin lifecycle.
+
+DAYS:
+
+Day 1 — Staging E2E admin validation
+ Approve vendor per type
+ Moderate and publish service
+ Detect overdue vendor response
+ Propose alternative vendor without auto-replacement
+ Review suspicious chat flag
+ Freeze/unfreeze chat thread
+ Approve withdrawal and upload transfer proof
+ Archive violating service or unpublish violating CMS page
+ Run campaign-backed offer flow
+ Review invoice-requested booking flow
+ Moderate flagged review
+ Use daily ops page to acknowledge/resolve at least one issue
+ Capture screenshots/log evidence for each step
+ Record pass/fail checklist with notes
+
+CUT-LIST:
+None. This is launch-readiness validation for the admin journey.
+
+EXIT CRITERIA:
+
+✅ Full admin journey passes on staging
+✅ FR-17 preserved: admin only proposes alternatives, never auto-replaces
+✅ Chat oversight works without content editing
+✅ Settlement/content/review/daily-ops flows all work
+✅ Evidence pack exists for handoff
+
+BLOCKS: Phase 7.2 documentation updates
+
+Final notes
+
+This final version keeps your added admin phases aligned with the locked rules and existing Phase 1 scope. The biggest deliberate narrowings are:
+
+8.3 is offer governance through campaigns/settings, not a brand-new discount engine.
+8.4 is tax-invoice-request oversight, not a full tax invoice subsystem.
+8.6 is vendor loyalty oversight, not platform-wide loyalty.
 
 **GOAL:** Project documented for ops handoff. Lessons learned for Phase 1.5.
 

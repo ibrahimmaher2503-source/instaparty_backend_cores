@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Providers\Filament;
 
 use App\Modules\Catalog\Filament\Pages\ImportRentalServicesPage;
+use App\Modules\Reviews\Filament\Pages\ReviewModerationPage;
 use BezhanSalleh\FilamentLanguageSwitch\LanguageSwitch;
 use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
 use Filament\Http\Middleware\Authenticate;
@@ -51,6 +52,7 @@ class AdminPanelProvider extends PanelProvider
             ->pages([
                 Pages\Dashboard::class,
                 ImportRentalServicesPage::class,
+                ReviewModerationPage::class,
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
@@ -62,6 +64,7 @@ class AdminPanelProvider extends PanelProvider
                 NavigationGroup::make()->label(fn (): string => __('admin.nav.groups.identity')),
                 NavigationGroup::make()->label(fn (): string => __('admin.nav.groups.vendor_onboarding')),
                 NavigationGroup::make('Services')->icon('heroicon-o-cube'),
+                NavigationGroup::make('Moderation')->icon('heroicon-o-shield-check'),
                 NavigationGroup::make()->label(fn (): string => __('admin.nav.groups.catalog')),
                 NavigationGroup::make()->label(fn (): string => __('admin.nav.groups.booking')),
                 NavigationGroup::make()->label(fn (): string => __('admin.nav.groups.payments')),

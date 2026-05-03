@@ -22,10 +22,14 @@ use App\Modules\Booking\Domain\Events\CustomerModificationDecided;
 use App\Modules\Booking\Domain\Events\VendorAccepted;
 use App\Modules\Booking\Domain\Events\VendorModificationProposed;
 use App\Modules\Booking\Domain\Events\VendorRejected;
+use App\Modules\Booking\Infrastructure\Repositories\EloquentBookingItemReviewabilityReader;
 use App\Modules\Booking\Infrastructure\Repositories\EloquentBookingRepository;
+use App\Modules\Booking\Infrastructure\Repositories\EloquentBookingVendorReviewabilityReader;
 use App\Modules\Booking\Infrastructure\Repositories\EloquentPaymentsBookingReader;
 use App\Modules\Booking\Infrastructure\Repositories\EloquentSettlementBookingReader;
 use App\Modules\Payments\Domain\Contracts\PaymentsBookingReader;
+use App\Modules\Reviews\Domain\Contracts\BookingItemReviewabilityReader;
+use App\Modules\Reviews\Domain\Contracts\BookingVendorReviewabilityReader;
 use App\Modules\Settlement\Domain\Contracts\SettlementBookingReader;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
@@ -37,6 +41,8 @@ class BookingServiceProvider extends ServiceProvider
         $this->app->bind(BookingRepository::class, EloquentBookingRepository::class);
         $this->app->bind(PaymentsBookingReader::class, EloquentPaymentsBookingReader::class);
         $this->app->bind(SettlementBookingReader::class, EloquentSettlementBookingReader::class);
+        $this->app->singleton(BookingItemReviewabilityReader::class, EloquentBookingItemReviewabilityReader::class);
+        $this->app->singleton(BookingVendorReviewabilityReader::class, EloquentBookingVendorReviewabilityReader::class);
     }
 
     public function boot(): void
