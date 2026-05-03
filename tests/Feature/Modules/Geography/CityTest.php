@@ -49,10 +49,11 @@ it('denorm governorate_id matches region governorate_id when factory derives it'
 })->group('geography');
 
 it('scopeActive filters out inactive cities', function () {
-    City::factory()->create(['is_active' => true]);
-    City::factory()->inactive()->create();
+    $active = City::factory()->create(['is_active' => true]);
+    $inactive = City::factory()->inactive()->create();
 
-    expect(City::active()->get())->toHaveCount(1);
+    expect(City::active()->whereKey($active->id)->exists())->toBeTrue()
+        ->and(City::active()->whereKey($inactive->id)->exists())->toBeFalse();
 })->group('geography');
 
 it('scopeForGovernorate returns only matching cities', function () {

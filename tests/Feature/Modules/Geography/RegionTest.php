@@ -39,10 +39,11 @@ it('has a public_id ULID that is 26 characters', function () {
 })->group('geography');
 
 it('scopeActive filters out inactive regions', function () {
-    Region::factory()->create(['is_active' => true]);
-    Region::factory()->inactive()->create();
+    $active = Region::factory()->create(['is_active' => true]);
+    $inactive = Region::factory()->inactive()->create();
 
-    expect(Region::active()->get())->toHaveCount(1);
+    expect(Region::active()->whereKey($active->id)->exists())->toBeTrue()
+        ->and(Region::active()->whereKey($inactive->id)->exists())->toBeFalse();
 })->group('geography');
 
 it('scopeForGovernorate returns only matching regions', function () {

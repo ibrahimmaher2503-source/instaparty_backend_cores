@@ -15,13 +15,17 @@ class CountryFactory extends Factory
 {
     protected $model = Country::class;
 
+    private static int $sequence = 1;
+
     public function definition(): array
     {
+        $sequence = self::$sequence++;
+
         return [
             'public_id' => (string) Str::ulid(),
             'name' => ['en' => fake()->country(), 'ar' => fake()->country()],
-            'iso2' => strtoupper(fake()->unique()->lexify('??')),
-            'iso3' => strtoupper(fake()->unique()->lexify('???')),
+            'iso2' => $this->alphaCode($sequence, 2),
+            'iso3' => $this->alphaCode($sequence, 3),
             'default_currency' => 'EGP',
             'default_locale' => 'ar',
             'default_timezone' => 'Africa/Cairo',
@@ -34,5 +38,18 @@ class CountryFactory extends Factory
     public function inactive(): static
     {
         return $this->state(['is_active' => false]);
+    }
+
+    private function alphaCode(int $sequence, int $length): string
+    {
+        $sequence = max(1, $sequence);
+        $code = '';
+
+        for ($index = 0; $index < $length; $index++) {
+            $code = chr(65 + (($sequence - 1) % 26)).$code;
+            $sequence = intdiv($sequence - 1, 26) + 1;
+        }
+
+        return $code;
     }
 }

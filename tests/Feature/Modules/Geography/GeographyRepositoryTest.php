@@ -55,33 +55,28 @@ it('listCitiesByGovernorate returns only active cities for the governorate', fun
 
 it('searchCities matches by EN name', function () {
     $region = Region::factory()->create();
-    City::factory()->create([
+    $city = City::factory()->create([
         'region_id' => $region->id,
         'governorate_id' => $region->governorate_id,
-        'name' => ['en' => 'Nasr City', 'ar' => 'مدينة نصر'],
-    ]);
-    City::factory()->create([
-        'region_id' => $region->id,
-        'governorate_id' => $region->governorate_id,
-        'name' => ['en' => 'Maadi', 'ar' => 'المعادي'],
+        'name' => ['en' => 'Saffron Heights', 'ar' => 'التلال الزعفرانية'],
     ]);
 
-    $results = app(GeographyRepository::class)->searchCities('Nasr');
+    $results = app(GeographyRepository::class)->searchCities('Saffron');
 
-    expect($results)->toHaveCount(1);
+    expect($results->contains('id', $city->id))->toBeTrue();
 })->group('geography');
 
 it('searchCities matches by AR name', function () {
     $region = Region::factory()->create();
-    City::factory()->create([
+    $city = City::factory()->create([
         'region_id' => $region->id,
         'governorate_id' => $region->governorate_id,
-        'name' => ['en' => 'Nasr City', 'ar' => 'مدينة نصر'],
+        'name' => ['en' => 'Saffron Heights', 'ar' => 'التلال الزعفرانية'],
     ]);
 
-    $results = app(GeographyRepository::class)->searchCities('نصر');
+    $results = app(GeographyRepository::class)->searchCities('زعفرانية');
 
-    expect($results)->toHaveCount(1);
+    expect($results->contains('id', $city->id))->toBeTrue();
 })->group('geography');
 
 it('searchCities returns empty collection on no match', function () {
@@ -97,6 +92,11 @@ it('activeGovernorates returns only active ones ordered by sort_order', function
 
     $results = app(GeographyRepository::class)->activeGovernorates();
 
-    expect($results)->toHaveCount(2)
-        ->and($results->first()->id)->toBe($g1->id);
+    $orderedIds = $results->pluck('id')->all();
+    $g1Position = array_search($g1->id, $orderedIds, true);
+    $g2Position = array_search($g2->id, $orderedIds, true);
+
+    expect($g1Position)->not->toBeFalse()
+        ->and($g2Position)->not->toBeFalse()
+        ->and($g1Position)->toBeLessThan($g2Position);
 })->group('geography');

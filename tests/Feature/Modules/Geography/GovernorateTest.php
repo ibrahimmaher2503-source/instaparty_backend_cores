@@ -18,7 +18,7 @@ it('can create a governorate with translatable name', function () {
         'public_id' => (string) Str::ulid(),
         'country_id' => $country->id,
         'name' => ['en' => 'Cairo', 'ar' => 'القاهرة'],
-        'code' => 'EG-CAI',
+        'code' => 'EG-TST',
         'is_active' => true,
         'sort_order' => 1,
     ]);
@@ -48,10 +48,11 @@ it('has many regions', function () {
 })->group('geography');
 
 it('scopeActive filters out inactive governorates', function () {
-    Governorate::factory()->create(['is_active' => true]);
-    Governorate::factory()->inactive()->create();
+    $active = Governorate::factory()->create(['is_active' => true]);
+    $inactive = Governorate::factory()->inactive()->create();
 
-    expect(Governorate::active()->get())->toHaveCount(1);
+    expect(Governorate::active()->whereKey($active->id)->exists())->toBeTrue()
+        ->and(Governorate::active()->whereKey($inactive->id)->exists())->toBeFalse();
 })->group('geography');
 
 it('route key is public_id', function () {
