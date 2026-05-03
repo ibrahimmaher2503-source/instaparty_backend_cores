@@ -1,20 +1,28 @@
-  [41;1m FAILED [49;22m [1mTests\Feature\Modules\Booking\VendorModifyTest[22m [90m>[39m it vendor modifies →… [41;1m UniqueConstraintViolationException [49;22m
-  [41;1m FAILED [49;22m [1mTests\Feature\Modules\Discovery\SearchLocaleTest[22m [90m>[39m it Arabic Accept-Language header retur… [41;1m QueryException [49;22m
-  [41;1m FAILED [49;22m [1mTests\Feature\Modules\Discovery\SearchLocaleTest[22m [90m>[39m it English Accept-Language header retu… [41;1m QueryException [49;22m
-  [41;1m FAILED [49;22m [1mTests\Feature\Modules\Discovery\SearchServicesTest[22m [90m>[39m it whitespace only query return… [41;1m BadRequestException [49;22m
-  [41;1m FAILED [49;22m [1mTests\Feature\Modules\Discovery\WishlistTest[22m [90m>[39m it adding non-published service returns 40… [41;1m QueryException [49;22m
-  [41;1m FAILED [49;22m [1mTests\Feature\Modules\Discovery\WishlistTest[22m [90m>[39m it adding same service twice is idempotent  [41;1m QueryException [49;22m
-  [41;1m FAILED [49;22m [1mTests\Feature\Modules\Discovery\WishlistTest[22m [90m>[39m it authenticated customer can add a servic… [41;1m QueryException [49;22m
-  [41;1m FAILED [49;22m [1mTests\Feature\Modules\Discovery\WishlistTest[22m [90m>[39m it authenticated customer can remove a ser… [41;1m QueryException [49;22m
-  [41;1m FAILED [49;22m [1mTests\Feature\Modules\Discovery\WishlistTest[22m [90m>[39m it customer can list wishlist items         [41;1m QueryException [49;22m
-  [41;1m FAILED [49;22m [1mTests\Feature\Modules\Discovery\WishlistTest[22m [90m>[39m it unauthenticated request to add wishlist… [41;1m QueryException [49;22m
-  [41;1m FAILED [49;22m [1mTests\Feature\Modules\Discovery\WishlistTest[22m [90m>[39m it unauthenticated request to list wishlis… [41;1m QueryException [49;22m
-  [41;1m FAILED [49;22m [1mTests\Feature\Modules\Geography\CityTest[22m [90m>[39m it scopeActive filters out inactive cities
-  [41;1m FAILED [49;22m [1mTests\Feature\Modules\Geography\GeographyRepositoryTest[22m [90m>[39m it activeGovernorates returns only active ones…
-  [41;1m FAILED [49;22m [1mTests\Feature\Modules\Geography\GeographyRepositoryTest[22m [90m>[39m it searchCities matches by AR name
-  [41;1m FAILED [49;22m [1mTests\Feature\Modules\Geography\GeographyRepositoryTest[22m [90m>[39m it searchCities matches by EN name
-  [41;1m FAILED [49;22m [1mTests\Feature\Modules\Geography\GovernorateTest[22m [90m>[39m it can create a gov… [41;1m UniqueConstraintViolationException [49;22m
-  [41;1m FAILED [49;22m [1mTests\Feature\Modules\Geography\GovernorateTest[22m [90m>[39m it scopeActive filters out inactive governorates
-  [41;1m FAILED [49;22m [1mTests\Feature\Modules\Geography\RegionTest[22m [90m>[39m it scopeActive filters out inactive regions
-  [41;1m FAILED [49;22m [1mTests\Unit\Modules\Discovery\SearchableArrayTest[22m [90m>[39m it shouldBeSearchable return… [41;1m InvalidArgumentException [49;22m
-  [41;1m FAILED [49;22m [1mTests\Unit\Modules\Discovery\SearchableArrayTest[22m [90m>[39m it toSearchableArray contain… [41;1m InvalidArgumentException [49;22m
+  [41;1m FAILED [49;22m [1mTests\Feature\Modules\Discovery\SearchLocaleTest[22m [90m>[39m it Arabic Accept-Language header retur… [41;1m QueryException [49;22m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Modules\Discovery\SearchLocaleTest[22m [90m>[39m it English Accept-Language header retu… [41;1m QueryException [49;22m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Modules\Discovery\SearchServicesTest[22m [90m>[39m it whitespace only query return… [41;1m BadRequestException [49;22m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Modules\Discovery\WishlistTest[22m [90m>[39m it adding non-published service returns 40… [41;1m QueryException [49;22m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Modules\Discovery\WishlistTest[22m [90m>[39m it adding same service twice is idempotent  [41;1m QueryException [49;22m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Modules\Discovery\WishlistTest[22m [90m>[39m it authenticated customer can add a servic… [41;1m QueryException [49;22m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Modules\Discovery\WishlistTest[22m [90m>[39m it authenticated customer can remove a ser… [41;1m QueryException [49;22m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Modules\Discovery\WishlistTest[22m [90m>[39m it customer can list wishlist items         [41;1m QueryException [49;22m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Modules\Discovery\WishlistTest[22m [90m>[39m it unauthenticated request to add wishlist… [41;1m QueryException [49;22m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Modules\Discovery\WishlistTest[22m [90m>[39m it unauthenticated request to list wishlis… [41;1m QueryException [49;22m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Modules\Geography\CityTest[22m [90m>[39m it scopeActive filters out inactive cities                        
+  [41;1m FAILED [49;22m [1mTests\Feature\Modules\Geography\GeographyRepositoryTest[22m [90m>[39m it activeGovernorates returns only active ones…    
+  [41;1m FAILED [49;22m [1mTests\Feature\Modules\Geography\GeographyRepositoryTest[22m [90m>[39m it searchCities matches by AR name                 
+  [41;1m FAILED [49;22m [1mTests\Feature\Modules\Geography\GeographyRepositoryTest[22m [90m>[39m it searchCities matches by EN name                 
+  [41;1m FAILED [49;22m [1mTests\Feature\Modules\Geography\GovernorateTest[22m [90m>[39m it can create a gov… [41;1m UniqueConstraintViolationException [49;22m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Modules\Geography\GovernorateTest[22m [90m>[39m it scopeActive filters out inactive governorates           
+  [41;1m FAILED [49;22m [1mTests\Feature\Modules\Geography\RegionTest[22m [90m>[39m it scopeActive filters out inactive regions                     
+  [41;1m FAILED [49;22m [1mTests\Feature\Modules\Payments\InitiateRefundDigitalTest[22m [90m>[39m it digital: 422 digita… [41;1m PermissionDoesNotExist [49;22m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Modules\Payments\InitiateRefundDigitalTest[22m [90m>[39m it digital: refund all… [41;1m PermissionDoesNotExist [49;22m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Modules\Payments\InitiateRefundRentalTest[22m [90m>[39m it rental: 422 with ren… [41;1m PermissionDoesNotExist [49;22m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Modules\Payments\InitiateRefundRentalTest[22m [90m>[39m it rental: AR locale re… [41;1m PermissionDoesNotExist [49;22m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Modules\Payments\InitiateRefundRentalTest[22m [90m>[39m it rental: refund allow… [41;1m PermissionDoesNotExist [49;22m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Modules\Payments\InitiateRefundRentalTest[22m [90m>[39m it returns 422 when rea… [41;1m PermissionDoesNotExist [49;22m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Modules\Payments\InitiateRefundRentalTest[22m [90m>[39m it returns 422 with par… [41;1m PermissionDoesNotExist [49;22m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Modules\Payments\InitiateRefundSaleTest[22m [90m>[39m it sale: 422 when item is… [41;1m PermissionDoesNotExist [49;22m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Modules\Payments\InitiateRefundSaleTest[22m [90m>[39m it sale: 422 with sale_in… [41;1m PermissionDoesNotExist [49;22m  
+  [41;1m FAILED [49;22m [1mTests\Feature\Modules\Payments\InitiateRefundSaleTest[22m [90m>[39m it sale: refund allowed w… [41;1m PermissionDoesNotExist [49;22m  
+  [41;1m FAILED [49;22m [1mTests\Unit\Modules\Discovery\SearchableArrayTest[22m [90m>[39m it toSearchableArray contains required… [41;1m QueryException [49;22m  
