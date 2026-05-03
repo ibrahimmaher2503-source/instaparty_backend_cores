@@ -34,6 +34,15 @@ If a row needs more nuance than the table can carry (multi-step flows, idempoten
 | POST | /api/v1/webhooks/paymob | Payments | 4.0 | none | — | PaymobWebhookRequest | ApiResponse{data, meta, errors} | 📝 partial |
 | POST | /api/v1/admin/bookings/{bookingPublicId}/refunds | Payments | 4.1 | sanctum-token | admin | InitiateRefundRequest | ApiResponse{data: Refund init payload, meta, errors} | 📝 partial |
 | GET | /api/v1/admin/refunds/{refundPublicId} | Payments | 4.1 | sanctum-token | admin | — | ApiResponse{data: RefundResource, meta, errors} | 📝 partial |
+| GET | /api/v1/vendor/wallet | Settlement | 4.2 | sanctum-token | vendor | — | ApiResponse{data: WalletResource, meta, errors} | ✅ postman |
+| GET | /api/v1/vendor/wallet/ledger | Settlement | 4.2 | sanctum-token | vendor | — | ApiResponse{data: WalletLedgerEntryResource[], meta(cursor), errors} | ✅ postman |
+| GET | /api/v1/vendor/withdrawals | Settlement | 4.2 | sanctum-token | vendor | — | ApiResponse{data: WithdrawalResource[], meta(cursor), errors} | ✅ postman |
+| POST | /api/v1/vendor/withdrawals | Settlement | 4.2 | sanctum-token | vendor | RequestWithdrawalRequest | ApiResponse{data: WithdrawalResource, meta, errors} | ✅ postman |
+| GET | /api/v1/vendor/withdrawals/{public_id} | Settlement | 4.2 | sanctum-token | vendor | — | ApiResponse{data: WithdrawalResource, meta, errors} | ✅ postman |
+| GET | /api/v1/customer/notification-preferences | Communication | 5.0 | sanctum-token | customer | — | ApiResponse{data: NotificationPreferenceResource[], meta, errors} | 📝 partial |
+| PUT | /api/v1/customer/notification-preferences/{channel}/{event_category} | Communication | 5.0 | sanctum-token | customer | UpdateNotificationPreferenceRequest | ApiResponse{data: NotificationPreferenceResource, meta, errors} | 📝 partial |
+| GET | /api/v1/vendor/notification-preferences | Communication | 5.0 | sanctum-token | vendor | — | ApiResponse{data: NotificationPreferenceResource[], meta, errors} | 📝 partial |
+| PUT | /api/v1/vendor/notification-preferences/{channel}/{event_category} | Communication | 5.0 | sanctum-token | vendor | UpdateNotificationPreferenceRequest | ApiResponse{data: NotificationPreferenceResource, meta, errors} | 📝 partial |
 
 ---
 
