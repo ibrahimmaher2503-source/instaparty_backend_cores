@@ -11,6 +11,7 @@ use App\Modules\Booking\Application\Listeners\WriteBookingStateTransitionListene
 use App\Modules\Booking\Application\Listeners\WriteInitialBookingSnapshotListener;
 use App\Modules\Booking\Application\Listeners\WriteNegotiationSnapshotListener;
 use App\Modules\Booking\Console\Commands\ReleaseExpiredReservationsCommand;
+use App\Modules\Booking\Domain\Contracts\BookingHistoryReader;
 use App\Modules\Booking\Domain\Contracts\BookingRepository;
 use App\Modules\Booking\Domain\Events\BookingCancelled;
 use App\Modules\Booking\Domain\Events\BookingConfirmed;
@@ -22,6 +23,7 @@ use App\Modules\Booking\Domain\Events\CustomerModificationDecided;
 use App\Modules\Booking\Domain\Events\VendorAccepted;
 use App\Modules\Booking\Domain\Events\VendorModificationProposed;
 use App\Modules\Booking\Domain\Events\VendorRejected;
+use App\Modules\Booking\Infrastructure\Repositories\EloquentBookingHistoryReader;
 use App\Modules\Booking\Infrastructure\Repositories\EloquentBookingItemReviewabilityReader;
 use App\Modules\Booking\Infrastructure\Repositories\EloquentBookingRepository;
 use App\Modules\Booking\Infrastructure\Repositories\EloquentBookingVendorReviewabilityReader;
@@ -43,6 +45,7 @@ class BookingServiceProvider extends ServiceProvider
         $this->app->bind(SettlementBookingReader::class, EloquentSettlementBookingReader::class);
         $this->app->singleton(BookingItemReviewabilityReader::class, EloquentBookingItemReviewabilityReader::class);
         $this->app->singleton(BookingVendorReviewabilityReader::class, EloquentBookingVendorReviewabilityReader::class);
+        $this->app->singleton(BookingHistoryReader::class, EloquentBookingHistoryReader::class);
     }
 
     public function boot(): void

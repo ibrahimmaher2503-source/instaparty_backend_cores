@@ -2,6 +2,9 @@
 
 declare(strict_types=1);
 
+use App\Modules\Communication\Domain\Models\Campaign;
+use App\Modules\Communication\Domain\Models\CampaignRecipient;
+use App\Modules\Communication\Domain\Models\CampaignRun;
 use App\Modules\Communication\Domain\Models\NotificationDispatch;
 use App\Modules\Payments\Domain\Models\GatewayWebhookLog;
 use App\Modules\Payments\Domain\Models\Payment;
@@ -62,6 +65,25 @@ it('settlement append-only models do not use the SoftDeletes trait', function ()
 
 it('notification_dispatches table has no deleted_at column', function (): void {
     expect(Schema::hasColumn('notification_dispatches', 'deleted_at'))->toBeFalse();
+});
+
+// ─────────────────────────────────────────────────────
+// T046 — Campaign models must not use soft deletes
+// ─────────────────────────────────────────────────────
+
+it('campaign_recipients table has no deleted_at column', function (): void {
+    expect(Schema::hasColumn('campaign_recipients', 'deleted_at'))->toBeFalse();
+});
+
+it('campaign models do not use the SoftDeletes trait', function (): void {
+    foreach ([
+        Campaign::class,
+        CampaignRun::class,
+        CampaignRecipient::class,
+    ] as $model) {
+        expect(in_array(SoftDeletes::class, class_uses_recursive($model), true))
+            ->toBeFalse("$model must not use SoftDeletes trait");
+    }
 });
 
 it('notification_dispatches table has no updated_at column (true append-only)', function (): void {

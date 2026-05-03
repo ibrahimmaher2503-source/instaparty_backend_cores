@@ -20,5 +20,8 @@ class DispatchNotificationDTO extends Data
         public readonly array $context = [],
         public readonly ?string $referenceType = null,
         public readonly ?int $referenceId = null,
+        /** When set, bypasses TemplateResolver — used by campaign dispatch. */
+        public readonly ?string $directBody = null,
+        public readonly ?string $directSubject = null,
     ) {}
 }

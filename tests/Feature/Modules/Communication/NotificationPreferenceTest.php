@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Modules\Communication\Application\Actions\DispatchNotificationAction;
 use App\Modules\Communication\Application\DTOs\DispatchNotificationDTO;
+use App\Modules\Communication\Domain\Contracts\NotificationChannelAdapter;
 use App\Modules\Communication\Domain\Enums\DispatchStatus;
 use App\Modules\Communication\Domain\Enums\EventCategory;
 use App\Modules\Communication\Domain\Enums\NotificationAudience;
@@ -11,12 +12,13 @@ use App\Modules\Communication\Domain\Enums\NotificationChannel;
 use App\Modules\Communication\Domain\Models\NotificationDispatch;
 use App\Modules\Communication\Domain\Models\NotificationPreference;
 use App\Modules\Communication\Domain\Models\NotificationTemplate;
+use App\Modules\Identity\Domain\Models\User;
 use Illuminate\Support\Str;
 
-
 beforeEach(function () {
-    \App\Modules\Communication\Domain\Models\NotificationTemplate::query()->delete();
-    $stubAdapter = new class implements \App\Modules\Communication\Domain\Contracts\NotificationChannelAdapter {
+    NotificationTemplate::query()->delete();
+    $stubAdapter = new class implements NotificationChannelAdapter
+    {
         public function send(NotificationDispatch $dispatch): void
         {
             $dispatch->status = DispatchStatus::Sent;
@@ -30,21 +32,21 @@ beforeEach(function () {
 });
 
 it('marketing opt-out: no push dispatch created for marketing event', function () {
-    $user = \App\Modules\Identity\Domain\Models\User::factory()->create();
+    $user = User::factory()->create();
     NotificationPreference::create([
-        'public_id'      => Str::ulid()->toBase32(),
-        'user_id'        => $user->id,
-        'channel'        => NotificationChannel::Push->value,
+        'public_id' => Str::ulid()->toBase32(),
+        'user_id' => $user->id,
+        'channel' => NotificationChannel::Push->value,
         'event_category' => EventCategory::Marketing->value,
-        'is_enabled'     => false,
+        'is_enabled' => false,
     ]);
 
     NotificationTemplate::create([
         'public_id' => Str::ulid()->toBase32(),
         'event_key' => 'marketing.promo',
-        'channel'   => 'push',
-        'audience'  => 'customer',
-        'body'      => ['en' => 'Promo!', 'ar' => 'عرض!'],
+        'channel' => 'push',
+        'audience' => 'customer',
+        'body' => ['en' => 'Promo!', 'ar' => 'عرض!'],
         'is_active' => true,
     ]);
 
@@ -62,21 +64,21 @@ it('marketing opt-out: no push dispatch created for marketing event', function (
 })->group('communication');
 
 it('marketing opt-out does not block booking category dispatches', function () {
-    $user = \App\Modules\Identity\Domain\Models\User::factory()->create();
+    $user = User::factory()->create();
     NotificationPreference::create([
-        'public_id'      => Str::ulid()->toBase32(),
-        'user_id'        => $user->id,
-        'channel'        => NotificationChannel::Push->value,
+        'public_id' => Str::ulid()->toBase32(),
+        'user_id' => $user->id,
+        'channel' => NotificationChannel::Push->value,
         'event_category' => EventCategory::Marketing->value,
-        'is_enabled'     => false,
+        'is_enabled' => false,
     ]);
 
     NotificationTemplate::create([
         'public_id' => Str::ulid()->toBase32(),
         'event_key' => 'booking.submitted',
-        'channel'   => 'push',
-        'audience'  => 'customer',
-        'body'      => ['en' => 'Booking!', 'ar' => 'حجز!'],
+        'channel' => 'push',
+        'audience' => 'customer',
+        'body' => ['en' => 'Booking!', 'ar' => 'حجز!'],
         'is_active' => true,
     ]);
 
@@ -94,14 +96,14 @@ it('marketing opt-out does not block booking category dispatches', function () {
 })->group('communication');
 
 it('missing preference row defaults to enabled (dispatch proceeds)', function () {
-    $user = \App\Modules\Identity\Domain\Models\User::factory()->create();
+    $user = User::factory()->create();
 
     NotificationTemplate::create([
         'public_id' => Str::ulid()->toBase32(),
         'event_key' => 'booking.submitted',
-        'channel'   => 'push',
-        'audience'  => 'customer',
-        'body'      => ['en' => 'Booking!', 'ar' => 'حجز!'],
+        'channel' => 'push',
+        'audience' => 'customer',
+        'body' => ['en' => 'Booking!', 'ar' => 'حجز!'],
         'is_active' => true,
     ]);
 

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Modules\Communication\Application\Actions;
 
-use App\Modules\Identity\Domain\Models\User;
 use App\Modules\Communication\Application\DTOs\DispatchNotificationDTO;
 use App\Modules\Communication\Application\Services\TemplateNotFoundException;
 use App\Modules\Communication\Application\Services\TemplateResolver;
@@ -17,6 +16,7 @@ use App\Modules\Communication\Domain\Enums\NotificationChannel;
 use App\Modules\Communication\Domain\Events\NotificationDispatched;
 use App\Modules\Communication\Domain\Models\NotificationDispatch;
 use App\Modules\Communication\Domain\Models\NotificationPreference;
+use App\Modules\Identity\Domain\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
@@ -27,36 +27,45 @@ class DispatchNotificationAction implements NotificationDispatcher
         private readonly TemplateResolver $templateResolver,
     ) {}
 
-    public function execute(DispatchNotificationDTO $dto): void
+    public function execute(DispatchNotificationDTO $dto): ?NotificationDispatch
     {
         if (! NotificationPreference::isEnabledFor($dto->userId, $dto->channel, $dto->eventCategory)) {
-            return;
+            return null;
         }
 
         $locale = $this->resolveLocale($dto->userId);
 
-        try {
-            $resolved = $this->templateResolver->resolve(
-                $dto->eventKey,
-                $dto->channel,
-                $dto->audience,
-                $locale,
-            );
-        } catch (TemplateNotFoundException $e) {
-            $this->writeFailedDispatch($dto, $locale, $e->getMessage());
+        if ($dto->directBody !== null) {
+            $context = array_merge($dto->context, [
+                'body' => $dto->directBody,
+                'subject' => $dto->directSubject,
+            ]);
+            $templateId = null;
+        } else {
+            try {
+                $resolved = $this->templateResolver->resolve(
+                    $dto->eventKey,
+                    $dto->channel,
+                    $dto->audience,
+                    $locale,
+                );
+            } catch (TemplateNotFoundException $e) {
+                $this->writeFailedDispatch($dto, $locale, $e->getMessage());
 
-            return;
+                return null;
+            }
+
+            $context = array_merge($dto->context, [
+                'body' => $resolved->body,
+                'subject' => $resolved->subject,
+            ]);
+            $templateId = $resolved->templateId;
         }
 
-        $context = array_merge($dto->context, [
-            'body' => $resolved->body,
-            'subject' => $resolved->subject,
-        ]);
-
-        $dispatch = DB::transaction(function () use ($dto, $resolved, $context, $locale): NotificationDispatch {
+        return DB::transaction(function () use ($dto, $templateId, $context, $locale): NotificationDispatch {
             $dispatch = NotificationDispatch::create([
                 'public_id' => Str::ulid()->toBase32(),
-                'notification_template_id' => $resolved->templateId,
+                'notification_template_id' => $templateId,
                 'user_id' => $dto->userId,
                 'channel' => $dto->channel->value,
                 'locale' => $locale,
@@ -116,7 +125,7 @@ class DispatchNotificationAction implements NotificationDispatcher
     private function resolveLocale(int $userId): string
     {
         try {
-            /** @var \App\Modules\Identity\Domain\Models\User|null $user */
+            /** @var User|null $user */
             $user = User::find($userId);
 
             return $user !== null ? ($user->preferred_locale ?? app()->getLocale()) : app()->getLocale();
@@ -152,7 +161,7 @@ class DispatchNotificationAction implements NotificationDispatcher
 
     private function categoryFromEventKey(string $eventKey): EventCategory
     {
-        $parts  = explode('.', $eventKey);
+        $parts = explode('.', $eventKey);
         $prefix = $parts[0];
 
         return match ($prefix) {

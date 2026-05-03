@@ -8,11 +8,11 @@ use App\Modules\Communication\Domain\Models\NotificationPreference;
 use App\Modules\Identity\Domain\Models\User;
 use Illuminate\Support\Str;
 
-
 function notifPrefMakeCustomer(): User
 {
     $user = User::factory()->create();
     $user->assignRole('customer');
+
     return $user;
 }
 
@@ -20,6 +20,7 @@ function notifPrefMakeVendor(): User
 {
     $user = User::factory()->create();
     $user->assignRole('vendor');
+
     return $user;
 }
 
@@ -53,11 +54,11 @@ it('customer cannot access vendor notification preferences endpoint (403)', func
 it('GET customer notification preferences returns list', function () {
     $customer = notifPrefMakeCustomer();
     NotificationPreference::create([
-        'public_id'      => Str::ulid()->toBase32(),
-        'user_id'        => $customer->id,
-        'channel'        => NotificationChannel::Push->value,
+        'public_id' => Str::ulid()->toBase32(),
+        'user_id' => $customer->id,
+        'channel' => NotificationChannel::Push->value,
         'event_category' => EventCategory::Booking->value,
-        'is_enabled'     => true,
+        'is_enabled' => true,
     ]);
 
     $this->actingAs($customer, 'sanctum')
@@ -96,8 +97,8 @@ it('PUT returns 422 when quiet_hours_start format is invalid', function () {
 
     $this->actingAs($customer, 'sanctum')
         ->putJson('/api/v1/customer/notification-preferences/push/booking', [
-            'is_enabled'         => true,
-            'quiet_hours_start'  => 'not-a-time',
+            'is_enabled' => true,
+            'quiet_hours_start' => 'not-a-time',
         ])
         ->assertStatus(422)
         ->assertJsonValidationErrors(['quiet_hours_start']);
@@ -108,7 +109,7 @@ it('PUT returns 422 when quiet_hours_start provided but quiet_hours_end missing'
 
     $this->actingAs($customer, 'sanctum')
         ->putJson('/api/v1/customer/notification-preferences/push/booking', [
-            'is_enabled'        => true,
+            'is_enabled' => true,
             'quiet_hours_start' => '22:00',
         ])
         ->assertStatus(422)
@@ -130,11 +131,11 @@ it('PUT returns 422 with system_notifications_cannot_be_disabled when disabling 
 it('GET preferences returns same shape for en and ar (no translatable text)', function () {
     $customer = notifPrefMakeCustomer();
     NotificationPreference::create([
-        'public_id'      => Str::ulid()->toBase32(),
-        'user_id'        => $customer->id,
-        'channel'        => NotificationChannel::Push->value,
+        'public_id' => Str::ulid()->toBase32(),
+        'user_id' => $customer->id,
+        'channel' => NotificationChannel::Push->value,
         'event_category' => EventCategory::Booking->value,
-        'is_enabled'     => true,
+        'is_enabled' => true,
     ]);
 
     $enResponse = $this->actingAs($customer, 'sanctum')

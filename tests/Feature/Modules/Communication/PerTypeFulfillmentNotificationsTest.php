@@ -4,18 +4,20 @@ declare(strict_types=1);
 
 use App\Modules\Communication\Application\Actions\DispatchNotificationAction;
 use App\Modules\Communication\Application\DTOs\DispatchNotificationDTO;
+use App\Modules\Communication\Domain\Contracts\NotificationChannelAdapter;
 use App\Modules\Communication\Domain\Enums\DispatchStatus;
 use App\Modules\Communication\Domain\Enums\EventCategory;
 use App\Modules\Communication\Domain\Enums\NotificationAudience;
 use App\Modules\Communication\Domain\Enums\NotificationChannel;
 use App\Modules\Communication\Domain\Models\NotificationDispatch;
 use App\Modules\Communication\Domain\Models\NotificationTemplate;
+use App\Modules\Identity\Domain\Models\User;
 use Illuminate\Support\Str;
 
-
 beforeEach(function () {
-    \App\Modules\Communication\Domain\Models\NotificationTemplate::query()->delete();
-    $stubAdapter = new class implements \App\Modules\Communication\Domain\Contracts\NotificationChannelAdapter {
+    NotificationTemplate::query()->delete();
+    $stubAdapter = new class implements NotificationChannelAdapter
+    {
         public function send(NotificationDispatch $dispatch): void
         {
             $dispatch->status = DispatchStatus::Sent;
@@ -29,15 +31,15 @@ beforeEach(function () {
 });
 
 it('rental: RentalDeliveryScheduled dispatches push + sms using rental.delivery_scheduled template', function () {
-    $user = \App\Modules\Identity\Domain\Models\User::factory()->create(['preferred_locale' => 'en']);
+    $user = User::factory()->create(['preferred_locale' => 'en']);
 
     foreach (['push', 'sms'] as $channel) {
         NotificationTemplate::create([
             'public_id' => Str::ulid()->toBase32(),
             'event_key' => 'rental.delivery_scheduled',
-            'channel'   => $channel,
-            'audience'  => 'customer',
-            'body'      => ['en' => 'Delivery scheduled.', 'ar' => 'تم جدولة التسليم.'],
+            'channel' => $channel,
+            'audience' => 'customer',
+            'body' => ['en' => 'Delivery scheduled.', 'ar' => 'تم جدولة التسليم.'],
             'is_active' => true,
         ]);
     }
@@ -61,14 +63,14 @@ it('rental: RentalDeliveryScheduled dispatches push + sms using rental.delivery_
 })->group('communication', 'rental');
 
 it('sale: SalePreparationStarted dispatches push using sale.preparation_started template', function () {
-    $user = \App\Modules\Identity\Domain\Models\User::factory()->create(['preferred_locale' => 'en']);
+    $user = User::factory()->create(['preferred_locale' => 'en']);
 
     NotificationTemplate::create([
         'public_id' => Str::ulid()->toBase32(),
         'event_key' => 'sale.preparation_started',
-        'channel'   => 'push',
-        'audience'  => 'customer',
-        'body'      => ['en' => 'Preparation started.', 'ar' => 'بدأ التحضير.'],
+        'channel' => 'push',
+        'audience' => 'customer',
+        'body' => ['en' => 'Preparation started.', 'ar' => 'بدأ التحضير.'],
         'is_active' => true,
     ]);
 
@@ -88,15 +90,15 @@ it('sale: SalePreparationStarted dispatches push using sale.preparation_started 
 })->group('communication', 'sale');
 
 it('digital: DigitalDelivered dispatches push + email using digital.delivered template', function () {
-    $user = \App\Modules\Identity\Domain\Models\User::factory()->create(['preferred_locale' => 'en']);
+    $user = User::factory()->create(['preferred_locale' => 'en']);
 
     foreach (['push', 'email'] as $channel) {
         NotificationTemplate::create([
             'public_id' => Str::ulid()->toBase32(),
             'event_key' => 'digital.delivered',
-            'channel'   => $channel,
-            'audience'  => 'customer',
-            'body'      => ['en' => 'Digital delivered.', 'ar' => 'تم التسليم الرقمي.'],
+            'channel' => $channel,
+            'audience' => 'customer',
+            'body' => ['en' => 'Digital delivered.', 'ar' => 'تم التسليم الرقمي.'],
             'is_active' => true,
         ]);
     }
@@ -117,14 +119,14 @@ it('digital: DigitalDelivered dispatches push + email using digital.delivered te
 })->group('communication', 'digital');
 
 it('digital: DigitalExpiringSoon context contains expiry_date', function () {
-    $user = \App\Modules\Identity\Domain\Models\User::factory()->create(['preferred_locale' => 'en']);
+    $user = User::factory()->create(['preferred_locale' => 'en']);
 
     NotificationTemplate::create([
         'public_id' => Str::ulid()->toBase32(),
         'event_key' => 'digital.expiring_soon',
-        'channel'   => 'push',
-        'audience'  => 'customer',
-        'body'      => ['en' => 'Expiring soon.', 'ar' => 'ينتهي قريباً.'],
+        'channel' => 'push',
+        'audience' => 'customer',
+        'body' => ['en' => 'Expiring soon.', 'ar' => 'ينتهي قريباً.'],
         'is_active' => true,
     ]);
 

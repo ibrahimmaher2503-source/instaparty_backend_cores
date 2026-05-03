@@ -12,3 +12,4 @@ uses(TestCase::class)->in('Unit');
 require_once __DIR__.'/Feature/Modules/Booking/BookingTestHelpers.php';
 require_once __DIR__.'/Feature/Modules/Payments/PaymentsTestHelpers.php';
 require_once __DIR__.'/Feature/Modules/Settlement/SettlementTestHelpers.php';
+require_once __DIR__.'/Feature/Modules/Communication/CommunicationTestHelpers.php';

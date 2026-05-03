@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace App\Modules\Communication\Providers;
 
+use App\Modules\Booking\Domain\Contracts\BookingHistoryReader;
+use App\Modules\Booking\Infrastructure\Repositories\EloquentBookingHistoryReader;
 use App\Modules\Communication\Application\Actions\DispatchNotificationAction;
 use App\Modules\Communication\Application\Listeners\OnBookingConfirmed;
 use App\Modules\Communication\Application\Listeners\OnBookingModified;
 use App\Modules\Communication\Application\Listeners\OnBookingSubmitted;
 use App\Modules\Communication\Application\Listeners\OnPaymentCaptured;
+use App\Modules\Communication\Application\Services\SegmentResolver;
 use App\Modules\Communication\Domain\Contracts\NotificationDispatcher;
 use App\Modules\Communication\Domain\Enums\NotificationChannel;
 use App\Modules\Communication\Infrastructure\Gateways\FcmPushAdapter;
@@ -24,6 +27,8 @@ class CommunicationServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->bind(NotificationDispatcher::class, DispatchNotificationAction::class);
+        $this->app->singleton(BookingHistoryReader::class, EloquentBookingHistoryReader::class);
+        $this->app->singleton(SegmentResolver::class);
 
         $this->app->bind(NotificationChannel::Push->value.'_adapter', FcmPushAdapter::class);
         $this->app->bind(NotificationChannel::Sms->value.'_adapter', VonageSmsAdapter::class);

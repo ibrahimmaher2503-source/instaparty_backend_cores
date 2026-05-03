@@ -10,7 +10,7 @@ use App\Modules\Communication\Domain\Models\NotificationTemplate;
 use Illuminate\Support\Str;
 
 beforeEach(function () {
-    \App\Modules\Communication\Domain\Models\NotificationTemplate::query()->delete();
+    NotificationTemplate::query()->delete();
     $this->resolver = app(TemplateResolver::class);
 });
 
@@ -18,10 +18,10 @@ it('returns body in requested locale', function () {
     NotificationTemplate::create([
         'public_id' => Str::ulid()->toBase32(),
         'event_key' => 'booking.submitted',
-        'channel'   => 'push',
-        'audience'  => 'customer',
-        'body'      => ['en' => 'Your booking was submitted.', 'ar' => 'تم تقديم حجزك.'],
-        'subject'   => null,
+        'channel' => 'push',
+        'audience' => 'customer',
+        'body' => ['en' => 'Your booking was submitted.', 'ar' => 'تم تقديم حجزك.'],
+        'subject' => null,
         'is_active' => true,
     ]);
 
@@ -33,10 +33,10 @@ it('falls back to en body when requested locale missing', function () {
     NotificationTemplate::create([
         'public_id' => Str::ulid()->toBase32(),
         'event_key' => 'booking.submitted',
-        'channel'   => 'push',
-        'audience'  => 'customer',
-        'body'      => ['en' => 'Your booking was submitted.'],
-        'subject'   => null,
+        'channel' => 'push',
+        'audience' => 'customer',
+        'body' => ['en' => 'Your booking was submitted.'],
+        'subject' => null,
         'is_active' => true,
     ]);
 
@@ -52,9 +52,9 @@ it('throws TemplateNotFoundException when template is inactive', function () {
     NotificationTemplate::create([
         'public_id' => Str::ulid()->toBase32(),
         'event_key' => 'some.event',
-        'channel'   => 'push',
-        'audience'  => 'customer',
-        'body'      => ['en' => 'Body'],
+        'channel' => 'push',
+        'audience' => 'customer',
+        'body' => ['en' => 'Body'],
         'is_active' => false,
     ]);
 

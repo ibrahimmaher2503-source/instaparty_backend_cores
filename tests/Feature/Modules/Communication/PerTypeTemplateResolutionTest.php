@@ -4,18 +4,20 @@ declare(strict_types=1);
 
 use App\Modules\Communication\Application\Actions\DispatchNotificationAction;
 use App\Modules\Communication\Application\DTOs\DispatchNotificationDTO;
+use App\Modules\Communication\Domain\Contracts\NotificationChannelAdapter;
 use App\Modules\Communication\Domain\Enums\DispatchStatus;
 use App\Modules\Communication\Domain\Enums\EventCategory;
 use App\Modules\Communication\Domain\Enums\NotificationAudience;
 use App\Modules\Communication\Domain\Enums\NotificationChannel;
 use App\Modules\Communication\Domain\Models\NotificationDispatch;
 use App\Modules\Communication\Domain\Models\NotificationTemplate;
+use App\Modules\Identity\Domain\Models\User;
 use Illuminate\Support\Str;
 
-
 beforeEach(function () {
-    \App\Modules\Communication\Domain\Models\NotificationTemplate::query()->delete();
-    $stubAdapter = new class implements \App\Modules\Communication\Domain\Contracts\NotificationChannelAdapter {
+    NotificationTemplate::query()->delete();
+    $stubAdapter = new class implements NotificationChannelAdapter
+    {
         public function send(NotificationDispatch $dispatch): void
         {
             $dispatch->status = DispatchStatus::Sent;
@@ -29,15 +31,15 @@ beforeEach(function () {
 });
 
 it('SalePreparationStarted produces failed dispatch when only rental.delivery_scheduled template exists', function () {
-    $user = \App\Modules\Identity\Domain\Models\User::factory()->create();
+    $user = User::factory()->create();
 
     // Only seed rental template — NOT sale
     NotificationTemplate::create([
         'public_id' => Str::ulid()->toBase32(),
         'event_key' => 'rental.delivery_scheduled',
-        'channel'   => 'push',
-        'audience'  => 'customer',
-        'body'      => ['en' => 'Rental delivery scheduled.', 'ar' => 'تم جدولة تسليم الإيجار.'],
+        'channel' => 'push',
+        'audience' => 'customer',
+        'body' => ['en' => 'Rental delivery scheduled.', 'ar' => 'تم جدولة تسليم الإيجار.'],
         'is_active' => true,
     ]);
 
@@ -58,7 +60,7 @@ it('SalePreparationStarted produces failed dispatch when only rental.delivery_sc
 })->group('communication', 'sale');
 
 it('all 4 per-type event keys resolve to distinct template_ids', function () {
-    $user = \App\Modules\Identity\Domain\Models\User::factory()->create();
+    $user = User::factory()->create();
 
     $eventKeys = [
         'rental.delivery_scheduled',
@@ -72,9 +74,9 @@ it('all 4 per-type event keys resolve to distinct template_ids', function () {
         $template = NotificationTemplate::create([
             'public_id' => Str::ulid()->toBase32(),
             'event_key' => $eventKey,
-            'channel'   => 'push',
-            'audience'  => 'customer',
-            'body'      => ['en' => "Body for {$eventKey}", 'ar' => "نص لـ {$eventKey}"],
+            'channel' => 'push',
+            'audience' => 'customer',
+            'body' => ['en' => "Body for {$eventKey}", 'ar' => "نص لـ {$eventKey}"],
             'is_active' => true,
         ]);
         $templateIds[$eventKey] = $template->id;
