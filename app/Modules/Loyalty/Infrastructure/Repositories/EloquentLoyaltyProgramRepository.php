@@ -24,32 +24,34 @@ class EloquentLoyaltyProgramRepository implements LoyaltyProgramRepository
     {
         return LoyaltyProgram::create([
             'vendor_profile_id' => $vendorProfileId,
-            'name'              => $draft->name,
-            'terms'             => $draft->terms,
-            'currency'          => $draft->currency,
-            'status'            => $draft->status,
-            'expiration_days'   => $draft->expirationDays,
-            'created_by'        => auth()->id(),
-            'updated_by'        => auth()->id(),
+            'name' => $draft->name,
+            'terms' => $draft->terms,
+            'currency' => $draft->currency,
+            'status' => $draft->status,
+            'expiration_days' => $draft->expirationDays,
+            'created_by' => auth()->id(),
+            'updated_by' => auth()->id(),
         ]);
     }
 
     public function updateStatus(LoyaltyProgram $program, string $status): LoyaltyProgram
     {
         $program->update(['status' => $status, 'updated_by' => auth()->id()]);
+
         return $program->fresh();
     }
 
     public function update(LoyaltyProgram $program, ProgramDraft $draft): LoyaltyProgram
     {
         $program->update([
-            'name'            => $draft->name,
-            'terms'           => $draft->terms,
-            'currency'        => $draft->currency,
-            'status'          => $draft->status,
+            'name' => $draft->name,
+            'terms' => $draft->terms,
+            'currency' => $draft->currency,
+            'status' => $draft->status,
             'expiration_days' => $draft->expirationDays,
-            'updated_by'      => auth()->id(),
+            'updated_by' => auth()->id(),
         ]);
+
         return $program->fresh();
     }
 }

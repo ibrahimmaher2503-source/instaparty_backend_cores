@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Providers;
 
 use BezhanSalleh\FilamentLanguageSwitch\LanguageSwitch;
+use Filament\Forms\Components\TextInput;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -15,6 +16,17 @@ class AppServiceProvider extends ServiceProvider
     {
         LanguageSwitch::configureUsing(function (LanguageSwitch $switch) {
             $switch->locales(['en', 'ar']);
+        });
+
+        TextInput::macro('dir', function (string $direction = 'ltr') {
+            /** @var TextInput $this */
+
+            return $this->extraInputAttributes([
+                'dir' => $direction,
+                'style' => $direction === 'rtl'
+                    ? 'text-align: right;'
+                    : 'text-align: left;',
+            ]);
         });
     }
 }

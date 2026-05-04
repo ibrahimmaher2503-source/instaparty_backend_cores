@@ -19,7 +19,7 @@ it('creates a vendor review when all booking vendor items are completed', functi
     $this->actingAs($data['customer'], 'sanctum')
         ->postJson("/api/v1/customer/booking-vendors/{$data['bookingVendor']->public_id}/review", [
             'rating' => 4,
-            'body'   => 'Great vendor service!',
+            'body' => 'Great vendor service!',
         ])
         ->assertStatus(201)
         ->assertJsonPath('data.rating', 4)
@@ -28,7 +28,7 @@ it('creates a vendor review when all booking vendor items are completed', functi
     $this->assertDatabaseHas('vendor_reviews', [
         'booking_vendor_id' => $data['bookingVendor']->id,
         'moderation_status' => 'pending',
-        'rating'            => 4,
+        'rating' => 4,
     ]);
 })->group('reviews');
 

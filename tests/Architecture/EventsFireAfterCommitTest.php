@@ -34,3 +34,29 @@ it('payments actions that dispatch events also reference DB::afterCommit', funct
 
     expect($offenders)->toBe([], 'These Action files dispatch domain events without using DB::afterCommit anywhere: '.implode(', ', $offenders));
 });
+
+// T702 — Settlement actions must also fire events after commit
+it('settlement actions that dispatch events also reference DB::afterCommit', function (): void {
+    $offenders = [];
+
+    $finder = (new Finder)
+        ->files()
+        ->in(base_path('app/Modules/Settlement/Application/Actions'))
+        ->name('*.php');
+
+    foreach ($finder as $file) {
+        $code = $file->getContents();
+
+        $hasEventDispatch = preg_match('/(?<![>:])\bevent\s*\(/', $code) || preg_match('/::dispatch\s*\(/', $code);
+
+        if (! $hasEventDispatch) {
+            continue;
+        }
+
+        if (! str_contains($code, 'DB::afterCommit')) {
+            $offenders[] = $file->getRelativePathname();
+        }
+    }
+
+    expect($offenders)->toBe([], 'These Settlement Action files dispatch domain events without using DB::afterCommit anywhere: '.implode(', ', $offenders));
+});

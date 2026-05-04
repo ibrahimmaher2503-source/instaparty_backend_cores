@@ -5,6 +5,8 @@ declare(strict_types=1);
 use App\Modules\Catalog\Http\Controllers\CategoryController;
 use App\Modules\Catalog\Http\Controllers\OccasionController;
 use App\Modules\Catalog\Http\Controllers\Vendor\DigitalServiceController;
+use App\Modules\Catalog\Http\Controllers\Vendor\ImportDigitalServicesController;
+use App\Modules\Catalog\Http\Controllers\Vendor\ImportSaleServicesController;
 use App\Modules\Catalog\Http\Controllers\Vendor\RentalServiceController;
 use App\Modules\Catalog\Http\Controllers\Vendor\SaleServiceController;
 use Illuminate\Support\Facades\Route;
@@ -24,4 +26,8 @@ Route::middleware(['auth:sanctum'])->prefix('api/v1/vendor')->group(function ():
     // Digital services
     Route::post('services/digital', [DigitalServiceController::class, 'store']);
     Route::patch('services/digital/{publicId}', [DigitalServiceController::class, 'update'])->name('vendor.services.digital.update');
+
+    // Excel imports
+    Route::post('services/sale/import', [ImportSaleServicesController::class, 'store'])->name('vendor.services.sale.import');
+    Route::post('services/digital/import', [ImportDigitalServicesController::class, 'store'])->name('vendor.services.digital.import');
 });

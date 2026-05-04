@@ -1,0 +1,475 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - generic [ref=e3]:
+      - navigation [ref=e5]:
+        - generic [ref=e6]:
+          - generic [ref=e9]:
+            - generic [ref=e10]: بحث عام
+            - generic [ref=e11]:
+              - img [ref=e13]
+              - searchbox "بحث عام" [ref=e16]
+          - generic [ref=e21] [cursor=pointer]: AR
+          - button "قائمة المستخدم" [ref=e24] [cursor=pointer]:
+            - img "صورة شخصية لـ InstaParty Admin" [ref=e25]
+      - main [ref=e26]:
+        - generic [ref=e27]:
+          - generic [ref=e28]:
+            - heading "لوحة التحكم" [level=1] [ref=e31]
+            - generic [ref=e34]:
+              - generic [ref=e39]:
+                - img "صورة شخصية لـ InstaParty Admin" [ref=e40]
+                - generic [ref=e41]:
+                  - heading "مرحباً" [level=2] [ref=e42]
+                  - paragraph [ref=e43]: InstaParty Admin
+                - button "تسجيل الخروج" [ref=e45] [cursor=pointer]:
+                  - img [ref=e46]
+                  - generic [ref=e49]: تسجيل الخروج
+              - generic [ref=e54]:
+                - generic [ref=e55]:
+                  - link "Filament" [ref=e56] [cursor=pointer]:
+                    - /url: https://filamentphp.com
+                    - img "Filament" [ref=e57]
+                  - paragraph [ref=e60]: v3.3.50
+                - generic [ref=e61]:
+                  - link "الوثائق" [ref=e62] [cursor=pointer]:
+                    - /url: https://filamentphp.com/docs
+                    - img [ref=e63]
+                    - generic [ref=e65]: الوثائق
+                  - link "GitHub" [ref=e66] [cursor=pointer]:
+                    - /url: https://github.com/filamentphp/filament
+                    - img [ref=e68]
+                    - generic [ref=e70]: GitHub
+          - generic:
+            - dialog
+          - generic:
+            - dialog
+          - generic:
+            - dialog
+    - complementary [ref=e75]:
+      - link "Laravel" [ref=e79] [cursor=pointer]:
+        - /url: http://127.0.0.1:8000/admin
+        - generic [ref=e80]: Laravel
+      - navigation [ref=e81]:
+        - list [ref=e82]:
+          - listitem [ref=e83]:
+            - list [ref=e84]:
+              - listitem [ref=e85]:
+                - link "لوحة التحكم" [ref=e86] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin
+                  - img [ref=e87]
+                  - generic [ref=e89]: لوحة التحكم
+              - listitem [ref=e90]:
+                - link "Activity Logs" [ref=e91] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/activitylogs
+                  - img [ref=e92]
+                  - generic [ref=e94]: Activity Logs
+          - listitem [ref=e95]:
+            - generic [ref=e96] [cursor=pointer]:
+              - generic [ref=e97]: إدارة الصلاحيات
+              - button "إدارة الصلاحيات" [expanded] [ref=e98]:
+                - generic [ref=e99]: إدارة الصلاحيات
+                - img [ref=e100]
+            - list [ref=e102]:
+              - listitem [ref=e103]:
+                - link "الأدوار 5" [ref=e104] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/shield/roles
+                  - img [ref=e105]
+                  - generic [ref=e107]: الأدوار
+                  - generic [ref=e111]: "5"
+          - listitem [ref=e112]:
+            - generic [ref=e113] [cursor=pointer]:
+              - generic [ref=e114]: Moderation
+              - button "Moderation" [expanded] [ref=e115]:
+                - generic [ref=e116]: Moderation
+                - img [ref=e117]
+            - list [ref=e119]:
+              - listitem [ref=e120]:
+                - link "إشراف التقييمات" [ref=e121] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/review-moderation-page
+                  - img [ref=e122]
+                  - generic [ref=e124]: إشراف التقييمات
+              - listitem [ref=e125]:
+                - link "تقييمات الخدمات" [ref=e126] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/service-reviews
+                  - img [ref=e127]
+                  - generic [ref=e129]: تقييمات الخدمات
+              - listitem [ref=e130]:
+                - link "تقييمات الموردين" [ref=e131] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/vendor-reviews
+                  - img [ref=e132]
+                  - generic [ref=e134]: تقييمات الموردين
+              - listitem [ref=e135]:
+                - link "سجلات الإشراف" [ref=e136] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/review-moderation-logs
+                  - img [ref=e137]
+                  - generic [ref=e139]: سجلات الإشراف
+          - listitem [ref=e140]:
+            - generic [ref=e141] [cursor=pointer]:
+              - generic [ref=e142]: Booking
+              - button "Booking" [expanded] [ref=e143]:
+                - generic [ref=e144]: Booking
+                - img [ref=e145]
+            - list [ref=e147]:
+              - listitem [ref=e148]:
+                - link "الحجوزات" [ref=e149] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/bookings
+                  - img [ref=e150]
+                  - generic [ref=e152]: الحجوزات
+              - listitem [ref=e153]:
+                - link "التعديلات" [ref=e154] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/booking-modifications
+                  - img [ref=e155]
+                  - generic [ref=e157]: التعديلات
+              - listitem [ref=e158]:
+                - link "انتقالات الحالة" [ref=e159] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/booking-state-transitions
+                  - img [ref=e160]
+                  - generic [ref=e162]: انتقالات الحالة
+              - listitem [ref=e163]:
+                - link "مراقبة التفاوض" [ref=e164] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/bookings-monitor
+                  - img [ref=e165]
+                  - generic [ref=e167]: مراقبة التفاوض
+          - listitem [ref=e168]:
+            - generic [ref=e169] [cursor=pointer]:
+              - generic [ref=e170]: Catalog
+              - button "Catalog" [expanded] [ref=e171]:
+                - generic [ref=e172]: Catalog
+                - img [ref=e173]
+            - list [ref=e175]:
+              - listitem [ref=e176]:
+                - link "المناسبات" [ref=e177] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/occasions
+                  - img [ref=e178]
+                  - generic [ref=e180]: المناسبات
+              - listitem [ref=e181]:
+                - link "التصنيفات" [ref=e182] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/categories
+                  - img [ref=e183]
+                  - generic [ref=e186]: التصنيفات
+              - listitem [ref=e187]:
+                - link "مخططات حقول التصنيف" [ref=e188] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/category-field-schemas
+                  - img [ref=e189]
+                  - generic [ref=e191]: مخططات حقول التصنيف
+              - listitem [ref=e192]:
+                - link "سمات الخدمات" [ref=e193] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/service-themes
+                  - img [ref=e194]
+                  - generic [ref=e196]: سمات الخدمات
+          - listitem [ref=e197]:
+            - generic [ref=e198] [cursor=pointer]:
+              - generic [ref=e199]: Services
+              - button "Services" [expanded] [ref=e200]:
+                - generic [ref=e201]: Services
+                - img [ref=e202]
+            - list [ref=e204]:
+              - listitem [ref=e205]:
+                - link "خدمات الإيجار" [ref=e206] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/rental-services
+                  - img [ref=e207]
+                  - generic [ref=e209]: خدمات الإيجار
+              - listitem [ref=e210]:
+                - link "خدمات البيع" [ref=e211] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/sale-services
+                  - img [ref=e212]
+                  - generic [ref=e214]: خدمات البيع
+              - listitem [ref=e215]:
+                - link "الخدمات الرقمية" [ref=e216] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/digital-services
+                  - img [ref=e217]
+                  - generic [ref=e219]: الخدمات الرقمية
+              - listitem [ref=e220]:
+                - link "استيراد خدمات الإيجار" [ref=e221] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/import-rental-services-page
+                  - img [ref=e222]
+                  - generic [ref=e224]: استيراد خدمات الإيجار
+              - listitem [ref=e225]:
+                - link "استيراد خدمات البيع" [ref=e226] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/import-sale-services-page
+                  - img [ref=e227]
+                  - generic [ref=e229]: استيراد خدمات البيع
+              - listitem [ref=e230]:
+                - link "استيراد الخدمات الرقمية" [ref=e231] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/import-digital-services-page
+                  - img [ref=e232]
+                  - generic [ref=e234]: استيراد الخدمات الرقمية
+              - listitem [ref=e235]:
+                - link "حجوزات المخزون" [ref=e236] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/service-inventory-reservations
+                  - img [ref=e237]
+                  - generic [ref=e239]: حجوزات المخزون
+              - listitem [ref=e240]:
+                - link "استيرادات Excel" [ref=e241] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/excel-imports
+                  - img [ref=e242]
+                  - generic [ref=e244]: استيرادات Excel
+          - listitem [ref=e245]:
+            - generic [ref=e246] [cursor=pointer]:
+              - generic [ref=e247]: Communication
+              - button "Communication" [expanded] [ref=e248]:
+                - generic [ref=e249]: Communication
+                - img [ref=e250]
+            - list [ref=e252]:
+              - listitem [ref=e253]:
+                - link "قوالب الإشعارات" [ref=e254] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/notification-templates
+                  - img [ref=e255]
+                  - generic [ref=e257]: قوالب الإشعارات
+              - listitem [ref=e258]:
+                - link "الحملات التسويقية" [ref=e259] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/campaigns
+                  - img [ref=e260]
+                  - generic [ref=e262]: الحملات التسويقية
+              - listitem [ref=e263]:
+                - link "تفضيلات الإشعارات" [ref=e264] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/notification-preferences
+                  - img [ref=e265]
+                  - generic [ref=e267]: تفضيلات الإشعارات
+              - listitem [ref=e268]:
+                - link "سجلات الإرسال" [ref=e269] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/notification-dispatches
+                  - img [ref=e270]
+                  - generic [ref=e272]: سجلات الإرسال
+          - listitem [ref=e273]:
+            - generic [ref=e274] [cursor=pointer]:
+              - generic [ref=e275]: Discovery
+              - button "Discovery" [expanded] [ref=e276]:
+                - generic [ref=e277]: Discovery
+                - img [ref=e278]
+            - list [ref=e280]:
+              - listitem [ref=e281]:
+                - link "البحوث المحفوظة" [ref=e282] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/saved-searches
+                  - img [ref=e283]
+                  - generic [ref=e285]: البحوث المحفوظة
+              - listitem [ref=e286]:
+                - link "سجل البحث" [ref=e287] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/search-logs
+                  - img [ref=e288]
+                  - generic [ref=e290]: سجل البحث
+              - listitem [ref=e291]:
+                - link "قوائم الأمنيات" [ref=e292] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/wishlists
+                  - img [ref=e293]
+                  - generic [ref=e295]: قوائم الأمنيات
+          - listitem [ref=e296]:
+            - generic [ref=e297] [cursor=pointer]:
+              - generic [ref=e298]: الجغرافيا
+              - button "الجغرافيا" [expanded] [ref=e299]:
+                - generic [ref=e300]: الجغرافيا
+                - img [ref=e301]
+            - list [ref=e303]:
+              - listitem [ref=e304]:
+                - link "الدول" [ref=e305] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/countries
+                  - img [ref=e306]
+                  - generic [ref=e308]: الدول
+              - listitem [ref=e309]:
+                - link "المحافظات" [ref=e310] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/governorates
+                  - img [ref=e311]
+                  - generic [ref=e313]: المحافظات
+              - listitem [ref=e314]:
+                - link "المناطق" [ref=e315] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/regions
+                  - img [ref=e316]
+                  - generic [ref=e319]: المناطق
+              - listitem [ref=e320]:
+                - link "المدن" [ref=e321] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/cities
+                  - img [ref=e322]
+                  - generic [ref=e324]: المدن
+          - listitem [ref=e325]:
+            - generic [ref=e326] [cursor=pointer]:
+              - generic [ref=e327]: Identity
+              - button "Identity" [expanded] [ref=e328]:
+                - generic [ref=e329]: Identity
+                - img [ref=e330]
+            - list [ref=e332]:
+              - listitem [ref=e333]:
+                - link "المستخدمون" [ref=e334] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/users
+                  - img [ref=e335]
+                  - generic [ref=e337]: المستخدمون
+              - listitem [ref=e338]:
+                - link "ملفات العملاء" [ref=e339] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/customer-profiles
+                  - img [ref=e340]
+                  - generic [ref=e342]: ملفات العملاء
+              - listitem [ref=e343]:
+                - link "عناوين العملاء" [ref=e344] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/customer-addresses
+                  - img [ref=e345]
+                  - generic [ref=e348]: عناوين العملاء
+              - listitem [ref=e349]:
+                - link "أجهزة المستخدمين" [ref=e350] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/user-devices
+                  - img [ref=e351]
+                  - generic [ref=e353]: أجهزة المستخدمين
+          - listitem [ref=e354]:
+            - generic [ref=e355] [cursor=pointer]:
+              - generic [ref=e356]: Vendor Onboarding
+              - button "Vendor Onboarding" [expanded] [ref=e357]:
+                - generic [ref=e358]: Vendor Onboarding
+                - img [ref=e359]
+            - list [ref=e361]:
+              - listitem [ref=e362]:
+                - link "قائمة الانتظار" [ref=e363] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/vendor-approval-queue
+                  - img [ref=e364]
+                  - generic [ref=e366]: قائمة الانتظار
+              - listitem [ref=e367]:
+                - link "المستندات" [ref=e368] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/vendor-document-filaments
+                  - img [ref=e369]
+                  - generic [ref=e371]: المستندات
+              - listitem [ref=e372]:
+                - link "مناطق التغطية" [ref=e373] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/vendor-coverage-areas
+                  - img [ref=e374]
+                  - generic [ref=e376]: مناطق التغطية
+              - listitem [ref=e377]:
+                - link "ساعات العمل" [ref=e378] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/vendor-business-hours
+                  - img [ref=e379]
+                  - generic [ref=e381]: ساعات العمل
+              - listitem [ref=e382]:
+                - link "أنواع المنتجات المعتمدة" [ref=e383] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/vendor-approved-product-types
+                  - img [ref=e384]
+                  - generic [ref=e386]: أنواع المنتجات المعتمدة
+          - listitem [ref=e387]:
+            - generic [ref=e388] [cursor=pointer]:
+              - generic [ref=e389]: Payments
+              - button "Payments" [expanded] [ref=e390]:
+                - generic [ref=e391]: Payments
+                - img [ref=e392]
+            - list [ref=e394]:
+              - listitem [ref=e395]:
+                - link "المدفوعات" [ref=e396] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/payments
+                  - img [ref=e397]
+                  - generic [ref=e399]: المدفوعات
+              - listitem [ref=e400]:
+                - link "محاولات الدفع" [ref=e401] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/payment-attempts
+                  - img [ref=e402]
+                  - generic [ref=e404]: محاولات الدفع
+              - listitem [ref=e405]:
+                - link "المبالغ المستردة" [ref=e406] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/refunds
+                  - img [ref=e407]
+                  - generic [ref=e409]: المبالغ المستردة
+              - listitem [ref=e410]:
+                - link "سجلات Webhook" [ref=e411] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/gateway-webhook-logs
+                  - img [ref=e412]
+                  - generic [ref=e414]: سجلات Webhook
+              - listitem [ref=e415]:
+                - link "مفاتيح الإيدمبوتنسي" [ref=e416] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/idempotency-keys
+                  - img [ref=e417]
+                  - generic [ref=e419]: مفاتيح الإيدمبوتنسي
+          - listitem [ref=e420]:
+            - generic [ref=e421] [cursor=pointer]:
+              - generic [ref=e422]: إدارة مقدمي الخدمات
+              - button "إدارة مقدمي الخدمات" [expanded] [ref=e423]:
+                - generic [ref=e424]: إدارة مقدمي الخدمات
+                - img [ref=e425]
+            - list [ref=e427]:
+              - listitem [ref=e428]:
+                - link "جميع مقدمي الخدمات" [ref=e429] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/vendor-profiles
+                  - img [ref=e430]
+                  - generic [ref=e432]: جميع مقدمي الخدمات
+          - listitem [ref=e433]:
+            - generic [ref=e434] [cursor=pointer]:
+              - generic [ref=e435]: Settlement
+              - button "Settlement" [expanded] [ref=e436]:
+                - generic [ref=e437]: Settlement
+                - img [ref=e438]
+            - list [ref=e440]:
+              - listitem [ref=e441]:
+                - link "قواعد العمولة" [ref=e442] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/settlement-commission-rules
+                  - img [ref=e443]
+                  - generic [ref=e445]: قواعد العمولة
+              - listitem [ref=e446]:
+                - link "سجل المحفظة" [ref=e447] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/settlement-wallets
+                  - img [ref=e448]
+                  - generic [ref=e450]: سجل المحفظة
+              - listitem [ref=e451]:
+                - link "طلبات السحب" [ref=e452] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/settlement-withdrawals
+                  - img [ref=e453]
+                  - generic [ref=e455]: طلبات السحب
+              - listitem [ref=e456]:
+                - link "العمولات" [ref=e457] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/commissions
+                  - img [ref=e458]
+                  - generic [ref=e460]: العمولات
+              - listitem [ref=e461]:
+                - link "جولات التسوية" [ref=e462] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/settlement-runs
+                  - img [ref=e463]
+                  - generic [ref=e465]: جولات التسوية
+          - listitem [ref=e466]:
+            - generic [ref=e467] [cursor=pointer]:
+              - generic [ref=e468]: Settings
+              - button "Settings" [expanded] [ref=e469]:
+                - generic [ref=e470]: Settings
+                - img [ref=e471]
+            - list [ref=e473]:
+              - listitem [ref=e474]:
+                - link "CMS Pages" [ref=e475] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/cms-pages
+                  - img [ref=e476]
+                  - generic [ref=e478]: CMS Pages
+              - listitem [ref=e479]:
+                - link "App Settings" [ref=e480] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/manage-settings
+                  - img [ref=e481]
+                  - generic [ref=e484]: App Settings
+          - listitem [ref=e485]:
+            - generic [ref=e486] [cursor=pointer]:
+              - generic [ref=e487]: Loyalty
+              - button "Loyalty" [expanded] [ref=e488]:
+                - generic [ref=e489]: Loyalty
+                - img [ref=e490]
+            - list [ref=e492]:
+              - listitem [ref=e493]:
+                - link "قواعد الولاء" [ref=e494] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/loyalty-rules
+                  - img [ref=e495]
+                  - generic [ref=e497]: قواعد الولاء
+              - listitem [ref=e498]:
+                - link "استبدال النقاط" [ref=e499] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/loyalty-redemptions
+                  - img [ref=e500]
+                  - generic [ref=e502]: استبدال النقاط
+              - listitem [ref=e503]:
+                - link "سجل النقاط" [ref=e504] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/loyalty-ledgers
+                  - img [ref=e505]
+                  - generic [ref=e507]: سجل النقاط
+              - listitem [ref=e508]:
+                - link "برامج الولاء" [ref=e509] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/loyalty-programs
+                  - img [ref=e510]
+                  - generic [ref=e512]: برامج الولاء
+          - listitem [ref=e513]:
+            - generic [ref=e514] [cursor=pointer]:
+              - generic [ref=e515]: Users
+              - button "Users" [expanded] [ref=e516]:
+                - generic [ref=e517]: Users
+                - img [ref=e518]
+            - list [ref=e520]:
+              - listitem [ref=e521]:
+                - link "العملاء" [ref=e522] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/customers
+                  - img [ref=e523]
+                  - generic [ref=e525]: العملاء
+  - generic:
+    - status

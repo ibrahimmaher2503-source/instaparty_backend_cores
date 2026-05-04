@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace App\Modules\Booking\Domain\Models;
 
+use App\Modules\Booking\Database\Factories\BookingVendorFactory;
 use App\Modules\Booking\Domain\Enums\VendorSubStatus;
 use App\Modules\Shared\Domain\Casts\MoneyCast;
 use App\Modules\Shared\Domain\Concerns\HasPublicId;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -37,6 +39,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class BookingVendor extends Model
 {
+    use HasFactory;
     use HasPublicId;
 
     protected $fillable = [
@@ -60,6 +63,11 @@ class BookingVendor extends Model
         'commission' => MoneyCast::class.':commission',
         'vendor_payout' => MoneyCast::class.':vendor_payout',
     ];
+
+    protected static function newFactory(): BookingVendorFactory
+    {
+        return BookingVendorFactory::new();
+    }
 
     /** @return BelongsTo<Booking, $this> */
     public function booking(): BelongsTo

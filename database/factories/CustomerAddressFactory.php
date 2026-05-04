@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Database\Factories;
 
+use App\Modules\Geography\Domain\Models\City;
 use App\Modules\Identity\Domain\Models\CustomerAddress;
 use App\Modules\Identity\Domain\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -21,7 +22,7 @@ class CustomerAddressFactory extends Factory
         return [
             'public_id' => (string) Str::ulid(),
             'user_id' => User::factory(),
-            'city_id' => 1,
+            'city_id' => City::factory(),
             'label' => fake()->randomElement(['Home', 'Work', 'Other']),
             'address_line' => fake()->streetAddress(),
             'building' => null,

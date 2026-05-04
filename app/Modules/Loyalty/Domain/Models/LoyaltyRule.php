@@ -4,14 +4,16 @@ declare(strict_types=1);
 
 namespace App\Modules\Loyalty\Domain\Models;
 
+use App\Modules\Loyalty\Database\Factories\LoyaltyRuleFactory;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Spatie\Translatable\HasTranslations;
 
 class LoyaltyRule extends Model
 {
-    use HasUlids, HasTranslations;
+    use HasFactory, HasTranslations, HasUlids;
 
     protected $table = 'loyalty_rules';
 
@@ -34,20 +36,25 @@ class LoyaltyRule extends Model
     protected function casts(): array
     {
         return [
-            'earn_points_per_minor'    => 'integer',
-            'earn_minor_per_unit'      => 'integer',
-            'redemption_ratio_points'  => 'integer',
-            'redemption_ratio_minor'   => 'integer',
-            'min_points_to_redeem'     => 'integer',
-            'max_redeem_pct_bps'       => 'integer',
-            'is_active'                => 'boolean',
-            'effective_from'           => 'datetime',
+            'earn_points_per_minor' => 'integer',
+            'earn_minor_per_unit' => 'integer',
+            'redemption_ratio_points' => 'integer',
+            'redemption_ratio_minor' => 'integer',
+            'min_points_to_redeem' => 'integer',
+            'max_redeem_pct_bps' => 'integer',
+            'is_active' => 'boolean',
+            'effective_from' => 'datetime',
         ];
     }
 
     public function uniqueIds(): array
     {
         return ['public_id'];
+    }
+
+    protected static function newFactory(): LoyaltyRuleFactory
+    {
+        return LoyaltyRuleFactory::new();
     }
 
     public function program(): BelongsTo

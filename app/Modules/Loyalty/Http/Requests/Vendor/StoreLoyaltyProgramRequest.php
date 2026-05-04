@@ -24,14 +24,14 @@ class StoreLoyaltyProgramRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name'              => ['required', 'array'],
-            'name.en'           => ['required', 'string', 'max:150'],
-            'name.ar'           => ['required', 'string', 'max:150'],
-            'terms'             => ['nullable', 'array'],
-            'terms.en'          => ['nullable', 'string', 'max:2000'],
-            'terms.ar'          => ['nullable', 'string', 'max:2000'],
-            'currency'          => ['nullable', 'string', 'size:3'],
-            'expiration_days'   => ['nullable', 'integer', 'min:1', 'max:3650'],
+            'name' => ['required', 'array'],
+            'name.en' => ['required', 'string', 'max:150'],
+            'name.ar' => ['required', 'string', 'max:150'],
+            'terms' => ['nullable', 'array'],
+            'terms.en' => ['nullable', 'string', 'max:2000'],
+            'terms.ar' => ['nullable', 'string', 'max:2000'],
+            'currency' => ['nullable', 'string', 'size:3'],
+            'expiration_days' => ['nullable', 'integer', 'min:1', 'max:3650'],
         ];
     }
 }

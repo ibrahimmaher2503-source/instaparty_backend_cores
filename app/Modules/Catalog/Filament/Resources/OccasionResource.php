@@ -29,9 +29,27 @@ class OccasionResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-calendar';
 
-    protected static ?string $navigationGroup = 'Catalog';
+    public static function getNavigationGroup(): ?string
+    {
+        return __('admin.nav.groups.catalog');
+    }
 
     protected static ?int $navigationSort = 1;
+
+    public static function getNavigationLabel(): string
+    {
+        return __('catalog.nav.occasions');
+    }
+
+    public static function getModelLabel(): string
+    {
+        return __('catalog.models.occasion.singular');
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('catalog.models.occasion.plural');
+    }
 
     public static function getTranslatableLocales(): array
     {
@@ -72,17 +90,17 @@ class OccasionResource extends Resource
                                 ->maxLength(500)
                                 ->label('Description (English)'),
                         ]),
-                    Tabs\Tab::make('العربية')
+                    Tabs\Tab::make('Ø§Ù„Ø¹Ø±Ø¨ÙŠØ©')
                         ->schema([
                             TextInput::make('name.ar')
                                 ->required()
                                 ->maxLength(255)
-                                ->label('الاسم (عربي)')
-                                ->dir('rtl'),
+                                ->label('Ø§Ù„Ø§Ø³Ù… (Ø¹Ø±Ø¨ÙŠ)')
+                                ->extraInputAttributes(['dir' => 'rtl']),
                             TextInput::make('description.ar')
                                 ->maxLength(500)
-                                ->label('الوصف (عربي)')
-                                ->dir('rtl'),
+                                ->label('Ø§Ù„ÙˆØµÙ (Ø¹Ø±Ø¨ÙŠ)')
+                                ->extraInputAttributes(['dir' => 'rtl']),
                         ]),
                 ])
                 ->columnSpanFull(),

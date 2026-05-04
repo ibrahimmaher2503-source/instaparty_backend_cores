@@ -8,10 +8,10 @@ use App\Modules\Communication\Application\Services\InvalidSegmentFilterException
 use App\Modules\Communication\Domain\Enums\CampaignChannel;
 use App\Modules\Communication\Domain\Enums\CampaignStatus;
 use App\Modules\Communication\Domain\Enums\CampaignTargetLocale;
-use App\Modules\Identity\Database\Factories\UserFactory;
+use App\Modules\Identity\Domain\Models\User;
 
 it('creates a campaign in draft state', function () {
-    $admin = UserFactory::new()->admin()->create();
+    $admin = User::factory()->asAdmin()->create();
 
     $dto = new BuildCampaignDTO(
         name: '10% off Rentals',
@@ -32,7 +32,7 @@ it('creates a campaign in draft state', function () {
 })->group('communication', 'campaign');
 
 it('rejects a campaign with missing English body', function () {
-    $admin = UserFactory::new()->admin()->create();
+    $admin = User::factory()->asAdmin()->create();
 
     $dto = new BuildCampaignDTO(
         name: 'Test',
@@ -49,7 +49,7 @@ it('rejects a campaign with missing English body', function () {
 })->group('communication', 'campaign');
 
 it('rejects a campaign with missing Arabic body', function () {
-    $admin = UserFactory::new()->admin()->create();
+    $admin = User::factory()->asAdmin()->create();
 
     $dto = new BuildCampaignDTO(
         name: 'Test',
@@ -66,7 +66,7 @@ it('rejects a campaign with missing Arabic body', function () {
 })->group('communication', 'campaign');
 
 it('rejects a campaign with empty segment filters', function () {
-    $admin = UserFactory::new()->admin()->create();
+    $admin = User::factory()->asAdmin()->create();
 
     $dto = new BuildCampaignDTO(
         name: 'Test',

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Modules\Booking\Domain\Models;
 
+use App\Modules\Booking\Database\Factories\BookingItemFactory;
 use App\Modules\Booking\Domain\States\DigitalItemStatus\DigitalItemStatus;
 use App\Modules\Booking\Domain\States\RentalItemStatus\RentalItemStatus;
 use App\Modules\Booking\Domain\States\SaleItemStatus\SaleItemStatus;
@@ -11,6 +12,7 @@ use App\Modules\Catalog\Domain\Enums\ProductType;
 use App\Modules\Shared\Domain\Casts\MoneyCast;
 use App\Modules\Shared\Domain\Concerns\HasPublicId;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Spatie\ModelStates\State;
@@ -34,6 +36,7 @@ use Spatie\ModelStates\State;
  */
 class BookingItem extends Model
 {
+    use HasFactory;
     use HasPublicId;
 
     protected $fillable = [
@@ -62,6 +65,11 @@ class BookingItem extends Model
         'line_total' => MoneyCast::class.':line_total',
         'commission' => MoneyCast::class.':commission',
     ];
+
+    protected static function newFactory(): BookingItemFactory
+    {
+        return BookingItemFactory::new();
+    }
 
     public function bookingVendor(): BelongsTo
     {

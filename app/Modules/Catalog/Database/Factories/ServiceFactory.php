@@ -6,7 +6,9 @@ namespace App\Modules\Catalog\Database\Factories;
 
 use App\Modules\Catalog\Domain\Enums\ProductType;
 use App\Modules\Catalog\Domain\Enums\ServiceStatus;
+use App\Modules\Catalog\Domain\Models\Category;
 use App\Modules\Catalog\Domain\Models\Service;
+use App\Modules\Identity\Domain\Models\VendorProfile;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
@@ -24,8 +26,10 @@ class ServiceFactory extends Factory
 
         return [
             'public_id' => (string) Str::ulid(),
-            'vendor_profile_id' => 1, // overridden in tests
-            'category_id' => 1, // overridden in tests
+            'vendor_profile_id' => VendorProfile::factory()->approved(),
+            'category_id' => Category::factory()->state([
+                'allowed_product_types' => [$productType->value],
+            ]),
             'product_type' => $productType,
             'name' => ['en' => $name, 'ar' => $name.' (ar)'],
             'short_description' => ['en' => $this->faker->sentence(), 'ar' => $this->faker->sentence()],
@@ -40,21 +44,46 @@ class ServiceFactory extends Factory
 
     public function rental(): static
     {
-        return $this->state(['product_type' => ProductType::Rental]);
+        return $this->state([
+            'product_type' => ProductType::Rental,
+            'category_id' => Category::factory()->state([
+                'allowed_product_types' => [ProductType::Rental->value],
+            ]),
+        ]);
     }
 
     public function sale(): static
     {
-        return $this->state(['product_type' => ProductType::Sale]);
+        return $this->state([
+            'product_type' => ProductType::Sale,
+            'category_id' => Category::factory()->state([
+                'allowed_product_types' => [ProductType::Sale->value],
+            ]),
+        ]);
     }
 
     public function digital(): static
     {
-        return $this->state(['product_type' => ProductType::Digital]);
+        return $this->state([
+            'product_type' => ProductType::Digital,
+            'category_id' => Category::factory()->state([
+                'allowed_product_types' => [ProductType::Digital->value],
+            ]),
+        ]);
     }
 
     public function published(): static
     {
         return $this->state(['status' => ServiceStatus::Published]);
+    }
+
+    public function pendingReview(): static
+    {
+        return $this->state(['status' => ServiceStatus::PendingReview]);
+    }
+
+    public function archived(): static
+    {
+        return $this->state(['status' => ServiceStatus::Archived]);
     }
 }

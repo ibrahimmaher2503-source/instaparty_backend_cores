@@ -8,8 +8,6 @@ use App\Modules\Booking\Domain\Contracts\BookingHistoryReader;
 use App\Modules\Catalog\Domain\Enums\ProductType;
 use Illuminate\Support\Collection;
 
-class InvalidSegmentFilterException extends \InvalidArgumentException {}
-
 class SegmentResolver
 {
     private const ALLOWED_KEYS = [

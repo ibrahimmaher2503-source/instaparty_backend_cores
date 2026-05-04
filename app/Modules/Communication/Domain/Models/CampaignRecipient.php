@@ -4,18 +4,27 @@ declare(strict_types=1);
 
 namespace App\Modules\Communication\Domain\Models;
 
+use App\Modules\Communication\Database\Factories\CampaignRecipientFactory;
 use App\Modules\Communication\Domain\Enums\CampaignRecipientStatus;
 use App\Modules\Identity\Domain\Models\User;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class CampaignRecipient extends Model
 {
+    use HasFactory;
+
     protected $table = 'campaign_recipients';
 
     public $timestamps = false;
 
     protected $guarded = [];
+
+    protected static function newFactory(): CampaignRecipientFactory
+    {
+        return CampaignRecipientFactory::new();
+    }
 
     protected function casts(): array
     {

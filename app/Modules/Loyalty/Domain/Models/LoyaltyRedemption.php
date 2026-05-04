@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace App\Modules\Loyalty\Domain\Models;
 
+use App\Modules\Loyalty\Database\Factories\LoyaltyRedemptionFactory;
 use App\Modules\Loyalty\Domain\States\Redemption\RedemptionState;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -13,7 +15,7 @@ use Spatie\ModelStates\HasStates;
 
 class LoyaltyRedemption extends Model
 {
-    use HasUlids, HasStates;
+    use HasFactory, HasStates, HasUlids;
 
     protected $table = 'loyalty_redemptions';
 
@@ -36,18 +38,23 @@ class LoyaltyRedemption extends Model
     protected function casts(): array
     {
         return [
-            'status'       => RedemptionState::class,
-            'points_held'  => 'integer',
+            'status' => RedemptionState::class,
+            'points_held' => 'integer',
             'discount_minor' => 'integer',
-            'applied_at'   => 'datetime',
-            'voided_at'    => 'datetime',
-            'reversed_at'  => 'datetime',
+            'applied_at' => 'datetime',
+            'voided_at' => 'datetime',
+            'reversed_at' => 'datetime',
         ];
     }
 
     public function uniqueIds(): array
     {
         return ['public_id'];
+    }
+
+    protected static function newFactory(): LoyaltyRedemptionFactory
+    {
+        return LoyaltyRedemptionFactory::new();
     }
 
     public function program(): BelongsTo

@@ -14,13 +14,13 @@ class MyReviewResource extends JsonResource
         $reviewType = $this->additional['review_type'] ?? (isset($this->service_id) ? 'service' : 'vendor');
 
         return [
-            'review_type'       => $reviewType,
-            'public_id'         => $this->public_id,
-            'rating'            => $this->rating,
-            'body'              => $this->body,
-            'locale'            => $this->locale,
+            'review_type' => $reviewType,
+            'public_id' => $this->public_id,
+            'rating' => $this->rating,
+            'body' => $this->body,
+            'locale' => $this->locale,
             'moderation_status' => $this->moderation_status,
-            'created_at'        => $this->created_at?->toISOString(),
+            'created_at' => $this->created_at?->toISOString(),
         ];
     }
 }

@@ -1,0 +1,842 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - generic [ref=e3]:
+      - navigation [ref=e5]:
+        - generic [ref=e6]:
+          - generic [ref=e9]:
+            - generic [ref=e10]: Global search
+            - generic [ref=e11]:
+              - img [ref=e13]
+              - searchbox "Global search" [ref=e16]
+          - generic [ref=e21] [cursor=pointer]: EN
+          - button "User menu" [ref=e24] [cursor=pointer]:
+            - img "Avatar of InstaParty Admin" [ref=e25]
+      - main [ref=e26]:
+        - generic [ref=e28]:
+          - generic [ref=e29]:
+            - generic [ref=e30]:
+              - navigation [ref=e31]:
+                - list [ref=e32]:
+                  - listitem [ref=e33]:
+                    - link "Cities" [ref=e34] [cursor=pointer]:
+                      - /url: http://127.0.0.1:8000/admin/cities
+                  - listitem [ref=e35]:
+                    - img [ref=e36]
+                    - generic [ref=e38]: List
+              - heading "Cities" [level=1] [ref=e39]
+            - link "New City" [ref=e42] [cursor=pointer]:
+              - /url: http://127.0.0.1:8000/admin/cities/create
+              - generic [ref=e43]: New City
+          - generic [ref=e47]:
+            - generic [ref=e48]:
+              - generic [ref=e51]:
+                - generic [ref=e52]:
+                  - generic [ref=e53]: Search
+                  - generic [ref=e54]:
+                    - img [ref=e56]
+                    - searchbox "Search" [ref=e59]
+                - button "Filter 0" [ref=e62] [cursor=pointer]:
+                  - generic [ref=e63]: Filter
+                  - img [ref=e64]
+                  - generic [ref=e69]: "0"
+                - button "Toggle columns" [ref=e72] [cursor=pointer]:
+                  - generic [ref=e73]: Toggle columns
+                  - img [ref=e74]
+              - table [ref=e77]:
+                - rowgroup [ref=e78]:
+                  - row "Name Region Governorate Sort Order Active Actions" [ref=e79]:
+                    - columnheader "Name" [ref=e80]:
+                      - button "Name" [ref=e81] [cursor=pointer]:
+                        - generic [ref=e82]: Name
+                        - img [ref=e83]
+                    - columnheader "Region" [ref=e85]:
+                      - button "Region" [ref=e86] [cursor=pointer]:
+                        - generic [ref=e87]: Region
+                        - img [ref=e88]
+                    - columnheader "Governorate" [ref=e90]:
+                      - button "Governorate" [ref=e91] [cursor=pointer]:
+                        - generic [ref=e92]: Governorate
+                        - img [ref=e93]
+                    - columnheader "Sort Order" [ref=e95]:
+                      - button "Sort Order" [ref=e96] [cursor=pointer]:
+                        - generic [ref=e97]: Sort Order
+                        - img [ref=e98]
+                    - columnheader "Active" [ref=e100]:
+                      - button "Active" [ref=e101] [cursor=pointer]:
+                        - generic [ref=e102]: Active
+                        - img [ref=e103]
+                    - columnheader "Actions" [ref=e105]
+                - rowgroup [ref=e106]:
+                  - row "Nasr City East Cairo Cairo 1 Edit Delete" [ref=e107]:
+                    - cell "Nasr City" [ref=e108]:
+                      - link "Nasr City" [ref=e110] [cursor=pointer]:
+                        - /url: http://127.0.0.1:8000/admin/cities/60V15WACJ8DHGMSVQFP1X6MX3P/edit
+                        - generic [ref=e115]: Nasr City
+                    - cell "East Cairo" [ref=e116]:
+                      - link "East Cairo" [ref=e118] [cursor=pointer]:
+                        - /url: http://127.0.0.1:8000/admin/cities/60V15WACJ8DHGMSVQFP1X6MX3P/edit
+                        - generic [ref=e123]: East Cairo
+                    - cell "Cairo" [ref=e124]:
+                      - link "Cairo" [ref=e126] [cursor=pointer]:
+                        - /url: http://127.0.0.1:8000/admin/cities/60V15WACJ8DHGMSVQFP1X6MX3P/edit
+                        - generic [ref=e131]: Cairo
+                    - cell "1" [ref=e132]:
+                      - link "1" [ref=e134] [cursor=pointer]:
+                        - /url: http://127.0.0.1:8000/admin/cities/60V15WACJ8DHGMSVQFP1X6MX3P/edit
+                        - generic [ref=e139]: "1"
+                    - cell [ref=e140]:
+                      - link [ref=e142] [cursor=pointer]:
+                        - /url: http://127.0.0.1:8000/admin/cities/60V15WACJ8DHGMSVQFP1X6MX3P/edit
+                        - img [ref=e144]
+                    - cell "Edit Delete" [ref=e146]:
+                      - generic [ref=e148]:
+                        - link "Edit" [ref=e149] [cursor=pointer]:
+                          - /url: http://127.0.0.1:8000/admin/cities/60V15WACJ8DHGMSVQFP1X6MX3P/edit
+                          - img [ref=e150]
+                          - generic [ref=e153]: Edit
+                        - button "Delete" [ref=e154] [cursor=pointer]:
+                          - img [ref=e155]
+                          - generic [ref=e157]: Delete
+                  - row "Fifth Settlement New Cairo Cairo 1 Edit Delete" [ref=e158]:
+                    - cell "Fifth Settlement" [ref=e159]:
+                      - link "Fifth Settlement" [ref=e161] [cursor=pointer]:
+                        - /url: http://127.0.0.1:8000/admin/cities/2YRTQVK0MK68HERCY1692SWKDS/edit
+                        - generic [ref=e166]: Fifth Settlement
+                    - cell "New Cairo" [ref=e167]:
+                      - link "New Cairo" [ref=e169] [cursor=pointer]:
+                        - /url: http://127.0.0.1:8000/admin/cities/2YRTQVK0MK68HERCY1692SWKDS/edit
+                        - generic [ref=e174]: New Cairo
+                    - cell "Cairo" [ref=e175]:
+                      - link "Cairo" [ref=e177] [cursor=pointer]:
+                        - /url: http://127.0.0.1:8000/admin/cities/2YRTQVK0MK68HERCY1692SWKDS/edit
+                        - generic [ref=e182]: Cairo
+                    - cell "1" [ref=e183]:
+                      - link "1" [ref=e185] [cursor=pointer]:
+                        - /url: http://127.0.0.1:8000/admin/cities/2YRTQVK0MK68HERCY1692SWKDS/edit
+                        - generic [ref=e190]: "1"
+                    - cell [ref=e191]:
+                      - link [ref=e193] [cursor=pointer]:
+                        - /url: http://127.0.0.1:8000/admin/cities/2YRTQVK0MK68HERCY1692SWKDS/edit
+                        - img [ref=e195]
+                    - cell "Edit Delete" [ref=e197]:
+                      - generic [ref=e199]:
+                        - link "Edit" [ref=e200] [cursor=pointer]:
+                          - /url: http://127.0.0.1:8000/admin/cities/2YRTQVK0MK68HERCY1692SWKDS/edit
+                          - img [ref=e201]
+                          - generic [ref=e204]: Edit
+                        - button "Delete" [ref=e205] [cursor=pointer]:
+                          - img [ref=e206]
+                          - generic [ref=e208]: Delete
+                  - row "Maadi South Cairo Cairo 1 Edit Delete" [ref=e209]:
+                    - cell "Maadi" [ref=e210]:
+                      - link "Maadi" [ref=e212] [cursor=pointer]:
+                        - /url: http://127.0.0.1:8000/admin/cities/5Z12FWMPR7N9G2CQAC9WNYC5C8/edit
+                        - generic [ref=e217]: Maadi
+                    - cell "South Cairo" [ref=e218]:
+                      - link "South Cairo" [ref=e220] [cursor=pointer]:
+                        - /url: http://127.0.0.1:8000/admin/cities/5Z12FWMPR7N9G2CQAC9WNYC5C8/edit
+                        - generic [ref=e225]: South Cairo
+                    - cell "Cairo" [ref=e226]:
+                      - link "Cairo" [ref=e228] [cursor=pointer]:
+                        - /url: http://127.0.0.1:8000/admin/cities/5Z12FWMPR7N9G2CQAC9WNYC5C8/edit
+                        - generic [ref=e233]: Cairo
+                    - cell "1" [ref=e234]:
+                      - link "1" [ref=e236] [cursor=pointer]:
+                        - /url: http://127.0.0.1:8000/admin/cities/5Z12FWMPR7N9G2CQAC9WNYC5C8/edit
+                        - generic [ref=e241]: "1"
+                    - cell [ref=e242]:
+                      - link [ref=e244] [cursor=pointer]:
+                        - /url: http://127.0.0.1:8000/admin/cities/5Z12FWMPR7N9G2CQAC9WNYC5C8/edit
+                        - img [ref=e246]
+                    - cell "Edit Delete" [ref=e248]:
+                      - generic [ref=e250]:
+                        - link "Edit" [ref=e251] [cursor=pointer]:
+                          - /url: http://127.0.0.1:8000/admin/cities/5Z12FWMPR7N9G2CQAC9WNYC5C8/edit
+                          - img [ref=e252]
+                          - generic [ref=e255]: Edit
+                        - button "Delete" [ref=e256] [cursor=pointer]:
+                          - img [ref=e257]
+                          - generic [ref=e259]: Delete
+                  - row "Giza City Greater Giza Giza 1 Edit Delete" [ref=e260]:
+                    - cell "Giza City" [ref=e261]:
+                      - link "Giza City" [ref=e263] [cursor=pointer]:
+                        - /url: http://127.0.0.1:8000/admin/cities/29DADMSQ9EW70P8AT6PS5GNBM3/edit
+                        - generic [ref=e268]: Giza City
+                    - cell "Greater Giza" [ref=e269]:
+                      - link "Greater Giza" [ref=e271] [cursor=pointer]:
+                        - /url: http://127.0.0.1:8000/admin/cities/29DADMSQ9EW70P8AT6PS5GNBM3/edit
+                        - generic [ref=e276]: Greater Giza
+                    - cell "Giza" [ref=e277]:
+                      - link "Giza" [ref=e279] [cursor=pointer]:
+                        - /url: http://127.0.0.1:8000/admin/cities/29DADMSQ9EW70P8AT6PS5GNBM3/edit
+                        - generic [ref=e284]: Giza
+                    - cell "1" [ref=e285]:
+                      - link "1" [ref=e287] [cursor=pointer]:
+                        - /url: http://127.0.0.1:8000/admin/cities/29DADMSQ9EW70P8AT6PS5GNBM3/edit
+                        - generic [ref=e292]: "1"
+                    - cell [ref=e293]:
+                      - link [ref=e295] [cursor=pointer]:
+                        - /url: http://127.0.0.1:8000/admin/cities/29DADMSQ9EW70P8AT6PS5GNBM3/edit
+                        - img [ref=e297]
+                    - cell "Edit Delete" [ref=e299]:
+                      - generic [ref=e301]:
+                        - link "Edit" [ref=e302] [cursor=pointer]:
+                          - /url: http://127.0.0.1:8000/admin/cities/29DADMSQ9EW70P8AT6PS5GNBM3/edit
+                          - img [ref=e303]
+                          - generic [ref=e306]: Edit
+                        - button "Delete" [ref=e307] [cursor=pointer]:
+                          - img [ref=e308]
+                          - generic [ref=e310]: Delete
+                  - row "6th of October City 6th of October Giza 1 Edit Delete" [ref=e311]:
+                    - cell "6th of October City" [ref=e312]:
+                      - link "6th of October City" [ref=e314] [cursor=pointer]:
+                        - /url: http://127.0.0.1:8000/admin/cities/5A16EPD8BJG5KZMJB6V8QDA77P/edit
+                        - generic [ref=e319]: 6th of October City
+                    - cell "6th of October" [ref=e320]:
+                      - link "6th of October" [ref=e322] [cursor=pointer]:
+                        - /url: http://127.0.0.1:8000/admin/cities/5A16EPD8BJG5KZMJB6V8QDA77P/edit
+                        - generic [ref=e327]: 6th of October
+                    - cell "Giza" [ref=e328]:
+                      - link "Giza" [ref=e330] [cursor=pointer]:
+                        - /url: http://127.0.0.1:8000/admin/cities/5A16EPD8BJG5KZMJB6V8QDA77P/edit
+                        - generic [ref=e335]: Giza
+                    - cell "1" [ref=e336]:
+                      - link "1" [ref=e338] [cursor=pointer]:
+                        - /url: http://127.0.0.1:8000/admin/cities/5A16EPD8BJG5KZMJB6V8QDA77P/edit
+                        - generic [ref=e343]: "1"
+                    - cell [ref=e344]:
+                      - link [ref=e346] [cursor=pointer]:
+                        - /url: http://127.0.0.1:8000/admin/cities/5A16EPD8BJG5KZMJB6V8QDA77P/edit
+                        - img [ref=e348]
+                    - cell "Edit Delete" [ref=e350]:
+                      - generic [ref=e352]:
+                        - link "Edit" [ref=e353] [cursor=pointer]:
+                          - /url: http://127.0.0.1:8000/admin/cities/5A16EPD8BJG5KZMJB6V8QDA77P/edit
+                          - img [ref=e354]
+                          - generic [ref=e357]: Edit
+                        - button "Delete" [ref=e358] [cursor=pointer]:
+                          - img [ref=e359]
+                          - generic [ref=e361]: Delete
+                  - row "Montaza East Alexandria Alexandria 1 Edit Delete" [ref=e362]:
+                    - cell "Montaza" [ref=e363]:
+                      - link "Montaza" [ref=e365] [cursor=pointer]:
+                        - /url: http://127.0.0.1:8000/admin/cities/0SGKX7CJ5M33J115T7JX02KZSP/edit
+                        - generic [ref=e370]: Montaza
+                    - cell "East Alexandria" [ref=e371]:
+                      - link "East Alexandria" [ref=e373] [cursor=pointer]:
+                        - /url: http://127.0.0.1:8000/admin/cities/0SGKX7CJ5M33J115T7JX02KZSP/edit
+                        - generic [ref=e378]: East Alexandria
+                    - cell "Alexandria" [ref=e379]:
+                      - link "Alexandria" [ref=e381] [cursor=pointer]:
+                        - /url: http://127.0.0.1:8000/admin/cities/0SGKX7CJ5M33J115T7JX02KZSP/edit
+                        - generic [ref=e386]: Alexandria
+                    - cell "1" [ref=e387]:
+                      - link "1" [ref=e389] [cursor=pointer]:
+                        - /url: http://127.0.0.1:8000/admin/cities/0SGKX7CJ5M33J115T7JX02KZSP/edit
+                        - generic [ref=e394]: "1"
+                    - cell [ref=e395]:
+                      - link [ref=e397] [cursor=pointer]:
+                        - /url: http://127.0.0.1:8000/admin/cities/0SGKX7CJ5M33J115T7JX02KZSP/edit
+                        - img [ref=e399]
+                    - cell "Edit Delete" [ref=e401]:
+                      - generic [ref=e403]:
+                        - link "Edit" [ref=e404] [cursor=pointer]:
+                          - /url: http://127.0.0.1:8000/admin/cities/0SGKX7CJ5M33J115T7JX02KZSP/edit
+                          - img [ref=e405]
+                          - generic [ref=e408]: Edit
+                        - button "Delete" [ref=e409] [cursor=pointer]:
+                          - img [ref=e410]
+                          - generic [ref=e412]: Delete
+                  - row "Smouha West Alexandria Alexandria 1 Edit Delete" [ref=e413]:
+                    - cell "Smouha" [ref=e414]:
+                      - link "Smouha" [ref=e416] [cursor=pointer]:
+                        - /url: http://127.0.0.1:8000/admin/cities/2YXKNYD12XFSX04F0K7Q043NXJ/edit
+                        - generic [ref=e421]: Smouha
+                    - cell "West Alexandria" [ref=e422]:
+                      - link "West Alexandria" [ref=e424] [cursor=pointer]:
+                        - /url: http://127.0.0.1:8000/admin/cities/2YXKNYD12XFSX04F0K7Q043NXJ/edit
+                        - generic [ref=e429]: West Alexandria
+                    - cell "Alexandria" [ref=e430]:
+                      - link "Alexandria" [ref=e432] [cursor=pointer]:
+                        - /url: http://127.0.0.1:8000/admin/cities/2YXKNYD12XFSX04F0K7Q043NXJ/edit
+                        - generic [ref=e437]: Alexandria
+                    - cell "1" [ref=e438]:
+                      - link "1" [ref=e440] [cursor=pointer]:
+                        - /url: http://127.0.0.1:8000/admin/cities/2YXKNYD12XFSX04F0K7Q043NXJ/edit
+                        - generic [ref=e445]: "1"
+                    - cell [ref=e446]:
+                      - link [ref=e448] [cursor=pointer]:
+                        - /url: http://127.0.0.1:8000/admin/cities/2YXKNYD12XFSX04F0K7Q043NXJ/edit
+                        - img [ref=e450]
+                    - cell "Edit Delete" [ref=e452]:
+                      - generic [ref=e454]:
+                        - link "Edit" [ref=e455] [cursor=pointer]:
+                          - /url: http://127.0.0.1:8000/admin/cities/2YXKNYD12XFSX04F0K7Q043NXJ/edit
+                          - img [ref=e456]
+                          - generic [ref=e459]: Edit
+                        - button "Delete" [ref=e460] [cursor=pointer]:
+                          - img [ref=e461]
+                          - generic [ref=e463]: Delete
+                  - row "Zagazig Zagazig Region Sharqia 1 Edit Delete" [ref=e464]:
+                    - cell "Zagazig" [ref=e465]:
+                      - link "Zagazig" [ref=e467] [cursor=pointer]:
+                        - /url: http://127.0.0.1:8000/admin/cities/6SBVDPNMRKK9X6TMNWSY9P29S5/edit
+                        - generic [ref=e472]: Zagazig
+                    - cell "Zagazig Region" [ref=e473]:
+                      - link "Zagazig Region" [ref=e475] [cursor=pointer]:
+                        - /url: http://127.0.0.1:8000/admin/cities/6SBVDPNMRKK9X6TMNWSY9P29S5/edit
+                        - generic [ref=e480]: Zagazig Region
+                    - cell "Sharqia" [ref=e481]:
+                      - link "Sharqia" [ref=e483] [cursor=pointer]:
+                        - /url: http://127.0.0.1:8000/admin/cities/6SBVDPNMRKK9X6TMNWSY9P29S5/edit
+                        - generic [ref=e488]: Sharqia
+                    - cell "1" [ref=e489]:
+                      - link "1" [ref=e491] [cursor=pointer]:
+                        - /url: http://127.0.0.1:8000/admin/cities/6SBVDPNMRKK9X6TMNWSY9P29S5/edit
+                        - generic [ref=e496]: "1"
+                    - cell [ref=e497]:
+                      - link [ref=e499] [cursor=pointer]:
+                        - /url: http://127.0.0.1:8000/admin/cities/6SBVDPNMRKK9X6TMNWSY9P29S5/edit
+                        - img [ref=e501]
+                    - cell "Edit Delete" [ref=e503]:
+                      - generic [ref=e505]:
+                        - link "Edit" [ref=e506] [cursor=pointer]:
+                          - /url: http://127.0.0.1:8000/admin/cities/6SBVDPNMRKK9X6TMNWSY9P29S5/edit
+                          - img [ref=e507]
+                          - generic [ref=e510]: Edit
+                        - button "Delete" [ref=e511] [cursor=pointer]:
+                          - img [ref=e512]
+                          - generic [ref=e514]: Delete
+                  - row "10th of Ramadan Tenth of Ramadan Sharqia 1 Edit Delete" [ref=e515]:
+                    - cell "10th of Ramadan" [ref=e516]:
+                      - link "10th of Ramadan" [ref=e518] [cursor=pointer]:
+                        - /url: http://127.0.0.1:8000/admin/cities/0J6DG03ENBKWR9K14V19B6521J/edit
+                        - generic [ref=e523]: 10th of Ramadan
+                    - cell "Tenth of Ramadan" [ref=e524]:
+                      - link "Tenth of Ramadan" [ref=e526] [cursor=pointer]:
+                        - /url: http://127.0.0.1:8000/admin/cities/0J6DG03ENBKWR9K14V19B6521J/edit
+                        - generic [ref=e531]: Tenth of Ramadan
+                    - cell "Sharqia" [ref=e532]:
+                      - link "Sharqia" [ref=e534] [cursor=pointer]:
+                        - /url: http://127.0.0.1:8000/admin/cities/0J6DG03ENBKWR9K14V19B6521J/edit
+                        - generic [ref=e539]: Sharqia
+                    - cell "1" [ref=e540]:
+                      - link "1" [ref=e542] [cursor=pointer]:
+                        - /url: http://127.0.0.1:8000/admin/cities/0J6DG03ENBKWR9K14V19B6521J/edit
+                        - generic [ref=e547]: "1"
+                    - cell [ref=e548]:
+                      - link [ref=e550] [cursor=pointer]:
+                        - /url: http://127.0.0.1:8000/admin/cities/0J6DG03ENBKWR9K14V19B6521J/edit
+                        - img [ref=e552]
+                    - cell "Edit Delete" [ref=e554]:
+                      - generic [ref=e556]:
+                        - link "Edit" [ref=e557] [cursor=pointer]:
+                          - /url: http://127.0.0.1:8000/admin/cities/0J6DG03ENBKWR9K14V19B6521J/edit
+                          - img [ref=e558]
+                          - generic [ref=e561]: Edit
+                        - button "Delete" [ref=e562] [cursor=pointer]:
+                          - img [ref=e563]
+                          - generic [ref=e565]: Delete
+                  - row "Banha Banha Region Qalyubia 1 Edit Delete" [ref=e566]:
+                    - cell "Banha" [ref=e567]:
+                      - link "Banha" [ref=e569] [cursor=pointer]:
+                        - /url: http://127.0.0.1:8000/admin/cities/5DSJMYBKNFRNANAA53YZ0NYW4A/edit
+                        - generic [ref=e574]: Banha
+                    - cell "Banha Region" [ref=e575]:
+                      - link "Banha Region" [ref=e577] [cursor=pointer]:
+                        - /url: http://127.0.0.1:8000/admin/cities/5DSJMYBKNFRNANAA53YZ0NYW4A/edit
+                        - generic [ref=e582]: Banha Region
+                    - cell "Qalyubia" [ref=e583]:
+                      - link "Qalyubia" [ref=e585] [cursor=pointer]:
+                        - /url: http://127.0.0.1:8000/admin/cities/5DSJMYBKNFRNANAA53YZ0NYW4A/edit
+                        - generic [ref=e590]: Qalyubia
+                    - cell "1" [ref=e591]:
+                      - link "1" [ref=e593] [cursor=pointer]:
+                        - /url: http://127.0.0.1:8000/admin/cities/5DSJMYBKNFRNANAA53YZ0NYW4A/edit
+                        - generic [ref=e598]: "1"
+                    - cell [ref=e599]:
+                      - link [ref=e601] [cursor=pointer]:
+                        - /url: http://127.0.0.1:8000/admin/cities/5DSJMYBKNFRNANAA53YZ0NYW4A/edit
+                        - img [ref=e603]
+                    - cell "Edit Delete" [ref=e605]:
+                      - generic [ref=e607]:
+                        - link "Edit" [ref=e608] [cursor=pointer]:
+                          - /url: http://127.0.0.1:8000/admin/cities/5DSJMYBKNFRNANAA53YZ0NYW4A/edit
+                          - img [ref=e609]
+                          - generic [ref=e612]: Edit
+                        - button "Delete" [ref=e613] [cursor=pointer]:
+                          - img [ref=e614]
+                          - generic [ref=e616]: Delete
+              - navigation "Pagination navigation" [ref=e617]:
+                - generic [ref=e618]: Showing 1 to 10 of 96 results
+                - generic [ref=e621]:
+                  - generic [ref=e623]: Per page
+                  - combobox "Per page" [ref=e625]:
+                    - option "5"
+                    - option "10" [selected]
+                    - option "25"
+                    - option "50"
+                    - option "All"
+                - list [ref=e626]:
+                  - listitem [ref=e627]:
+                    - button "Go to page 1" [ref=e628] [cursor=pointer]:
+                      - generic [ref=e629]: "1"
+                  - listitem [ref=e630]:
+                    - button "Go to page 2" [ref=e631] [cursor=pointer]:
+                      - generic [ref=e632]: "2"
+                  - listitem [ref=e633]:
+                    - button "Go to page 3" [ref=e634] [cursor=pointer]:
+                      - generic [ref=e635]: "3"
+                  - listitem [ref=e636]:
+                    - button "Go to page 4" [ref=e637] [cursor=pointer]:
+                      - generic [ref=e638]: "4"
+                  - listitem [ref=e639]:
+                    - button "..." [disabled] [ref=e640]:
+                      - generic [ref=e641]: ...
+                  - listitem [ref=e642]:
+                    - button "Go to page 9" [ref=e643] [cursor=pointer]:
+                      - generic [ref=e644]: "9"
+                  - listitem [ref=e645]:
+                    - button "Go to page 10" [ref=e646] [cursor=pointer]:
+                      - generic [ref=e647]: "10"
+                  - listitem [ref=e648]:
+                    - button "Next" [ref=e649] [cursor=pointer]:
+                      - img [ref=e650]
+            - generic:
+              - dialog
+            - generic:
+              - dialog
+            - generic:
+              - dialog
+            - generic:
+              - dialog
+            - generic:
+              - dialog
+    - complementary [ref=e652]:
+      - link "Laravel" [ref=e656] [cursor=pointer]:
+        - /url: http://127.0.0.1:8000/admin
+        - generic [ref=e657]: Laravel
+      - navigation [ref=e658]:
+        - list [ref=e659]:
+          - listitem [ref=e660]:
+            - list [ref=e661]:
+              - listitem [ref=e662]:
+                - link "Dashboard" [ref=e663] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin
+                  - img [ref=e664]
+                  - generic [ref=e666]: Dashboard
+              - listitem [ref=e667]:
+                - link "Activity Logs" [ref=e668] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/activitylogs
+                  - img [ref=e669]
+                  - generic [ref=e671]: Activity Logs
+          - listitem [ref=e672]:
+            - generic [ref=e673] [cursor=pointer]:
+              - generic [ref=e674]: Filament Shield
+              - button "Filament Shield" [expanded] [ref=e675]:
+                - generic [ref=e676]: Filament Shield
+                - img [ref=e677]
+            - list [ref=e679]:
+              - listitem [ref=e680]:
+                - link "Roles 5" [ref=e681] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/shield/roles
+                  - img [ref=e682]
+                  - generic [ref=e684]: Roles
+                  - generic [ref=e688]: "5"
+          - listitem [ref=e689]:
+            - generic [ref=e690] [cursor=pointer]:
+              - generic [ref=e691]: Booking
+              - button "Booking" [expanded] [ref=e692]:
+                - generic [ref=e693]: Booking
+                - img [ref=e694]
+            - list [ref=e696]:
+              - listitem [ref=e697]:
+                - link "Bookings" [ref=e698] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/bookings
+                  - img [ref=e699]
+                  - generic [ref=e701]: Bookings
+              - listitem [ref=e702]:
+                - link "Modifications" [ref=e703] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/booking-modifications
+                  - img [ref=e704]
+                  - generic [ref=e706]: Modifications
+              - listitem [ref=e707]:
+                - link "State Transitions" [ref=e708] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/booking-state-transitions
+                  - img [ref=e709]
+                  - generic [ref=e711]: State Transitions
+              - listitem [ref=e712]:
+                - link "Negotiation Monitor" [ref=e713] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/bookings-monitor
+                  - img [ref=e714]
+                  - generic [ref=e716]: Negotiation Monitor
+          - listitem [ref=e717]:
+            - generic [ref=e718] [cursor=pointer]:
+              - generic [ref=e719]: Communication
+              - button "Communication" [expanded] [ref=e720]:
+                - generic [ref=e721]: Communication
+                - img [ref=e722]
+            - list [ref=e724]:
+              - listitem [ref=e725]:
+                - link "Notification Templates" [ref=e726] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/notification-templates
+                  - img [ref=e727]
+                  - generic [ref=e729]: Notification Templates
+              - listitem [ref=e730]:
+                - link "Campaigns" [ref=e731] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/campaigns
+                  - img [ref=e732]
+                  - generic [ref=e734]: Campaigns
+              - listitem [ref=e735]:
+                - link "Notification Preferences" [ref=e736] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/notification-preferences
+                  - img [ref=e737]
+                  - generic [ref=e739]: Notification Preferences
+              - listitem [ref=e740]:
+                - link "Dispatch Logs" [ref=e741] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/notification-dispatches
+                  - img [ref=e742]
+                  - generic [ref=e744]: Dispatch Logs
+          - listitem [ref=e745]:
+            - generic [ref=e746] [cursor=pointer]:
+              - generic [ref=e747]: Geography
+              - button "Geography" [expanded] [ref=e748]:
+                - generic [ref=e749]: Geography
+                - img [ref=e750]
+            - list [ref=e752]:
+              - listitem [ref=e753]:
+                - link "Countries" [ref=e754] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/countries
+                  - img [ref=e755]
+                  - generic [ref=e757]: Countries
+              - listitem [ref=e758]:
+                - link "Governorates" [ref=e759] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/governorates
+                  - img [ref=e760]
+                  - generic [ref=e762]: Governorates
+              - listitem [ref=e763]:
+                - link "Regions" [ref=e764] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/regions
+                  - img [ref=e765]
+                  - generic [ref=e768]: Regions
+              - listitem [ref=e769]:
+                - link "Cities" [ref=e770] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/cities
+                  - img [ref=e771]
+                  - generic [ref=e773]: Cities
+          - listitem [ref=e774]:
+            - generic [ref=e775] [cursor=pointer]:
+              - generic [ref=e776]: Vendor Management
+              - button "Vendor Management" [expanded] [ref=e777]:
+                - generic [ref=e778]: Vendor Management
+                - img [ref=e779]
+            - list [ref=e781]:
+              - listitem [ref=e782]:
+                - link "All Vendors" [ref=e783] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/vendor-profiles
+                  - img [ref=e784]
+                  - generic [ref=e786]: All Vendors
+          - listitem [ref=e787]:
+            - generic [ref=e788] [cursor=pointer]:
+              - generic [ref=e789]: Settlement
+              - button "Settlement" [expanded] [ref=e790]:
+                - generic [ref=e791]: Settlement
+                - img [ref=e792]
+            - list [ref=e794]:
+              - listitem [ref=e795]:
+                - link "Commission Rules" [ref=e796] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/settlement-commission-rules
+                  - img [ref=e797]
+                  - generic [ref=e799]: Commission Rules
+              - listitem [ref=e800]:
+                - link "Wallet Ledger" [ref=e801] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/settlement-wallets
+                  - img [ref=e802]
+                  - generic [ref=e804]: Wallet Ledger
+              - listitem [ref=e805]:
+                - link "Withdrawal Requests" [ref=e806] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/settlement-withdrawals
+                  - img [ref=e807]
+                  - generic [ref=e809]: Withdrawal Requests
+              - listitem [ref=e810]:
+                - link "Commissions" [ref=e811] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/commissions
+                  - img [ref=e812]
+                  - generic [ref=e814]: Commissions
+              - listitem [ref=e815]:
+                - link "Settlement Runs" [ref=e816] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/settlement-runs
+                  - img [ref=e817]
+                  - generic [ref=e819]: Settlement Runs
+          - listitem [ref=e820]:
+            - generic [ref=e821] [cursor=pointer]:
+              - generic [ref=e822]: Users
+              - button "Users" [expanded] [ref=e823]:
+                - generic [ref=e824]: Users
+                - img [ref=e825]
+            - list [ref=e827]:
+              - listitem [ref=e828]:
+                - link "Customers" [ref=e829] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/customers
+                  - img [ref=e830]
+                  - generic [ref=e832]: Customers
+          - listitem [ref=e833]:
+            - generic [ref=e834] [cursor=pointer]:
+              - generic [ref=e835]: Identity
+              - button "Identity" [expanded] [ref=e836]:
+                - generic [ref=e837]: Identity
+                - img [ref=e838]
+            - list [ref=e840]:
+              - listitem [ref=e841]:
+                - link "Users" [ref=e842] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/users
+                  - img [ref=e843]
+                  - generic [ref=e845]: Users
+              - listitem [ref=e846]:
+                - link "Customer Profiles" [ref=e847] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/customer-profiles
+                  - img [ref=e848]
+                  - generic [ref=e850]: Customer Profiles
+              - listitem [ref=e851]:
+                - link "Customer Addresses" [ref=e852] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/customer-addresses
+                  - img [ref=e853]
+                  - generic [ref=e856]: Customer Addresses
+              - listitem [ref=e857]:
+                - link "User Devices" [ref=e858] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/user-devices
+                  - img [ref=e859]
+                  - generic [ref=e861]: User Devices
+          - listitem [ref=e862]:
+            - generic [ref=e863] [cursor=pointer]:
+              - generic [ref=e864]: Vendor Onboarding
+              - button "Vendor Onboarding" [expanded] [ref=e865]:
+                - generic [ref=e866]: Vendor Onboarding
+                - img [ref=e867]
+            - list [ref=e869]:
+              - listitem [ref=e870]:
+                - link "Approval Queue" [ref=e871] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/vendor-approval-queue
+                  - img [ref=e872]
+                  - generic [ref=e874]: Approval Queue
+              - listitem [ref=e875]:
+                - link "Documents" [ref=e876] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/vendor-document-filaments
+                  - img [ref=e877]
+                  - generic [ref=e879]: Documents
+              - listitem [ref=e880]:
+                - link "Coverage Areas" [ref=e881] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/vendor-coverage-areas
+                  - img [ref=e882]
+                  - generic [ref=e884]: Coverage Areas
+              - listitem [ref=e885]:
+                - link "Business Hours" [ref=e886] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/vendor-business-hours
+                  - img [ref=e887]
+                  - generic [ref=e889]: Business Hours
+              - listitem [ref=e890]:
+                - link "Approved Product Types" [ref=e891] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/vendor-approved-product-types
+                  - img [ref=e892]
+                  - generic [ref=e894]: Approved Product Types
+          - listitem [ref=e895]:
+            - generic [ref=e896] [cursor=pointer]:
+              - generic [ref=e897]: Catalog
+              - button "Catalog" [expanded] [ref=e898]:
+                - generic [ref=e899]: Catalog
+                - img [ref=e900]
+            - list [ref=e902]:
+              - listitem [ref=e903]:
+                - link "Occasions" [ref=e904] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/occasions
+                  - img [ref=e905]
+                  - generic [ref=e907]: Occasions
+              - listitem [ref=e908]:
+                - link "Categories" [ref=e909] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/categories
+                  - img [ref=e910]
+                  - generic [ref=e913]: Categories
+              - listitem [ref=e914]:
+                - link "Category Field Schemas" [ref=e915] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/category-field-schemas
+                  - img [ref=e916]
+                  - generic [ref=e918]: Category Field Schemas
+              - listitem [ref=e919]:
+                - link "Service Themes" [ref=e920] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/service-themes
+                  - img [ref=e921]
+                  - generic [ref=e923]: Service Themes
+          - listitem [ref=e924]:
+            - generic [ref=e925] [cursor=pointer]:
+              - generic [ref=e926]: Services
+              - button "Services" [expanded] [ref=e927]:
+                - generic [ref=e928]: Services
+                - img [ref=e929]
+            - list [ref=e931]:
+              - listitem [ref=e932]:
+                - link "Rental Services" [ref=e933] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/rental-services
+                  - img [ref=e934]
+                  - generic [ref=e936]: Rental Services
+              - listitem [ref=e937]:
+                - link "Sale Services" [ref=e938] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/sale-services
+                  - img [ref=e939]
+                  - generic [ref=e941]: Sale Services
+              - listitem [ref=e942]:
+                - link "Digital Services" [ref=e943] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/digital-services
+                  - img [ref=e944]
+                  - generic [ref=e946]: Digital Services
+              - listitem [ref=e947]:
+                - link "Import Rental Services" [ref=e948] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/import-rental-services-page
+                  - img [ref=e949]
+                  - generic [ref=e951]: Import Rental Services
+              - listitem [ref=e952]:
+                - link "Import Sale Services" [ref=e953] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/import-sale-services-page
+                  - img [ref=e954]
+                  - generic [ref=e956]: Import Sale Services
+              - listitem [ref=e957]:
+                - link "Import Digital Services" [ref=e958] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/import-digital-services-page
+                  - img [ref=e959]
+                  - generic [ref=e961]: Import Digital Services
+              - listitem [ref=e962]:
+                - link "Inventory Reservations" [ref=e963] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/service-inventory-reservations
+                  - img [ref=e964]
+                  - generic [ref=e966]: Inventory Reservations
+              - listitem [ref=e967]:
+                - link "Excel Imports" [ref=e968] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/excel-imports
+                  - img [ref=e969]
+                  - generic [ref=e971]: Excel Imports
+          - listitem [ref=e972]:
+            - generic [ref=e973] [cursor=pointer]:
+              - generic [ref=e974]: Payments
+              - button "Payments" [expanded] [ref=e975]:
+                - generic [ref=e976]: Payments
+                - img [ref=e977]
+            - list [ref=e979]:
+              - listitem [ref=e980]:
+                - link "Payments" [ref=e981] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/payments
+                  - img [ref=e982]
+                  - generic [ref=e984]: Payments
+              - listitem [ref=e985]:
+                - link "Payment Attempts" [ref=e986] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/payment-attempts
+                  - img [ref=e987]
+                  - generic [ref=e989]: Payment Attempts
+              - listitem [ref=e990]:
+                - link "Refunds" [ref=e991] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/refunds
+                  - img [ref=e992]
+                  - generic [ref=e994]: Refunds
+              - listitem [ref=e995]:
+                - link "Webhook Logs" [ref=e996] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/gateway-webhook-logs
+                  - img [ref=e997]
+                  - generic [ref=e999]: Webhook Logs
+              - listitem [ref=e1000]:
+                - link "Idempotency Keys" [ref=e1001] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/idempotency-keys
+                  - img [ref=e1002]
+                  - generic [ref=e1004]: Idempotency Keys
+          - listitem [ref=e1005]:
+            - generic [ref=e1006] [cursor=pointer]:
+              - generic [ref=e1007]: Loyalty
+              - button "Loyalty" [expanded] [ref=e1008]:
+                - generic [ref=e1009]: Loyalty
+                - img [ref=e1010]
+            - list [ref=e1012]:
+              - listitem [ref=e1013]:
+                - link "Loyalty Rules" [ref=e1014] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/loyalty-rules
+                  - img [ref=e1015]
+                  - generic [ref=e1017]: Loyalty Rules
+              - listitem [ref=e1018]:
+                - link "Point Redemptions" [ref=e1019] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/loyalty-redemptions
+                  - img [ref=e1020]
+                  - generic [ref=e1022]: Point Redemptions
+              - listitem [ref=e1023]:
+                - link "Points Ledger" [ref=e1024] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/loyalty-ledgers
+                  - img [ref=e1025]
+                  - generic [ref=e1027]: Points Ledger
+              - listitem [ref=e1028]:
+                - link "Loyalty Programs" [ref=e1029] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/loyalty-programs
+                  - img [ref=e1030]
+                  - generic [ref=e1032]: Loyalty Programs
+          - listitem [ref=e1033]:
+            - generic [ref=e1034] [cursor=pointer]:
+              - generic [ref=e1035]: Discovery
+              - button "Discovery" [expanded] [ref=e1036]:
+                - generic [ref=e1037]: Discovery
+                - img [ref=e1038]
+            - list [ref=e1040]:
+              - listitem [ref=e1041]:
+                - link "Saved Searches" [ref=e1042] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/saved-searches
+                  - img [ref=e1043]
+                  - generic [ref=e1045]: Saved Searches
+              - listitem [ref=e1046]:
+                - link "Search Logs" [ref=e1047] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/search-logs
+                  - img [ref=e1048]
+                  - generic [ref=e1050]: Search Logs
+              - listitem [ref=e1051]:
+                - link "Wishlists" [ref=e1052] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/wishlists
+                  - img [ref=e1053]
+                  - generic [ref=e1055]: Wishlists
+          - listitem [ref=e1056]:
+            - generic [ref=e1057] [cursor=pointer]:
+              - generic [ref=e1058]: Moderation
+              - button "Moderation" [expanded] [ref=e1059]:
+                - generic [ref=e1060]: Moderation
+                - img [ref=e1061]
+            - list [ref=e1063]:
+              - listitem [ref=e1064]:
+                - link "Review Moderation" [ref=e1065] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/review-moderation-page
+                  - img [ref=e1066]
+                  - generic [ref=e1068]: Review Moderation
+              - listitem [ref=e1069]:
+                - link "Service Reviews" [ref=e1070] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/service-reviews
+                  - img [ref=e1071]
+                  - generic [ref=e1073]: Service Reviews
+              - listitem [ref=e1074]:
+                - link "Vendor Reviews" [ref=e1075] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/vendor-reviews
+                  - img [ref=e1076]
+                  - generic [ref=e1078]: Vendor Reviews
+              - listitem [ref=e1079]:
+                - link "Moderation Logs" [ref=e1080] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/review-moderation-logs
+                  - img [ref=e1081]
+                  - generic [ref=e1083]: Moderation Logs
+          - listitem [ref=e1084]:
+            - generic [ref=e1085] [cursor=pointer]:
+              - generic [ref=e1086]: Settings
+              - button "Settings" [expanded] [ref=e1087]:
+                - generic [ref=e1088]: Settings
+                - img [ref=e1089]
+            - list [ref=e1091]:
+              - listitem [ref=e1092]:
+                - link "CMS Pages" [ref=e1093] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/cms-pages
+                  - img [ref=e1094]
+                  - generic [ref=e1096]: CMS Pages
+              - listitem [ref=e1097]:
+                - link "App Settings" [ref=e1098] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/manage-settings
+                  - img [ref=e1099]
+                  - generic [ref=e1102]: App Settings
+  - generic:
+    - status

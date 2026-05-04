@@ -8,7 +8,17 @@ use Illuminate\Support\ServiceProvider;
 
 class SharedServiceProvider extends ServiceProvider
 {
-    public function boot(): void {}
-
     public function register(): void {}
+
+    public function boot(): void
+    {
+        $this->loadMigrationsFrom(__DIR__.'/../Database/Migrations');
+        $this->loadTranslationsFrom(__DIR__.'/../Resources/lang', 'shared');
+        $this->registerRoutes();
+    }
+
+    private function registerRoutes(): void
+    {
+        $this->loadRoutesFrom(__DIR__.'/../Routes/customer.php');
+    }
 }

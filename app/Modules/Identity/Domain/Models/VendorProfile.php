@@ -4,9 +4,14 @@ declare(strict_types=1);
 
 namespace App\Modules\Identity\Domain\Models;
 
+use App\Modules\Booking\Domain\Models\BookingVendor;
 use App\Modules\Catalog\Domain\Enums\ProductType;
+use App\Modules\Catalog\Domain\Models\Service;
 use App\Modules\Identity\Domain\Enums\ApprovalStatus;
 use App\Modules\Identity\Domain\Enums\BusinessType;
+use App\Modules\Reviews\Domain\Models\VendorReview;
+use App\Modules\Settlement\Domain\Models\Wallet;
+use App\Modules\Settlement\Domain\Models\Withdrawal;
 use App\Modules\Shared\Domain\Concerns\HasPublicId;
 use Database\Factories\VendorProfileFactory;
 use Illuminate\Database\Eloquent\Builder;
@@ -15,6 +20,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
 use Spatie\Translatable\HasTranslations;
@@ -138,6 +144,31 @@ class VendorProfile extends Model
     public function coverageAreas(): HasMany
     {
         return $this->hasMany(VendorCoverageArea::class);
+    }
+
+    public function services(): HasMany
+    {
+        return $this->hasMany(Service::class);
+    }
+
+    public function bookingVendors(): HasMany
+    {
+        return $this->hasMany(BookingVendor::class);
+    }
+
+    public function wallet(): MorphOne
+    {
+        return $this->morphOne(Wallet::class, 'owner');
+    }
+
+    public function withdrawals(): HasMany
+    {
+        return $this->hasMany(Withdrawal::class);
+    }
+
+    public function vendorReviews(): HasMany
+    {
+        return $this->hasMany(VendorReview::class);
     }
 
     public function scopePending(Builder $query): Builder

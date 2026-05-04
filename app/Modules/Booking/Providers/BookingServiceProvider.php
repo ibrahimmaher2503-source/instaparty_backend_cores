@@ -10,10 +10,15 @@ use App\Modules\Booking\Application\Listeners\ReleaseInventoryOnCancellationList
 use App\Modules\Booking\Application\Listeners\WriteBookingStateTransitionListener;
 use App\Modules\Booking\Application\Listeners\WriteInitialBookingSnapshotListener;
 use App\Modules\Booking\Application\Listeners\WriteNegotiationSnapshotListener;
+use App\Modules\Booking\Console\Commands\ExpireVendorProposalsCommand;
 use App\Modules\Booking\Console\Commands\ReleaseExpiredReservationsCommand;
 use App\Modules\Booking\Domain\Contracts\BookingHistoryReader;
 use App\Modules\Booking\Domain\Contracts\BookingRepository;
+use App\Modules\Booking\Domain\Events\AlternativeVendorProposed;
 use App\Modules\Booking\Domain\Events\BookingCancelled;
+use App\Modules\Booking\Domain\Events\BookingForceCancelled;
+use App\Modules\Booking\Domain\Events\VendorProposalDecided;
+use App\Modules\Booking\Domain\Events\VendorResponseTimedOut;
 use App\Modules\Booking\Domain\Events\BookingConfirmed;
 use App\Modules\Booking\Domain\Events\BookingDraftCreated;
 use App\Modules\Booking\Domain\Events\BookingItemAdded;
@@ -56,7 +61,10 @@ class BookingServiceProvider extends ServiceProvider
         $this->loadRoutesFrom(__DIR__.'/../Routes/vendor.php');
         $this->loadRoutesFrom(__DIR__.'/../Routes/admin.php');
 
-        $this->commands([ReleaseExpiredReservationsCommand::class]);
+        $this->commands([
+            ReleaseExpiredReservationsCommand::class,
+            ExpireVendorProposalsCommand::class,
+        ]);
 
         // Booking draft events (listener-driven state transition for initial draft)
         Event::listen(BookingDraftCreated::class, WriteInitialBookingSnapshotListener::class);
@@ -74,5 +82,17 @@ class BookingServiceProvider extends ServiceProvider
         Event::listen(BookingConfirmed::class, ConfirmInventoryReservationsListener::class);
         Event::listen(BookingCancelled::class, WriteNegotiationSnapshotListener::class);
         Event::listen(BookingCancelled::class, ReleaseInventoryOnCancellationListener::class);
+
+        // Admin override events
+        Event::listen(BookingForceCancelled::class, ReleaseInventoryOnCancellationListener::class);
+        Event::listen(BookingForceCancelled::class, WriteNegotiationSnapshotListener::class);
+
+        // Scheduler for proposal expiry
+        if ($this->app->runningInConsole()) {
+            $this->app->booted(function () {
+                $schedule = $this->app->make(\Illuminate\Console\Scheduling\Schedule::class);
+                $schedule->command('booking:expire-vendor-proposals')->hourly();
+            });
+        }
     }
 }

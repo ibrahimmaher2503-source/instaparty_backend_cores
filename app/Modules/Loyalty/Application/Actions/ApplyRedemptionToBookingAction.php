@@ -39,7 +39,7 @@ class ApplyRedemptionToBookingAction
             }
 
             $program = $this->programs->findByVendor($booking->vendorProfileId);
-            if ($program === null || !$program->status->allowsRedemption()) {
+            if ($program === null || ! $program->status->allowsRedemption()) {
                 throw ValidationException::withMessages([
                     'program' => [__('loyalty::loyalty.errors.no_active_program')],
                 ]);

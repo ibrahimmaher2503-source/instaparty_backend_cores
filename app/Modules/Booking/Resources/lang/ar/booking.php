@@ -64,21 +64,20 @@ return [
     ],
 
     'payment_status' => [
-        'pending' => 'قيد الانتظار',
-        'authorized' => 'مصرح به',
-        'captured' => 'متحصل',
-        'failed' => 'فشل',
-        'refunded' => 'مسترد',
+        'unpaid' => 'غير مدفوع',
+        'partial' => 'مدفوع جزئياً',
+        'paid' => 'مدفوع',
+        'refund_pending' => 'استرداد قيد الانتظار',
         'partially_refunded' => 'مسترد جزئياً',
-        'voided' => 'ملغي',
+        'refunded' => 'مسترد',
     ],
 
     'fulfillment_status' => [
-        'pending' => 'قيد الانتظار',
-        'confirmed' => 'مؤكد',
+        'not_started' => 'لم يبدأ',
         'in_progress' => 'قيد التنفيذ',
+        'partially_completed' => 'مكتمل جزئياً',
         'completed' => 'مكتمل',
-        'cancelled' => 'ملغي',
+        'failed' => 'فشل',
     ],
 
     'force_cancel' => 'إلغاء إجباري',
@@ -86,4 +85,10 @@ return [
     'force_cancel_confirm_heading' => 'إلغاء هذا الحجز إجبارياً؟',
     'force_cancel_confirm_description' => 'سيؤدي ذلك إلى إلغاء الحجز فوراً وبدء أي استرداد مناسب. لا يمكن التراجع عن هذا الإجراء.',
     'force_cancelled_successfully' => 'تم إلغاء الحجز إجبارياً بنجاح.',
+
+    'dashboard' => [
+        'confirmed_today' => 'حجوزات مؤكدة اليوم',
+        'submitted_today' => 'حجوزات مرسلة اليوم',
+        'draft_bookings' => 'حجوزات قيد الإعداد',
+    ],
 ];

@@ -18,7 +18,7 @@ class CreditPointsOnBookingCompleted implements ShouldQueue
     public function handle(object $event): void
     {
         // Expects event to carry: customer_id, booking_item_id, booking_id
-        if (!isset($event->bookingItemId, $event->customerId, $event->bookingId)) {
+        if (! isset($event->bookingItemId, $event->customerId, $event->bookingId)) {
             return;
         }
 

@@ -2,6 +2,18 @@
 
 declare(strict_types=1);
 
+use App\Modules\Booking\Domain\Enums\FulfillmentStatus;
+use App\Modules\Booking\Domain\Enums\LifecycleStatus;
+use App\Modules\Booking\Domain\Enums\PaymentStatus;
+use App\Modules\Booking\Domain\Enums\VendorSubStatus;
+use App\Modules\Booking\Domain\Models\Booking;
+use App\Modules\Booking\Domain\Models\BookingItem;
+use App\Modules\Booking\Domain\Models\BookingVendor;
+use App\Modules\Catalog\Domain\Enums\ProductType;
+use App\Modules\Catalog\Domain\Models\Category;
+use App\Modules\Catalog\Domain\Models\Occasion;
+use App\Modules\Catalog\Domain\Models\Service;
+use App\Modules\Identity\Domain\Models\VendorProfile;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -9,27 +21,62 @@ use Illuminate\Support\Str;
 if (! function_exists('createBookingForUser')) {
     function createBookingForUser(int $userId, string $productType, Carbon $createdAt): void
     {
-        $bookingId = DB::table('bookings')->insertGetId([
-            'public_id' => Str::ulid()->toBase32(),
-            'user_id' => $userId,
-            'lifecycle_status' => 'confirmed',
-            'payment_status' => 'captured',
-            'fulfillment_status' => 'pending',
-            'currency' => 'EGP',
-            'created_at' => $createdAt,
-            'updated_at' => $createdAt,
+        $occasion = Occasion::factory()->create();
+        $vendor = VendorProfile::factory()->approved()->create();
+        $category = Category::factory()->create();
+        $service = Service::factory()->create([
+            'product_type' => ProductType::from($productType),
+            'vendor_profile_id' => $vendor->id,
+            'category_id' => $category->id,
         ]);
 
-        DB::table('booking_items')->insert([
-            'public_id' => Str::ulid()->toBase32(),
-            'booking_id' => $bookingId,
-            'product_type' => $productType,
-            'item_status' => 'confirmed',
+        $booking = Booking::create([
+            'public_id' => (string) Str::ulid(),
+            'customer_id' => $userId,
+            'occasion_id' => $occasion->id,
+            'lifecycle_status' => LifecycleStatus::Confirmed,
+            'payment_status' => PaymentStatus::Paid,
+            'fulfillment_status' => FulfillmentStatus::NotStarted,
+            'subtotal_currency' => 'EGP',
+            'delivery_total_currency' => 'EGP',
+            'discount_total_currency' => 'EGP',
+            'loyalty_redeemed_currency' => 'EGP',
+            'total_currency' => 'EGP',
+            'amount_paid_currency' => 'EGP',
+        ]);
+
+        DB::table('bookings')->where('id', $booking->id)->update(['created_at' => $createdAt]);
+
+        $bookingVendor = BookingVendor::create([
+            'public_id' => (string) Str::ulid(),
+            'booking_id' => $booking->id,
+            'vendor_profile_id' => $vendor->id,
+            'sub_status' => VendorSubStatus::Accepted,
+            'subtotal_minor' => 0,
+            'subtotal_currency' => 'EGP',
+            'delivery_fee_minor' => 0,
+            'delivery_fee_currency' => 'EGP',
+            'commission_minor' => 0,
+            'commission_currency' => 'EGP',
+            'vendor_payout_minor' => 0,
+            'vendor_payout_currency' => 'EGP',
+        ]);
+
+        BookingItem::create([
+            'public_id' => (string) Str::ulid(),
+            'booking_vendor_id' => $bookingVendor->id,
+            'service_id' => $service->id,
+            'product_type' => ProductType::from($productType),
+            'name_snapshot' => ['en' => 'Test Service', 'ar' => 'خدمة تجريبية'],
             'unit_price_minor' => 10000,
             'unit_price_currency' => 'EGP',
+            'line_total_minor' => 10000,
+            'line_total_currency' => 'EGP',
+            'commission_minor' => 0,
+            'commission_currency' => 'EGP',
             'quantity' => 1,
-            'created_at' => $createdAt,
-            'updated_at' => $createdAt,
+            'item_status' => 'confirmed',
+            'commission_bps' => 0,
         ]);
     }
 }

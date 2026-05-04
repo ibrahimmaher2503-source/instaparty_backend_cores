@@ -19,7 +19,7 @@ class ApplyRedemptionOnPaymentCaptured implements ShouldQueue
 
     public function handle(object $event): void
     {
-        if (!isset($event->bookingId)) {
+        if (! isset($event->bookingId)) {
             return;
         }
 

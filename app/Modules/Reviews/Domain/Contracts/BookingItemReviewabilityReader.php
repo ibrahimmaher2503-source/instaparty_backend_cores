@@ -11,7 +11,7 @@ interface BookingItemReviewabilityReader
      * given user (booking.user_id === userId), and not soft-deleted.
      *
      * @param  string  $bookingItemPublicId  CHAR(26) ULID
-     * @param  int     $userId               authenticated user id
+     * @param  int  $userId  authenticated user id
      */
     public function isReviewable(string $bookingItemPublicId, int $userId): bool;
 

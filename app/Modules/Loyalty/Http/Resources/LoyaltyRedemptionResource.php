@@ -42,16 +42,16 @@ class LoyaltyRedemptionResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'public_id'          => $this->public_id,
-            'points_held'        => $this->points_held,
-            'discount_minor'     => $this->discount_minor,
+            'public_id' => $this->public_id,
+            'points_held' => $this->points_held,
+            'discount_minor' => $this->discount_minor,
             'discount_formatted' => number_format($this->discount_minor / 100, 2).' '.$this->discount_currency,
-            'discount_currency'  => $this->discount_currency,
-            'status'             => (string) $this->status,
-            'applied_at'         => $this->applied_at?->toISOString(),
-            'voided_at'          => $this->voided_at?->toISOString(),
-            'reversed_at'        => $this->reversed_at?->toISOString(),
-            'created_at'         => $this->created_at?->toISOString(),
+            'discount_currency' => $this->discount_currency,
+            'status' => (string) $this->status,
+            'applied_at' => $this->applied_at?->toISOString(),
+            'voided_at' => $this->voided_at?->toISOString(),
+            'reversed_at' => $this->reversed_at?->toISOString(),
+            'created_at' => $this->created_at?->toISOString(),
         ];
     }
 }

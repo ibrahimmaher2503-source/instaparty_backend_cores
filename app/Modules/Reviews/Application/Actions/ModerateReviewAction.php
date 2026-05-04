@@ -37,7 +37,7 @@ class ModerateReviewAction
 
         $repository = $review instanceof ServiceReview ? $this->serviceRepository : $this->vendorRepository;
         $reviewType = $review instanceof ServiceReview ? 'service' : 'vendor';
-        $subjectId  = $review instanceof ServiceReview ? $review->service_id : $review->vendor_profile_id;
+        $subjectId = $review instanceof ServiceReview ? $review->service_id : $review->vendor_profile_id;
 
         DB::transaction(function () use ($review, $data, $previousStatus, $repository, $reviewType): void {
             $repository->transition($review, $data->toStatus->value, $data->moderatorId);

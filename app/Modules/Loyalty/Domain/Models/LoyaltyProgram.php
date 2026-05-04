@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace App\Modules\Loyalty\Domain\Models;
 
+use App\Modules\Loyalty\Database\Factories\LoyaltyProgramFactory;
 use App\Modules\Loyalty\Domain\Enums\ProgramStatus;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -13,7 +15,7 @@ use Spatie\Translatable\HasTranslations;
 
 class LoyaltyProgram extends Model
 {
-    use HasUlids, HasTranslations;
+    use HasFactory, HasTranslations, HasUlids;
 
     protected $table = 'loyalty_programs';
 
@@ -34,7 +36,7 @@ class LoyaltyProgram extends Model
     protected function casts(): array
     {
         return [
-            'status'          => ProgramStatus::class,
+            'status' => ProgramStatus::class,
             'expiration_days' => 'integer',
         ];
     }
@@ -42,6 +44,11 @@ class LoyaltyProgram extends Model
     public function uniqueIds(): array
     {
         return ['public_id'];
+    }
+
+    protected static function newFactory(): LoyaltyProgramFactory
+    {
+        return LoyaltyProgramFactory::new();
     }
 
     public function rules(): HasMany

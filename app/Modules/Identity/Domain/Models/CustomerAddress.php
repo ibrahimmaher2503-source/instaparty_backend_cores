@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Modules\Identity\Domain\Models;
 
 use App\Modules\Shared\Domain\Concerns\HasPublicId;
+use Database\Factories\CustomerAddressFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -33,6 +34,7 @@ use Illuminate\Support\Carbon;
  */
 class CustomerAddress extends Model
 {
+    /** @use HasFactory<CustomerAddressFactory> */
     use HasFactory, HasPublicId, SoftDeletes;
 
     protected $fillable = [
@@ -55,6 +57,11 @@ class CustomerAddress extends Model
     public function getRouteKeyName(): string
     {
         return 'public_id';
+    }
+
+    protected static function newFactory(): CustomerAddressFactory
+    {
+        return CustomerAddressFactory::new();
     }
 
     public function user(): BelongsTo

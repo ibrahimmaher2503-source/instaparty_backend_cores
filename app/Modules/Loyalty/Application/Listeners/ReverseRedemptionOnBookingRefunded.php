@@ -5,12 +5,11 @@ declare(strict_types=1);
 namespace App\Modules\Loyalty\Application\Listeners;
 
 use App\Modules\Loyalty\Application\Actions\FinalizeRedemptionAction;
-use App\Modules\Loyalty\Domain\Contracts\LoyaltyRedemptionRepository;
 use App\Modules\Loyalty\Domain\Contracts\LoyaltyLedgerRepository;
-use App\Modules\Loyalty\Domain\Enums\LedgerEntryType;
-use App\Modules\Loyalty\Domain\Contracts\BookingItemNetAmountReader;
 use App\Modules\Loyalty\Domain\Contracts\LoyaltyProgramRepository;
+use App\Modules\Loyalty\Domain\Contracts\LoyaltyRedemptionRepository;
 use App\Modules\Loyalty\Domain\Contracts\LoyaltyRuleRepository;
+use App\Modules\Loyalty\Domain\Enums\LedgerEntryType;
 use App\Modules\Loyalty\Domain\Models\LoyaltyLedgerEntry;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\DB;

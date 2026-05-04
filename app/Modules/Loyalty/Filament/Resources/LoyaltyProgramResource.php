@@ -5,12 +5,16 @@ declare(strict_types=1);
 namespace App\Modules\Loyalty\Filament\Resources;
 
 use App\Modules\Loyalty\Domain\Models\LoyaltyProgram;
+use App\Modules\Loyalty\Filament\Resources\LoyaltyProgramResource\Pages\CreateLoyaltyProgram;
+use App\Modules\Loyalty\Filament\Resources\LoyaltyProgramResource\Pages\EditLoyaltyProgram;
+use App\Modules\Loyalty\Filament\Resources\LoyaltyProgramResource\Pages\ListLoyaltyPrograms;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Concerns\Translatable;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class LoyaltyProgramResource extends Resource
 {
@@ -20,23 +24,39 @@ class LoyaltyProgramResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-star';
 
-    protected static ?string $navigationGroup = 'Vendors';
-
-    protected static ?string $navigationLabel = 'Loyalty Programs';
+    public static function getNavigationGroup(): ?string
+    {
+        return __('admin.nav.groups.loyalty');
+    }
 
     protected static ?int $navigationSort = 40;
+
+    public static function getNavigationLabel(): string
+    {
+        return __('loyalty.nav.programs');
+    }
+
+    public static function getModelLabel(): string
+    {
+        return __('loyalty.models.program.singular');
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('loyalty.models.program.plural');
+    }
 
     public static function getTranslatableLocales(): array
     {
         return ['en', 'ar'];
     }
 
-    public static function getEloquentQuery(): \Illuminate\Database\Eloquent\Builder
+    public static function getEloquentQuery(): Builder
     {
         $query = parent::getEloquentQuery();
 
         // Scope to own vendor profile if the authenticated user is a vendor (not admin)
-        if (auth()->check() && !auth()->user()->hasRole('super_admin')) {
+        if (auth()->check() && ! auth()->user()->hasRole('super_admin')) {
             $vendorProfileId = auth()->user()->vendorProfile?->id;
             if ($vendorProfileId) {
                 $query->where('vendor_profile_id', $vendorProfileId);
@@ -62,14 +82,14 @@ class LoyaltyProgramResource extends Resource
                                 ->rows(3)
                                 ->maxLength(2000),
                         ]),
-                    Forms\Components\Tabs\Tab::make('العربية')
+                    Forms\Components\Tabs\Tab::make('Ø§Ù„Ø¹Ø±Ø¨ÙŠØ©')
                         ->schema([
                             Forms\Components\TextInput::make('name.ar')
-                                ->label('الاسم (عربي)')
+                                ->label('Ø§Ù„Ø§Ø³Ù… (Ø¹Ø±Ø¨ÙŠ)')
                                 ->required()
                                 ->maxLength(150),
                             Forms\Components\Textarea::make('terms.ar')
-                                ->label('الشروط (عربي)')
+                                ->label('Ø§Ù„Ø´Ø±ÙˆØ· (Ø¹Ø±Ø¨ÙŠ)')
                                 ->rows(3)
                                 ->maxLength(2000),
                         ]),
@@ -80,8 +100,8 @@ class LoyaltyProgramResource extends Resource
                 ->schema([
                     Forms\Components\Select::make('status')
                         ->options([
-                            'active'   => 'Active',
-                            'paused'   => 'Paused',
+                            'active' => 'Active',
+                            'paused' => 'Paused',
                             'archived' => 'Archived',
                         ])
                         ->default('active')
@@ -115,11 +135,15 @@ class LoyaltyProgramResource extends Resource
                     ->formatStateUsing(fn ($state) => is_array($state) ? ($state['en'] ?? '') : $state),
                 Tables\Columns\TextColumn::make('status')
                     ->badge()
-                    ->color(fn (string $state): string => match ($state) {
-                        'active'   => 'success',
-                        'paused'   => 'warning',
-                        'archived' => 'gray',
-                        default    => 'gray',
+                    ->color(function ($state): string {
+                        $value = $state instanceof \BackedEnum ? $state->value : (string) $state;
+
+                        return match ($value) {
+                            'active' => 'success',
+                            'paused' => 'warning',
+                            'archived' => 'gray',
+                            default => 'gray',
+                        };
                     }),
                 Tables\Columns\TextColumn::make('currency'),
                 Tables\Columns\TextColumn::make('expiration_days')
@@ -133,8 +157,8 @@ class LoyaltyProgramResource extends Resource
             ->filters([
                 Tables\Filters\SelectFilter::make('status')
                     ->options([
-                        'active'   => 'Active',
-                        'paused'   => 'Paused',
+                        'active' => 'Active',
+                        'paused' => 'Paused',
                         'archived' => 'Archived',
                     ]),
             ])
@@ -146,9 +170,9 @@ class LoyaltyProgramResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => \App\Modules\Loyalty\Filament\Resources\LoyaltyProgramResource\Pages\ListLoyaltyPrograms::route('/'),
-            'create' => \App\Modules\Loyalty\Filament\Resources\LoyaltyProgramResource\Pages\CreateLoyaltyProgram::route('/create'),
-            'edit' => \App\Modules\Loyalty\Filament\Resources\LoyaltyProgramResource\Pages\EditLoyaltyProgram::route('/{record}/edit'),
+            'index' => ListLoyaltyPrograms::route('/'),
+            'create' => CreateLoyaltyProgram::route('/create'),
+            'edit' => EditLoyaltyProgram::route('/{record}/edit'),
         ];
     }
 }

@@ -58,7 +58,7 @@ This PRD is the implementation baseline for the development team. It consolidate
 
 ### 5.2 Deferred to Phase 2
 
-- Vendor subscription module (silver / gold / bronze plans, plan-based privileges, billing lifecycle)
+- ~~Vendor subscription module (silver / gold / bronze plans, plan-based privileges, billing lifecycle)~~ **MOVED to Phase 1.7** — see `docs/specs/09_Phasing_Plan.md` §PHASE 1.7 and ADR-0013. Approved scope extension: 4-tier (Free/Silver/Gold/Premium) with Paymob billing, auto-renewal, grace period, admin override.
 - Platform-owned package products with separate accounting and commission rules
 - Dispute-resolution module with compensation / penalty policies
 - Different card layout templates per category with admin-managed card schemas

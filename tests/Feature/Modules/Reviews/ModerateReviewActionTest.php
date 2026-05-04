@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
+use App\Modules\Identity\Domain\Models\User;
 use App\Modules\Reviews\Application\Actions\ModerateReviewAction;
 use App\Modules\Reviews\Application\DTOs\ModerateReviewData;
 use App\Modules\Reviews\Domain\Enums\ModerationStatus;
 use App\Modules\Reviews\Domain\Models\ServiceReview;
-use App\Modules\Reviews\Domain\Models\VendorReview;
 use Database\Seeders\IdentityRolesSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Str;
@@ -21,13 +21,13 @@ function makeServiceReview(string $status = 'pending'): array
 {
     $data = makeCompletedBookingItem();
     $review = ServiceReview::create([
-        'public_id'         => (string) Str::ulid(),
-        'service_id'        => $data['service']->id,
-        'booking_item_id'   => $data['bookingItem']->id,
-        'user_id'           => $data['customer']->id,
-        'rating'            => 4,
-        'body'              => 'Test review',
-        'locale'            => 'en',
+        'public_id' => (string) Str::ulid(),
+        'service_id' => $data['service']->id,
+        'booking_item_id' => $data['bookingItem']->id,
+        'user_id' => $data['customer']->id,
+        'rating' => 4,
+        'body' => 'Test review',
+        'locale' => 'en',
         'moderation_status' => $status,
     ]);
 
@@ -36,7 +36,7 @@ function makeServiceReview(string $status = 'pending'): array
 
 it('approves a pending review (pending → approved)', function (): void {
     $data = makeServiceReview('pending');
-    $admin = \App\Modules\Identity\Domain\Models\User::factory()->asAdmin()->create();
+    $admin = User::factory()->asAdmin()->create();
 
     app(ModerateReviewAction::class)->execute($data['review'], new ModerateReviewData(
         toStatus: ModerationStatus::Approved,
@@ -44,23 +44,23 @@ it('approves a pending review (pending → approved)', function (): void {
     ));
 
     $this->assertDatabaseHas('service_reviews', [
-        'id'                => $data['review']->id,
+        'id' => $data['review']->id,
         'moderation_status' => 'approved',
-        'moderated_by'      => $admin->id,
+        'moderated_by' => $admin->id,
     ]);
 
     $this->assertDatabaseHas('review_moderation_log', [
         'review_type' => 'service',
-        'review_id'   => $data['review']->id,
+        'review_id' => $data['review']->id,
         'from_status' => 'pending',
-        'to_status'   => 'approved',
+        'to_status' => 'approved',
         'moderator_id' => $admin->id,
     ]);
 })->group('reviews');
 
 it('rejects a pending review (pending → rejected)', function (): void {
     $data = makeServiceReview('pending');
-    $admin = \App\Modules\Identity\Domain\Models\User::factory()->asAdmin()->create();
+    $admin = User::factory()->asAdmin()->create();
 
     app(ModerateReviewAction::class)->execute($data['review'], new ModerateReviewData(
         toStatus: ModerationStatus::Rejected,
@@ -69,14 +69,14 @@ it('rejects a pending review (pending → rejected)', function (): void {
     ));
 
     $this->assertDatabaseHas('service_reviews', [
-        'id'                => $data['review']->id,
+        'id' => $data['review']->id,
         'moderation_status' => 'rejected',
     ]);
 })->group('reviews');
 
 it('hides an approved review (approved → hidden)', function (): void {
     $data = makeServiceReview('approved');
-    $admin = \App\Modules\Identity\Domain\Models\User::factory()->asAdmin()->create();
+    $admin = User::factory()->asAdmin()->create();
 
     app(ModerateReviewAction::class)->execute($data['review'], new ModerateReviewData(
         toStatus: ModerationStatus::Hidden,
@@ -84,19 +84,19 @@ it('hides an approved review (approved → hidden)', function (): void {
     ));
 
     $this->assertDatabaseHas('service_reviews', [
-        'id'                => $data['review']->id,
+        'id' => $data['review']->id,
         'moderation_status' => 'hidden',
     ]);
 
     $this->assertDatabaseHas('review_moderation_log', [
         'from_status' => 'approved',
-        'to_status'   => 'hidden',
+        'to_status' => 'hidden',
     ]);
 })->group('reviews');
 
 it('restores a hidden review (hidden → approved)', function (): void {
     $data = makeServiceReview('hidden');
-    $admin = \App\Modules\Identity\Domain\Models\User::factory()->asAdmin()->create();
+    $admin = User::factory()->asAdmin()->create();
 
     app(ModerateReviewAction::class)->execute($data['review'], new ModerateReviewData(
         toStatus: ModerationStatus::Approved,
@@ -104,14 +104,14 @@ it('restores a hidden review (hidden → approved)', function (): void {
     ));
 
     $this->assertDatabaseHas('service_reviews', [
-        'id'                => $data['review']->id,
+        'id' => $data['review']->id,
         'moderation_status' => 'approved',
     ]);
 })->group('reviews');
 
 it('rejects an approved review (approved → rejected)', function (): void {
     $data = makeServiceReview('approved');
-    $admin = \App\Modules\Identity\Domain\Models\User::factory()->asAdmin()->create();
+    $admin = User::factory()->asAdmin()->create();
 
     app(ModerateReviewAction::class)->execute($data['review'], new ModerateReviewData(
         toStatus: ModerationStatus::Rejected,
@@ -119,34 +119,34 @@ it('rejects an approved review (approved → rejected)', function (): void {
     ));
 
     $this->assertDatabaseHas('service_reviews', [
-        'id'                => $data['review']->id,
+        'id' => $data['review']->id,
         'moderation_status' => 'rejected',
     ]);
 })->group('reviews');
 
 it('throws when transitioning from rejected (terminal state)', function (): void {
     $data = makeServiceReview('rejected');
-    $admin = \App\Modules\Identity\Domain\Models\User::factory()->asAdmin()->create();
+    $admin = User::factory()->asAdmin()->create();
 
     expect(fn () => app(ModerateReviewAction::class)->execute($data['review'], new ModerateReviewData(
         toStatus: ModerationStatus::Approved,
         moderatorId: $admin->id,
-    )))->toThrow(\InvalidArgumentException::class);
+    )))->toThrow(InvalidArgumentException::class);
 })->group('reviews');
 
 it('throws when transitioning pending → hidden (forbidden)', function (): void {
     $data = makeServiceReview('pending');
-    $admin = \App\Modules\Identity\Domain\Models\User::factory()->asAdmin()->create();
+    $admin = User::factory()->asAdmin()->create();
 
     expect(fn () => app(ModerateReviewAction::class)->execute($data['review'], new ModerateReviewData(
         toStatus: ModerationStatus::Hidden,
         moderatorId: $admin->id,
-    )))->toThrow(\InvalidArgumentException::class);
+    )))->toThrow(InvalidArgumentException::class);
 })->group('reviews');
 
 it('appends to review_moderation_log on every transition', function (): void {
     $data = makeServiceReview('pending');
-    $admin = \App\Modules\Identity\Domain\Models\User::factory()->asAdmin()->create();
+    $admin = User::factory()->asAdmin()->create();
 
     app(ModerateReviewAction::class)->execute($data['review'], new ModerateReviewData(
         toStatus: ModerationStatus::Approved,

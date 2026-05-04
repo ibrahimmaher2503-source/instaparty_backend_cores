@@ -100,6 +100,7 @@ Same risks as v1, but now mitigated by smaller scope per phase:
 | **5.1** | Reviews | 1 | W6 | Reviews |
 | **5.2** | Loyalty (per-vendor) | 2 | W6 | Loyalty |
 | **5.3** | Marketing Campaigns | 1 | W7 | Communication |
+| **1.7** | Subscriptions: Vendor Tier Plans | 3 | W6-7 | Subscriptions (NEW) |
 | **6.0** | Reports + Audit Log | 2 | W7 | Reporting |
 | **6.1** | Sale + Digital Excel Imports | 1 | W7 | Catalog |
 | **6.2** | CMS Pages + Settings | 1 | W7 | Cross-cutting |
@@ -107,8 +108,41 @@ Same risks as v1, but now mitigated by smaller scope per phase:
 | **7.1** | Staging Deploy + Smoke Tests | 2 | W8 | DevOps |
 | **7.2** | Documentation + Retrospective | 1 | W8 | All |
 
-**Total: 26 phases × ~1.5 days avg = 40 days = 8 weeks.** Some phases are 1 day, some are 3 — average works out.
+**Total: 27 phases (incl. Phase 1.7 Subscriptions) × ~1.5 days avg ≈ 40 days = 8 weeks.** Some phases are 1 day, some are 3 — average works out.
 
+
+---
+
+## PHASE 1.7 — Subscriptions: Vendor Tier Plans (3 days, W6-7)
+
+**GOAL:** Every vendor has a subscription tier; Free-tier limits are enforced; paid upgrade flow works; auto-renewal + grace + expiry cycle is reliable; admin can override any vendor's tier with full audit.
+
+**PRD COVERAGE:** FR-001..FR-030 (specs/018-subscriptions-tiers/spec.md)
+
+**ADR REQUIRED:** ADR-0013-subscription-tiers-module.md ✅ (already authored)
+
+**TABLES TOUCHED:** `subscription_plans` (NEW), `plan_features` (NEW), `vendor_subscriptions` (NEW), `subscription_invoices` (NEW), `subscription_payments` (NEW), `subscription_audit` (NEW), `commission_rates` (ALTER — add `subscription_plan_id` FK)
+
+**DELIVERABLE:** New vendor auto-enrolled on Free tier; `GET /vendor/subscription` returns tier info; vendor cannot publish 6th service; paid upgrade flow ends with active Silver/Gold/Premium; admin can override tier with audit trail visible in Filament.
+
+**DAYS:**
+- Day 1: Module scaffold + all 7 migrations + enums + models + state machine + contracts + seeder (Phases 1+2 of tasks.md)
+- Day 2: Free auto-enrol listener + Catalog gates + vendor read endpoint (Phase 3); subscribe + payment flow (Phase 4)
+- Day 3: Renewal/grace/expiry cycle (Phase 5); commission fallback (Phase 6); featured gate (Phase 7); admin override + Filament (Phase 8); Pest suite green
+
+**CUT-LIST (if slipping):**
+- Defer recurring-token auto-renewal (keep vendor_initiated path only, feature flag default stays false)
+- Defer Excel import gate (FR-014) to Phase 6.1
+- Defer `GET /admin/subscriptions` pagination filters (return all, paginate later)
+
+**EXIT CRITERIA:**
+- [ ] `php artisan db:seed --class=SubscriptionPlansSeeder` produces 4 plans + ~36 features + 4 commission_rates rows
+- [ ] New vendor auto-enrolled: `vendor_subscriptions` row with `plan_code=free, status=active`
+- [ ] 6th service publish rejected with 422 + English + Arabic error messages
+- [ ] Paid Silver upgrade: invoice + webhook capture + active subscription + superseded old row
+- [ ] `./vendor/bin/pest --group=subscriptions` all green
+
+**BLOCKS:** Phase 6.0 (Reports reads subscription data), Phase 7.0 (Hardening)
 
 ---
 

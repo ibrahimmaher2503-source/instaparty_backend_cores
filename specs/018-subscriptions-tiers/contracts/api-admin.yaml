@@ -1,0 +1,165 @@
+openapi: 3.1.0
+info:
+  title: InstaParty Subscriptions — Admin API
+  version: 1.0.0
+  description: |
+    Admin endpoints for monitoring vendor subscriptions and applying / ending
+    tier overrides. All mutating endpoints require an `Idempotency-Key` header
+    and the corresponding Shield permission.
+servers:
+  - url: https://api.instaparty.example/api
+    description: production
+tags:
+  - name: admin-subscription
+
+components:
+  securitySchemes:
+    sanctum:
+      type: http
+      scheme: bearer
+      bearerFormat: opaque
+
+  parameters:
+    AcceptLanguage:
+      in: header
+      name: Accept-Language
+      required: false
+      schema: { type: string, enum: [en, ar], default: en }
+    IdempotencyKey:
+      in: header
+      name: Idempotency-Key
+      required: true
+      schema: { type: string, minLength: 8, maxLength: 64 }
+
+  schemas:
+    AdminSubscriptionRow:
+      type: object
+      properties:
+        public_id:           { type: string }
+        vendor_profile:
+          type: object
+          properties:
+            public_id: { type: string }
+            display_name: { type: string }
+        plan_code:           { type: string }
+        status:              { type: string, enum: [active, past_due, cancelled, expired, superseded] }
+        billing_cycle:       { type: string, enum: [monthly, yearly, none] }
+        current_period_end:  { type: string, format: date-time, nullable: true }
+        grace_period_ends_at:{ type: string, format: date-time, nullable: true }
+        is_admin_override:   { type: boolean }
+        override_expires_at: { type: string, format: date-time, nullable: true }
+
+    ErrorEnvelope:
+      type: object
+      properties:
+        data:   { nullable: true }
+        meta:   { type: object }
+        errors:
+          type: array
+          items: { type: object, properties: { code: { type: string }, message: { type: string } } }
+
+security:
+  - sanctum: []
+
+paths:
+  /admin/subscriptions:
+    get:
+      tags: [admin-subscription]
+      summary: List vendor subscriptions, filterable by plan / status / renewal window
+      parameters:
+        - $ref: '#/components/parameters/AcceptLanguage'
+        - in: query
+          name: plan_code
+          schema: { type: string, enum: [free, silver, gold, premium] }
+        - in: query
+          name: status
+          schema: { type: string, enum: [active, past_due, cancelled, expired, superseded] }
+        - in: query
+          name: renews_before
+          schema: { type: string, format: date }
+        - in: query
+          name: vendor_profile_public_id
+          schema: { type: string }
+        - in: query
+          name: per_page
+          schema: { type: integer, default: 25, maximum: 100 }
+      responses:
+        '200':
+          description: Paginated subscription list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items: { $ref: '#/components/schemas/AdminSubscriptionRow' }
+                  meta:
+                    type: object
+                    properties:
+                      page: { type: integer, example: 1 }
+                      per_page: { type: integer, example: 25 }
+                      total: { type: integer, example: 1834 }
+                  errors: { type: array, items: {}, example: [] }
+        '403':
+          description: Missing `view_any_vendor_subscription` Shield permission
+          content: { application/json: { schema: { $ref: '#/components/schemas/ErrorEnvelope' } } }
+
+  /admin/subscriptions/{id}/override:
+    post:
+      tags: [admin-subscription]
+      summary: Apply (or update) an admin tier override on a vendor subscription
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string, description: "vendor_subscriptions.public_id (ULID)" }
+        - $ref: '#/components/parameters/AcceptLanguage'
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [plan_code, reason]
+              properties:
+                plan_code:   { type: string, enum: [free, silver, gold, premium] }
+                reason:      { type: string, minLength: 4, maxLength: 500 }
+                expires_at:  { type: string, format: date-time, nullable: true, description: "ISO-8601 UTC; omit/null for indefinite override (must be ended manually)" }
+            example:
+              plan_code: premium
+              reason: "Beta partner — comp until launch"
+              expires_at: "2026-08-01T00:00:00Z"
+      responses:
+        '200':
+          description: Override applied (and previous override, if any, ended)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data: { $ref: '#/components/schemas/AdminSubscriptionRow' }
+                  meta:
+                    type: object
+                    properties:
+                      audit_entry_id: { type: integer, example: 8821 }
+                  errors: { type: array, items: {}, example: [] }
+              example:
+                data:
+                  public_id: "01J9P3R7XY4Q5GH7B8N9C0VWQE"
+                  vendor_profile: { public_id: "01J9P0...", display_name: "Cairo Bouncy Castles" }
+                  plan_code: premium
+                  status: active
+                  billing_cycle: none
+                  current_period_end: null
+                  grace_period_ends_at: null
+                  is_admin_override: true
+                  override_expires_at: "2026-08-01T00:00:00Z"
+                meta: { audit_entry_id: 8821 }
+                errors: []
+        '403':
+          description: Missing `override_vendor_subscription` Shield permission
+        '422':
+          description: Validation failure (unknown plan_code, missing reason, expires_at in past)
+          content: { application/json: { schema: { $ref: '#/components/schemas/ErrorEnvelope' } } }

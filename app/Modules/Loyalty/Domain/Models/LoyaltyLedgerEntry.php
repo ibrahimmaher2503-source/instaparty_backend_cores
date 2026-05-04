@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace App\Modules\Loyalty\Domain\Models;
 
+use App\Modules\Loyalty\Database\Factories\LoyaltyLedgerEntryFactory;
 use App\Modules\Loyalty\Domain\Enums\LedgerEntryType;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use RuntimeException;
@@ -13,12 +15,13 @@ use Spatie\Translatable\HasTranslations;
 
 class LoyaltyLedgerEntry extends Model
 {
-    use HasUlids, HasTranslations;
+    use HasFactory, HasTranslations, HasUlids;
 
     // Append-only: no updated_at
     public $timestamps = false;
 
     const CREATED_AT = 'created_at';
+
     const UPDATED_AT = null;
 
     protected $table = 'loyalty_ledger';
@@ -43,15 +46,20 @@ class LoyaltyLedgerEntry extends Model
     protected function casts(): array
     {
         return [
-            'entry_type'  => LedgerEntryType::class,
-            'points'      => 'integer',
-            'created_at'  => 'datetime',
+            'entry_type' => LedgerEntryType::class,
+            'points' => 'integer',
+            'created_at' => 'datetime',
         ];
     }
 
     public function uniqueIds(): array
     {
         return ['public_id'];
+    }
+
+    protected static function newFactory(): LoyaltyLedgerEntryFactory
+    {
+        return LoyaltyLedgerEntryFactory::new();
     }
 
     protected static function booted(): void

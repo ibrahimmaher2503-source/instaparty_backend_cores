@@ -8,16 +8,22 @@ return [
     'region' => 'Region',
     'city' => 'City',
 
-    // Plurals (for Filament navigation labels and model labels)
     'countries' => 'Countries',
     'governorates' => 'Governorates',
     'regions' => 'Regions',
     'cities' => 'Cities',
 
-    // Table column labels
     'columns' => [
         'name' => 'Name',
+        'name_en' => 'Name (EN)',
+        'name_ar' => 'Name (AR)',
         'code' => 'Code',
+        'iso2' => 'ISO2',
+        'iso3' => 'ISO3',
+        'default_currency' => 'Default Currency',
+        'default_locale' => 'Default Locale',
+        'default_timezone' => 'Default Timezone',
+        'phone_code' => 'Phone Code',
         'country' => 'Country',
         'governorate' => 'Governorate',
         'region' => 'Region',
@@ -28,7 +34,11 @@ return [
         'created_at' => 'Created At',
     ],
 
-    // Filter labels
+    'errors' => [
+        'delete_region_has_cities' => 'Cannot delete this region because it has cities assigned to it.',
+        'delete_governorate_has_regions' => 'Cannot delete this governorate because it has regions assigned to it.',
+    ],
+
     'filters' => [
         'is_active' => 'Active',
         'country' => 'Country',

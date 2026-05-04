@@ -35,7 +35,7 @@ class RecomputeRatingOnApproval implements ShouldQueue
         }
 
         $subjectType = $event->reviewType;
-        $subjectId   = $event->subjectId;
+        $subjectId = $event->subjectId;
 
         $aggregate = $this->aggregationService->recompute($subjectType, $subjectId);
 

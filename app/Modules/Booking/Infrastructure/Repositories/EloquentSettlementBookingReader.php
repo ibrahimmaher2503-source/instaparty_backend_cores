@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Modules\Booking\Infrastructure\Repositories;
 
-use App\Modules\Booking\Domain\Models\BookingItem;
 use App\Modules\Catalog\Domain\Enums\ProductType;
 use App\Modules\Settlement\Application\DTOs\BookingItemSnapshotDto;
 use App\Modules\Settlement\Domain\Contracts\SettlementBookingReader;

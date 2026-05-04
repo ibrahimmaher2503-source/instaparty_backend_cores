@@ -22,13 +22,13 @@ function makeServiceReviews(int $count, string $status = 'approved'): array
         // Create a new booking item for each review (unique booking_item_id)
         $newData = makeCompletedBookingItem();
         $reviews[] = ServiceReview::create([
-            'public_id'         => (string) Str::ulid(),
-            'service_id'        => $data['service']->id,
-            'booking_item_id'   => $newData['bookingItem']->id,
-            'user_id'           => $newData['customer']->id,
-            'rating'            => rand(1, 5),
-            'body'              => null,
-            'locale'            => 'en',
+            'public_id' => (string) Str::ulid(),
+            'service_id' => $data['service']->id,
+            'booking_item_id' => $newData['bookingItem']->id,
+            'user_id' => $newData['customer']->id,
+            'rating' => rand(1, 5),
+            'body' => null,
+            'locale' => 'en',
             'moderation_status' => $status,
         ]);
     }
@@ -38,7 +38,7 @@ function makeServiceReviews(int $count, string $status = 'approved'): array
 
 it('returns only approved non-deleted reviews for a service', function (): void {
     $serviceData = makeServiceReviews(3, 'approved');
-    $service     = $serviceData['service'];
+    $service = $serviceData['service'];
 
     // Add pending and rejected reviews
     makeServiceReviews(2, 'pending');
@@ -54,12 +54,12 @@ it('returns reviewer_first_name as first word of name', function (): void {
     $data['customer']->update(['name' => 'Ahmed Maher']);
 
     ServiceReview::create([
-        'public_id'         => (string) Str::ulid(),
-        'service_id'        => $data['service']->id,
-        'booking_item_id'   => $data['bookingItem']->id,
-        'user_id'           => $data['customer']->id,
-        'rating'            => 5,
-        'locale'            => 'en',
+        'public_id' => (string) Str::ulid(),
+        'service_id' => $data['service']->id,
+        'booking_item_id' => $data['bookingItem']->id,
+        'user_id' => $data['customer']->id,
+        'rating' => 5,
+        'locale' => 'en',
         'moderation_status' => 'approved',
     ]);
 
@@ -73,12 +73,12 @@ it('returns verified customer fallback when user name is empty', function (): vo
     $data['customer']->update(['name' => '']);
 
     ServiceReview::create([
-        'public_id'         => (string) Str::ulid(),
-        'service_id'        => $data['service']->id,
-        'booking_item_id'   => $data['bookingItem']->id,
-        'user_id'           => $data['customer']->id,
-        'rating'            => 5,
-        'locale'            => 'en',
+        'public_id' => (string) Str::ulid(),
+        'service_id' => $data['service']->id,
+        'booking_item_id' => $data['bookingItem']->id,
+        'user_id' => $data['customer']->id,
+        'rating' => 5,
+        'locale' => 'en',
         'moderation_status' => 'approved',
     ]);
 
@@ -95,12 +95,12 @@ it('returns 404 for non-existent service', function (): void {
 it('soft-deleted reviews do not appear in public listing', function (): void {
     $data = makeCompletedBookingItem();
     $review = ServiceReview::create([
-        'public_id'         => (string) Str::ulid(),
-        'service_id'        => $data['service']->id,
-        'booking_item_id'   => $data['bookingItem']->id,
-        'user_id'           => $data['customer']->id,
-        'rating'            => 5,
-        'locale'            => 'en',
+        'public_id' => (string) Str::ulid(),
+        'service_id' => $data['service']->id,
+        'booking_item_id' => $data['bookingItem']->id,
+        'user_id' => $data['customer']->id,
+        'rating' => 5,
+        'locale' => 'en',
         'moderation_status' => 'approved',
     ]);
 

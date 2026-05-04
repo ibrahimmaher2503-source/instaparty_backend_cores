@@ -35,7 +35,7 @@ class EloquentBookingItemReviewabilityReader implements BookingItemReviewability
 
         return [
             'booking_item_id' => (int) $row->booking_item_id,
-            'service_id'      => (int) $row->service_id,
+            'service_id' => (int) $row->service_id,
         ];
     }
 }

@@ -9,25 +9,13 @@ declare(strict_types=1);
 it('DispatchCampaignRecipientJob uses DispatchNotificationAction and not direct adapter classes', function (): void {
     $jobFile = base_path('app/Modules/Communication/Application/Jobs/DispatchCampaignRecipientJob.php');
 
-    expect(file_exists($jobFile))->toBeTrue('DispatchCampaignRecipientJob.php must exist');
+    expect(file_exists($jobFile))->toBeTrue();
 
     $code = file_get_contents($jobFile);
 
-    expect($code)->toContain('DispatchNotificationAction',
-        'DispatchCampaignRecipientJob must delegate to DispatchNotificationAction'
-    );
+    expect($code)->toContain('DispatchNotificationAction');
 
-    $forbiddenAdapters = [
-        'FcmPushAdapter',
-        'VonageSmsAdapter',
-        'WhatsAppStubAdapter',
-        'MailchimpEmailAdapter',
-    ];
-
-    foreach ($forbiddenAdapters as $adapter) {
-        expect($code)->not->toContain(
-            $adapter,
-            "DispatchCampaignRecipientJob must not reference $adapter directly — use DispatchNotificationAction instead"
-        );
+    foreach (['FcmPushAdapter', 'VonageSmsAdapter', 'WhatsAppStubAdapter', 'MailchimpEmailAdapter'] as $adapter) {
+        expect($code)->not->toContain($adapter);
     }
 })->group('communication');

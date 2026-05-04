@@ -19,13 +19,19 @@ class ImportRentalServicesPage extends Page implements HasForms
 {
     use InteractsWithForms;
 
-    protected static ?string $navigationGroup = 'Services';
-
-    protected static ?string $navigationLabel = 'Import Rental Services';
+    public static function getNavigationGroup(): ?string
+    {
+        return __('admin.nav.groups.services');
+    }
 
     protected static ?string $navigationIcon = 'heroicon-o-arrow-up-tray';
 
     protected static ?int $navigationSort = 10;
+
+    public static function getNavigationLabel(): string
+    {
+        return __('catalog.nav.import_rental_services');
+    }
 
     protected static string $view = 'catalog::filament.pages.import-rental-services';
 

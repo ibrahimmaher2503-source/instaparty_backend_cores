@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Modules\Discovery\Domain\Models;
 
 use App\Modules\Catalog\Domain\Models\Service;
+use App\Modules\Discovery\Database\Factories\WishlistItemFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -20,6 +21,11 @@ class WishlistItem extends Model
         'wishlist_id',
         'service_id',
     ];
+
+    protected static function newFactory(): WishlistItemFactory
+    {
+        return WishlistItemFactory::new();
+    }
 
     public function wishlist(): BelongsTo
     {

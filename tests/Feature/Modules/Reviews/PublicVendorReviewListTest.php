@@ -18,23 +18,23 @@ it('returns only approved non-deleted vendor reviews', function (): void {
     $vendor = $data['vendor'];
 
     VendorReview::create([
-        'public_id'         => (string) Str::ulid(),
+        'public_id' => (string) Str::ulid(),
         'vendor_profile_id' => $vendor->id,
         'booking_vendor_id' => $data['bookingVendor']->id,
-        'user_id'           => $data['customer']->id,
-        'rating'            => 5,
-        'locale'            => 'en',
+        'user_id' => $data['customer']->id,
+        'rating' => 5,
+        'locale' => 'en',
         'moderation_status' => 'approved',
     ]);
 
     $data2 = makeCompletedBookingItem();
     VendorReview::create([
-        'public_id'         => (string) Str::ulid(),
+        'public_id' => (string) Str::ulid(),
         'vendor_profile_id' => $vendor->id,
         'booking_vendor_id' => $data2['bookingVendor']->id,
-        'user_id'           => $data2['customer']->id,
-        'rating'            => 3,
-        'locale'            => 'en',
+        'user_id' => $data2['customer']->id,
+        'rating' => 3,
+        'locale' => 'en',
         'moderation_status' => 'pending',
     ]);
 

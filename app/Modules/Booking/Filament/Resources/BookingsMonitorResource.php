@@ -23,7 +23,10 @@ class BookingsMonitorResource extends Resource
 {
     protected static ?string $model = Booking::class;
 
-    protected static ?string $navigationGroup = 'Booking';
+    public static function getNavigationGroup(): ?string
+    {
+        return __('admin.nav.groups.booking');
+    }
 
     protected static ?string $navigationIcon = 'heroicon-o-chat-bubble-left-right';
 
@@ -54,6 +57,7 @@ class BookingsMonitorResource extends Resource
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()
+            ->with(['customer'])
             ->whereIn('lifecycle_status', [
                 LifecycleStatus::VendorReview->value,
                 LifecycleStatus::CustomerReview->value,
@@ -69,9 +73,10 @@ class BookingsMonitorResource extends Resource
                     ->sortable()
                     ->label(__('booking.columns.reference_no')),
 
-                Tables\Columns\TextColumn::make('customer_id')
+                Tables\Columns\TextColumn::make('customer.name')
                     ->label(__('booking.columns.customer_id'))
-                    ->searchable(),
+                    ->searchable()
+                    ->default(fn (Booking $record): string => '#'.$record->customer_id),
 
                 Tables\Columns\TextColumn::make('lifecycle_status')
                     ->badge()

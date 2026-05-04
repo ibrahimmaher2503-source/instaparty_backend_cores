@@ -22,9 +22,9 @@ enum ProgramStatus: string
 
     public function label(): string
     {
-        return match($this) {
-            self::Active   => 'Active',
-            self::Paused   => 'Paused',
+        return match ($this) {
+            self::Active => 'Active',
+            self::Paused => 'Paused',
             self::Archived => 'Archived',
         };
     }

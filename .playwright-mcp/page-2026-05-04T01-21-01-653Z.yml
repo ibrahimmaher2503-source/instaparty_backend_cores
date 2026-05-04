@@ -1,0 +1,557 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - generic [ref=e3]:
+      - navigation [ref=e5]:
+        - generic [ref=e6]:
+          - generic [ref=e9]:
+            - generic [ref=e10]: Global search
+            - generic [ref=e11]:
+              - img [ref=e13]
+              - searchbox "Global search" [ref=e16]
+          - generic [ref=e21] [cursor=pointer]: EN
+          - button "User menu" [ref=e24] [cursor=pointer]:
+            - img "Avatar of InstaParty Admin" [ref=e25]
+      - main [ref=e26]:
+        - generic [ref=e28]:
+          - generic [ref=e30]:
+            - navigation [ref=e31]:
+              - list [ref=e32]:
+                - listitem [ref=e33]:
+                  - link "Payments" [ref=e34] [cursor=pointer]:
+                    - /url: http://127.0.0.1:8000/admin/payments
+                - listitem [ref=e35]:
+                  - img [ref=e36]
+                  - generic [ref=e38]: List
+            - heading "Payments" [level=1] [ref=e39]
+          - generic [ref=e43]:
+            - generic [ref=e44]:
+              - generic [ref=e48]:
+                - generic [ref=e49]: Search
+                - generic [ref=e50]:
+                  - img [ref=e52]
+                  - searchbox "Search" [ref=e55]
+              - table [ref=e57]:
+                - rowgroup [ref=e58]:
+                  - row "Public ID Booking Payment Gateway Amount Payment Method Status Captured At Created At" [ref=e59]:
+                    - columnheader "Public ID" [ref=e60]:
+                      - generic [ref=e62]: Public ID
+                    - columnheader "Booking" [ref=e63]:
+                      - button "Booking" [ref=e64] [cursor=pointer]:
+                        - generic [ref=e65]: Booking
+                        - img [ref=e66]
+                    - columnheader "Payment Gateway" [ref=e68]:
+                      - generic [ref=e70]: Payment Gateway
+                    - columnheader "Amount" [ref=e71]:
+                      - button "Amount" [ref=e72] [cursor=pointer]:
+                        - generic [ref=e73]: Amount
+                        - img [ref=e74]
+                    - columnheader "Payment Method" [ref=e76]:
+                      - generic [ref=e78]: Payment Method
+                    - columnheader "Status" [ref=e79]:
+                      - generic [ref=e81]: Status
+                    - columnheader "Captured At" [ref=e82]:
+                      - button "Captured At" [ref=e83] [cursor=pointer]:
+                        - generic [ref=e84]: Captured At
+                        - img [ref=e85]
+                    - columnheader "Created At" [ref=e87]:
+                      - button "Created At" [ref=e88] [cursor=pointer]:
+                        - generic [ref=e89]: Created At
+                        - img [ref=e90]
+                - rowgroup [ref=e92]:
+                  - row "3MRKVAR5KB4B4H0M7QNVXRC0KS 1 paymob EGP 4,000.00 Card Captured May 16, 2026 13:30:00 May 4, 2026 00:35:21" [ref=e93]:
+                    - cell "3MRKVAR5KB4B4H0M7QNVXRC0KS" [ref=e94]:
+                      - generic [ref=e101] [cursor=pointer]: 3MRKVAR5KB4B4H0M7QNVXRC0KS
+                    - cell "1" [ref=e102]:
+                      - generic [ref=e109]: "1"
+                    - cell "paymob" [ref=e110]:
+                      - generic [ref=e117]: paymob
+                    - cell "EGP 4,000.00" [ref=e118]:
+                      - generic [ref=e125]: EGP 4,000.00
+                    - cell "Card" [ref=e126]:
+                      - generic [ref=e134]: Card
+                    - cell "Captured" [ref=e135]:
+                      - generic [ref=e143]: Captured
+                    - cell "May 16, 2026 13:30:00" [ref=e144]:
+                      - generic [ref=e151]: May 16, 2026 13:30:00
+                    - cell "May 4, 2026 00:35:21" [ref=e152]:
+                      - generic [ref=e159]: May 4, 2026 00:35:21
+                  - row "1SVSBN6TKTWDSQRFCDS476PJMP 2 paymob EGP 1,650.00 Wallet Pending May 4, 2026 00:35:21" [ref=e160]:
+                    - cell "1SVSBN6TKTWDSQRFCDS476PJMP" [ref=e161]:
+                      - generic [ref=e168] [cursor=pointer]: 1SVSBN6TKTWDSQRFCDS476PJMP
+                    - cell "2" [ref=e169]:
+                      - generic [ref=e176]: "2"
+                    - cell "paymob" [ref=e177]:
+                      - generic [ref=e184]: paymob
+                    - cell "EGP 1,650.00" [ref=e185]:
+                      - generic [ref=e192]: EGP 1,650.00
+                    - cell "Wallet" [ref=e193]:
+                      - generic [ref=e201]: Wallet
+                    - cell "Pending" [ref=e202]:
+                      - generic [ref=e210]: Pending
+                    - cell [ref=e211]
+                    - cell "May 4, 2026 00:35:21" [ref=e215]:
+                      - generic [ref=e222]: May 4, 2026 00:35:21
+                  - row "121EBEEWQZQZDT0BBGPYY39AW7 3 paymob EGP 300.00 Transfer Failed May 4, 2026 00:35:21" [ref=e223]:
+                    - cell "121EBEEWQZQZDT0BBGPYY39AW7" [ref=e224]:
+                      - generic [ref=e231] [cursor=pointer]: 121EBEEWQZQZDT0BBGPYY39AW7
+                    - cell "3" [ref=e232]:
+                      - generic [ref=e239]: "3"
+                    - cell "paymob" [ref=e240]:
+                      - generic [ref=e247]: paymob
+                    - cell "EGP 300.00" [ref=e248]:
+                      - generic [ref=e255]: EGP 300.00
+                    - cell "Transfer" [ref=e256]:
+                      - generic [ref=e264]: Transfer
+                    - cell "Failed" [ref=e265]:
+                      - generic [ref=e273]: Failed
+                    - cell [ref=e274]
+                    - cell "May 4, 2026 00:35:21" [ref=e278]:
+                      - generic [ref=e285]: May 4, 2026 00:35:21
+              - navigation "Pagination navigation" [ref=e286]:
+                - generic [ref=e287]: Showing 1 to 3 of 3 results
+                - generic [ref=e290]:
+                  - generic [ref=e292]: Per page
+                  - combobox "Per page" [ref=e294]:
+                    - option "5"
+                    - option "10" [selected]
+                    - option "25"
+                    - option "50"
+                    - option "All"
+            - generic:
+              - dialog
+            - generic:
+              - dialog
+            - generic:
+              - dialog
+            - generic:
+              - dialog
+            - generic:
+              - dialog
+    - complementary [ref=e295]:
+      - link "Laravel" [ref=e299] [cursor=pointer]:
+        - /url: http://127.0.0.1:8000/admin
+        - generic [ref=e300]: Laravel
+      - navigation [ref=e301]:
+        - list [ref=e302]:
+          - listitem [ref=e303]:
+            - list [ref=e304]:
+              - listitem [ref=e305]:
+                - link "Dashboard" [ref=e306] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin
+                  - img [ref=e307]
+                  - generic [ref=e309]: Dashboard
+              - listitem [ref=e310]:
+                - link "Activity Logs" [ref=e311] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/activitylogs
+                  - img [ref=e312]
+                  - generic [ref=e314]: Activity Logs
+          - listitem [ref=e315]:
+            - generic [ref=e316] [cursor=pointer]:
+              - generic [ref=e317]: Filament Shield
+              - button "Filament Shield" [expanded] [ref=e318]:
+                - generic [ref=e319]: Filament Shield
+                - img [ref=e320]
+            - list [ref=e322]:
+              - listitem [ref=e323]:
+                - link "Roles 5" [ref=e324] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/shield/roles
+                  - img [ref=e325]
+                  - generic [ref=e327]: Roles
+                  - generic [ref=e331]: "5"
+          - listitem [ref=e332]:
+            - generic [ref=e333] [cursor=pointer]:
+              - generic [ref=e334]: Booking
+              - button "Booking" [expanded] [ref=e335]:
+                - generic [ref=e336]: Booking
+                - img [ref=e337]
+            - list [ref=e339]:
+              - listitem [ref=e340]:
+                - link "Bookings" [ref=e341] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/bookings
+                  - img [ref=e342]
+                  - generic [ref=e344]: Bookings
+              - listitem [ref=e345]:
+                - link "Modifications" [ref=e346] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/booking-modifications
+                  - img [ref=e347]
+                  - generic [ref=e349]: Modifications
+              - listitem [ref=e350]:
+                - link "State Transitions" [ref=e351] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/booking-state-transitions
+                  - img [ref=e352]
+                  - generic [ref=e354]: State Transitions
+              - listitem [ref=e355]:
+                - link "Negotiation Monitor" [ref=e356] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/bookings-monitor
+                  - img [ref=e357]
+                  - generic [ref=e359]: Negotiation Monitor
+          - listitem [ref=e360]:
+            - generic [ref=e361] [cursor=pointer]:
+              - generic [ref=e362]: Communication
+              - button "Communication" [expanded] [ref=e363]:
+                - generic [ref=e364]: Communication
+                - img [ref=e365]
+            - list [ref=e367]:
+              - listitem [ref=e368]:
+                - link "Notification Templates" [ref=e369] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/notification-templates
+                  - img [ref=e370]
+                  - generic [ref=e372]: Notification Templates
+              - listitem [ref=e373]:
+                - link "Campaigns" [ref=e374] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/campaigns
+                  - img [ref=e375]
+                  - generic [ref=e377]: Campaigns
+              - listitem [ref=e378]:
+                - link "Notification Preferences" [ref=e379] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/notification-preferences
+                  - img [ref=e380]
+                  - generic [ref=e382]: Notification Preferences
+              - listitem [ref=e383]:
+                - link "Dispatch Logs" [ref=e384] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/notification-dispatches
+                  - img [ref=e385]
+                  - generic [ref=e387]: Dispatch Logs
+          - listitem [ref=e388]:
+            - generic [ref=e389] [cursor=pointer]:
+              - generic [ref=e390]: Geography
+              - button "Geography" [expanded] [ref=e391]:
+                - generic [ref=e392]: Geography
+                - img [ref=e393]
+            - list [ref=e395]:
+              - listitem [ref=e396]:
+                - link "Countries" [ref=e397] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/countries
+                  - img [ref=e398]
+                  - generic [ref=e400]: Countries
+              - listitem [ref=e401]:
+                - link "Governorates" [ref=e402] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/governorates
+                  - img [ref=e403]
+                  - generic [ref=e405]: Governorates
+              - listitem [ref=e406]:
+                - link "Regions" [ref=e407] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/regions
+                  - img [ref=e408]
+                  - generic [ref=e411]: Regions
+              - listitem [ref=e412]:
+                - link "Cities" [ref=e413] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/cities
+                  - img [ref=e414]
+                  - generic [ref=e416]: Cities
+          - listitem [ref=e417]:
+            - generic [ref=e418] [cursor=pointer]:
+              - generic [ref=e419]: Vendor Management
+              - button "Vendor Management" [expanded] [ref=e420]:
+                - generic [ref=e421]: Vendor Management
+                - img [ref=e422]
+            - list [ref=e424]:
+              - listitem [ref=e425]:
+                - link "All Vendors" [ref=e426] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/vendor-profiles
+                  - img [ref=e427]
+                  - generic [ref=e429]: All Vendors
+          - listitem [ref=e430]:
+            - generic [ref=e431] [cursor=pointer]:
+              - generic [ref=e432]: Settlement
+              - button "Settlement" [expanded] [ref=e433]:
+                - generic [ref=e434]: Settlement
+                - img [ref=e435]
+            - list [ref=e437]:
+              - listitem [ref=e438]:
+                - link "Commission Rules" [ref=e439] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/settlement-commission-rules
+                  - img [ref=e440]
+                  - generic [ref=e442]: Commission Rules
+              - listitem [ref=e443]:
+                - link "Wallet Ledger" [ref=e444] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/settlement-wallets
+                  - img [ref=e445]
+                  - generic [ref=e447]: Wallet Ledger
+              - listitem [ref=e448]:
+                - link "Withdrawal Requests" [ref=e449] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/settlement-withdrawals
+                  - img [ref=e450]
+                  - generic [ref=e452]: Withdrawal Requests
+              - listitem [ref=e453]:
+                - link "Commissions" [ref=e454] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/commissions
+                  - img [ref=e455]
+                  - generic [ref=e457]: Commissions
+              - listitem [ref=e458]:
+                - link "Settlement Runs" [ref=e459] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/settlement-runs
+                  - img [ref=e460]
+                  - generic [ref=e462]: Settlement Runs
+          - listitem [ref=e463]:
+            - generic [ref=e464] [cursor=pointer]:
+              - generic [ref=e465]: Users
+              - button "Users" [expanded] [ref=e466]:
+                - generic [ref=e467]: Users
+                - img [ref=e468]
+            - list [ref=e470]:
+              - listitem [ref=e471]:
+                - link "Customers" [ref=e472] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/customers
+                  - img [ref=e473]
+                  - generic [ref=e475]: Customers
+          - listitem [ref=e476]:
+            - generic [ref=e477] [cursor=pointer]:
+              - generic [ref=e478]: Identity
+              - button "Identity" [expanded] [ref=e479]:
+                - generic [ref=e480]: Identity
+                - img [ref=e481]
+            - list [ref=e483]:
+              - listitem [ref=e484]:
+                - link "Users" [ref=e485] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/users
+                  - img [ref=e486]
+                  - generic [ref=e488]: Users
+              - listitem [ref=e489]:
+                - link "Customer Profiles" [ref=e490] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/customer-profiles
+                  - img [ref=e491]
+                  - generic [ref=e493]: Customer Profiles
+              - listitem [ref=e494]:
+                - link "Customer Addresses" [ref=e495] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/customer-addresses
+                  - img [ref=e496]
+                  - generic [ref=e499]: Customer Addresses
+              - listitem [ref=e500]:
+                - link "User Devices" [ref=e501] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/user-devices
+                  - img [ref=e502]
+                  - generic [ref=e504]: User Devices
+          - listitem [ref=e505]:
+            - generic [ref=e506] [cursor=pointer]:
+              - generic [ref=e507]: Vendor Onboarding
+              - button "Vendor Onboarding" [expanded] [ref=e508]:
+                - generic [ref=e509]: Vendor Onboarding
+                - img [ref=e510]
+            - list [ref=e512]:
+              - listitem [ref=e513]:
+                - link "Approval Queue" [ref=e514] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/vendor-approval-queue
+                  - img [ref=e515]
+                  - generic [ref=e517]: Approval Queue
+              - listitem [ref=e518]:
+                - link "Documents" [ref=e519] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/vendor-document-filaments
+                  - img [ref=e520]
+                  - generic [ref=e522]: Documents
+              - listitem [ref=e523]:
+                - link "Coverage Areas" [ref=e524] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/vendor-coverage-areas
+                  - img [ref=e525]
+                  - generic [ref=e527]: Coverage Areas
+              - listitem [ref=e528]:
+                - link "Business Hours" [ref=e529] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/vendor-business-hours
+                  - img [ref=e530]
+                  - generic [ref=e532]: Business Hours
+              - listitem [ref=e533]:
+                - link "Approved Product Types" [ref=e534] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/vendor-approved-product-types
+                  - img [ref=e535]
+                  - generic [ref=e537]: Approved Product Types
+          - listitem [ref=e538]:
+            - generic [ref=e539] [cursor=pointer]:
+              - generic [ref=e540]: Catalog
+              - button "Catalog" [expanded] [ref=e541]:
+                - generic [ref=e542]: Catalog
+                - img [ref=e543]
+            - list [ref=e545]:
+              - listitem [ref=e546]:
+                - link "Occasions" [ref=e547] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/occasions
+                  - img [ref=e548]
+                  - generic [ref=e550]: Occasions
+              - listitem [ref=e551]:
+                - link "Categories" [ref=e552] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/categories
+                  - img [ref=e553]
+                  - generic [ref=e556]: Categories
+              - listitem [ref=e557]:
+                - link "Category Field Schemas" [ref=e558] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/category-field-schemas
+                  - img [ref=e559]
+                  - generic [ref=e561]: Category Field Schemas
+              - listitem [ref=e562]:
+                - link "Service Themes" [ref=e563] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/service-themes
+                  - img [ref=e564]
+                  - generic [ref=e566]: Service Themes
+          - listitem [ref=e567]:
+            - generic [ref=e568] [cursor=pointer]:
+              - generic [ref=e569]: Services
+              - button "Services" [expanded] [ref=e570]:
+                - generic [ref=e571]: Services
+                - img [ref=e572]
+            - list [ref=e574]:
+              - listitem [ref=e575]:
+                - link "Rental Services" [ref=e576] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/rental-services
+                  - img [ref=e577]
+                  - generic [ref=e579]: Rental Services
+              - listitem [ref=e580]:
+                - link "Sale Services" [ref=e581] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/sale-services
+                  - img [ref=e582]
+                  - generic [ref=e584]: Sale Services
+              - listitem [ref=e585]:
+                - link "Digital Services" [ref=e586] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/digital-services
+                  - img [ref=e587]
+                  - generic [ref=e589]: Digital Services
+              - listitem [ref=e590]:
+                - link "Import Rental Services" [ref=e591] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/import-rental-services-page
+                  - img [ref=e592]
+                  - generic [ref=e594]: Import Rental Services
+              - listitem [ref=e595]:
+                - link "Import Sale Services" [ref=e596] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/import-sale-services-page
+                  - img [ref=e597]
+                  - generic [ref=e599]: Import Sale Services
+              - listitem [ref=e600]:
+                - link "Import Digital Services" [ref=e601] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/import-digital-services-page
+                  - img [ref=e602]
+                  - generic [ref=e604]: Import Digital Services
+              - listitem [ref=e605]:
+                - link "Inventory Reservations" [ref=e606] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/service-inventory-reservations
+                  - img [ref=e607]
+                  - generic [ref=e609]: Inventory Reservations
+              - listitem [ref=e610]:
+                - link "Excel Imports" [ref=e611] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/excel-imports
+                  - img [ref=e612]
+                  - generic [ref=e614]: Excel Imports
+          - listitem [ref=e615]:
+            - generic [ref=e616] [cursor=pointer]:
+              - generic [ref=e617]: Payments
+              - button "Payments" [expanded] [ref=e618]:
+                - generic [ref=e619]: Payments
+                - img [ref=e620]
+            - list [ref=e622]:
+              - listitem [ref=e623]:
+                - link "Payments" [ref=e624] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/payments
+                  - img [ref=e625]
+                  - generic [ref=e627]: Payments
+              - listitem [ref=e628]:
+                - link "Payment Attempts" [ref=e629] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/payment-attempts
+                  - img [ref=e630]
+                  - generic [ref=e632]: Payment Attempts
+              - listitem [ref=e633]:
+                - link "Refunds" [ref=e634] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/refunds
+                  - img [ref=e635]
+                  - generic [ref=e637]: Refunds
+              - listitem [ref=e638]:
+                - link "Webhook Logs" [ref=e639] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/gateway-webhook-logs
+                  - img [ref=e640]
+                  - generic [ref=e642]: Webhook Logs
+              - listitem [ref=e643]:
+                - link "Idempotency Keys" [ref=e644] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/idempotency-keys
+                  - img [ref=e645]
+                  - generic [ref=e647]: Idempotency Keys
+          - listitem [ref=e648]:
+            - generic [ref=e649] [cursor=pointer]:
+              - generic [ref=e650]: Loyalty
+              - button "Loyalty" [expanded] [ref=e651]:
+                - generic [ref=e652]: Loyalty
+                - img [ref=e653]
+            - list [ref=e655]:
+              - listitem [ref=e656]:
+                - link "Loyalty Rules" [ref=e657] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/loyalty-rules
+                  - img [ref=e658]
+                  - generic [ref=e660]: Loyalty Rules
+              - listitem [ref=e661]:
+                - link "Point Redemptions" [ref=e662] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/loyalty-redemptions
+                  - img [ref=e663]
+                  - generic [ref=e665]: Point Redemptions
+              - listitem [ref=e666]:
+                - link "Points Ledger" [ref=e667] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/loyalty-ledgers
+                  - img [ref=e668]
+                  - generic [ref=e670]: Points Ledger
+              - listitem [ref=e671]:
+                - link "Loyalty Programs" [ref=e672] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/loyalty-programs
+                  - img [ref=e673]
+                  - generic [ref=e675]: Loyalty Programs
+          - listitem [ref=e676]:
+            - generic [ref=e677] [cursor=pointer]:
+              - generic [ref=e678]: Discovery
+              - button "Discovery" [expanded] [ref=e679]:
+                - generic [ref=e680]: Discovery
+                - img [ref=e681]
+            - list [ref=e683]:
+              - listitem [ref=e684]:
+                - link "Saved Searches" [ref=e685] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/saved-searches
+                  - img [ref=e686]
+                  - generic [ref=e688]: Saved Searches
+              - listitem [ref=e689]:
+                - link "Search Logs" [ref=e690] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/search-logs
+                  - img [ref=e691]
+                  - generic [ref=e693]: Search Logs
+              - listitem [ref=e694]:
+                - link "Wishlists" [ref=e695] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/wishlists
+                  - img [ref=e696]
+                  - generic [ref=e698]: Wishlists
+          - listitem [ref=e699]:
+            - generic [ref=e700] [cursor=pointer]:
+              - generic [ref=e701]: Moderation
+              - button "Moderation" [expanded] [ref=e702]:
+                - generic [ref=e703]: Moderation
+                - img [ref=e704]
+            - list [ref=e706]:
+              - listitem [ref=e707]:
+                - link "Review Moderation" [ref=e708] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/review-moderation-page
+                  - img [ref=e709]
+                  - generic [ref=e711]: Review Moderation
+              - listitem [ref=e712]:
+                - link "Service Reviews" [ref=e713] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/service-reviews
+                  - img [ref=e714]
+                  - generic [ref=e716]: Service Reviews
+              - listitem [ref=e717]:
+                - link "Vendor Reviews" [ref=e718] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/vendor-reviews
+                  - img [ref=e719]
+                  - generic [ref=e721]: Vendor Reviews
+              - listitem [ref=e722]:
+                - link "Moderation Logs" [ref=e723] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/review-moderation-logs
+                  - img [ref=e724]
+                  - generic [ref=e726]: Moderation Logs
+          - listitem [ref=e727]:
+            - generic [ref=e728] [cursor=pointer]:
+              - generic [ref=e729]: Settings
+              - button "Settings" [expanded] [ref=e730]:
+                - generic [ref=e731]: Settings
+                - img [ref=e732]
+            - list [ref=e734]:
+              - listitem [ref=e735]:
+                - link "CMS Pages" [ref=e736] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/cms-pages
+                  - img [ref=e737]
+                  - generic [ref=e739]: CMS Pages
+              - listitem [ref=e740]:
+                - link "App Settings" [ref=e741] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/manage-settings
+                  - img [ref=e742]
+                  - generic [ref=e745]: App Settings
+  - generic:
+    - status

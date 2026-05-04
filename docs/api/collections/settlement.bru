@@ -1,0 +1,106 @@
+meta {
+  name: Settlement — Wallets, Commissions, Withdrawals
+  type: collection
+  seq: 4
+}
+
+# Phase 4.2 — Settlement API
+
+## GET Vendor Wallet Balance
+
+get {
+  url: {{base_url}}/api/v1/vendor/wallet
+  body: none
+  auth: bearer
+}
+
+headers {
+  Authorization: Bearer {{vendor_token}}
+  Accept: application/json
+  Accept-Language: en
+}
+
+# ---
+
+## GET Vendor Wallet Ledger
+
+get {
+  url: {{base_url}}/api/v1/vendor/wallet/ledger
+  body: none
+  auth: bearer
+}
+
+headers {
+  Authorization: Bearer {{vendor_token}}
+  Accept: application/json
+  Accept-Language: en
+}
+
+params:query {
+  per_page: 25
+  entry_type: commission_credit
+}
+
+# ---
+
+## POST Request Withdrawal
+
+post {
+  url: {{base_url}}/api/v1/vendor/withdrawals
+  body: json
+  auth: bearer
+}
+
+headers {
+  Authorization: Bearer {{vendor_token}}
+  Accept: application/json
+  Content-Type: application/json
+  Idempotency-Key: {{$guid}}
+}
+
+body:json {
+  {
+    "amount_minor": 50000,
+    "currency": "EGP",
+    "bank_account": {
+      "account_holder": "Ahmed Mohamed",
+      "iban": "EG380019000500000000263180002",
+      "bank_name": "CIB",
+      "swift_bic": "CIBEEGCX"
+    }
+  }
+}
+
+# ---
+
+## GET List Vendor Withdrawals
+
+get {
+  url: {{base_url}}/api/v1/vendor/withdrawals
+  body: none
+  auth: bearer
+}
+
+headers {
+  Authorization: Bearer {{vendor_token}}
+  Accept: application/json
+}
+
+params:query {
+  status: pending
+}
+
+# ---
+
+## GET Show Withdrawal by Public ID
+
+get {
+  url: {{base_url}}/api/v1/vendor/withdrawals/{{withdrawal_public_id}}
+  body: none
+  auth: bearer
+}
+
+headers {
+  Authorization: Bearer {{vendor_token}}
+  Accept: application/json
+}

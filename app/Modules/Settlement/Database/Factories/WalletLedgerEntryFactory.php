@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Modules\Settlement\Database\Factories;
 
 use App\Modules\Settlement\Domain\Enums\LedgerEntryType;
+use App\Modules\Settlement\Domain\Models\Wallet;
 use App\Modules\Settlement\Domain\Models\WalletLedgerEntry;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -18,7 +19,7 @@ class WalletLedgerEntryFactory extends Factory
     public function definition(): array
     {
         return [
-            'wallet_id' => 1, // overridden in tests
+            'wallet_id' => Wallet::factory(),
             'entry_type' => LedgerEntryType::CommissionCredit,
             'amount_minor' => $this->faker->numberBetween(1000, 100000),
             'currency' => 'EGP',
@@ -31,16 +32,27 @@ class WalletLedgerEntryFactory extends Factory
 
     public function commissionCredit(): static
     {
-        return $this->state(['entry_type' => LedgerEntryType::CommissionCredit]);
+        return $this->state([
+            'entry_type' => LedgerEntryType::CommissionCredit,
+            'description_key' => 'settlement.ledger.commission_credit',
+        ]);
     }
 
     public function refundDebit(): static
     {
-        return $this->state(['entry_type' => LedgerEntryType::RefundDebit]);
+        return $this->state(fn (array $attributes): array => [
+            'entry_type' => LedgerEntryType::RefundDebit,
+            'amount_minor' => -abs((int) ($attributes['amount_minor'] ?? $this->faker->numberBetween(1000, 50000))),
+            'description_key' => 'settlement.ledger.refund_debit',
+        ]);
     }
 
     public function withdrawalDebit(): static
     {
-        return $this->state(['entry_type' => LedgerEntryType::WithdrawalDebit]);
+        return $this->state(fn (array $attributes): array => [
+            'entry_type' => LedgerEntryType::WithdrawalDebit,
+            'amount_minor' => -abs((int) ($attributes['amount_minor'] ?? $this->faker->numberBetween(10000, 100000))),
+            'description_key' => 'settlement.ledger.withdrawal_debit',
+        ]);
     }
 }

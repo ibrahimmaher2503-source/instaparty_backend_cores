@@ -64,21 +64,20 @@ return [
     ],
 
     'payment_status' => [
-        'pending' => 'Pending',
-        'authorized' => 'Authorized',
-        'captured' => 'Captured',
-        'failed' => 'Failed',
-        'refunded' => 'Refunded',
+        'unpaid' => 'Unpaid',
+        'partial' => 'Partially Paid',
+        'paid' => 'Paid',
+        'refund_pending' => 'Refund Pending',
         'partially_refunded' => 'Partially Refunded',
-        'voided' => 'Voided',
+        'refunded' => 'Refunded',
     ],
 
     'fulfillment_status' => [
-        'pending' => 'Pending',
-        'confirmed' => 'Confirmed',
+        'not_started' => 'Not Started',
         'in_progress' => 'In Progress',
+        'partially_completed' => 'Partially Completed',
         'completed' => 'Completed',
-        'cancelled' => 'Cancelled',
+        'failed' => 'Failed',
     ],
 
     'force_cancel' => 'Force Cancel',
@@ -86,4 +85,10 @@ return [
     'force_cancel_confirm_heading' => 'Force-cancel this booking?',
     'force_cancel_confirm_description' => 'This will immediately cancel the booking and initiate any applicable refunds. This action cannot be undone.',
     'force_cancelled_successfully' => 'Booking force-cancelled successfully.',
+
+    'dashboard' => [
+        'confirmed_today' => 'Confirmed Today',
+        'submitted_today' => 'Submitted Today',
+        'draft_bookings' => 'Draft Bookings',
+    ],
 ];

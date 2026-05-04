@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Modules\Catalog\Domain\Models;
 
+use App\Modules\Catalog\Database\Factories\ExcelImportFactory;
 use App\Modules\Catalog\Domain\Enums\ProductType;
 use App\Modules\Identity\Domain\Models\VendorProfile;
 use App\Modules\Shared\Domain\Concerns\HasPublicId;
@@ -14,7 +15,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class ExcelImport extends Model
 {
+    /** @use HasFactory<ExcelImportFactory> */
     use HasFactory;
+
     use HasPublicId;
 
     protected $fillable = [
@@ -36,6 +39,11 @@ class ExcelImport extends Model
         'imported_rows' => 'integer',
         'error_rows' => 'integer',
     ];
+
+    protected static function newFactory(): ExcelImportFactory
+    {
+        return ExcelImportFactory::new();
+    }
 
     // -------------------------------------------------------------------------
     // Relationships

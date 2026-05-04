@@ -12,7 +12,7 @@ class RatingSummaryResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'rating_avg'   => $this->resource['average'],
+            'rating_avg' => $this->resource['average'],
             'rating_count' => $this->resource['count'],
         ];
     }

@@ -34,7 +34,7 @@ class OnPaymentCaptured implements ShouldQueue
 
         $context = [
             'booking_id' => $customer->booking_public_id,
-            'amount'     => $amount,
+            'amount' => $amount,
         ];
 
         // Customer: push + email

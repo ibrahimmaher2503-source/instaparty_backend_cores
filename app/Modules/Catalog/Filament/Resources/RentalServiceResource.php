@@ -38,11 +38,29 @@ class RentalServiceResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-cube';
 
-    protected static ?string $navigationGroup = 'Services';
+    public static function getNavigationGroup(): ?string
+    {
+        return __('admin.nav.groups.services');
+    }
 
     protected static ?string $navigationLabel = 'Rental Services';
 
     protected static ?int $navigationSort = 1;
+
+    public static function getNavigationLabel(): string
+    {
+        return __('catalog.nav.rental_services');
+    }
+
+    public static function getModelLabel(): string
+    {
+        return __('catalog.models.rental_service.singular');
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('catalog.models.rental_service.plural');
+    }
 
     public static function getEloquentQuery(): Builder
     {
@@ -87,14 +105,14 @@ class RentalServiceResource extends Resource
                         ->label(__('catalog.category')),
                     TextInput::make('base_price_minor')
                         ->label(__('catalog.base_price'))
-                        ->helperText('In piastres — 10000 = 100.00 EGP')
+                        ->helperText('In piastres â€” 10000 = 100.00 EGP')
                         ->numeric()
                         ->minValue(0)
                         ->required(),
                     Select::make('status')
                         ->options(ServiceStatus::class)
                         ->required()
-                        ->label(__('catalog.status')),
+                        ->label(__('catalog.status_label')),
                     Toggle::make('is_featured')
                         ->label(__('catalog.is_featured')),
                 ])
@@ -124,7 +142,7 @@ class RentalServiceResource extends Resource
                         ->label(__('catalog.teardown_time_minutes')),
                     TextInput::make('security_deposit_minor')
                         ->label(__('catalog.security_deposit'))
-                        ->helperText('In piastres — 10000 = 100.00 EGP')
+                        ->helperText('In piastres â€” 10000 = 100.00 EGP')
                         ->numeric()
                         ->minValue(0),
                     TextInput::make('minimum_space_sqm')
@@ -173,7 +191,7 @@ class RentalServiceResource extends Resource
                     ->badge()
                     ->color(fn (ServiceStatus $state): string => $state->color())
                     ->formatStateUsing(fn (ServiceStatus $state): string => $state->label())
-                    ->label(__('catalog.status')),
+                    ->label(__('catalog.status_label')),
                 TextColumn::make('base_price_minor')
                     ->money('EGP', divideBy: 100)
                     ->sortable()

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Modules\Settlement\Database\Factories;
 
+use App\Modules\Identity\Domain\Models\User;
+use App\Modules\Identity\Domain\Models\VendorProfile;
 use App\Modules\Settlement\Domain\Enums\WithdrawalStatus;
 use App\Modules\Settlement\Domain\Models\Withdrawal;
 use App\Modules\Settlement\Domain\ValueObjects\BankAccountSnapshot;
@@ -19,11 +21,9 @@ class WithdrawalFactory extends Factory
 
     public function definition(): array
     {
-        $vendorProfileId = 1; // overridden in tests
-
         return [
             'public_id' => (string) Str::ulid(),
-            'vendor_profile_id' => $vendorProfileId,
+            'vendor_profile_id' => VendorProfile::factory()->approved(),
             'requested_amount_minor' => $this->faker->numberBetween(10000, 100000),
             'requested_amount_currency' => 'EGP',
             'paid_amount_minor' => null,
@@ -36,13 +36,13 @@ class WithdrawalFactory extends Factory
             ),
             'status' => WithdrawalStatus::Pending,
             'rejected_reason' => null,
-            'requested_by_user_id' => 1, // overridden in tests
+            'requested_by_user_id' => User::factory()->asVendor(),
             'processed_by_user_id' => null,
             'bank_proof_media_id' => null,
             'requested_at' => now(),
             'processed_at' => null,
             'paid_at' => null,
-            'pending_lock' => $vendorProfileId,
+            'pending_lock' => fn (array $attributes): int => (int) $attributes['vendor_profile_id'],
         ];
     }
 

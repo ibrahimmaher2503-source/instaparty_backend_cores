@@ -16,7 +16,8 @@ class BalanceCalculator implements PointsBalanceReader
     public function availableFor(int $customerId, int $vendorProfileId): int
     {
         $total = $this->ledger->balanceFor($customerId, $vendorProfileId);
-        $held  = $this->ledger->heldPointsFor($customerId, $vendorProfileId);
+        $held = $this->ledger->heldPointsFor($customerId, $vendorProfileId);
+
         return max(0, $total - $held);
     }
 }

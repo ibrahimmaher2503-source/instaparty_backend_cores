@@ -6,6 +6,7 @@ namespace App\Modules\Communication\Http\Requests;
 
 use App\Modules\Communication\Domain\Enums\EventCategory;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Validator;
 
 class UpdateNotificationPreferenceRequest extends FormRequest
 {
@@ -39,7 +40,7 @@ class UpdateNotificationPreferenceRequest extends FormRequest
         ];
     }
 
-    public function withValidator(\Illuminate\Validation\Validator $validator): void
+    public function withValidator(Validator $validator): void
     {
         $validator->after(function ($validator) {
             $eventCategory = $this->route('event_category');

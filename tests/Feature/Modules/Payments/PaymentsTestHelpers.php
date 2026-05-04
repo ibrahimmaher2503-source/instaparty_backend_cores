@@ -21,8 +21,12 @@ use App\Modules\Identity\Domain\Models\VendorProfile;
 use App\Modules\Payments\Domain\Enums\PaymentMethod;
 use App\Modules\Payments\Domain\Enums\PaymentStatus;
 use App\Modules\Payments\Domain\Models\Payment;
+use Database\Seeders\IdentityRolesSeeder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\PermissionRegistrar;
 
 if (! function_exists('seedPaymentsTestRoles')) {
     function seedPaymentsTestRoles(): void
@@ -31,9 +35,9 @@ if (! function_exists('seedPaymentsTestRoles')) {
         if ($seeded) {
             return;
         }
-        app(\Database\Seeders\IdentityRolesSeeder::class)->run();
-        \Spatie\Permission\Models\Permission::findOrCreate('payment.refund', 'web');
-        \Spatie\Permission\Models\Permission::findOrCreate('view_refund', 'web');
+        app(IdentityRolesSeeder::class)->run();
+        Permission::findOrCreate('payment.refund', 'web');
+        Permission::findOrCreate('view_refund', 'web');
         $seeded = true;
     }
 }
@@ -42,7 +46,7 @@ if (! function_exists('resetPaymentsTestRoleCache')) {
     function resetPaymentsTestRoleCache(): void
     {
         // Spatie permission cache must be cleared after RefreshDatabase wipes the tables.
-        app(\Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
+        app(PermissionRegistrar::class)->forgetCachedPermissions();
     }
 }
 
@@ -58,10 +62,10 @@ if (! function_exists('makeConfirmedBookingWithItem')) {
         ?Carbon $eventStartsAt = null,
     ): array {
         resetPaymentsTestRoleCache();
-        if (\Spatie\Permission\Models\Role::query()->where('name', 'customer')->doesntExist()) {
-            app(\Database\Seeders\IdentityRolesSeeder::class)->run();
-            \Spatie\Permission\Models\Permission::findOrCreate('payment.refund', 'web');
-            \Spatie\Permission\Models\Permission::findOrCreate('view_refund', 'web');
+        if (Role::query()->where('name', 'customer')->doesntExist()) {
+            app(IdentityRolesSeeder::class)->run();
+            Permission::findOrCreate('payment.refund', 'web');
+            Permission::findOrCreate('view_refund', 'web');
         }
         $customer = User::factory()->asCustomer()->create(['timezone' => 'Africa/Cairo']);
         $occasion = Occasion::factory()->create();

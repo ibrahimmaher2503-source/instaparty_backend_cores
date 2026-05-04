@@ -13,4 +13,5 @@ enum VendorSubStatus: string
     case Cancelled = 'cancelled';
     case InProgress = 'in_progress';
     case Completed = 'completed';
+    case TimedOut = 'timed_out';
 }

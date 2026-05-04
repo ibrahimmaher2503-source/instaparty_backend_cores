@@ -21,7 +21,7 @@ class SubmitServiceReviewRequest extends FormRequest
     {
         return [
             'rating' => ['required', 'integer', 'between:1,5'],
-            'body'   => ['nullable', 'string', 'max:2000'],
+            'body' => ['nullable', 'string', 'max:2000'],
         ];
     }
 }

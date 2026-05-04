@@ -4,16 +4,20 @@ declare(strict_types=1);
 
 namespace App\Modules\Payments\Domain\Models;
 
+use App\Modules\Payments\Database\Factories\PaymentFactory;
 use App\Modules\Payments\Domain\Enums\PaymentMethod;
 use App\Modules\Payments\Domain\Enums\PaymentStatus;
 use App\Modules\Shared\Domain\Casts\MoneyCast;
 use App\Modules\Shared\Domain\Concerns\HasPublicId;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Payment extends Model
 {
+    use HasFactory;
     use HasPublicId;
 
     protected $fillable = [
@@ -31,6 +35,16 @@ class Payment extends Model
         'failure_message' => 'array',
         'metadata' => 'array',
     ];
+
+    protected static function newFactory(): PaymentFactory
+    {
+        return PaymentFactory::new();
+    }
+
+    public function booking(): BelongsTo
+    {
+        return $this->belongsTo(\App\Modules\Booking\Domain\Models\Booking::class, 'booking_id');
+    }
 
     public function attempts(): HasMany
     {

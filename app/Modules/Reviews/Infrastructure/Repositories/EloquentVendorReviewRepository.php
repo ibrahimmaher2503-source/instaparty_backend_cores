@@ -15,13 +15,13 @@ class EloquentVendorReviewRepository implements VendorReviewRepository
     public function create(SubmitReviewData $data, int $vendorProfileId, int $bookingVendorId): VendorReview
     {
         return VendorReview::create([
-            'public_id'         => Str::ulid()->toBase32(),
+            'public_id' => Str::ulid()->toBase32(),
             'vendor_profile_id' => $vendorProfileId,
             'booking_vendor_id' => $bookingVendorId,
-            'user_id'           => $data->userId,
-            'rating'            => $data->rating,
-            'body'              => $data->body,
-            'locale'            => $data->locale,
+            'user_id' => $data->userId,
+            'rating' => $data->rating,
+            'body' => $data->body,
+            'locale' => $data->locale,
             'moderation_status' => ModerationStatus::Pending->value,
         ]);
     }
@@ -42,7 +42,7 @@ class EloquentVendorReviewRepository implements VendorReviewRepository
 
     public function listApprovedForVendor(int $vendorProfileId, array $options = []): array
     {
-        $limit  = $options['limit'] ?? 15;
+        $limit = $options['limit'] ?? 15;
         $cursor = $options['cursor'] ?? null;
 
         $query = VendorReview::with('reviewer')
@@ -73,7 +73,7 @@ class EloquentVendorReviewRepository implements VendorReviewRepository
             : null;
 
         return [
-            'items'       => $items->all(),
+            'items' => $items->all(),
             'next_cursor' => $nextCursor,
             'prev_cursor' => null,
         ];
@@ -88,7 +88,7 @@ class EloquentVendorReviewRepository implements VendorReviewRepository
 
         return [
             'average' => round((float) ($result->average ?? 0), 2),
-            'count'   => (int) ($result->count ?? 0),
+            'count' => (int) ($result->count ?? 0),
         ];
     }
 
@@ -101,8 +101,8 @@ class EloquentVendorReviewRepository implements VendorReviewRepository
     {
         $review->update([
             'moderation_status' => $toStatus,
-            'moderated_by'      => $moderatorId,
-            'moderated_at'      => now(),
+            'moderated_by' => $moderatorId,
+            'moderated_at' => now(),
         ]);
     }
 }

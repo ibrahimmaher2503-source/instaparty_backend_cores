@@ -27,7 +27,7 @@ class CalculateLoyaltyPointsAction
         $vendorProfileId = $this->amountReader->vendorProfileIdFor($bookingItemId);
         $program = $this->programs->findByVendor($vendorProfileId);
 
-        if ($program === null || !$program->status->allowsEarning()) {
+        if ($program === null || ! $program->status->allowsEarning()) {
             return null;
         }
 
@@ -45,7 +45,7 @@ class CalculateLoyaltyPointsAction
 
         $productType = $this->amountReader->productTypeFor($bookingItemId);
 
-        return DB::transaction(function () use ($customerId, $vendorProfileId, $program, $rule, $points, $bookingId, $bookingItemId, $productType) {
+        return DB::transaction(function () use ($customerId, $vendorProfileId, $program, $points, $bookingId, $bookingItemId, $productType) {
             $entry = $this->ledger->append(
                 type: LedgerEntryType::Earn,
                 customerId: $customerId,

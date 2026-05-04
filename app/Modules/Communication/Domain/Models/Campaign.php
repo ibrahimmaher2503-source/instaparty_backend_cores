@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace App\Modules\Communication\Domain\Models;
 
+use App\Modules\Communication\Database\Factories\CampaignFactory;
 use App\Modules\Communication\Domain\Enums\CampaignChannel;
 use App\Modules\Communication\Domain\Enums\CampaignStatus;
 use App\Modules\Communication\Domain\Enums\CampaignTargetLocale;
 use App\Modules\Identity\Domain\Models\User;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -22,6 +24,7 @@ use Spatie\Translatable\HasTranslations;
  */
 class Campaign extends Model
 {
+    use HasFactory;
     use HasTranslations;
 
     protected $table = 'campaigns';
@@ -30,6 +33,11 @@ class Campaign extends Model
 
     /** @var list<string> */
     public array $translatable = ['subject', 'body'];
+
+    protected static function newFactory(): CampaignFactory
+    {
+        return CampaignFactory::new();
+    }
 
     protected function casts(): array
     {

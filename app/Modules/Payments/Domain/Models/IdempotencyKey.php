@@ -4,11 +4,15 @@ declare(strict_types=1);
 
 namespace App\Modules\Payments\Domain\Models;
 
+use App\Modules\Payments\Database\Factories\IdempotencyKeyFactory;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class IdempotencyKey extends Model
 {
+    use HasFactory;
+
     public $timestamps = false;
 
     protected $fillable = [
@@ -20,6 +24,11 @@ class IdempotencyKey extends Model
         'expires_at' => 'datetime',
         'created_at' => 'datetime',
     ];
+
+    protected static function newFactory(): IdempotencyKeyFactory
+    {
+        return IdempotencyKeyFactory::new();
+    }
 
     public function scopeActive(Builder $query): Builder
     {

@@ -2,9 +2,9 @@
 
 namespace App\Modules\Geography\Domain\Policies;
 
-use App\Modules\Identity\Domain\Models\User;
 use App\Modules\Geography\Domain\Models\City;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use Illuminate\Foundation\Auth\User;
 
 class CityPolicy
 {

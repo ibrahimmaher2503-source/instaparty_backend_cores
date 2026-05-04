@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace App\Modules\Catalog\Filament\Resources;
 
+use App\Modules\Catalog\Application\Actions\ImportSaleServicesFromExcelAction;
 use App\Modules\Catalog\Domain\Enums\ProductType;
 use App\Modules\Catalog\Domain\Enums\ServiceStatus;
 use App\Modules\Catalog\Domain\Models\Service;
 use App\Modules\Catalog\Filament\Resources\SaleServiceResource\Pages;
 use App\Modules\Discovery\Filament\Actions\ReindexServicesAction;
+use App\Modules\Identity\Domain\Models\VendorProfile;
+use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\KeyValue;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
@@ -17,8 +20,10 @@ use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
+use Filament\Notifications\Notification;
 use Filament\Resources\Concerns\Translatable;
 use Filament\Resources\Resource;
+use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Actions\ForceDeleteAction;
@@ -30,6 +35,8 @@ use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 
 class SaleServiceResource extends Resource
 {
@@ -39,11 +46,29 @@ class SaleServiceResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-shopping-bag';
 
-    protected static ?string $navigationGroup = 'Services';
+    public static function getNavigationGroup(): ?string
+    {
+        return __('admin.nav.groups.services');
+    }
 
     protected static ?string $navigationLabel = 'Sale Services';
 
     protected static ?int $navigationSort = 2;
+
+    public static function getNavigationLabel(): string
+    {
+        return __('catalog.nav.sale_services');
+    }
+
+    public static function getModelLabel(): string
+    {
+        return __('catalog.models.sale_service.singular');
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('catalog.models.sale_service.plural');
+    }
 
     public static function getEloquentQuery(): Builder
     {
@@ -88,14 +113,14 @@ class SaleServiceResource extends Resource
                         ->label(__('catalog.category')),
                     TextInput::make('base_price_minor')
                         ->label(__('catalog.base_price'))
-                        ->helperText('In piastres — 10000 = 100.00 EGP')
+                        ->helperText('In piastres â€” 10000 = 100.00 EGP')
                         ->numeric()
                         ->minValue(0)
                         ->required(),
                     Select::make('status')
                         ->options(ServiceStatus::class)
                         ->required()
-                        ->label(__('catalog.status')),
+                        ->label(__('catalog.status_label')),
                     Toggle::make('is_featured')
                         ->label(__('catalog.is_featured')),
                 ])
@@ -165,7 +190,7 @@ class SaleServiceResource extends Resource
                     ->badge()
                     ->color(fn (ServiceStatus $state): string => $state->color())
                     ->formatStateUsing(fn (ServiceStatus $state): string => $state->label())
-                    ->label(__('catalog.status')),
+                    ->label(__('catalog.status_label')),
                 TextColumn::make('base_price_minor')
                     ->money('EGP', divideBy: 100)
                     ->sortable()
@@ -187,6 +212,56 @@ class SaleServiceResource extends Resource
             ])
             ->headerActions([
                 ReindexServicesAction::make(),
+                Action::make('importSaleServices')
+                    ->label('Import Sale Services')
+                    ->icon('heroicon-o-arrow-up-tray')
+                    ->form([
+                        Select::make('vendor_profile_id')
+                            ->label('Vendor')
+                            ->options(
+                                fn (): array => VendorProfile::query()
+                                    ->where('approval_status', 'approved')
+                                    ->get()
+                                    ->mapWithKeys(fn (VendorProfile $vp): array => [
+                                        $vp->id => is_array($vp->business_name)
+                                            ? ($vp->business_name['en'] ?? '')
+                                            : (string) $vp->business_name,
+                                    ])
+                                    ->all()
+                            )
+                            ->searchable()
+                            ->required(),
+                        FileUpload::make('file')
+                            ->label('Excel File (.xlsx / .xls)')
+                            ->acceptedFileTypes([
+                                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                                'application/vnd.ms-excel',
+                            ])
+                            ->disk('local')
+                            ->directory('excel-imports-temp')
+                            ->required(),
+                    ])
+                    ->action(function (array $data, ImportSaleServicesFromExcelAction $action): void {
+                        $absolutePath = Storage::disk('local')->path($data['file']);
+                        $file = new UploadedFile($absolutePath, basename($absolutePath), null, null, true);
+
+                        $import = $action->execute($file, (int) $data['vendor_profile_id'], app()->getLocale());
+
+                        if ($import->status === 'completed') {
+                            Notification::make()
+                                ->title("Import completed: {$import->imported_rows} services created.")
+                                ->success()
+                                ->send();
+                        } else {
+                            Notification::make()
+                                ->title('Import failed â€” check per-row errors on the import record.')
+                                ->danger()
+                                ->send();
+                        }
+                    })
+                    ->modalHeading('Import Sale Services')
+                    ->modalSubmitActionLabel('Import')
+                    ->requiresConfirmation(false),
             ])
             ->actions([
                 EditAction::make(),

@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace App\Modules\Booking\Domain\Models;
 
+use App\Modules\Booking\Database\Factories\BookingModificationFactory;
 use App\Modules\Booking\Domain\Enums\ModificationProposalKind;
 use App\Modules\Booking\Domain\Enums\ModificationStatus;
+use App\Modules\Identity\Domain\Models\User;
 use App\Modules\Shared\Domain\Concerns\HasPublicId;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -28,6 +31,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class BookingModification extends Model
 {
+    use HasFactory;
     use HasPublicId;
 
     protected $fillable = [
@@ -55,6 +59,11 @@ class BookingModification extends Model
         ];
     }
 
+    protected static function newFactory(): BookingModificationFactory
+    {
+        return BookingModificationFactory::new();
+    }
+
     /** @return BelongsTo<BookingVendor, $this> */
     public function bookingVendor(): BelongsTo
     {
@@ -67,9 +76,9 @@ class BookingModification extends Model
         return $this->hasMany(BookingModificationItem::class, 'booking_modification_id');
     }
 
-    /** @return BelongsTo<\App\Modules\Identity\Domain\Models\User, $this> */
+    /** @return BelongsTo<User, $this> */
     public function proposedBy(): BelongsTo
     {
-        return $this->belongsTo(\App\Modules\Identity\Domain\Models\User::class, 'proposed_by');
+        return $this->belongsTo(User::class, 'proposed_by');
     }
 }

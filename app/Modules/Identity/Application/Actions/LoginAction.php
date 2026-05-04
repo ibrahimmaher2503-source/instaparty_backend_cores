@@ -25,6 +25,12 @@ class LoginAction
             ]);
         }
 
+        if ($user->status === 'suspended') {
+            throw ValidationException::withMessages([
+                'login' => __('identity.account_suspended'),
+            ]);
+        }
+
         $user->forceFill([
             'last_login_at' => now(),
             'last_login_ip' => $ip,

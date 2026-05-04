@@ -4,14 +4,17 @@ declare(strict_types=1);
 
 namespace App\Modules\Payments\Domain\Models;
 
+use App\Modules\Payments\Database\Factories\RefundFactory;
 use App\Modules\Payments\Domain\Enums\RefundReasonCode;
 use App\Modules\Payments\Domain\Enums\RefundStatus;
 use App\Modules\Shared\Domain\Casts\MoneyCast;
 use App\Modules\Shared\Domain\Concerns\HasPublicId;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Refund extends Model
 {
+    use HasFactory;
     use HasPublicId;
 
     protected $fillable = [
@@ -28,4 +31,9 @@ class Refund extends Model
         'reason_notes' => 'array',
         'processed_at' => 'datetime',
     ];
+
+    protected static function newFactory(): RefundFactory
+    {
+        return RefundFactory::new();
+    }
 }

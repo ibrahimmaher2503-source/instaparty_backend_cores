@@ -33,6 +33,7 @@ class IdempotencyKeyMiddleware
             }
 
             $body = $existing->response_body ?? ['data' => null, 'meta' => (object) [], 'errors' => []];
+
             return response()->json($body, (int) ($existing->response_status ?? 200));
         }
 

@@ -4,10 +4,14 @@ declare(strict_types=1);
 
 namespace App\Modules\Payments\Domain\Models;
 
+use App\Modules\Payments\Database\Factories\GatewayWebhookLogFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class GatewayWebhookLog extends Model
 {
+    use HasFactory;
+
     public $timestamps = false;
 
     protected $fillable = [
@@ -20,4 +24,9 @@ class GatewayWebhookLog extends Model
         'processed_at' => 'datetime',
         'created_at' => 'datetime',
     ];
+
+    protected static function newFactory(): GatewayWebhookLogFactory
+    {
+        return GatewayWebhookLogFactory::new();
+    }
 }

@@ -4,13 +4,17 @@ declare(strict_types=1);
 
 namespace App\Modules\Reviews\Domain\Models;
 
+use App\Modules\Identity\Domain\Models\User;
+use App\Modules\Reviews\Database\Factories\ReviewModerationLogFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Spatie\Translatable\HasTranslations;
 
 class ReviewModerationLog extends Model
 {
-    use HasTranslations;
+    /** @use HasFactory<ReviewModerationLogFactory> */
+    use HasFactory, HasTranslations;
 
     protected $table = 'review_moderation_log';
 
@@ -32,13 +36,18 @@ class ReviewModerationLog extends Model
     {
         return [
             'created_at' => 'datetime',
-            'reason'     => 'array',
+            'reason' => 'array',
         ];
+    }
+
+    protected static function newFactory(): ReviewModerationLogFactory
+    {
+        return ReviewModerationLogFactory::new();
     }
 
     public function moderator(): BelongsTo
     {
-        return $this->belongsTo(\App\Modules\Identity\Domain\Models\User::class, 'moderator_id');
+        return $this->belongsTo(User::class, 'moderator_id');
     }
 
     protected static function booted(): void

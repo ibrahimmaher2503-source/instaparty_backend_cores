@@ -7,6 +7,7 @@ namespace App\Modules\Identity\Domain\Models;
 use App\Modules\Identity\Domain\Enums\DocumentStatus;
 use App\Modules\Identity\Domain\Enums\DocumentType;
 use App\Modules\Shared\Domain\Concerns\HasPublicId;
+use Database\Factories\VendorDocumentFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -29,6 +30,7 @@ use Spatie\Translatable\HasTranslations;
  */
 class VendorDocument extends Model
 {
+    /** @use HasFactory<VendorDocumentFactory> */
     use HasFactory, HasPublicId, HasTranslations;
 
     /** @var array<int, string> */
@@ -49,6 +51,11 @@ class VendorDocument extends Model
     public function vendorProfile(): BelongsTo
     {
         return $this->belongsTo(VendorProfile::class);
+    }
+
+    protected static function newFactory(): VendorDocumentFactory
+    {
+        return VendorDocumentFactory::new();
     }
 
     public function reviewer(): BelongsTo

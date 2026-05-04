@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Modules\Identity\Domain\Models;
 
 use App\Modules\Shared\Domain\Casts\MoneyCast;
+use Database\Factories\VendorCoverageAreaFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -23,6 +24,7 @@ use Illuminate\Support\Carbon;
  */
 class VendorCoverageArea extends Model
 {
+    /** @use HasFactory<VendorCoverageAreaFactory> */
     use HasFactory;
 
     protected $fillable = [
@@ -37,6 +39,11 @@ class VendorCoverageArea extends Model
     public function vendorProfile(): BelongsTo
     {
         return $this->belongsTo(VendorProfile::class);
+    }
+
+    protected static function newFactory(): VendorCoverageAreaFactory
+    {
+        return VendorCoverageAreaFactory::new();
     }
 
     protected function casts(): array

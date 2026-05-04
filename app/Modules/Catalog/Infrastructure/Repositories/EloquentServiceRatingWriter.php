@@ -14,7 +14,7 @@ class EloquentServiceRatingWriter implements ServiceRatingWriter
         DB::table('services')
             ->where('id', $serviceId)
             ->update([
-                'rating_avg'   => round($newAverage, 2),
+                'rating_avg' => round($newAverage, 2),
                 'rating_count' => $newCount,
             ]);
     }

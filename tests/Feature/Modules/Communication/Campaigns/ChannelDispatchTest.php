@@ -13,7 +13,7 @@ use App\Modules\Communication\Domain\Enums\CampaignTargetLocale;
 use App\Modules\Communication\Domain\Enums\NotificationChannel;
 use App\Modules\Communication\Domain\Models\CampaignRecipient;
 use App\Modules\Communication\Domain\Models\NotificationDispatch;
-use App\Modules\Identity\Database\Factories\UserFactory;
+use App\Modules\Identity\Domain\Models\User;
 use Illuminate\Support\Facades\Queue;
 
 beforeEach(function () {
@@ -22,8 +22,8 @@ beforeEach(function () {
 
 function runSingleRecipientCampaign(CampaignChannel $channel, string $productType): array
 {
-    $admin = UserFactory::new()->admin()->create();
-    $customer = UserFactory::new()->customer()->create(['preferred_locale' => 'en', 'status' => 'active']);
+    $admin = User::factory()->asAdmin()->create();
+    $customer = User::factory()->asCustomer()->create(['preferred_locale' => 'en', 'status' => 'active']);
 
     createBookingForUser($customer->id, $productType, now()->subDays(5));
 

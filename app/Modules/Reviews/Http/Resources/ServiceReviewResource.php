@@ -26,14 +26,14 @@ class ServiceReviewResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'public_id'              => $this->public_id,
-            'rating'                 => $this->rating,
-            'body'                   => $this->body,
-            'locale'                 => $this->locale,
-            'moderation_status'      => $this->moderation_status,
-            'service_public_id'      => $this->whenLoaded('service', fn () => $this->service?->public_id),
+            'public_id' => $this->public_id,
+            'rating' => $this->rating,
+            'body' => $this->body,
+            'locale' => $this->locale,
+            'moderation_status' => $this->moderation_status,
+            'service_public_id' => $this->whenLoaded('service', fn () => $this->service?->public_id),
             'booking_item_public_id' => $this->whenLoaded('bookingItem', fn () => $this->bookingItem?->public_id),
-            'created_at'             => $this->created_at?->toISOString(),
+            'created_at' => $this->created_at?->toISOString(),
         ];
     }
 }

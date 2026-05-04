@@ -23,9 +23,12 @@ class IdentityRolesSeeder extends Seeder
         Role::firstOrCreate(['name' => 'vendor', 'guard_name' => 'web']);
 
         $admin = Role::firstOrCreate(['name' => 'admin', 'guard_name' => 'web']);
-        $admin->syncPermissions(Permission::all());
+        $admin->syncPermissions(
+            Permission::where('name', '!=', 'impersonate_vendor')->get()
+        );
 
-        Role::firstOrCreate(['name' => 'super_admin', 'guard_name' => 'web']);
+        $superAdmin = Role::firstOrCreate(['name' => 'super_admin', 'guard_name' => 'web']);
+        $superAdmin->syncPermissions(Permission::all());
     }
 
     /** @return array<string> */
@@ -48,6 +51,9 @@ class IdentityRolesSeeder extends Seeder
             'approve_vendor_for_digital',
             'revoke_vendor_type',
             'review_vendor_documents',
+            'manage_vendor_profile',
+            'impersonate_vendor',
+            're_upload_vendor_document',
         ];
 
         $vendorOwnPermissions = [

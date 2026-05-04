@@ -28,15 +28,15 @@ class EloquentLoyaltyRuleRepository implements LoyaltyRuleRepository
                 ->update(['is_active' => false]);
 
             return LoyaltyRule::create([
-                'loyalty_program_id'      => $programId,
-                'label'                   => $draft->label,
-                'earn_points_per_minor'   => $draft->earnPointsPerMinor,
-                'earn_minor_per_unit'     => $draft->earnMinorPerUnit,
+                'loyalty_program_id' => $programId,
+                'label' => $draft->label,
+                'earn_points_per_minor' => $draft->earnPointsPerMinor,
+                'earn_minor_per_unit' => $draft->earnMinorPerUnit,
                 'redemption_ratio_points' => $draft->redemptionRatioPoints,
-                'redemption_ratio_minor'  => $draft->redemptionRatioMinor,
-                'min_points_to_redeem'    => $draft->minPointsToRedeem,
-                'max_redeem_pct_bps'      => $draft->maxRedeemPctBps,
-                'is_active'               => true,
+                'redemption_ratio_minor' => $draft->redemptionRatioMinor,
+                'min_points_to_redeem' => $draft->minPointsToRedeem,
+                'max_redeem_pct_bps' => $draft->maxRedeemPctBps,
+                'is_active' => true,
             ]);
         });
     }

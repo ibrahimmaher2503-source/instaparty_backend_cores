@@ -4,11 +4,15 @@ declare(strict_types=1);
 
 namespace App\Modules\Booking\Domain\Models;
 
+use App\Modules\Booking\Database\Factories\BookingStateTransitionFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class BookingStateTransition extends Model
 {
+    use HasFactory;
+
     public const UPDATED_AT = null;
 
     protected $fillable = [
@@ -20,6 +24,11 @@ class BookingStateTransition extends Model
     protected $casts = [
         'context' => 'array',
     ];
+
+    protected static function newFactory(): BookingStateTransitionFactory
+    {
+        return BookingStateTransitionFactory::new();
+    }
 
     public function transitionable(): MorphTo
     {

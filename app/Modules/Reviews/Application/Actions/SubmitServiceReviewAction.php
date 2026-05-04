@@ -7,8 +7,8 @@ namespace App\Modules\Reviews\Application\Actions;
 use App\Modules\Reviews\Application\DTOs\SubmitReviewData;
 use App\Modules\Reviews\Domain\Contracts\BookingItemReviewabilityReader;
 use App\Modules\Reviews\Domain\Contracts\ServiceReviewRepository;
-use App\Modules\Reviews\Domain\Models\ServiceReview;
 use App\Modules\Reviews\Domain\Events\ReviewSubmitted;
+use App\Modules\Reviews\Domain\Models\ServiceReview;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response;
@@ -26,8 +26,8 @@ class SubmitServiceReviewAction
 
         if ($context === null) {
             throw new HttpResponseException(response()->json([
-                'data'   => null,
-                'meta'   => (object) [],
+                'data' => null,
+                'meta' => (object) [],
                 'errors' => [['code' => 'booking_item_not_completed', 'message' => __('reviews::reviews.errors.booking_item_not_completed')]],
             ], Response::HTTP_UNPROCESSABLE_ENTITY));
         }
@@ -36,11 +36,11 @@ class SubmitServiceReviewAction
 
         if ($existing !== null) {
             throw new HttpResponseException(response()->json([
-                'data'   => null,
-                'meta'   => (object) [],
+                'data' => null,
+                'meta' => (object) [],
                 'errors' => [[
-                    'code'                      => 'review_already_exists',
-                    'message'                   => __('reviews::reviews.errors.review_already_exists'),
+                    'code' => 'review_already_exists',
+                    'message' => __('reviews::reviews.errors.review_already_exists'),
                     'existing_review_public_id' => $existing->public_id,
                 ]],
             ], Response::HTTP_CONFLICT));

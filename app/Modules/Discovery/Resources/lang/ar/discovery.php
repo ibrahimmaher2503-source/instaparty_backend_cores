@@ -24,4 +24,38 @@ return [
     'wishlist_added' => 'تمت إضافة الخدمة إلى قائمة الرغبات.',
     'wishlist_removed' => 'تمت إزالة الخدمة من قائمة الرغبات.',
     'search_placeholder' => 'ابحث عن الخدمات…',
+
+    'nav' => [
+        'saved_searches' => 'البحوث المحفوظة',
+        'search_logs' => 'سجل البحث',
+        'wishlists' => 'قوائم الأمنيات',
+    ],
+
+    'models' => [
+        'saved_search' => [
+            'singular' => 'بحث محفوظ',
+            'plural' => 'البحوث المحفوظة',
+        ],
+        'search_log' => [
+            'singular' => 'سجل بحث',
+            'plural' => 'سجلات البحث',
+        ],
+        'wishlist' => [
+            'singular' => 'قائمة أمنيات',
+            'plural' => 'قوائم الأمنيات',
+        ],
+    ],
+
+    'columns' => [
+        'public_id' => 'المعرّف العام',
+        'user_id' => 'المستخدم',
+        'label' => 'التسمية',
+        'filters' => 'عوامل التصفية',
+        'query' => 'نص البحث',
+        'locale' => 'اللغة',
+        'results_count' => 'عدد النتائج',
+        'clicked_service_id' => 'الخدمة المنقور عليها',
+        'name' => 'الاسم',
+        'items_count' => 'عدد العناصر',
+    ],
 ];

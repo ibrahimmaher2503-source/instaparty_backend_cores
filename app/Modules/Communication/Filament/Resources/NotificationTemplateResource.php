@@ -14,6 +14,7 @@ use Filament\Resources\Concerns\Translatable;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Support\Str;
 
 class NotificationTemplateResource extends Resource
 {
@@ -23,9 +24,27 @@ class NotificationTemplateResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-bell';
 
-    protected static ?string $navigationGroup = 'Communications';
+    public static function getNavigationGroup(): ?string
+    {
+        return __('admin.nav.groups.communication');
+    }
 
     protected static ?int $navigationSort = 1;
+
+    public static function getNavigationLabel(): string
+    {
+        return __('communication.nav.notification_templates');
+    }
+
+    public static function getModelLabel(): string
+    {
+        return __('communication.models.notification_template.singular');
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('communication.models.notification_template.plural');
+    }
 
     public static function getTranslatableLocales(): array
     {
@@ -35,16 +54,16 @@ class NotificationTemplateResource extends Resource
     public static function form(Form $form): Form
     {
         return $form->schema([
-            Forms\Components\Section::make(__('communication::resource.notification_templates'))
+            Forms\Components\Section::make(__('communication.resource.notification_templates'))
                 ->schema([
                     Forms\Components\TextInput::make('event_key')
-                        ->label(__('communication::resource.event_key'))
+                        ->label(__('communication.resource.event_key'))
                         ->required()
                         ->maxLength(100)
                         ->columnSpan(1),
 
                     Forms\Components\Select::make('channel')
-                        ->label(__('communication::resource.channel'))
+                        ->label(__('communication.resource.channel'))
                         ->options(collect(NotificationChannel::cases())->mapWithKeys(
                             fn (NotificationChannel $c) => [$c->value => $c->label()]
                         ))
@@ -52,7 +71,7 @@ class NotificationTemplateResource extends Resource
                         ->columnSpan(1),
 
                     Forms\Components\Select::make('audience')
-                        ->label(__('communication::resource.audience'))
+                        ->label(__('communication.resource.audience'))
                         ->options(collect(NotificationAudience::cases())->mapWithKeys(
                             fn (NotificationAudience $a) => [$a->value => $a->label()]
                         ))
@@ -60,7 +79,7 @@ class NotificationTemplateResource extends Resource
                         ->columnSpan(1),
 
                     Forms\Components\Toggle::make('is_active')
-                        ->label(__('communication::resource.is_active'))
+                        ->label(__('communication.resource.is_active'))
                         ->default(true)
                         ->columnSpan(1),
                 ])
@@ -69,19 +88,19 @@ class NotificationTemplateResource extends Resource
             Forms\Components\Section::make('Content')
                 ->schema([
                     Forms\Components\Textarea::make('subject')
-                        ->label(__('communication::resource.subject'))
+                        ->label(__('communication.resource.subject'))
                         ->rows(2)
                         ->nullable()
                         ->columnSpanFull(),
 
                     Forms\Components\Textarea::make('body')
-                        ->label(__('communication::resource.body'))
+                        ->label(__('communication.resource.body'))
                         ->rows(5)
                         ->required()
                         ->columnSpanFull(),
 
                     Forms\Components\KeyValue::make('variables')
-                        ->label(__('communication::resource.variables'))
+                        ->label(__('communication.resource.variables'))
                         ->keyLabel('Variable')
                         ->valueLabel('Description')
                         ->nullable()
@@ -95,12 +114,21 @@ class NotificationTemplateResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('event_key')
-                    ->label(__('communication::resource.event_key'))
+                    ->label(__('communication.resource.event_key'))
                     ->searchable()
-                    ->sortable(),
+                    ->sortable()
+                    ->formatStateUsing(function (?string $state): string {
+                        if ($state === null || $state === '') {
+                            return '';
+                        }
+                        $key = 'communication.event_keys.'.str_replace('.', '_', $state);
+                        $translated = __($key);
+
+                        return $translated === $key ? Str::headline(str_replace('.', ' ', $state)) : $translated;
+                    }),
 
                 Tables\Columns\TextColumn::make('channel')
-                    ->label(__('communication::resource.channel'))
+                    ->label(__('communication.resource.channel'))
                     ->badge()
                     ->color(fn (NotificationChannel $state): string => match ($state) {
                         NotificationChannel::Push => 'info',
@@ -112,7 +140,7 @@ class NotificationTemplateResource extends Resource
                     ->formatStateUsing(fn (NotificationChannel $state) => $state->label()),
 
                 Tables\Columns\TextColumn::make('audience')
-                    ->label(__('communication::resource.audience'))
+                    ->label(__('communication.resource.audience'))
                     ->badge()
                     ->color(fn (NotificationAudience $state): string => match ($state) {
                         NotificationAudience::Customer => 'success',
@@ -122,7 +150,7 @@ class NotificationTemplateResource extends Resource
                     ->formatStateUsing(fn (NotificationAudience $state) => $state->label()),
 
                 Tables\Columns\IconColumn::make('is_active')
-                    ->label(__('communication::resource.is_active'))
+                    ->label(__('communication.resource.is_active'))
                     ->boolean()
                     ->sortable(),
 
@@ -142,7 +170,7 @@ class NotificationTemplateResource extends Resource
                         fn (NotificationAudience $a) => [$a->value => $a->label()]
                     )),
                 Tables\Filters\TernaryFilter::make('is_active')
-                    ->label(__('communication::resource.is_active')),
+                    ->label(__('communication.resource.is_active')),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

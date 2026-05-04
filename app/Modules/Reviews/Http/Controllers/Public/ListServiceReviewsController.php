@@ -8,6 +8,7 @@ use App\Modules\Reviews\Domain\Contracts\ServiceReviewRepository;
 use App\Modules\Reviews\Http\Resources\PublicServiceReviewResource;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ListServiceReviewsController
 {
@@ -15,7 +16,7 @@ class ListServiceReviewsController
 
     public function index(Request $request, string $servicePublicId): JsonResponse
     {
-        $serviceId = \Illuminate\Support\Facades\DB::table('services')
+        $serviceId = DB::table('services')
             ->where('public_id', $servicePublicId)
             ->value('id');
 
@@ -25,7 +26,7 @@ class ListServiceReviewsController
 
         $result = $this->repo->listApprovedForService((int) $serviceId, [
             'cursor' => $request->query('cursor'),
-            'limit'  => 15,
+            'limit' => 15,
         ]);
 
         return response()->json([

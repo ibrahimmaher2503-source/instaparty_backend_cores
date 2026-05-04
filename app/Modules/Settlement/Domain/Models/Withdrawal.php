@@ -14,6 +14,7 @@ use App\Modules\Shared\Domain\Concerns\HasPublicId;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
@@ -30,15 +31,16 @@ use Spatie\MediaLibrary\InteractsWithMedia;
  * @property int $requested_by_user_id
  * @property int|null $processed_by_user_id
  * @property int|null $bank_proof_media_id
- * @property \Illuminate\Support\Carbon|null $requested_at
- * @property \Illuminate\Support\Carbon|null $processed_at
- * @property \Illuminate\Support\Carbon|null $paid_at
+ * @property Carbon|null $requested_at
+ * @property Carbon|null $processed_at
+ * @property Carbon|null $paid_at
  * @property int|null $pending_lock
  */
 class Withdrawal extends Model implements HasMedia
 {
     /** @use HasFactory<WithdrawalFactory> */
     use HasFactory;
+
     use HasPublicId;
     use InteractsWithMedia;
 

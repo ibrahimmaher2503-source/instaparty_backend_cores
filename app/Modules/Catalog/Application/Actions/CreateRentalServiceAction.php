@@ -10,13 +10,28 @@ use App\Modules\Catalog\Domain\Enums\ServiceStatus;
 use App\Modules\Catalog\Domain\Events\RentalServiceCreated;
 use App\Modules\Catalog\Domain\Models\Service;
 use App\Modules\Catalog\Domain\Models\ServiceRentalDetail;
+use App\Modules\Subscriptions\Domain\Contracts\SubscriptionPolicyContract;
+use App\Modules\Subscriptions\Domain\Exceptions\SubscriptionLimitReachedException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class CreateRentalServiceAction
 {
+    public function __construct(private readonly SubscriptionPolicyContract $subscriptionPolicy) {}
+
     public function execute(CreateRentalServiceDTO $dto): Service
     {
+        $decision = $this->subscriptionPolicy->canCreateService($dto->vendorProfileId, ProductType::Rental);
+        if (! $decision->allowed) {
+            throw new SubscriptionLimitReachedException(
+                $decision->featureKey,
+                $decision->currentCount,
+                $decision->limit,
+                $decision->unblockingPlanCode,
+                $decision->currentPlanCode,
+            );
+        }
+
         return DB::transaction(function () use ($dto): Service {
             $service = Service::create([
                 'public_id' => Str::ulid()->toBase32(),

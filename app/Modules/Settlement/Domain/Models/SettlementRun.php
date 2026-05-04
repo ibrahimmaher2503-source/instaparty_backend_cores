@@ -14,6 +14,7 @@ class SettlementRun extends Model
 {
     /** @use HasFactory<SettlementRunFactory> */
     use HasFactory;
+
     use HasPublicId;
 
     protected $fillable = [

@@ -14,12 +14,12 @@ class BookingStatsWidget extends StatsOverviewWidget
     protected function getStats(): array
     {
         return [
-            Stat::make('Draft Bookings', Booking::where('lifecycle_status', LifecycleStatus::Draft)->count())
+            Stat::make(__('booking::booking.dashboard.draft_bookings'), Booking::where('lifecycle_status', LifecycleStatus::Draft)->count())
                 ->color('gray'),
-            Stat::make('Submitted Today', Booking::where('lifecycle_status', LifecycleStatus::Submitted)
+            Stat::make(__('booking::booking.dashboard.submitted_today'), Booking::where('lifecycle_status', LifecycleStatus::Submitted)
                 ->whereDate('submitted_at', today())->count())
                 ->color('warning'),
-            Stat::make('Confirmed Today', Booking::where('lifecycle_status', LifecycleStatus::Confirmed)
+            Stat::make(__('booking::booking.dashboard.confirmed_today'), Booking::where('lifecycle_status', LifecycleStatus::Confirmed)
                 ->whereDate('confirmed_at', today())->count())
                 ->color('success'),
         ];

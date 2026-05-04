@@ -11,22 +11,24 @@ use App\Modules\Communication\Domain\Enums\CampaignChannel;
 use App\Modules\Communication\Domain\Enums\CampaignRecipientStatus;
 use App\Modules\Communication\Domain\Enums\CampaignTargetLocale;
 use App\Modules\Communication\Domain\Models\CampaignRecipient;
-use App\Modules\Identity\Database\Factories\UserFactory;
+use App\Modules\Identity\Domain\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Queue;
+use Illuminate\Support\Str;
 
 beforeEach(function () {
     Queue::fake();
 });
 
 it('records opted-out recipient as skipped with no dispatch', function () {
-    $admin = UserFactory::new()->admin()->create();
-    $customer = UserFactory::new()->customer()->create(['preferred_locale' => 'en', 'status' => 'active']);
+    $admin = User::factory()->asAdmin()->create();
+    $customer = User::factory()->asCustomer()->create(['preferred_locale' => 'en', 'status' => 'active']);
 
     createBookingForUser($customer->id, 'rental', now()->subDays(5));
 
     // Opt out from push marketing
     DB::table('notification_preferences')->insert([
+        'public_id' => Str::ulid()->toBase32(),
         'user_id' => $customer->id,
         'channel' => 'push',
         'event_category' => 'marketing',
@@ -65,8 +67,8 @@ it('records opted-out recipient as skipped with no dispatch', function () {
 })->group('communication', 'campaign');
 
 it('dispatches recipient with no preference row (default enabled)', function () {
-    $admin = UserFactory::new()->admin()->create();
-    $customer = UserFactory::new()->customer()->create(['preferred_locale' => 'en', 'status' => 'active']);
+    $admin = User::factory()->asAdmin()->create();
+    $customer = User::factory()->asCustomer()->create(['preferred_locale' => 'en', 'status' => 'active']);
 
     createBookingForUser($customer->id, 'rental', now()->subDays(5));
 

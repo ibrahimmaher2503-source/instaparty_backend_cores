@@ -53,20 +53,20 @@ class VendorDocumentFilamentResource extends Resource
                 TextColumn::make('doc_type')
                     ->label(__('identity.columns.doc_type'))
                     ->badge()
-                    ->formatStateUsing(fn (string $state): string => __('identity.document_type.'.$state)),
+                    ->formatStateUsing(fn ($state): string => __('identity.document_type.'.($state instanceof \BackedEnum ? $state->value : $state))),
                 TextColumn::make('file_name')
                     ->label(__('identity.columns.file_name'))
                     ->searchable(),
                 TextColumn::make('status')
                     ->label(__('identity.columns.status'))
                     ->badge()
-                    ->color(fn (string $state): string => match ($state) {
+                    ->color(fn ($state): string => match ($state instanceof \BackedEnum ? $state->value : $state) {
                         'pending' => 'warning',
                         'approved' => 'success',
                         'rejected' => 'danger',
                         default => 'gray',
                     })
-                    ->formatStateUsing(fn (string $state): string => __('identity.document_status.'.$state)),
+                    ->formatStateUsing(fn ($state): string => __('identity.document_status.'.($state instanceof \BackedEnum ? $state->value : $state))),
                 TextColumn::make('created_at')
                     ->label(__('identity.columns.created_at'))
                     ->dateTime()

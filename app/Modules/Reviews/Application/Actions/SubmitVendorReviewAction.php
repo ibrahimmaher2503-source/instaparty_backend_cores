@@ -26,8 +26,8 @@ class SubmitVendorReviewAction
 
         if ($context === null) {
             throw new HttpResponseException(response()->json([
-                'data'   => null,
-                'meta'   => (object) [],
+                'data' => null,
+                'meta' => (object) [],
                 'errors' => [['code' => 'booking_vendor_items_not_all_completed', 'message' => __('reviews::reviews.errors.booking_vendor_items_not_all_completed')]],
             ], Response::HTTP_UNPROCESSABLE_ENTITY));
         }
@@ -36,11 +36,11 @@ class SubmitVendorReviewAction
 
         if ($existing !== null) {
             throw new HttpResponseException(response()->json([
-                'data'   => null,
-                'meta'   => (object) [],
+                'data' => null,
+                'meta' => (object) [],
                 'errors' => [[
-                    'code'                      => 'review_already_exists',
-                    'message'                   => __('reviews::reviews.errors.review_already_exists'),
+                    'code' => 'review_already_exists',
+                    'message' => __('reviews::reviews.errors.review_already_exists'),
                     'existing_review_public_id' => $existing->public_id,
                 ]],
             ], Response::HTTP_CONFLICT));

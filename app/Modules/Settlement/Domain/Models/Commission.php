@@ -10,6 +10,7 @@ use App\Modules\Settlement\Domain\Enums\CommissionStatus;
 use App\Modules\Shared\Domain\Concerns\HasPublicId;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 /**
  * @property string $public_id
@@ -27,12 +28,13 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $vendor_share_currency
  * @property int $reversed_amount_minor
  * @property CommissionStatus $status
- * @property \Illuminate\Support\Carbon|null $created_at
+ * @property Carbon|null $created_at
  */
 class Commission extends Model
 {
     /** @use HasFactory<CommissionFactory> */
     use HasFactory;
+
     use HasPublicId;
 
     // Append-only: only created_at, no updated_at (status field only may be updated)

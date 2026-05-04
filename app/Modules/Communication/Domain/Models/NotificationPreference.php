@@ -4,13 +4,17 @@ declare(strict_types=1);
 
 namespace App\Modules\Communication\Domain\Models;
 
+use App\Modules\Communication\Database\Factories\NotificationPreferenceFactory;
 use App\Modules\Communication\Domain\Enums\EventCategory;
 use App\Modules\Communication\Domain\Enums\NotificationChannel;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class NotificationPreference extends Model
 {
+    use HasFactory;
+
     protected $table = 'notification_preferences';
 
     protected $fillable = [
@@ -23,6 +27,11 @@ class NotificationPreference extends Model
         'quiet_hours_end',
         'timezone',
     ];
+
+    protected static function newFactory(): NotificationPreferenceFactory
+    {
+        return NotificationPreferenceFactory::new();
+    }
 
     protected function casts(): array
     {

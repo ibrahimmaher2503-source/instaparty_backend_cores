@@ -9,11 +9,11 @@ use App\Modules\Geography\Domain\Models\Region;
 use App\Modules\Geography\Filament\Resources\CityResource\Pages;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Tabs;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
 use Filament\Forms\Set;
-use Filament\Resources\Concerns\Translatable;
 use Filament\Resources\Resource;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\EditAction;
@@ -25,8 +25,6 @@ use Filament\Tables\Table;
 
 class CityResource extends Resource
 {
-    use Translatable;
-
     protected static ?string $model = City::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-building-office-2';
@@ -51,11 +49,6 @@ class CityResource extends Resource
     public static function getPluralModelLabel(): string
     {
         return __('geography.cities');
-    }
-
-    public static function getTranslatableLocales(): array
-    {
-        return ['en', 'ar'];
     }
 
     public static function form(Form $form): Form
@@ -89,10 +82,26 @@ class CityResource extends Resource
                         ->disabled()
                         ->dehydrated(),
 
-                    TextInput::make('name')
-                        ->label(__('geography.columns.name'))
-                        ->required()
-                        ->maxLength(255),
+                    Tabs::make(__('geography.columns.name'))
+                        ->tabs([
+                            Tabs\Tab::make('English')
+                                ->schema([
+                                    TextInput::make('name.en')
+                                        ->label(__('geography.columns.name_en'))
+                                        ->required()
+                                        ->maxLength(255)
+                                        ->dir('ltr'),
+                                ]),
+                            Tabs\Tab::make('Arabic')
+                                ->schema([
+                                    TextInput::make('name.ar')
+                                        ->label(__('geography.columns.name_ar'))
+                                        ->required()
+                                        ->maxLength(255)
+                                        ->extraInputAttributes(['dir' => 'rtl']),
+                                ]),
+                        ])
+                        ->columnSpanFull(),
 
                     TextInput::make('latitude')
                         ->label(__('geography.columns.latitude'))
@@ -126,6 +135,7 @@ class CityResource extends Resource
             ->columns([
                 TextColumn::make('name')
                     ->label(__('geography.columns.name'))
+                    ->getStateUsing(fn (City $record): string => $record->getTranslation('name', app()->getLocale(), useFallbackLocale: true))
                     ->searchable()
                     ->sortable(),
 

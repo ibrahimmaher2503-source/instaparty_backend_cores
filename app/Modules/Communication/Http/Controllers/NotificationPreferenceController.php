@@ -27,7 +27,7 @@ class NotificationPreferenceController extends Controller
     public function indexCustomer(Request $request): JsonResponse
     {
         /** @var User $user */
-        $user  = $request->user();
+        $user = $request->user();
         $prefs = $this->repository->listForUser($user->id);
 
         return ApiResponse::success(NotificationPreferenceResource::collection($prefs));
@@ -38,8 +38,8 @@ class NotificationPreferenceController extends Controller
         string $channel,
         string $eventCategory
     ): JsonResponse {
-        $channelEnum   = NotificationChannel::tryFrom($channel);
-        $categoryEnum  = EventCategory::tryFrom($eventCategory);
+        $channelEnum = NotificationChannel::tryFrom($channel);
+        $categoryEnum = EventCategory::tryFrom($eventCategory);
 
         if ($channelEnum === null || $categoryEnum === null) {
             return ApiResponse::error('Invalid channel or event_category.');
@@ -63,7 +63,7 @@ class NotificationPreferenceController extends Controller
     public function indexVendor(Request $request): JsonResponse
     {
         /** @var User $user */
-        $user  = $request->user();
+        $user = $request->user();
         $prefs = $this->repository->listForUser($user->id);
 
         return ApiResponse::success(NotificationPreferenceResource::collection($prefs));
@@ -74,8 +74,8 @@ class NotificationPreferenceController extends Controller
         string $channel,
         string $eventCategory
     ): JsonResponse {
-        $channelEnum   = NotificationChannel::tryFrom($channel);
-        $categoryEnum  = EventCategory::tryFrom($eventCategory);
+        $channelEnum = NotificationChannel::tryFrom($channel);
+        $categoryEnum = EventCategory::tryFrom($eventCategory);
 
         if ($channelEnum === null || $categoryEnum === null) {
             return ApiResponse::error('Invalid channel or event_category.');

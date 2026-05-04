@@ -4,20 +4,28 @@ declare(strict_types=1);
 
 namespace App\Modules\Communication\Domain\Models;
 
+use App\Modules\Communication\Database\Factories\NotificationTemplateFactory;
 use App\Modules\Communication\Domain\Enums\NotificationAudience;
 use App\Modules\Communication\Domain\Enums\NotificationChannel;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Translatable\HasTranslations;
 
 class NotificationTemplate extends Model
 {
+    use HasFactory;
     use HasTranslations;
 
     protected $table = 'notification_templates';
 
     /** @var array<int, string> */
     public array $translatable = ['body', 'subject'];
+
+    protected static function newFactory(): NotificationTemplateFactory
+    {
+        return NotificationTemplateFactory::new();
+    }
 
     protected $fillable = [
         'public_id',

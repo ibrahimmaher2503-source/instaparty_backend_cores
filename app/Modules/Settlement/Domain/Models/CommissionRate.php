@@ -16,6 +16,7 @@ class CommissionRate extends Model
 {
     /** @use HasFactory<CommissionRateFactory> */
     use HasFactory;
+
     use HasPublicId;
 
     protected $fillable = [

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Modules\Settlement\Database\Factories;
 
+use App\Modules\Identity\Domain\Models\VendorProfile;
 use App\Modules\Settlement\Domain\Models\Wallet;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
@@ -20,7 +21,7 @@ class WalletFactory extends Factory
         return [
             'public_id' => (string) Str::ulid(),
             'owner_type' => 'App\\Modules\\Identity\\Domain\\Models\\VendorProfile',
-            'owner_id' => 1, // overridden in tests
+            'owner_id' => VendorProfile::factory()->approved(),
             'currency' => 'EGP',
             'balance_minor' => $this->faker->numberBetween(0, 1000000),
             'pending_withdrawal_minor' => 0,

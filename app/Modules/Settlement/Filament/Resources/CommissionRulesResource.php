@@ -22,15 +22,48 @@ class CommissionRulesResource extends Resource
 {
     protected static ?string $model = CommissionRate::class;
 
-    protected static ?string $navigationGroup = 'Settlement';
+    public static function getNavigationGroup(): ?string
+    {
+        return __('admin.nav.groups.settlement');
+    }
 
     protected static ?string $navigationIcon = 'heroicon-o-percent-badge';
-
-    protected static ?string $navigationLabel = 'Commission Rules';
 
     protected static ?string $recordTitleAttribute = 'public_id';
 
     protected static ?string $slug = 'settlement-commission-rules';
+
+    protected static ?int $navigationSort = 10;
+
+    public static function getNavigationLabel(): string
+    {
+        return __('settlement.nav.commission_rules');
+    }
+
+    public static function getModelLabel(): string
+    {
+        return __('settlement.models.commission_rule.singular');
+    }
+
+    private static function categoryLabel($record): string
+    {
+        $locale = app()->getLocale();
+        $value = $record->getTranslation('name', $locale, false)
+            ?: $record->getTranslation('name', 'en', false);
+
+        while (is_array($value)) {
+            $value = $value[$locale] ?? $value['en'] ?? reset($value);
+        }
+
+        $value = (string) ($value ?? '');
+
+        return $value !== '' ? $value : ('#'.$record->id);
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('settlement.models.commission_rule.plural');
+    }
 
     public static function form(Form $form): Form
     {
@@ -40,7 +73,14 @@ class CommissionRulesResource extends Resource
                     Select::make('category_id')
                         ->label('Category (null = any)')
                         ->relationship('category', 'id')
-                        ->getOptionLabelFromRecordUsing(fn ($record) => $record->getTranslation('name', 'en'))
+                        ->getOptionLabelFromRecordUsing(fn ($record): string => self::categoryLabel($record))
+                        ->getSearchResultsUsing(fn (string $search) => \App\Modules\Catalog\Domain\Models\Category::query()
+                            ->where('name->en', 'like', "%{$search}%")
+                            ->orWhere('name->ar', 'like', "%{$search}%")
+                            ->limit(50)
+                            ->get()
+                            ->mapWithKeys(fn ($c) => [$c->id => self::categoryLabel($c)])
+                            ->all())
                         ->searchable()
                         ->preload()
                         ->placeholder('Any category (wildcard)')

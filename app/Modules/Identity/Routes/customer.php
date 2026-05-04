@@ -19,7 +19,7 @@ Route::prefix('api/v1')->middleware(['api', SetLocaleMiddleware::class])->group(
 
     Route::post('login', [CustomerAuthController::class, 'login'])->middleware('throttle:6,1');
 
-    Route::middleware('auth:sanctum')->group(function (): void {
+    Route::middleware(['auth:sanctum', 'ensure.account.active'])->group(function (): void {
         Route::post('logout', [CustomerAuthController::class, 'logout']);
 
         Route::middleware('role:customer')->prefix('customer')->group(function (): void {

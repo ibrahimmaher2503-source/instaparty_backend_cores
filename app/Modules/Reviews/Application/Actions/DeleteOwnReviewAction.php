@@ -26,9 +26,9 @@ class DeleteOwnReviewAction
         }
 
         $previousStatus = $review->moderation_status->value;
-        $reviewType     = $review instanceof ServiceReview ? 'service' : 'vendor';
-        $subjectId      = $review instanceof ServiceReview ? $review->service_id : $review->vendor_profile_id;
-        $repository     = $review instanceof ServiceReview ? $this->serviceRepository : $this->vendorRepository;
+        $reviewType = $review instanceof ServiceReview ? 'service' : 'vendor';
+        $subjectId = $review instanceof ServiceReview ? $review->service_id : $review->vendor_profile_id;
+        $repository = $review instanceof ServiceReview ? $this->serviceRepository : $this->vendorRepository;
 
         DB::transaction(fn () => $repository->softDelete($review));
 

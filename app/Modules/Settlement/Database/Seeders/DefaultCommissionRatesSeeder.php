@@ -4,22 +4,25 @@ declare(strict_types=1);
 
 namespace App\Modules\Settlement\Database\Seeders;
 
+use App\Modules\Settlement\Domain\Models\CommissionRate;
+use App\Modules\Shared\Database\Seeders\Concerns\SeedsDevelopmentData;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 
-class DefaultCommissionRatesSeeder extends Seeder
+final class DefaultCommissionRatesSeeder extends Seeder
 {
+    use SeedsDevelopmentData;
+
     public function run(): void
     {
-        DB::table('commission_rates')->insertOrIgnore([
-            'public_id' => (string) Str::ulid(),
-            'category_id' => null,
-            'product_type' => null,
-            'commission_bps' => 1500, // 15% platform default
-            'effective_from' => now()->toDateString(),
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
+        $this->updateOrCreateFactoryModel(
+            CommissionRate::factory()->globalDefault()->make([
+                'public_id' => $this->stablePublicId('commission-rate:global-default'),
+                'category_id' => null,
+                'product_type' => null,
+                'commission_bps' => 1500,
+                'effective_from' => now()->toDateString(),
+            ]),
+            ['category_id' => null, 'product_type' => null],
+        );
     }
 }

@@ -4,14 +4,18 @@ declare(strict_types=1);
 
 namespace App\Modules\Communication\Domain\Models;
 
+use App\Modules\Communication\Database\Factories\NotificationDispatchFactory;
 use App\Modules\Communication\Domain\Enums\DispatchStatus;
 use App\Modules\Communication\Domain\Enums\NotificationChannel;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class NotificationDispatch extends Model
 {
+    use HasFactory;
+
     protected $table = 'notification_dispatches';
 
     public $timestamps = false;
@@ -19,6 +23,11 @@ class NotificationDispatch extends Model
     const CREATED_AT = 'created_at';
 
     const UPDATED_AT = null;
+
+    protected static function newFactory(): NotificationDispatchFactory
+    {
+        return NotificationDispatchFactory::new();
+    }
 
     protected $fillable = [
         'public_id',

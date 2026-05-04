@@ -22,6 +22,7 @@ class LoyaltyRedemptionController
     public function store(ApplyRedemptionRequest $request, string $bookingPublicId): JsonResponse
     {
         $redemption = $this->apply->execute(auth()->id(), $bookingPublicId, $request->validated('points'));
+
         return (new LoyaltyRedemptionResource($redemption))->response()->setStatusCode(201);
     }
 

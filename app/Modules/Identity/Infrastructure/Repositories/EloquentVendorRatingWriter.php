@@ -14,7 +14,7 @@ class EloquentVendorRatingWriter implements VendorRatingWriter
         DB::table('vendor_profiles')
             ->where('id', $vendorProfileId)
             ->update([
-                'rating_avg'   => round($newAverage, 2),
+                'rating_avg' => round($newAverage, 2),
                 'rating_count' => $newCount,
             ]);
     }

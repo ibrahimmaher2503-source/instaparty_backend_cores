@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace App\Modules\Booking\Domain\Models;
 
+use App\Modules\Booking\Database\Factories\BookingModificationItemFactory;
 use App\Modules\Booking\Domain\Enums\ModificationChangeKind;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -19,6 +21,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class BookingModificationItem extends Model
 {
+    use HasFactory;
+
     public $timestamps = false;
 
     protected $fillable = [
@@ -36,6 +40,11 @@ class BookingModificationItem extends Model
             'payload' => 'array',
             'created_at' => 'datetime',
         ];
+    }
+
+    protected static function newFactory(): BookingModificationItemFactory
+    {
+        return BookingModificationItemFactory::new();
     }
 
     public function modification(): BelongsTo

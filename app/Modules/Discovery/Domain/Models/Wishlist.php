@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Modules\Discovery\Domain\Models;
 
+use App\Modules\Discovery\Database\Factories\WishlistFactory;
 use App\Modules\Identity\Domain\Models\User;
 use App\Modules\Shared\Domain\Concerns\HasPublicId;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -21,6 +22,11 @@ class Wishlist extends Model
         'user_id',
         'name',
     ];
+
+    protected static function newFactory(): WishlistFactory
+    {
+        return WishlistFactory::new();
+    }
 
     public function user(): BelongsTo
     {

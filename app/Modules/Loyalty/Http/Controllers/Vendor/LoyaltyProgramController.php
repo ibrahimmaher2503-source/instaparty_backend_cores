@@ -23,6 +23,7 @@ class LoyaltyProgramController
     public function store(StoreLoyaltyProgramRequest $request): JsonResponse
     {
         $program = $this->configure->execute(auth()->user()->vendorProfile->id, ProgramDraft::fromRequest($request->validated()));
+
         return (new LoyaltyProgramResource($program->load('activeRule')))->response()->setStatusCode(201);
     }
 
@@ -30,12 +31,14 @@ class LoyaltyProgramController
     {
         $program = $this->programs->findByVendor(auth()->user()->vendorProfile->id);
         abort_if($program === null, 404, __('loyalty::loyalty.errors.program_not_found'));
+
         return (new LoyaltyProgramResource($program->load('activeRule')))->response();
     }
 
     public function update(UpdateLoyaltyProgramRequest $request): JsonResponse
     {
         $program = $this->configure->execute(auth()->user()->vendorProfile->id, ProgramDraft::fromRequest($request->validated()));
+
         return (new LoyaltyProgramResource($program->load('activeRule')))->response();
     }
 }

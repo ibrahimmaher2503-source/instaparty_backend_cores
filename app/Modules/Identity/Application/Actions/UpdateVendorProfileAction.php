@@ -11,14 +11,16 @@ class UpdateVendorProfileAction
 {
     private const SENSITIVE_FIELDS = ['bank_iban', 'bank_name', 'bank_account_holder', 'bank_swift_bic'];
 
+    /** These columns can never be changed through this action, regardless of input. */
+    private const PROTECTED_FIELDS = ['approval_status', 'approved_at', 'approved_by', 'slug', 'user_id', 'rating_avg', 'rating_count'];
+
     public function execute(VendorProfile $vendorProfile, array $data): VendorProfile
     {
         return DB::transaction(function () use ($vendorProfile, $data): VendorProfile {
-            $sensitiveOld = array_intersect_key(
-                $vendorProfile->toArray(),
-                array_flip(self::SENSITIVE_FIELDS)
-            );
-            $sensitiveNew = array_intersect_key($data, array_flip(self::SENSITIVE_FIELDS));
+            // Strip protected fields so approval_status can never be overwritten
+            $data = array_diff_key($data, array_flip(self::PROTECTED_FIELDS));
+
+            $before = $vendorProfile->toArray();
 
             // Update User-level fields
             $userFields = array_filter(['preferred_locale' => $data['preferred_locale'] ?? null]);
@@ -32,15 +34,16 @@ class UpdateVendorProfileAction
                 $vendorProfile->fill($profileFields)->save();
             }
 
-            if ($sensitiveNew !== []) {
+            $after = $vendorProfile->refresh()->toArray();
+            $changed = array_filter($after, fn ($v, $k) => ($before[$k] ?? null) !== $v, ARRAY_FILTER_USE_BOTH);
+
+            if ($changed !== []) {
                 activity()
                     ->on($vendorProfile)
                     ->causedBy(auth()->user())
-                    ->withProperties(['old' => $sensitiveOld, 'new' => $sensitiveNew])
-                    ->log('updated_vendor_profile');
+                    ->withProperties(['changed_fields' => array_keys($changed)])
+                    ->log('admin_updated_vendor_profile');
             }
-
-            $vendorProfile->refresh();
 
             return $vendorProfile;
         });

@@ -8,10 +8,11 @@ use App\Modules\Geography\Domain\Models\Region;
 use App\Modules\Geography\Filament\Resources\RegionResource\Pages;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Tabs;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
-use Filament\Resources\Concerns\Translatable;
+use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\EditAction;
@@ -23,8 +24,6 @@ use Filament\Tables\Table;
 
 class RegionResource extends Resource
 {
-    use Translatable;
-
     protected static ?string $model = Region::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-map-pin';
@@ -51,11 +50,6 @@ class RegionResource extends Resource
         return __('geography.regions');
     }
 
-    public static function getTranslatableLocales(): array
-    {
-        return ['en', 'ar'];
-    }
-
     public static function form(Form $form): Form
     {
         return $form->schema([
@@ -68,10 +62,26 @@ class RegionResource extends Resource
                         ->preload()
                         ->required(),
 
-                    TextInput::make('name')
-                        ->label(__('geography.columns.name'))
-                        ->required()
-                        ->maxLength(255),
+                    Tabs::make(__('geography.columns.name'))
+                        ->tabs([
+                            Tabs\Tab::make('English')
+                                ->schema([
+                                    TextInput::make('name.en')
+                                        ->label(__('geography.columns.name_en'))
+                                        ->required()
+                                        ->maxLength(255)
+                                        ->dir('ltr'),
+                                ]),
+                            Tabs\Tab::make('Arabic')
+                                ->schema([
+                                    TextInput::make('name.ar')
+                                        ->label(__('geography.columns.name_ar'))
+                                        ->required()
+                                        ->maxLength(255)
+                                        ->extraInputAttributes(['dir' => 'rtl']),
+                                ]),
+                        ])
+                        ->columnSpanFull(),
 
                     TextInput::make('sort_order')
                         ->label(__('geography.columns.sort_order'))
@@ -93,6 +103,7 @@ class RegionResource extends Resource
             ->columns([
                 TextColumn::make('name')
                     ->label(__('geography.columns.name'))
+                    ->getStateUsing(fn (Region $record): string => $record->getTranslation('name', app()->getLocale(), useFallbackLocale: true))
                     ->searchable()
                     ->sortable(),
 
@@ -128,7 +139,16 @@ class RegionResource extends Resource
             ])
             ->actions([
                 EditAction::make(),
-                DeleteAction::make(),
+                DeleteAction::make()
+                    ->before(function (DeleteAction $action, Region $record): void {
+                        if ($record->cities()->exists()) {
+                            Notification::make()
+                                ->danger()
+                                ->title(__('geography.errors.delete_region_has_cities'))
+                                ->send();
+                            $action->cancel();
+                        }
+                    }),
             ]);
     }
 

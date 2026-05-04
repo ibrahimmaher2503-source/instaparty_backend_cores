@@ -7,8 +7,8 @@ return [
     |--------------------------------------------------------------------------
     */
 
-    'column.name' => 'العنوان',
-    'column.guard_name' => 'اسم الحارس',
+    'column.name' => 'الاسم',
+    'column.guard_name' => 'اسم الـ Guard',
     'column.roles' => 'الأدوار',
     'column.permissions' => 'الصلاحيات',
     'column.updated_at' => 'تاريخ التحديث',
@@ -20,13 +20,13 @@ return [
     |--------------------------------------------------------------------------
     */
 
-    'field.name' => 'العنوان',
-    'field.guard_name' => 'اسم الحارس',
+    'field.name' => 'اسم الدور',
+    'field.guard_name' => 'اسم الـ Guard',
     'field.permissions' => 'الصلاحيات',
     'field.select_all.name' => 'تحديد الكل',
-    'field.select_all.message' => 'تفعيل كافة الصلاحيات لهذا الدور',
+    'field.select_all.message' => 'تفعيل جميع الصلاحيات لهذا الدور',
     'field.team' => 'الفريق',
-    'field.team.placeholder' => 'اختر فريقاً ...',
+    'field.team.placeholder' => 'اختر فريقاً...',
 
     /*
     |--------------------------------------------------------------------------
@@ -34,7 +34,7 @@ return [
     |--------------------------------------------------------------------------
     */
 
-    'nav.group' => 'إدارة الوصول',
+    'nav.group' => 'إدارة الصلاحيات',
     'nav.role.label' => 'الأدوار',
     'nav.role.icon' => 'heroicon-o-shield-check',
     'resource.label.role' => 'دور',
@@ -47,8 +47,8 @@ return [
     */
 
     'section' => 'الأقسام',
-    'resources' => 'المصادر',
-    'widgets' => 'الأجزاء',
+    'resources' => 'الموارد',
+    'widgets' => 'الودجتات',
     'pages' => 'الصفحات',
     'custom' => 'صلاحيات مخصصة',
 
@@ -58,7 +58,7 @@ return [
     |--------------------------------------------------------------------------
     */
 
-    'forbidden' => 'أنت غير مخول، لديك صلاحية للوصول',
+    'forbidden' => 'غير مصرح لك بالوصول إلى هذه الصفحة.',
 
     /*
     |--------------------------------------------------------------------------
@@ -68,16 +68,16 @@ return [
 
     'resource_permission_prefixes_labels' => [
         'view' => 'عرض',
-        'view_any' => 'عرض الكل',
-        'create' => 'إضافة',
+        'view_any' => 'عرض القائمة',
+        'create' => 'إنشاء',
         'update' => 'تعديل',
         'delete' => 'حذف',
-        'delete_any' => 'حذف الكل',
-        'force_delete' => 'إجبار الحذف',
-        'force_delete_any' => ' إجبار حذف أي',
+        'delete_any' => 'حذف متعدد',
+        'force_delete' => 'حذف نهائي',
+        'force_delete_any' => 'حذف نهائي متعدد',
         'reorder' => 'إعادة ترتيب',
-        'restore' => 'استرجاع',
-        'restore_any' => 'استرجاع الكل',
-        'replicate' => 'استنساخ',
+        'restore' => 'استعادة',
+        'restore_any' => 'استعادة متعددة',
+        'replicate' => 'نسخ',
     ],
 ];

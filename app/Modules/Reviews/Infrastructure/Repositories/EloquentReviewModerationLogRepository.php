@@ -18,12 +18,12 @@ class EloquentReviewModerationLogRepository implements ReviewModerationLogReposi
         ?array $reason = null,
     ): void {
         ReviewModerationLog::create([
-            'review_type'  => $reviewType,
-            'review_id'    => $reviewId,
-            'from_status'  => $fromStatus,
-            'to_status'    => $toStatus,
+            'review_type' => $reviewType,
+            'review_id' => $reviewId,
+            'from_status' => $fromStatus,
+            'to_status' => $toStatus,
             'moderator_id' => $moderatorId,
-            'reason'       => $reason,
+            'reason' => $reason,
         ]);
     }
 }

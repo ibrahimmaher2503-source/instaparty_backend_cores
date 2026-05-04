@@ -1,0 +1,290 @@
+openapi: 3.1.0
+info:
+  title: InstaParty Subscriptions — Vendor API
+  version: 1.0.0
+  description: |
+    Vendor-facing endpoints for browsing plans, subscribing, viewing the current
+    subscription, and cancelling. All responses use the standard ApiResponse
+    envelope `{ data, meta, errors }`. Locale is selected via `Accept-Language`
+    (`en` or `ar`).
+servers:
+  - url: https://api.instaparty.example/api
+    description: production
+tags:
+  - name: vendor-subscription
+    description: Vendor subscription self-service
+
+components:
+  securitySchemes:
+    sanctum:
+      type: http
+      scheme: bearer
+      bearerFormat: opaque
+
+  parameters:
+    AcceptLanguage:
+      in: header
+      name: Accept-Language
+      required: false
+      schema: { type: string, enum: [en, ar], default: en }
+    IdempotencyKey:
+      in: header
+      name: Idempotency-Key
+      required: true
+      schema: { type: string, minLength: 8, maxLength: 64 }
+
+  schemas:
+    Money:
+      type: object
+      required: [amount_minor, currency, formatted]
+      properties:
+        amount_minor: { type: integer, format: int64, example: 19900 }
+        currency:     { type: string, example: EGP }
+        formatted:    { type: string, example: "199.00 EGP" }
+
+    Plan:
+      type: object
+      required: [public_id, plan_code, name, description, monthly_price, yearly_price, features]
+      properties:
+        public_id:     { type: string, example: "01J9P3R5GZTM6N6YH7K2A0FZ7M" }
+        plan_code:     { type: string, enum: [free, silver, gold, premium], example: silver }
+        name:          { type: string, example: Silver }
+        description:   { type: string, example: "For growing vendors with up to 25 active services." }
+        monthly_price: { $ref: '#/components/schemas/Money' }
+        yearly_price:  { $ref: '#/components/schemas/Money' }
+        features:
+          type: object
+          additionalProperties: true
+          example:
+            max_active_services: 25
+            featured_cap: 2
+            can_feature: true
+            can_import_excel: false
+            commission_discount_bps: 50
+
+    Subscription:
+      type: object
+      required: [public_id, plan, status, billing_cycle, started_at]
+      properties:
+        public_id:           { type: string, example: "01J9P3R7XY4Q5GH7B8N9C0VWQE" }
+        plan:                { $ref: '#/components/schemas/Plan' }
+        status:              { type: string, enum: [active, past_due, cancelled, expired, superseded] }
+        billing_cycle:       { type: string, enum: [monthly, yearly, none] }
+        current_period_start:{ type: string, format: date-time, nullable: true }
+        current_period_end:  { type: string, format: date-time, nullable: true }
+        grace_period_ends_at:{ type: string, format: date-time, nullable: true }
+        cancel_at_period_end:{ type: boolean }
+        is_admin_override:   { type: boolean }
+        started_at:          { type: string, format: date-time }
+        ended_at:            { type: string, format: date-time, nullable: true }
+
+    ErrorEnvelope:
+      type: object
+      properties:
+        data:   { nullable: true }
+        meta:   { type: object }
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              code:    { type: string }
+              message: { type: string }
+              field:   { type: string, nullable: true }
+
+security:
+  - sanctum: []
+
+paths:
+  /vendor/plans:
+    get:
+      tags: [vendor-subscription]
+      summary: List published plans with localised content + features
+      parameters:
+        - $ref: '#/components/parameters/AcceptLanguage'
+      responses:
+        '200':
+          description: Plans list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items: { $ref: '#/components/schemas/Plan' }
+                  meta:
+                    type: object
+                    example: { count: 4 }
+                  errors: { type: array, items: {}, example: [] }
+              examples:
+                en:
+                  summary: English
+                  value:
+                    data:
+                      - public_id: "01J9P3R5GZTM6N6YH7K2A0FZ7M"
+                        plan_code: free
+                        name: Free
+                        description: "Get started with up to 5 active services."
+                        monthly_price: { amount_minor: 0, currency: EGP, formatted: "0.00 EGP" }
+                        yearly_price:  { amount_minor: 0, currency: EGP, formatted: "0.00 EGP" }
+                        features: { max_active_services: 5, featured_cap: 0, can_feature: false, can_import_excel: false, commission_discount_bps: 0 }
+                    meta: { count: 4 }
+                    errors: []
+                ar:
+                  summary: Arabic
+                  value:
+                    data:
+                      - public_id: "01J9P3R5GZTM6N6YH7K2A0FZ7M"
+                        plan_code: free
+                        name: مجاني
+                        description: "ابدأ مع 5 خدمات فعّالة."
+                        monthly_price: { amount_minor: 0, currency: EGP, formatted: "٠٫٠٠ ج.م." }
+                        yearly_price:  { amount_minor: 0, currency: EGP, formatted: "٠٫٠٠ ج.م." }
+                        features: { max_active_services: 5, featured_cap: 0, can_feature: false, can_import_excel: false, commission_discount_bps: 0 }
+                    meta: { count: 4 }
+                    errors: []
+
+  /vendor/subscription:
+    get:
+      tags: [vendor-subscription]
+      summary: Get the authenticated vendor's current subscription (effective tier, including any admin override)
+      parameters:
+        - $ref: '#/components/parameters/AcceptLanguage'
+      responses:
+        '200':
+          description: Current subscription
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data: { $ref: '#/components/schemas/Subscription' }
+                  meta:
+                    type: object
+                    properties:
+                      effective_source: { type: string, enum: [admin_override, paid, free], example: paid }
+                  errors: { type: array, items: {}, example: [] }
+        '401': { description: Unauthenticated, content: { application/json: { schema: { $ref: '#/components/schemas/ErrorEnvelope' } } } }
+
+  /vendor/subscribe:
+    post:
+      tags: [vendor-subscription]
+      summary: Subscribe to a plan (idempotent)
+      parameters:
+        - $ref: '#/components/parameters/AcceptLanguage'
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [plan_code, billing_cycle]
+              properties:
+                plan_code:     { type: string, enum: [silver, gold, premium], description: "Free plan is not subscribable via this endpoint — Free is auto-attached on vendor creation." }
+                billing_cycle: { type: string, enum: [monthly, yearly] }
+                save_payment_token:
+                  type: boolean
+                  default: true
+                  description: |
+                    When true, opt the vendor into saving the gateway recurring token for unattended renewals.
+                    Honoured only when `feature_flags.subscriptions.recurring_tokens_enabled = true`.
+            example:
+              plan_code: silver
+              billing_cycle: yearly
+              save_payment_token: true
+      responses:
+        '202':
+          description: Accepted; payment initiated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      invoice_public_id: { type: string }
+                      checkout_url:      { type: string, format: uri }
+                      gateway_ref:       { type: string }
+                  meta: { type: object }
+                  errors: { type: array, items: {}, example: [] }
+              example:
+                data:
+                  invoice_public_id: "01J9P3RSV6YZP7VQ4M0M0R2K1A"
+                  checkout_url: "https://accept.paymob.com/api/acceptance/iframes/123?token=..."
+                  gateway_ref: "pmb_evt_98231719"
+                meta: {}
+                errors: []
+        '409':
+          description: Idempotency-Key replayed within window — original response is returned identically.
+        '422':
+          description: Validation failure (e.g., unknown plan_code, missing billing_cycle)
+          content: { application/json: { schema: { $ref: '#/components/schemas/ErrorEnvelope' } } }
+
+  /vendor/subscription/cancel:
+    post:
+      tags: [vendor-subscription]
+      summary: Cancel current subscription effective at current_period_end
+      parameters:
+        - $ref: '#/components/parameters/AcceptLanguage'
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                reason: { type: string, maxLength: 500 }
+            example: { reason: "Pausing my business this winter." }
+      responses:
+        '200':
+          description: Cancellation scheduled
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data: { $ref: '#/components/schemas/Subscription' }
+                  meta:
+                    type: object
+                    properties:
+                      cancels_at: { type: string, format: date-time }
+                  errors: { type: array, items: {}, example: [] }
+              examples:
+                en:
+                  value:
+                    data:
+                      public_id: "01J9P3R7XY4Q5GH7B8N9C0VWQE"
+                      plan: { public_id: "...", plan_code: silver, name: Silver, description: "...", monthly_price: { amount_minor: 19900, currency: EGP, formatted: "199.00 EGP" }, yearly_price: { amount_minor: 199000, currency: EGP, formatted: "1,990.00 EGP" }, features: {} }
+                      status: active
+                      billing_cycle: monthly
+                      current_period_start: "2026-04-15T08:30:00Z"
+                      current_period_end: "2026-05-15T08:30:00Z"
+                      grace_period_ends_at: null
+                      cancel_at_period_end: true
+                      is_admin_override: false
+                      started_at: "2026-04-15T08:30:00Z"
+                      ended_at: null
+                    meta: { cancels_at: "2026-05-15T08:30:00Z" }
+                    errors: []
+                ar:
+                  value:
+                    data:
+                      public_id: "01J9P3R7XY4Q5GH7B8N9C0VWQE"
+                      plan: { public_id: "...", plan_code: silver, name: فضي, description: "...", monthly_price: { amount_minor: 19900, currency: EGP, formatted: "١٩٩٫٠٠ ج.م." }, yearly_price: { amount_minor: 199000, currency: EGP, formatted: "١٬٩٩٠٫٠٠ ج.م." }, features: {} }
+                      status: active
+                      billing_cycle: monthly
+                      current_period_start: "2026-04-15T08:30:00Z"
+                      current_period_end: "2026-05-15T08:30:00Z"
+                      grace_period_ends_at: null
+                      cancel_at_period_end: true
+                      is_admin_override: false
+                      started_at: "2026-04-15T08:30:00Z"
+                      ended_at: null
+                    meta: { cancels_at: "2026-05-15T08:30:00Z" }
+                    errors: []
+        '422':
+          description: Subscription is not cancellable (e.g., already cancelled or already expired)

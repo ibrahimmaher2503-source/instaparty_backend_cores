@@ -1,0 +1,727 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - generic [ref=e3]:
+      - navigation [ref=e5]:
+        - generic [ref=e6]:
+          - generic [ref=e9]:
+            - generic [ref=e10]: Global search
+            - generic [ref=e11]:
+              - img [ref=e13]
+              - searchbox "Global search" [ref=e16]
+          - generic [ref=e21] [cursor=pointer]: EN
+          - button "User menu" [ref=e24] [cursor=pointer]:
+            - img "Avatar of InstaParty Admin" [ref=e25]
+      - main [ref=e26]:
+        - generic [ref=e28]:
+          - generic [ref=e29]:
+            - generic [ref=e30]:
+              - navigation [ref=e31]:
+                - list [ref=e32]:
+                  - listitem [ref=e33]:
+                    - link "Notification Templates" [ref=e34] [cursor=pointer]:
+                      - /url: http://127.0.0.1:8000/admin/notification-templates
+                  - listitem [ref=e35]:
+                    - img [ref=e36]
+                    - generic [ref=e38]: List
+              - heading "Notification Templates" [level=1] [ref=e39]
+            - generic [ref=e41]:
+              - generic [ref=e42]:
+                - generic [ref=e43]: Locale
+                - combobox "Locale" [ref=e46]:
+                  - option "English" [selected]
+                  - option "Arabic"
+              - link "New Notification Template" [ref=e47] [cursor=pointer]:
+                - /url: http://127.0.0.1:8000/admin/notification-templates/create
+                - generic [ref=e48]: New Notification Template
+          - generic [ref=e52]:
+            - generic [ref=e53]:
+              - generic [ref=e56]:
+                - generic [ref=e57]:
+                  - generic [ref=e58]: Search
+                  - generic [ref=e59]:
+                    - img [ref=e61]
+                    - searchbox "Search" [ref=e64]
+                - button "Filter 0" [ref=e67] [cursor=pointer]:
+                  - generic [ref=e68]: Filter
+                  - img [ref=e69]
+                  - generic [ref=e74]: "0"
+                - button "Toggle columns" [ref=e77] [cursor=pointer]:
+                  - generic [ref=e78]: Toggle columns
+                  - img [ref=e79]
+              - table [ref=e82]:
+                - rowgroup [ref=e83]:
+                  - row "Select/deselect all items for bulk actions. Event Key Delivery Channel Target Audience Active Updated at Actions" [ref=e84]:
+                    - columnheader "Select/deselect all items for bulk actions." [ref=e85]:
+                      - generic [ref=e87]:
+                        - checkbox "Select/deselect all items for bulk actions." [ref=e88]
+                        - generic [ref=e89]: Select/deselect all items for bulk actions.
+                    - columnheader "Event Key" [ref=e90]:
+                      - button "Event Key" [ref=e91] [cursor=pointer]:
+                        - generic [ref=e92]: Event Key
+                        - img [ref=e93]
+                    - columnheader "Delivery Channel" [ref=e95]:
+                      - generic [ref=e97]: Delivery Channel
+                    - columnheader "Target Audience" [ref=e98]:
+                      - generic [ref=e100]: Target Audience
+                    - columnheader "Active" [ref=e101]:
+                      - button "Active" [ref=e102] [cursor=pointer]:
+                        - generic [ref=e103]: Active
+                        - img [ref=e104]
+                    - columnheader "Updated at" [ref=e106]:
+                      - button "Updated at" [ref=e107] [cursor=pointer]:
+                        - generic [ref=e108]: Updated at
+                        - img [ref=e109]
+                    - columnheader "Actions" [ref=e111]
+                - rowgroup [ref=e112]:
+                  - row "Select/deselect item 3 for bulk actions. booking.confirmed Push Notification Customer May 4, 2026 00:35:26 Edit Delete" [ref=e113]:
+                    - cell "Select/deselect item 3 for bulk actions." [ref=e114]:
+                      - generic [ref=e116]:
+                        - checkbox "Select/deselect item 3 for bulk actions." [ref=e117]
+                        - generic [ref=e118]: Select/deselect item 3 for bulk actions.
+                    - cell "booking.confirmed" [ref=e119]:
+                      - link "booking.confirmed" [ref=e121] [cursor=pointer]:
+                        - /url: http://127.0.0.1:8000/admin/notification-templates/3/edit
+                        - generic [ref=e126]: booking.confirmed
+                    - cell "Push Notification" [ref=e127]:
+                      - link "Push Notification" [ref=e129] [cursor=pointer]:
+                        - /url: http://127.0.0.1:8000/admin/notification-templates/3/edit
+                        - generic [ref=e135]: Push Notification
+                    - cell "Customer" [ref=e136]:
+                      - link "Customer" [ref=e138] [cursor=pointer]:
+                        - /url: http://127.0.0.1:8000/admin/notification-templates/3/edit
+                        - generic [ref=e144]: Customer
+                    - cell [ref=e145]:
+                      - link [ref=e147] [cursor=pointer]:
+                        - /url: http://127.0.0.1:8000/admin/notification-templates/3/edit
+                        - img [ref=e149]
+                    - cell "May 4, 2026 00:35:26" [ref=e151]:
+                      - link "May 4, 2026 00:35:26" [ref=e153] [cursor=pointer]:
+                        - /url: http://127.0.0.1:8000/admin/notification-templates/3/edit
+                        - generic [ref=e158]: May 4, 2026 00:35:26
+                    - cell "Edit Delete" [ref=e159]:
+                      - generic [ref=e161]:
+                        - link "Edit" [ref=e162] [cursor=pointer]:
+                          - /url: http://127.0.0.1:8000/admin/notification-templates/3/edit
+                          - img [ref=e163]
+                          - generic [ref=e166]: Edit
+                        - button "Delete" [ref=e167] [cursor=pointer]:
+                          - img [ref=e168]
+                          - generic [ref=e170]: Delete
+                  - row "Select/deselect item 2 for bulk actions. booking.submitted Email Vendor May 4, 2026 00:35:26 Edit Delete" [ref=e171]:
+                    - cell "Select/deselect item 2 for bulk actions." [ref=e172]:
+                      - generic [ref=e174]:
+                        - checkbox "Select/deselect item 2 for bulk actions." [ref=e175]
+                        - generic [ref=e176]: Select/deselect item 2 for bulk actions.
+                    - cell "booking.submitted" [ref=e177]:
+                      - link "booking.submitted" [ref=e179] [cursor=pointer]:
+                        - /url: http://127.0.0.1:8000/admin/notification-templates/2/edit
+                        - generic [ref=e184]: booking.submitted
+                    - cell "Email" [ref=e185]:
+                      - link "Email" [ref=e187] [cursor=pointer]:
+                        - /url: http://127.0.0.1:8000/admin/notification-templates/2/edit
+                        - generic [ref=e193]: Email
+                    - cell "Vendor" [ref=e194]:
+                      - link "Vendor" [ref=e196] [cursor=pointer]:
+                        - /url: http://127.0.0.1:8000/admin/notification-templates/2/edit
+                        - generic [ref=e202]: Vendor
+                    - cell [ref=e203]:
+                      - link [ref=e205] [cursor=pointer]:
+                        - /url: http://127.0.0.1:8000/admin/notification-templates/2/edit
+                        - img [ref=e207]
+                    - cell "May 4, 2026 00:35:26" [ref=e209]:
+                      - link "May 4, 2026 00:35:26" [ref=e211] [cursor=pointer]:
+                        - /url: http://127.0.0.1:8000/admin/notification-templates/2/edit
+                        - generic [ref=e216]: May 4, 2026 00:35:26
+                    - cell "Edit Delete" [ref=e217]:
+                      - generic [ref=e219]:
+                        - link "Edit" [ref=e220] [cursor=pointer]:
+                          - /url: http://127.0.0.1:8000/admin/notification-templates/2/edit
+                          - img [ref=e221]
+                          - generic [ref=e224]: Edit
+                        - button "Delete" [ref=e225] [cursor=pointer]:
+                          - img [ref=e226]
+                          - generic [ref=e228]: Delete
+                  - row "Select/deselect item 1 for bulk actions. booking.submitted Push Notification Customer May 4, 2026 00:35:26 Edit Delete" [ref=e229]:
+                    - cell "Select/deselect item 1 for bulk actions." [ref=e230]:
+                      - generic [ref=e232]:
+                        - checkbox "Select/deselect item 1 for bulk actions." [ref=e233]
+                        - generic [ref=e234]: Select/deselect item 1 for bulk actions.
+                    - cell "booking.submitted" [ref=e235]:
+                      - link "booking.submitted" [ref=e237] [cursor=pointer]:
+                        - /url: http://127.0.0.1:8000/admin/notification-templates/1/edit
+                        - generic [ref=e242]: booking.submitted
+                    - cell "Push Notification" [ref=e243]:
+                      - link "Push Notification" [ref=e245] [cursor=pointer]:
+                        - /url: http://127.0.0.1:8000/admin/notification-templates/1/edit
+                        - generic [ref=e251]: Push Notification
+                    - cell "Customer" [ref=e252]:
+                      - link "Customer" [ref=e254] [cursor=pointer]:
+                        - /url: http://127.0.0.1:8000/admin/notification-templates/1/edit
+                        - generic [ref=e260]: Customer
+                    - cell [ref=e261]:
+                      - link [ref=e263] [cursor=pointer]:
+                        - /url: http://127.0.0.1:8000/admin/notification-templates/1/edit
+                        - img [ref=e265]
+                    - cell "May 4, 2026 00:35:26" [ref=e267]:
+                      - link "May 4, 2026 00:35:26" [ref=e269] [cursor=pointer]:
+                        - /url: http://127.0.0.1:8000/admin/notification-templates/1/edit
+                        - generic [ref=e274]: May 4, 2026 00:35:26
+                    - cell "Edit Delete" [ref=e275]:
+                      - generic [ref=e277]:
+                        - link "Edit" [ref=e278] [cursor=pointer]:
+                          - /url: http://127.0.0.1:8000/admin/notification-templates/1/edit
+                          - img [ref=e279]
+                          - generic [ref=e282]: Edit
+                        - button "Delete" [ref=e283] [cursor=pointer]:
+                          - img [ref=e284]
+                          - generic [ref=e286]: Delete
+                  - row "Select/deselect item 5 for bulk actions. digital.delivered Push Notification Customer May 4, 2026 00:35:26 Edit Delete" [ref=e287]:
+                    - cell "Select/deselect item 5 for bulk actions." [ref=e288]:
+                      - generic [ref=e290]:
+                        - checkbox "Select/deselect item 5 for bulk actions." [ref=e291]
+                        - generic [ref=e292]: Select/deselect item 5 for bulk actions.
+                    - cell "digital.delivered" [ref=e293]:
+                      - link "digital.delivered" [ref=e295] [cursor=pointer]:
+                        - /url: http://127.0.0.1:8000/admin/notification-templates/5/edit
+                        - generic [ref=e300]: digital.delivered
+                    - cell "Push Notification" [ref=e301]:
+                      - link "Push Notification" [ref=e303] [cursor=pointer]:
+                        - /url: http://127.0.0.1:8000/admin/notification-templates/5/edit
+                        - generic [ref=e309]: Push Notification
+                    - cell "Customer" [ref=e310]:
+                      - link "Customer" [ref=e312] [cursor=pointer]:
+                        - /url: http://127.0.0.1:8000/admin/notification-templates/5/edit
+                        - generic [ref=e318]: Customer
+                    - cell [ref=e319]:
+                      - link [ref=e321] [cursor=pointer]:
+                        - /url: http://127.0.0.1:8000/admin/notification-templates/5/edit
+                        - img [ref=e323]
+                    - cell "May 4, 2026 00:35:26" [ref=e325]:
+                      - link "May 4, 2026 00:35:26" [ref=e327] [cursor=pointer]:
+                        - /url: http://127.0.0.1:8000/admin/notification-templates/5/edit
+                        - generic [ref=e332]: May 4, 2026 00:35:26
+                    - cell "Edit Delete" [ref=e333]:
+                      - generic [ref=e335]:
+                        - link "Edit" [ref=e336] [cursor=pointer]:
+                          - /url: http://127.0.0.1:8000/admin/notification-templates/5/edit
+                          - img [ref=e337]
+                          - generic [ref=e340]: Edit
+                        - button "Delete" [ref=e341] [cursor=pointer]:
+                          - img [ref=e342]
+                          - generic [ref=e344]: Delete
+                  - row "Select/deselect item 4 for bulk actions. payment.captured Email Customer May 4, 2026 00:35:26 Edit Delete" [ref=e345]:
+                    - cell "Select/deselect item 4 for bulk actions." [ref=e346]:
+                      - generic [ref=e348]:
+                        - checkbox "Select/deselect item 4 for bulk actions." [ref=e349]
+                        - generic [ref=e350]: Select/deselect item 4 for bulk actions.
+                    - cell "payment.captured" [ref=e351]:
+                      - link "payment.captured" [ref=e353] [cursor=pointer]:
+                        - /url: http://127.0.0.1:8000/admin/notification-templates/4/edit
+                        - generic [ref=e358]: payment.captured
+                    - cell "Email" [ref=e359]:
+                      - link "Email" [ref=e361] [cursor=pointer]:
+                        - /url: http://127.0.0.1:8000/admin/notification-templates/4/edit
+                        - generic [ref=e367]: Email
+                    - cell "Customer" [ref=e368]:
+                      - link "Customer" [ref=e370] [cursor=pointer]:
+                        - /url: http://127.0.0.1:8000/admin/notification-templates/4/edit
+                        - generic [ref=e376]: Customer
+                    - cell [ref=e377]:
+                      - link [ref=e379] [cursor=pointer]:
+                        - /url: http://127.0.0.1:8000/admin/notification-templates/4/edit
+                        - img [ref=e381]
+                    - cell "May 4, 2026 00:35:26" [ref=e383]:
+                      - link "May 4, 2026 00:35:26" [ref=e385] [cursor=pointer]:
+                        - /url: http://127.0.0.1:8000/admin/notification-templates/4/edit
+                        - generic [ref=e390]: May 4, 2026 00:35:26
+                    - cell "Edit Delete" [ref=e391]:
+                      - generic [ref=e393]:
+                        - link "Edit" [ref=e394] [cursor=pointer]:
+                          - /url: http://127.0.0.1:8000/admin/notification-templates/4/edit
+                          - img [ref=e395]
+                          - generic [ref=e398]: Edit
+                        - button "Delete" [ref=e399] [cursor=pointer]:
+                          - img [ref=e400]
+                          - generic [ref=e402]: Delete
+                  - row "Select/deselect item 6 for bulk actions. review.requested In-App Customer May 4, 2026 00:35:26 Edit Delete" [ref=e403]:
+                    - cell "Select/deselect item 6 for bulk actions." [ref=e404]:
+                      - generic [ref=e406]:
+                        - checkbox "Select/deselect item 6 for bulk actions." [ref=e407]
+                        - generic [ref=e408]: Select/deselect item 6 for bulk actions.
+                    - cell "review.requested" [ref=e409]:
+                      - link "review.requested" [ref=e411] [cursor=pointer]:
+                        - /url: http://127.0.0.1:8000/admin/notification-templates/6/edit
+                        - generic [ref=e416]: review.requested
+                    - cell "In-App" [ref=e417]:
+                      - link "In-App" [ref=e419] [cursor=pointer]:
+                        - /url: http://127.0.0.1:8000/admin/notification-templates/6/edit
+                        - generic [ref=e425]: In-App
+                    - cell "Customer" [ref=e426]:
+                      - link "Customer" [ref=e428] [cursor=pointer]:
+                        - /url: http://127.0.0.1:8000/admin/notification-templates/6/edit
+                        - generic [ref=e434]: Customer
+                    - cell [ref=e435]:
+                      - link [ref=e437] [cursor=pointer]:
+                        - /url: http://127.0.0.1:8000/admin/notification-templates/6/edit
+                        - img [ref=e439]
+                    - cell "May 4, 2026 00:35:26" [ref=e441]:
+                      - link "May 4, 2026 00:35:26" [ref=e443] [cursor=pointer]:
+                        - /url: http://127.0.0.1:8000/admin/notification-templates/6/edit
+                        - generic [ref=e448]: May 4, 2026 00:35:26
+                    - cell "Edit Delete" [ref=e449]:
+                      - generic [ref=e451]:
+                        - link "Edit" [ref=e452] [cursor=pointer]:
+                          - /url: http://127.0.0.1:8000/admin/notification-templates/6/edit
+                          - img [ref=e453]
+                          - generic [ref=e456]: Edit
+                        - button "Delete" [ref=e457] [cursor=pointer]:
+                          - img [ref=e458]
+                          - generic [ref=e460]: Delete
+              - navigation "Pagination navigation" [ref=e461]:
+                - generic [ref=e462]: Showing 1 to 6 of 6 results
+                - generic [ref=e465]:
+                  - generic [ref=e467]: Per page
+                  - combobox "Per page" [ref=e469]:
+                    - option "5"
+                    - option "10" [selected]
+                    - option "25"
+                    - option "50"
+                    - option "All"
+            - generic:
+              - dialog
+            - generic:
+              - dialog
+            - generic:
+              - dialog
+            - generic:
+              - dialog
+            - generic:
+              - dialog
+    - complementary [ref=e470]:
+      - link "Laravel" [ref=e474] [cursor=pointer]:
+        - /url: http://127.0.0.1:8000/admin
+        - generic [ref=e475]: Laravel
+      - navigation [ref=e476]:
+        - list [ref=e477]:
+          - listitem [ref=e478]:
+            - list [ref=e479]:
+              - listitem [ref=e480]:
+                - link "Dashboard" [ref=e481] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin
+                  - img [ref=e482]
+                  - generic [ref=e484]: Dashboard
+              - listitem [ref=e485]:
+                - link "Activity Logs" [ref=e486] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/activitylogs
+                  - img [ref=e487]
+                  - generic [ref=e489]: Activity Logs
+          - listitem [ref=e490]:
+            - generic [ref=e491] [cursor=pointer]:
+              - generic [ref=e492]: Filament Shield
+              - button "Filament Shield" [expanded] [ref=e493]:
+                - generic [ref=e494]: Filament Shield
+                - img [ref=e495]
+            - list [ref=e497]:
+              - listitem [ref=e498]:
+                - link "Roles 5" [ref=e499] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/shield/roles
+                  - img [ref=e500]
+                  - generic [ref=e502]: Roles
+                  - generic [ref=e506]: "5"
+          - listitem [ref=e507]:
+            - generic [ref=e508] [cursor=pointer]:
+              - generic [ref=e509]: Booking
+              - button "Booking" [expanded] [ref=e510]:
+                - generic [ref=e511]: Booking
+                - img [ref=e512]
+            - list [ref=e514]:
+              - listitem [ref=e515]:
+                - link "Bookings" [ref=e516] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/bookings
+                  - img [ref=e517]
+                  - generic [ref=e519]: Bookings
+              - listitem [ref=e520]:
+                - link "Modifications" [ref=e521] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/booking-modifications
+                  - img [ref=e522]
+                  - generic [ref=e524]: Modifications
+              - listitem [ref=e525]:
+                - link "State Transitions" [ref=e526] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/booking-state-transitions
+                  - img [ref=e527]
+                  - generic [ref=e529]: State Transitions
+              - listitem [ref=e530]:
+                - link "Negotiation Monitor" [ref=e531] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/bookings-monitor
+                  - img [ref=e532]
+                  - generic [ref=e534]: Negotiation Monitor
+          - listitem [ref=e535]:
+            - generic [ref=e536] [cursor=pointer]:
+              - generic [ref=e537]: Communication
+              - button "Communication" [expanded] [ref=e538]:
+                - generic [ref=e539]: Communication
+                - img [ref=e540]
+            - list [ref=e542]:
+              - listitem [ref=e543]:
+                - link "Notification Templates" [ref=e544] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/notification-templates
+                  - img [ref=e545]
+                  - generic [ref=e547]: Notification Templates
+              - listitem [ref=e548]:
+                - link "Campaigns" [ref=e549] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/campaigns
+                  - img [ref=e550]
+                  - generic [ref=e552]: Campaigns
+              - listitem [ref=e553]:
+                - link "Notification Preferences" [ref=e554] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/notification-preferences
+                  - img [ref=e555]
+                  - generic [ref=e557]: Notification Preferences
+              - listitem [ref=e558]:
+                - link "Dispatch Logs" [ref=e559] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/notification-dispatches
+                  - img [ref=e560]
+                  - generic [ref=e562]: Dispatch Logs
+          - listitem [ref=e563]:
+            - generic [ref=e564] [cursor=pointer]:
+              - generic [ref=e565]: Geography
+              - button "Geography" [expanded] [ref=e566]:
+                - generic [ref=e567]: Geography
+                - img [ref=e568]
+            - list [ref=e570]:
+              - listitem [ref=e571]:
+                - link "Countries" [ref=e572] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/countries
+                  - img [ref=e573]
+                  - generic [ref=e575]: Countries
+              - listitem [ref=e576]:
+                - link "Governorates" [ref=e577] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/governorates
+                  - img [ref=e578]
+                  - generic [ref=e580]: Governorates
+              - listitem [ref=e581]:
+                - link "Regions" [ref=e582] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/regions
+                  - img [ref=e583]
+                  - generic [ref=e586]: Regions
+              - listitem [ref=e587]:
+                - link "Cities" [ref=e588] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/cities
+                  - img [ref=e589]
+                  - generic [ref=e591]: Cities
+          - listitem [ref=e592]:
+            - generic [ref=e593] [cursor=pointer]:
+              - generic [ref=e594]: Vendor Management
+              - button "Vendor Management" [expanded] [ref=e595]:
+                - generic [ref=e596]: Vendor Management
+                - img [ref=e597]
+            - list [ref=e599]:
+              - listitem [ref=e600]:
+                - link "All Vendors" [ref=e601] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/vendor-profiles
+                  - img [ref=e602]
+                  - generic [ref=e604]: All Vendors
+          - listitem [ref=e605]:
+            - generic [ref=e606] [cursor=pointer]:
+              - generic [ref=e607]: Settlement
+              - button "Settlement" [expanded] [ref=e608]:
+                - generic [ref=e609]: Settlement
+                - img [ref=e610]
+            - list [ref=e612]:
+              - listitem [ref=e613]:
+                - link "Commission Rules" [ref=e614] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/settlement-commission-rules
+                  - img [ref=e615]
+                  - generic [ref=e617]: Commission Rules
+              - listitem [ref=e618]:
+                - link "Wallet Ledger" [ref=e619] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/settlement-wallets
+                  - img [ref=e620]
+                  - generic [ref=e622]: Wallet Ledger
+              - listitem [ref=e623]:
+                - link "Withdrawal Requests" [ref=e624] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/settlement-withdrawals
+                  - img [ref=e625]
+                  - generic [ref=e627]: Withdrawal Requests
+              - listitem [ref=e628]:
+                - link "Commissions" [ref=e629] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/commissions
+                  - img [ref=e630]
+                  - generic [ref=e632]: Commissions
+              - listitem [ref=e633]:
+                - link "Settlement Runs" [ref=e634] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/settlement-runs
+                  - img [ref=e635]
+                  - generic [ref=e637]: Settlement Runs
+          - listitem [ref=e638]:
+            - generic [ref=e639] [cursor=pointer]:
+              - generic [ref=e640]: Users
+              - button "Users" [expanded] [ref=e641]:
+                - generic [ref=e642]: Users
+                - img [ref=e643]
+            - list [ref=e645]:
+              - listitem [ref=e646]:
+                - link "Customers" [ref=e647] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/customers
+                  - img [ref=e648]
+                  - generic [ref=e650]: Customers
+          - listitem [ref=e651]:
+            - generic [ref=e652] [cursor=pointer]:
+              - generic [ref=e653]: Identity
+              - button "Identity" [expanded] [ref=e654]:
+                - generic [ref=e655]: Identity
+                - img [ref=e656]
+            - list [ref=e658]:
+              - listitem [ref=e659]:
+                - link "Users" [ref=e660] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/users
+                  - img [ref=e661]
+                  - generic [ref=e663]: Users
+              - listitem [ref=e664]:
+                - link "Customer Profiles" [ref=e665] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/customer-profiles
+                  - img [ref=e666]
+                  - generic [ref=e668]: Customer Profiles
+              - listitem [ref=e669]:
+                - link "Customer Addresses" [ref=e670] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/customer-addresses
+                  - img [ref=e671]
+                  - generic [ref=e674]: Customer Addresses
+              - listitem [ref=e675]:
+                - link "User Devices" [ref=e676] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/user-devices
+                  - img [ref=e677]
+                  - generic [ref=e679]: User Devices
+          - listitem [ref=e680]:
+            - generic [ref=e681] [cursor=pointer]:
+              - generic [ref=e682]: Vendor Onboarding
+              - button "Vendor Onboarding" [expanded] [ref=e683]:
+                - generic [ref=e684]: Vendor Onboarding
+                - img [ref=e685]
+            - list [ref=e687]:
+              - listitem [ref=e688]:
+                - link "Approval Queue" [ref=e689] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/vendor-approval-queue
+                  - img [ref=e690]
+                  - generic [ref=e692]: Approval Queue
+              - listitem [ref=e693]:
+                - link "Documents" [ref=e694] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/vendor-document-filaments
+                  - img [ref=e695]
+                  - generic [ref=e697]: Documents
+              - listitem [ref=e698]:
+                - link "Coverage Areas" [ref=e699] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/vendor-coverage-areas
+                  - img [ref=e700]
+                  - generic [ref=e702]: Coverage Areas
+              - listitem [ref=e703]:
+                - link "Business Hours" [ref=e704] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/vendor-business-hours
+                  - img [ref=e705]
+                  - generic [ref=e707]: Business Hours
+              - listitem [ref=e708]:
+                - link "Approved Product Types" [ref=e709] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/vendor-approved-product-types
+                  - img [ref=e710]
+                  - generic [ref=e712]: Approved Product Types
+          - listitem [ref=e713]:
+            - generic [ref=e714] [cursor=pointer]:
+              - generic [ref=e715]: Catalog
+              - button "Catalog" [expanded] [ref=e716]:
+                - generic [ref=e717]: Catalog
+                - img [ref=e718]
+            - list [ref=e720]:
+              - listitem [ref=e721]:
+                - link "Occasions" [ref=e722] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/occasions
+                  - img [ref=e723]
+                  - generic [ref=e725]: Occasions
+              - listitem [ref=e726]:
+                - link "Categories" [ref=e727] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/categories
+                  - img [ref=e728]
+                  - generic [ref=e731]: Categories
+              - listitem [ref=e732]:
+                - link "Category Field Schemas" [ref=e733] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/category-field-schemas
+                  - img [ref=e734]
+                  - generic [ref=e736]: Category Field Schemas
+              - listitem [ref=e737]:
+                - link "Service Themes" [ref=e738] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/service-themes
+                  - img [ref=e739]
+                  - generic [ref=e741]: Service Themes
+          - listitem [ref=e742]:
+            - generic [ref=e743] [cursor=pointer]:
+              - generic [ref=e744]: Services
+              - button "Services" [expanded] [ref=e745]:
+                - generic [ref=e746]: Services
+                - img [ref=e747]
+            - list [ref=e749]:
+              - listitem [ref=e750]:
+                - link "Rental Services" [ref=e751] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/rental-services
+                  - img [ref=e752]
+                  - generic [ref=e754]: Rental Services
+              - listitem [ref=e755]:
+                - link "Sale Services" [ref=e756] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/sale-services
+                  - img [ref=e757]
+                  - generic [ref=e759]: Sale Services
+              - listitem [ref=e760]:
+                - link "Digital Services" [ref=e761] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/digital-services
+                  - img [ref=e762]
+                  - generic [ref=e764]: Digital Services
+              - listitem [ref=e765]:
+                - link "Import Rental Services" [ref=e766] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/import-rental-services-page
+                  - img [ref=e767]
+                  - generic [ref=e769]: Import Rental Services
+              - listitem [ref=e770]:
+                - link "Import Sale Services" [ref=e771] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/import-sale-services-page
+                  - img [ref=e772]
+                  - generic [ref=e774]: Import Sale Services
+              - listitem [ref=e775]:
+                - link "Import Digital Services" [ref=e776] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/import-digital-services-page
+                  - img [ref=e777]
+                  - generic [ref=e779]: Import Digital Services
+              - listitem [ref=e780]:
+                - link "Inventory Reservations" [ref=e781] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/service-inventory-reservations
+                  - img [ref=e782]
+                  - generic [ref=e784]: Inventory Reservations
+              - listitem [ref=e785]:
+                - link "Excel Imports" [ref=e786] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/excel-imports
+                  - img [ref=e787]
+                  - generic [ref=e789]: Excel Imports
+          - listitem [ref=e790]:
+            - generic [ref=e791] [cursor=pointer]:
+              - generic [ref=e792]: Payments
+              - button "Payments" [expanded] [ref=e793]:
+                - generic [ref=e794]: Payments
+                - img [ref=e795]
+            - list [ref=e797]:
+              - listitem [ref=e798]:
+                - link "Payments" [ref=e799] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/payments
+                  - img [ref=e800]
+                  - generic [ref=e802]: Payments
+              - listitem [ref=e803]:
+                - link "Payment Attempts" [ref=e804] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/payment-attempts
+                  - img [ref=e805]
+                  - generic [ref=e807]: Payment Attempts
+              - listitem [ref=e808]:
+                - link "Refunds" [ref=e809] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/refunds
+                  - img [ref=e810]
+                  - generic [ref=e812]: Refunds
+              - listitem [ref=e813]:
+                - link "Webhook Logs" [ref=e814] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/gateway-webhook-logs
+                  - img [ref=e815]
+                  - generic [ref=e817]: Webhook Logs
+              - listitem [ref=e818]:
+                - link "Idempotency Keys" [ref=e819] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/idempotency-keys
+                  - img [ref=e820]
+                  - generic [ref=e822]: Idempotency Keys
+          - listitem [ref=e823]:
+            - generic [ref=e824] [cursor=pointer]:
+              - generic [ref=e825]: Loyalty
+              - button "Loyalty" [expanded] [ref=e826]:
+                - generic [ref=e827]: Loyalty
+                - img [ref=e828]
+            - list [ref=e830]:
+              - listitem [ref=e831]:
+                - link "Loyalty Rules" [ref=e832] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/loyalty-rules
+                  - img [ref=e833]
+                  - generic [ref=e835]: Loyalty Rules
+              - listitem [ref=e836]:
+                - link "Point Redemptions" [ref=e837] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/loyalty-redemptions
+                  - img [ref=e838]
+                  - generic [ref=e840]: Point Redemptions
+              - listitem [ref=e841]:
+                - link "Points Ledger" [ref=e842] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/loyalty-ledgers
+                  - img [ref=e843]
+                  - generic [ref=e845]: Points Ledger
+              - listitem [ref=e846]:
+                - link "Loyalty Programs" [ref=e847] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/loyalty-programs
+                  - img [ref=e848]
+                  - generic [ref=e850]: Loyalty Programs
+          - listitem [ref=e851]:
+            - generic [ref=e852] [cursor=pointer]:
+              - generic [ref=e853]: Discovery
+              - button "Discovery" [expanded] [ref=e854]:
+                - generic [ref=e855]: Discovery
+                - img [ref=e856]
+            - list [ref=e858]:
+              - listitem [ref=e859]:
+                - link "Saved Searches" [ref=e860] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/saved-searches
+                  - img [ref=e861]
+                  - generic [ref=e863]: Saved Searches
+              - listitem [ref=e864]:
+                - link "Search Logs" [ref=e865] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/search-logs
+                  - img [ref=e866]
+                  - generic [ref=e868]: Search Logs
+              - listitem [ref=e869]:
+                - link "Wishlists" [ref=e870] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/wishlists
+                  - img [ref=e871]
+                  - generic [ref=e873]: Wishlists
+          - listitem [ref=e874]:
+            - generic [ref=e875] [cursor=pointer]:
+              - generic [ref=e876]: Moderation
+              - button "Moderation" [expanded] [ref=e877]:
+                - generic [ref=e878]: Moderation
+                - img [ref=e879]
+            - list [ref=e881]:
+              - listitem [ref=e882]:
+                - link "Review Moderation" [ref=e883] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/review-moderation-page
+                  - img [ref=e884]
+                  - generic [ref=e886]: Review Moderation
+              - listitem [ref=e887]:
+                - link "Service Reviews" [ref=e888] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/service-reviews
+                  - img [ref=e889]
+                  - generic [ref=e891]: Service Reviews
+              - listitem [ref=e892]:
+                - link "Vendor Reviews" [ref=e893] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/vendor-reviews
+                  - img [ref=e894]
+                  - generic [ref=e896]: Vendor Reviews
+              - listitem [ref=e897]:
+                - link "Moderation Logs" [ref=e898] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/review-moderation-logs
+                  - img [ref=e899]
+                  - generic [ref=e901]: Moderation Logs
+          - listitem [ref=e902]:
+            - generic [ref=e903] [cursor=pointer]:
+              - generic [ref=e904]: Settings
+              - button "Settings" [expanded] [ref=e905]:
+                - generic [ref=e906]: Settings
+                - img [ref=e907]
+            - list [ref=e909]:
+              - listitem [ref=e910]:
+                - link "CMS Pages" [ref=e911] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/cms-pages
+                  - img [ref=e912]
+                  - generic [ref=e914]: CMS Pages
+              - listitem [ref=e915]:
+                - link "App Settings" [ref=e916] [cursor=pointer]:
+                  - /url: http://127.0.0.1:8000/admin/manage-settings
+                  - img [ref=e917]
+                  - generic [ref=e920]: App Settings
+  - generic:
+    - status

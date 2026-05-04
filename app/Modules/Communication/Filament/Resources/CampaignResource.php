@@ -33,11 +33,27 @@ class CampaignResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-megaphone';
 
-    protected static ?string $navigationGroup = 'Communications';
-
-    protected static ?string $navigationLabel = 'Campaigns';
+    public static function getNavigationGroup(): ?string
+    {
+        return __('admin.nav.groups.communication');
+    }
 
     protected static ?int $navigationSort = 10;
+
+    public static function getNavigationLabel(): string
+    {
+        return __('communication.nav.campaigns');
+    }
+
+    public static function getModelLabel(): string
+    {
+        return __('communication.models.campaign.singular');
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('communication.models.campaign.plural');
+    }
 
     public static function form(Form $form): Form
     {
@@ -79,7 +95,7 @@ class CampaignResource extends Resource
                                 ->rows(4)
                                 ->helperText('Available variables: {{first_name}}, {{preferred_locale}}, {{governorate_name_localized}}'),
                         ]),
-                    Tabs\Tab::make('العربية')
+                    Tabs\Tab::make('Ø§Ù„Ø¹Ø±Ø¨ÙŠØ©')
                         ->schema([
                             TextInput::make('subject.ar')
                                 ->label('Subject (AR)')

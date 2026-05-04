@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Modules\Booking\Domain\Models;
 
+use App\Modules\Booking\Database\Factories\BookingFactory;
 use App\Modules\Booking\Domain\Enums\FulfillmentStatus;
 use App\Modules\Booking\Domain\Enums\LifecycleStatus;
 use App\Modules\Booking\Domain\Enums\PaymentStatus;
@@ -13,6 +14,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -80,6 +82,21 @@ class Booking extends Model
         'total' => MoneyCast::class.':total',
         'amount_paid' => MoneyCast::class.':amount_paid',
     ];
+
+    protected static function newFactory(): BookingFactory
+    {
+        return BookingFactory::new();
+    }
+
+    public function customer(): BelongsTo
+    {
+        return $this->belongsTo(\App\Modules\Identity\Domain\Models\User::class, 'customer_id');
+    }
+
+    public function occasion(): BelongsTo
+    {
+        return $this->belongsTo(\App\Modules\Catalog\Domain\Models\Occasion::class, 'occasion_id');
+    }
 
     public function address(): HasOne
     {

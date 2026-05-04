@@ -4,16 +4,20 @@ declare(strict_types=1);
 
 namespace App\Modules\Reviews\Domain\Models;
 
+use App\Modules\Identity\Domain\Models\User;
+use App\Modules\Reviews\Database\Factories\ServiceReviewFactory;
 use App\Modules\Reviews\Domain\Enums\ModerationStatus;
 use App\Modules\Reviews\Domain\Enums\ReviewLocale;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ServiceReview extends Model
 {
-    use HasUlids, SoftDeletes;
+    /** @use HasFactory<ServiceReviewFactory> */
+    use HasFactory, HasUlids, SoftDeletes;
 
     protected $table = 'service_reviews';
 
@@ -33,10 +37,10 @@ class ServiceReview extends Model
     protected function casts(): array
     {
         return [
-            'rating'            => 'integer',
-            'locale'            => ReviewLocale::class,
+            'rating' => 'integer',
+            'locale' => ReviewLocale::class,
             'moderation_status' => ModerationStatus::class,
-            'moderated_at'      => 'datetime',
+            'moderated_at' => 'datetime',
         ];
     }
 
@@ -45,14 +49,19 @@ class ServiceReview extends Model
         return ['public_id'];
     }
 
+    protected static function newFactory(): ServiceReviewFactory
+    {
+        return ServiceReviewFactory::new();
+    }
+
     public function reviewer(): BelongsTo
     {
-        return $this->belongsTo(\App\Modules\Identity\Domain\Models\User::class, 'user_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     public function moderator(): BelongsTo
     {
-        return $this->belongsTo(\App\Modules\Identity\Domain\Models\User::class, 'moderated_by');
+        return $this->belongsTo(User::class, 'moderated_by');
     }
 
     public function scopeApproved($query)

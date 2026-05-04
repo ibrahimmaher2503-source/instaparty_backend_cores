@@ -23,6 +23,7 @@ class Wallet extends Model
 {
     /** @use HasFactory<WalletFactory> */
     use HasFactory;
+
     use HasPublicId;
 
     protected $fillable = [

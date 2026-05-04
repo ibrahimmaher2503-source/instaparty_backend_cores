@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Modules\Catalog\Database\Factories;
 
+use App\Modules\Catalog\Domain\Models\Service;
 use App\Modules\Catalog\Domain\Models\ServiceDigitalDetail;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -17,6 +18,7 @@ class ServiceDigitalDetailFactory extends Factory
     public function definition(): array
     {
         return [
+            'service_id' => Service::factory()->digital(),
             'delivery_method' => $this->faker->randomElement(['email', 'sms', 'whatsapp', 'link']),
             'has_expiry' => $this->faker->boolean(),
             'expiry_days_after_purchase' => $this->faker->numberBetween(7, 365),

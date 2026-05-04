@@ -13,15 +13,15 @@ class EloquentLoyaltyRedemptionRepository implements LoyaltyRedemptionRepository
     public function create(RedemptionRequest $request): LoyaltyRedemption
     {
         return LoyaltyRedemption::create([
-            'customer_id'        => $request->customerId,
-            'vendor_profile_id'  => $request->vendorProfileId,
+            'customer_id' => $request->customerId,
+            'vendor_profile_id' => $request->vendorProfileId,
             'loyalty_program_id' => $request->programId,
-            'loyalty_rule_id'    => $request->ruleId,
-            'booking_id'         => $request->bookingId,
-            'points_held'        => $request->pointsToRedeem,
-            'discount_minor'     => $request->discountMinor,
-            'discount_currency'  => $request->discountCurrency,
-            'status'             => 'pending',
+            'loyalty_rule_id' => $request->ruleId,
+            'booking_id' => $request->bookingId,
+            'points_held' => $request->pointsToRedeem,
+            'discount_minor' => $request->discountMinor,
+            'discount_currency' => $request->discountCurrency,
+            'status' => 'pending',
         ]);
     }
 
@@ -49,14 +49,15 @@ class EloquentLoyaltyRedemptionRepository implements LoyaltyRedemptionRepository
     {
         $redemption->status->transitionTo($state);
         $tsColumn = match ($state) {
-            'applied'  => 'applied_at',
-            'voided'   => 'voided_at',
+            'applied' => 'applied_at',
+            'voided' => 'voided_at',
             'reversed' => 'reversed_at',
-            default    => null,
+            default => null,
         };
         if ($tsColumn) {
             $redemption->update([$tsColumn => now()]);
         }
+
         return $redemption->fresh();
     }
 }

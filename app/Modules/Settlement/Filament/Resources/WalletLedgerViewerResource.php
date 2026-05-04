@@ -19,15 +19,33 @@ class WalletLedgerViewerResource extends Resource
 {
     protected static ?string $model = Wallet::class;
 
-    protected static ?string $navigationGroup = 'Settlement';
+    public static function getNavigationGroup(): ?string
+    {
+        return __('admin.nav.groups.settlement');
+    }
 
     protected static ?string $navigationIcon = 'heroicon-o-book-open';
-
-    protected static ?string $navigationLabel = 'Wallet Ledger';
 
     protected static ?string $recordTitleAttribute = 'public_id';
 
     protected static ?string $slug = 'settlement-wallets';
+
+    protected static ?int $navigationSort = 20;
+
+    public static function getNavigationLabel(): string
+    {
+        return __('settlement.nav.wallet_ledger');
+    }
+
+    public static function getModelLabel(): string
+    {
+        return __('settlement.models.wallet.singular');
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('settlement.models.wallet.plural');
+    }
 
     public static function canCreate(): bool
     {

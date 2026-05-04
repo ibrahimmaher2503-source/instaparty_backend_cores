@@ -7,36 +7,36 @@ namespace App\Modules\Reviews\Filament\Pages;
 use App\Modules\Reviews\Application\Actions\ModerateReviewAction;
 use App\Modules\Reviews\Application\DTOs\ModerateReviewData;
 use App\Modules\Reviews\Domain\Enums\ModerationStatus;
-use App\Modules\Reviews\Domain\Enums\ReviewType;
 use App\Modules\Reviews\Domain\Models\ServiceReview;
-use App\Modules\Reviews\Domain\Models\VendorReview;
-use Filament\Actions\Action;
-use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 use Filament\Tables\Actions\Action as TableAction;
 use Filament\Tables\Actions\BulkAction;
-use Filament\Tables\Columns\BadgeColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 
 class ReviewModerationPage extends Page implements HasTable
 {
     use InteractsWithTable;
 
-    protected static ?string $navigationGroup = 'Moderation';
-
-    protected static ?string $navigationLabel = 'Review Moderation';
+    public static function getNavigationGroup(): ?string
+    {
+        return __('admin.nav.groups.moderation');
+    }
 
     protected static ?string $navigationIcon = 'heroicon-o-shield-check';
 
     protected static ?int $navigationSort = 1;
+
+    public static function getNavigationLabel(): string
+    {
+        return __('reviews.nav.review_moderation');
+    }
 
     protected static string $view = 'reviews::filament.pages.review-moderation';
 
@@ -77,15 +77,15 @@ class ReviewModerationPage extends Page implements HasTable
                     ->label(__('reviews.labels.moderation_status'))
                     ->badge()
                     ->color(fn (ModerationStatus $state): string => match ($state) {
-                        ModerationStatus::Pending  => 'warning',
+                        ModerationStatus::Pending => 'warning',
                         ModerationStatus::Approved => 'success',
                         ModerationStatus::Rejected => 'danger',
-                        ModerationStatus::Hidden   => 'gray',
+                        ModerationStatus::Hidden => 'gray',
                     }),
 
                 TextColumn::make('reviewer.name')
                     ->label(__('reviews.labels.reviewer'))
-                    ->default('—'),
+                    ->default('â€”'),
 
                 TextColumn::make('created_at')
                     ->label('Submitted At')
@@ -181,7 +181,7 @@ class ReviewModerationPage extends Page implements HasTable
                                 );
                             }
                         }
-                        Notification::make()->title('Selected reviews approved.')->success()->send();
+                        Notification::make()->title(__('reviews.notifications.bulk_approved_title'))->success()->send();
                     }),
             ])
             ->defaultSort('created_at', 'desc');

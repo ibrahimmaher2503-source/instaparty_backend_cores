@@ -8,14 +8,19 @@ use App\Modules\Geography\Domain\Models\City;
 use App\Modules\Geography\Domain\Models\Country;
 use App\Modules\Geography\Domain\Models\Governorate;
 use App\Modules\Geography\Domain\Models\Region;
+use App\Modules\Shared\Database\Seeders\Concerns\SeedsDevelopmentData;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class EgyptGeographySeeder extends Seeder
 {
+    use SeedsDevelopmentData;
+
     public function run(): void
     {
+        fake()->seed(2026050301);
+
         DB::transaction(function (): void {
             $egypt = $this->seedCountry();
 
@@ -33,25 +38,22 @@ class EgyptGeographySeeder extends Seeder
 
     private function seedCountry(): Country
     {
-        $country = Country::firstOrNew(['iso2' => 'EG']);
-
-        if (! $country->exists) {
-            $country->public_id = (string) Str::ulid();
-        }
-
-        $country->fill([
-            'name' => ['en' => 'Egypt', 'ar' => 'مصر'],
-            'iso2' => 'EG',
-            'iso3' => 'EGY',
-            'default_currency' => 'EGP',
-            'default_locale' => 'ar',
-            'default_timezone' => 'Africa/Cairo',
-            'phone_code' => '+20',
-            'is_active' => true,
-            'sort_order' => 1,
-        ]);
-
-        $country->save();
+        /** @var Country $country */
+        $country = $this->updateOrCreateFactoryModel(
+            Country::factory()->make([
+                'public_id' => $this->stablePublicId('country:EG'),
+                'name' => ['en' => 'Egypt', 'ar' => 'مصر'],
+                'iso2' => 'EG',
+                'iso3' => 'EGY',
+                'default_currency' => 'EGP',
+                'default_locale' => 'ar',
+                'default_timezone' => 'Africa/Cairo',
+                'phone_code' => '+20',
+                'is_active' => true,
+                'sort_order' => 1,
+            ]),
+            ['iso2' => 'EG'],
+        );
 
         return $country;
     }
@@ -62,60 +64,76 @@ class EgyptGeographySeeder extends Seeder
      */
     private function seedGovernorate(Country $country, string $code, array $name, int $sortOrder, array $regions): void
     {
-        $governorate = Governorate::firstOrNew(['code' => $code]);
-
-        if (! $governorate->exists) {
-            $governorate->public_id = (string) Str::ulid();
-        }
-
-        $governorate->fill([
-            'country_id' => $country->id,
-            'name' => $name,
-            'code' => $code,
-            'is_active' => true,
-            'sort_order' => $sortOrder,
-        ]);
-
-        $governorate->save();
+        /** @var Governorate $governorate */
+        $governorate = $this->updateOrCreateFactoryModel(
+            Governorate::factory()->make([
+                'public_id' => $this->stablePublicId('governorate:'.$code),
+                'country_id' => $country->id,
+                'name' => $name,
+                'code' => $code,
+                'is_active' => true,
+                'sort_order' => $sortOrder,
+            ]),
+            ['code' => $code],
+        );
 
         foreach ($regions as $regionSort => $regionData) {
-            $region = Region::query()
+            $existingRegion = Region::query()
                 ->where('governorate_id', $governorate->id)
                 ->where('name->en', $regionData['en'])
-                ->first() ?? new Region;
+                ->first();
+            $stableRegionPublicId = $this->stablePublicId('region:'.$code.':'.$regionData['en']);
 
-            if (! $region->exists) {
-                $region->public_id = (string) Str::ulid();
+            if ($existingRegion !== null && ! Str::isUlid((string) $existingRegion->public_id)) {
+                $existingRegion->forceFill(['public_id' => $stableRegionPublicId])->save();
+                $existingRegion->refresh();
             }
 
-            $region->fill([
-                'governorate_id' => $governorate->id,
-                'name' => ['en' => $regionData['en'], 'ar' => $regionData['ar']],
-                'is_active' => true,
-                'sort_order' => $regionSort + 1,
-            ]);
+            $regionPublicId = $existingRegion !== null
+                ? $existingRegion->public_id
+                : $stableRegionPublicId;
 
-            $region->save();
+            /** @var Region $region */
+            $region = $this->updateOrCreateFactoryModel(
+                Region::factory()->make([
+                    'public_id' => $regionPublicId,
+                    'governorate_id' => $governorate->id,
+                    'name' => ['en' => $regionData['en'], 'ar' => $regionData['ar']],
+                    'is_active' => true,
+                    'sort_order' => $regionSort + 1,
+                ]),
+                ['public_id' => $regionPublicId],
+            );
 
             foreach ($regionData['cities'] as $citySort => $cityData) {
-                $city = City::query()
+                $existingCity = City::query()
                     ->where('region_id', $region->id)
                     ->where('name->en', $cityData['en'])
-                    ->first() ?? new City;
+                    ->first();
+                $stableCityPublicId = $this->stablePublicId('city:'.$code.':'.$regionData['en'].':'.$cityData['en']);
 
-                if (! $city->exists) {
-                    $city->public_id = (string) Str::ulid();
+                if ($existingCity !== null && ! Str::isUlid((string) $existingCity->public_id)) {
+                    $existingCity->forceFill(['public_id' => $stableCityPublicId])->save();
+                    $existingCity->refresh();
                 }
 
-                $city->fill([
-                    'region_id' => $region->id,
-                    'governorate_id' => $governorate->id,
-                    'name' => ['en' => $cityData['en'], 'ar' => $cityData['ar']],
-                    'is_active' => true,
-                    'sort_order' => $citySort + 1,
-                ]);
+                $cityPublicId = $existingCity !== null
+                    ? $existingCity->public_id
+                    : $stableCityPublicId;
 
-                $city->save();
+                $this->updateOrCreateFactoryModel(
+                    City::factory()->make([
+                        'public_id' => $cityPublicId,
+                        'region_id' => $region->id,
+                        'governorate_id' => $governorate->id,
+                        'name' => ['en' => $cityData['en'], 'ar' => $cityData['ar']],
+                        'latitude' => null,
+                        'longitude' => null,
+                        'is_active' => true,
+                        'sort_order' => $citySort + 1,
+                    ]),
+                    ['public_id' => $cityPublicId],
+                );
             }
         }
     }

@@ -26,7 +26,7 @@ class ListVendorReviewsController
 
         $result = $this->repo->listApprovedForVendor((int) $vendorProfileId, [
             'cursor' => $request->query('cursor'),
-            'limit'  => 15,
+            'limit' => 15,
         ]);
 
         return response()->json([

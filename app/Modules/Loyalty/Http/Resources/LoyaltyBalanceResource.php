@@ -35,10 +35,10 @@ class LoyaltyBalanceResource extends JsonResource
 
         return [
             'vendor_public_id' => $this->resource['vendor_public_id'],
-            'vendor_name'      => $this->resource['vendor_name'][$locale] ?? $this->resource['vendor_name']['en'] ?? null,
+            'vendor_name' => $this->resource['vendor_name'][$locale] ?? $this->resource['vendor_name']['en'] ?? null,
             'available_points' => $this->resource['available_points'],
-            'held_points'      => $this->resource['held_points'],
-            'total_points'     => $this->resource['total_points'],
+            'held_points' => $this->resource['held_points'],
+            'total_points' => $this->resource['total_points'],
         ];
     }
 }

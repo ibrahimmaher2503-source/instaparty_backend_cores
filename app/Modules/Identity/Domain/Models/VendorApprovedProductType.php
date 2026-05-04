@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Modules\Identity\Domain\Models;
 
 use App\Modules\Catalog\Domain\Enums\ProductType;
+use Database\Factories\VendorApprovedProductTypeFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -27,6 +28,7 @@ use Illuminate\Support\Carbon;
  */
 class VendorApprovedProductType extends Model
 {
+    /** @use HasFactory<VendorApprovedProductTypeFactory> */
     use HasFactory;
 
     protected $fillable = [
@@ -42,6 +44,11 @@ class VendorApprovedProductType extends Model
     public function vendorProfile(): BelongsTo
     {
         return $this->belongsTo(VendorProfile::class);
+    }
+
+    protected static function newFactory(): VendorApprovedProductTypeFactory
+    {
+        return VendorApprovedProductTypeFactory::new();
     }
 
     public function scopeActive(Builder $query): Builder

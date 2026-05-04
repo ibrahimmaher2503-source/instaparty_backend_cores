@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Modules\Catalog\Database\Factories;
 
+use App\Modules\Catalog\Domain\Models\Service;
 use App\Modules\Catalog\Domain\Models\ServiceRentalDetail;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -17,6 +18,7 @@ class ServiceRentalDetailFactory extends Factory
     public function definition(): array
     {
         return [
+            'service_id' => Service::factory()->rental(),
             'requires_electricity' => $this->faker->boolean(),
             'requires_outdoor_space' => $this->faker->boolean(),
             'default_rental_duration_hours' => $this->faker->numberBetween(2, 8),

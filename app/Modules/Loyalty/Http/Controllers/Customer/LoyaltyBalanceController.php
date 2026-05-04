@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Modules\Loyalty\Http\Controllers\Customer;
 
 use App\Modules\Loyalty\Domain\Contracts\LoyaltyProgramRepository;
+use App\Modules\Loyalty\Domain\Models\LoyaltyLedgerEntry;
 use App\Modules\Loyalty\Domain\Services\BalanceCalculator;
 use App\Modules\Loyalty\Http\Resources\LoyaltyBalanceResource;
 use Illuminate\Http\JsonResponse;
@@ -25,17 +26,17 @@ class LoyaltyBalanceController
         $customerId = auth()->id();
         $vendorProfileId = $program->vendor_profile_id;
         $available = $this->balance->availableFor($customerId, $vendorProfileId);
-        $total = \App\Modules\Loyalty\Domain\Models\LoyaltyLedgerEntry::where('customer_id', $customerId)
+        $total = LoyaltyLedgerEntry::where('customer_id', $customerId)
             ->where('vendor_profile_id', $vendorProfileId)
             ->sum('points');
         $held = $total - $available;
 
         return (new LoyaltyBalanceResource([
             'vendor_public_id' => $program->public_id,
-            'vendor_name'      => $program->name,
+            'vendor_name' => $program->name,
             'available_points' => $available,
-            'held_points'      => max(0, $held),
-            'total_points'     => max(0, $total),
+            'held_points' => max(0, $held),
+            'total_points' => max(0, $total),
         ]))->response();
     }
 }

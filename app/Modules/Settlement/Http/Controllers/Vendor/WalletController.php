@@ -28,6 +28,13 @@ class WalletController extends Controller
         return ApiResponse::success(new WalletResource($data));
     }
 
+    /**
+     * @queryParam per_page int Number of entries per page (cursor pagination). Example: 25
+     * @queryParam cursor string Opaque cursor for the next/previous page. Example: eyJpZCI6MTB9
+     * @queryParam entry_type string Filter by ledger entry type (commission_credit, refund_debit, withdrawal_debit). Example: commission_credit
+     * @queryParam from string Filter entries on or after this date (Y-m-d). Example: 2026-01-01
+     * @queryParam to string Filter entries on or before this date (Y-m-d). Example: 2026-12-31
+     */
     public function ledger(Request $request): JsonResponse
     {
         $vendorProfileId = $this->vendorProfileIdForUser($request->user());

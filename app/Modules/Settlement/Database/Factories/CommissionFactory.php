@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace App\Modules\Settlement\Database\Factories;
 
+use App\Modules\Booking\Domain\Models\BookingItem;
 use App\Modules\Catalog\Domain\Enums\ProductType;
+use App\Modules\Identity\Domain\Models\VendorProfile;
+use App\Modules\Payments\Domain\Models\Payment;
 use App\Modules\Settlement\Domain\Enums\CommissionStatus;
 use App\Modules\Settlement\Domain\Models\Commission;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -26,9 +29,9 @@ class CommissionFactory extends Factory
 
         return [
             'public_id' => (string) Str::ulid(),
-            'booking_item_id' => 1, // overridden in tests
-            'payment_id' => 1, // overridden in tests
-            'vendor_profile_id' => 1, // overridden in tests
+            'booking_item_id' => BookingItem::factory(),
+            'payment_id' => Payment::factory(),
+            'vendor_profile_id' => VendorProfile::factory()->approved(),
             'category_id' => null,
             'product_type' => ProductType::Rental,
             'gross_amount_minor' => $grossMinor,

@@ -6,7 +6,7 @@ use App\Modules\Loyalty\Domain\Models\LoyaltyLedgerEntry;
 
 it('loyalty ledger model registers updating and deleting guards in booted', function (): void {
     // Instantiate to trigger booted()
-    new LoyaltyLedgerEntry();
+    new LoyaltyLedgerEntry;
 
     $dispatcher = LoyaltyLedgerEntry::getEventDispatcher();
     $class = LoyaltyLedgerEntry::class;
@@ -19,6 +19,6 @@ it('loyalty ledger model registers updating and deleting guards in booted', func
 })->group('architecture', 'loyalty');
 
 it('loyalty ledger model has no updated_at', function (): void {
-    $entry = new LoyaltyLedgerEntry();
+    $entry = new LoyaltyLedgerEntry;
     expect($entry::UPDATED_AT)->toBeNull();
 })->group('architecture', 'loyalty');

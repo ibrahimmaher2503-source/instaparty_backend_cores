@@ -26,12 +26,12 @@ class PublicVendorReviewResource extends JsonResource
         }
 
         return [
-            'public_id'           => $this->public_id,
-            'rating'              => $this->rating,
-            'body'                => $this->body,
-            'locale'              => $this->locale,
+            'public_id' => $this->public_id,
+            'rating' => $this->rating,
+            'body' => $this->body,
+            'locale' => $this->locale,
             'reviewer_first_name' => $firstName,
-            'created_at'          => $this->created_at?->toISOString(),
+            'created_at' => $this->created_at?->toISOString(),
         ];
     }
 }

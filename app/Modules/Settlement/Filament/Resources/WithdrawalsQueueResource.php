@@ -23,15 +23,33 @@ class WithdrawalsQueueResource extends Resource
 {
     protected static ?string $model = Withdrawal::class;
 
-    protected static ?string $navigationGroup = 'Settlement';
+    public static function getNavigationGroup(): ?string
+    {
+        return __('admin.nav.groups.settlement');
+    }
 
     protected static ?string $navigationIcon = 'heroicon-o-banknotes';
 
     protected static ?string $recordTitleAttribute = 'public_id';
 
-    protected static ?string $navigationLabel = 'Withdrawals Queue';
-
     protected static ?string $slug = 'settlement-withdrawals';
+
+    protected static ?int $navigationSort = 30;
+
+    public static function getNavigationLabel(): string
+    {
+        return __('settlement.nav.withdrawals_queue');
+    }
+
+    public static function getModelLabel(): string
+    {
+        return __('settlement.models.withdrawal.singular');
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('settlement.models.withdrawal.plural');
+    }
 
     public static function getEloquentQuery(): Builder
     {
@@ -52,7 +70,7 @@ class WithdrawalsQueueResource extends Resource
                 Tables\Columns\TextColumn::make('vendorProfile.business_name')
                     ->label('Vendor')
                     ->searchable()
-                    ->default('—'),
+                    ->default('â€”'),
 
                 Tables\Columns\TextColumn::make('requested_amount_minor')
                     ->money('EGP', divideBy: 100)

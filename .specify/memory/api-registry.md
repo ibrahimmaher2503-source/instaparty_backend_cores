@@ -43,6 +43,9 @@ If a row needs more nuance than the table can carry (multi-step flows, idempoten
 | PUT | /api/v1/customer/notification-preferences/{channel}/{event_category} | Communication | 5.0 | sanctum-token | customer | UpdateNotificationPreferenceRequest | ApiResponse{data: NotificationPreferenceResource, meta, errors} | ✅ postman |
 | GET | /api/v1/vendor/notification-preferences | Communication | 5.0 | sanctum-token | vendor | — | ApiResponse{data: NotificationPreferenceResource[], meta, errors} | ✅ postman |
 | PUT | /api/v1/vendor/notification-preferences/{channel}/{event_category} | Communication | 5.0 | sanctum-token | vendor | UpdateNotificationPreferenceRequest | ApiResponse{data: NotificationPreferenceResource, meta, errors} | ✅ postman |
+| POST | /api/v1/vendor/services/sale/import | Catalog | 6.1 | sanctum-token | vendor (sale-approved) | ImportSaleServicesRequest {store_id, file} | ApiResponse{data: {status, imported_rows, total_rows} \| {status, imported_rows, total_rows, errors[]}, meta, errors} | 📝 partial |
+| POST | /api/v1/vendor/services/digital/import | Catalog | 6.1 | sanctum-token | vendor (digital-approved) | ImportDigitalServicesRequest {store_id, file} | ApiResponse{data: {status, imported_rows, total_rows} \| {status, imported_rows, total_rows, errors[]}, meta, errors} | 📝 partial |
+| GET | /api/v1/cms/pages/{slug} | Shared | 6.2 | none | — | — (slug: terms\|privacy\|about\|contact) | ApiResponse{data: CmsPageResource (slug, title, body, meta_description, published_at), meta, errors} | 📝 partial |
 
 ---
 

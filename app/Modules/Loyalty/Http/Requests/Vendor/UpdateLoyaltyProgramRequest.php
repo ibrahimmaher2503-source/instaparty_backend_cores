@@ -25,13 +25,13 @@ class UpdateLoyaltyProgramRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name'            => ['sometimes', 'array'],
-            'name.en'         => ['sometimes', 'string', 'max:150'],
-            'name.ar'         => ['sometimes', 'string', 'max:150'],
-            'terms'           => ['nullable', 'array'],
-            'terms.en'        => ['nullable', 'string', 'max:2000'],
-            'terms.ar'        => ['nullable', 'string', 'max:2000'],
-            'status'          => ['sometimes', Rule::in(['active', 'paused', 'archived'])],
+            'name' => ['sometimes', 'array'],
+            'name.en' => ['sometimes', 'string', 'max:150'],
+            'name.ar' => ['sometimes', 'string', 'max:150'],
+            'terms' => ['nullable', 'array'],
+            'terms.en' => ['nullable', 'string', 'max:2000'],
+            'terms.ar' => ['nullable', 'string', 'max:2000'],
+            'status' => ['sometimes', Rule::in(['active', 'paused', 'archived'])],
             'expiration_days' => ['nullable', 'integer', 'min:1', 'max:3650'],
         ];
     }

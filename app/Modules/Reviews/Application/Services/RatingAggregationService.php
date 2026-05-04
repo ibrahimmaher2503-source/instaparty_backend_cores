@@ -22,7 +22,7 @@ class RatingAggregationService
 
         return [
             'average' => round((float) ($result->average ?? 0), 2),
-            'count'   => (int) ($result->count ?? 0),
+            'count' => (int) ($result->count ?? 0),
         ];
     }
 }

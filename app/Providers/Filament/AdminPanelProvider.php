@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Providers\Filament;
 
-use App\Modules\Catalog\Filament\Pages\ImportRentalServicesPage;
-use App\Modules\Reviews\Filament\Pages\ReviewModerationPage;
 use BezhanSalleh\FilamentLanguageSwitch\LanguageSwitch;
 use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
 use Filament\Http\Middleware\Authenticate;
@@ -16,6 +14,7 @@ use Filament\Navigation\NavigationGroup;
 use Filament\Pages;
 use Filament\Panel;
 use Filament\PanelProvider;
+use Filament\SpatieLaravelTranslatablePlugin;
 use Filament\Support\Colors\Color;
 use Filament\Widgets;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
@@ -47,33 +46,70 @@ class AdminPanelProvider extends PanelProvider
             ->colors([
                 'primary' => Color::Amber,
             ])
-            ->discoverResources(in: app_path('Modules'), for: 'App\\Modules')
+            ->discoverResources(in: app_path('Modules/Booking/Filament/Resources'), for: 'App\\Modules\\Booking\\Filament\\Resources')
+            ->discoverResources(in: app_path('Modules/Catalog/Filament/Resources'), for: 'App\\Modules\\Catalog\\Filament\\Resources')
+            ->discoverResources(in: app_path('Modules/Communication/Filament/Resources'), for: 'App\\Modules\\Communication\\Filament\\Resources')
+            ->discoverResources(in: app_path('Modules/Discovery/Filament/Resources'), for: 'App\\Modules\\Discovery\\Filament\\Resources')
+            ->discoverResources(in: app_path('Modules/Geography/Filament/Resources'), for: 'App\\Modules\\Geography\\Filament\\Resources')
+            ->discoverResources(in: app_path('Modules/Identity/Filament/Resources'), for: 'App\\Modules\\Identity\\Filament\\Resources')
+            ->discoverResources(in: app_path('Modules/Loyalty/Filament/Resources'), for: 'App\\Modules\\Loyalty\\Filament\\Resources')
+            ->discoverResources(in: app_path('Modules/Payments/Filament/Resources'), for: 'App\\Modules\\Payments\\Filament\\Resources')
+            ->discoverResources(in: app_path('Modules/Reviews/Filament/Resources'), for: 'App\\Modules\\Reviews\\Filament\\Resources')
+            ->discoverResources(in: app_path('Modules/Settlement/Filament/Resources'), for: 'App\\Modules\\Settlement\\Filament\\Resources')
+            ->discoverResources(in: app_path('Modules/Shared/Filament/Resources'), for: 'App\\Modules\\Shared\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
+            ->discoverPages(in: app_path('Modules/Catalog/Filament/Pages'), for: 'App\\Modules\\Catalog\\Filament\\Pages')
+            ->discoverPages(in: app_path('Modules/Reviews/Filament/Pages'), for: 'App\\Modules\\Reviews\\Filament\\Pages')
+            ->discoverPages(in: app_path('Modules/Shared/Filament/Pages'), for: 'App\\Modules\\Shared\\Filament\\Pages')
             ->pages([
                 Pages\Dashboard::class,
-                ImportRentalServicesPage::class,
-                ReviewModerationPage::class,
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
+            ->discoverWidgets(in: app_path('Modules/Booking/Filament/Widgets'), for: 'App\\Modules\\Booking\\Filament\\Widgets')
             ->widgets([
                 Widgets\AccountWidget::class,
                 Widgets\FilamentInfoWidget::class,
             ])
             ->navigationGroups([
-                NavigationGroup::make()->label(fn (): string => __('admin.nav.groups.geography')),
-                NavigationGroup::make()->label(fn (): string => __('admin.nav.groups.identity')),
-                NavigationGroup::make()->label(fn (): string => __('admin.nav.groups.vendor_onboarding')),
-                NavigationGroup::make('Services')->icon('heroicon-o-cube'),
-                NavigationGroup::make('Moderation')->icon('heroicon-o-shield-check'),
-                NavigationGroup::make()->label(fn (): string => __('admin.nav.groups.catalog')),
-                NavigationGroup::make()->label(fn (): string => __('admin.nav.groups.booking')),
-                NavigationGroup::make()->label(fn (): string => __('admin.nav.groups.payments')),
-                NavigationGroup::make()->label(fn (): string => __('admin.nav.groups.reports')),
-                NavigationGroup::make()->label(fn (): string => __('admin.nav.groups.settings')),
+                NavigationGroup::make(__('admin.nav.groups.geography'))
+                    ->label(fn (): string => __('admin.nav.groups.geography')),
+                NavigationGroup::make(__('admin.nav.groups.identity'))
+                    ->label(fn (): string => __('admin.nav.groups.identity')),
+                NavigationGroup::make(__('admin.nav.groups.users'))
+                    ->label(fn (): string => __('admin.nav.groups.users')),
+                NavigationGroup::make(__('admin.nav.groups.vendor_onboarding'))
+                    ->label(fn (): string => __('admin.nav.groups.vendor_onboarding')),
+                NavigationGroup::make(__('admin.nav.groups.catalog'))
+                    ->label(fn (): string => __('admin.nav.groups.catalog')),
+                NavigationGroup::make(__('admin.nav.groups.services'))
+                    ->label(fn (): string => __('admin.nav.groups.services')),
+                NavigationGroup::make(__('admin.nav.groups.booking'))
+                    ->label(fn (): string => __('admin.nav.groups.booking')),
+                NavigationGroup::make(__('admin.nav.groups.payments'))
+                    ->label(fn (): string => __('admin.nav.groups.payments')),
+                NavigationGroup::make(__('admin.nav.groups.settlement'))
+                    ->label(fn (): string => __('admin.nav.groups.settlement')),
+                NavigationGroup::make(__('admin.nav.groups.loyalty'))
+                    ->label(fn (): string => __('admin.nav.groups.loyalty')),
+                NavigationGroup::make(__('admin.nav.groups.discovery'))
+                    ->label(fn (): string => __('admin.nav.groups.discovery')),
+                NavigationGroup::make(__('admin.nav.groups.communication'))
+                    ->label(fn (): string => __('admin.nav.groups.communication')),
+                NavigationGroup::make(__('admin.nav.groups.moderation'))
+                    ->label(fn (): string => __('admin.nav.groups.moderation')),
+                NavigationGroup::make(__('admin.nav.groups.reports'))
+                    ->label(fn (): string => __('admin.nav.groups.reports')),
+                NavigationGroup::make(__('admin.nav.groups.settings'))
+                    ->label(fn (): string => __('admin.nav.groups.settings')),
+                NavigationGroup::make(__('admin.nav.groups.activity_logs'))
+                    ->label(fn (): string => __('admin.nav.groups.activity_logs')),
             ])
             ->plugins([
                 FilamentShieldPlugin::make(),
                 ActivitylogPlugin::make(),
+
+                SpatieLaravelTranslatablePlugin::make()
+                    ->defaultLocales(['en', 'ar']),
             ])
             ->middleware([
                 EncryptCookies::class,

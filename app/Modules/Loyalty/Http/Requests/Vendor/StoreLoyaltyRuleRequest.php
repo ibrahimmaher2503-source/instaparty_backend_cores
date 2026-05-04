@@ -26,15 +26,15 @@ class StoreLoyaltyRuleRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'label'                    => ['required', 'array'],
-            'label.en'                 => ['required', 'string', 'max:100'],
-            'label.ar'                 => ['required', 'string', 'max:100'],
-            'earn_points_per_minor'    => ['required', 'integer', 'min:1', 'max:100'],
-            'earn_minor_per_unit'      => ['required', 'integer', 'min:1'],
-            'redemption_ratio_points'  => ['required', 'integer', 'min:1'],
-            'redemption_ratio_minor'   => ['required', 'integer', 'min:1'],
-            'min_points_to_redeem'     => ['nullable', 'integer', 'min:0'],
-            'max_redeem_pct_bps'       => ['nullable', 'integer', 'min:0', 'max:5000'],
+            'label' => ['required', 'array'],
+            'label.en' => ['required', 'string', 'max:100'],
+            'label.ar' => ['required', 'string', 'max:100'],
+            'earn_points_per_minor' => ['required', 'integer', 'min:1', 'max:100'],
+            'earn_minor_per_unit' => ['required', 'integer', 'min:1'],
+            'redemption_ratio_points' => ['required', 'integer', 'min:1'],
+            'redemption_ratio_minor' => ['required', 'integer', 'min:1'],
+            'min_points_to_redeem' => ['nullable', 'integer', 'min:0'],
+            'max_redeem_pct_bps' => ['nullable', 'integer', 'min:0', 'max:5000'],
         ];
     }
 }

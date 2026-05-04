@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Modules\Identity\Domain\Models\User;
 use App\Modules\Reviews\Application\Actions\ModerateReviewAction;
 use App\Modules\Reviews\Application\DTOs\ModerateReviewData;
 use App\Modules\Reviews\Application\Listeners\RecomputeRatingOnApproval;
@@ -12,6 +13,7 @@ use App\Modules\Reviews\Domain\Events\ReviewSelfDeleted;
 use App\Modules\Reviews\Domain\Models\ServiceReview;
 use Database\Seeders\IdentityRolesSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Str;
 
 uses(RefreshDatabase::class);
@@ -25,17 +27,17 @@ it('updates service rating_avg and rating_count when a review is approved', func
 
     // Create two approved reviews
     $review1 = ServiceReview::create([
-        'public_id'         => (string) Str::ulid(),
-        'service_id'        => $data['service']->id,
-        'booking_item_id'   => $data['bookingItem']->id,
-        'user_id'           => $data['customer']->id,
-        'rating'            => 4,
-        'body'              => null,
-        'locale'            => 'en',
+        'public_id' => (string) Str::ulid(),
+        'service_id' => $data['service']->id,
+        'booking_item_id' => $data['bookingItem']->id,
+        'user_id' => $data['customer']->id,
+        'rating' => 4,
+        'body' => null,
+        'locale' => 'en',
         'moderation_status' => 'pending',
     ]);
 
-    $admin = \App\Modules\Identity\Domain\Models\User::factory()->asAdmin()->create();
+    $admin = User::factory()->asAdmin()->create();
 
     app(ModerateReviewAction::class)->execute($review1, new ModerateReviewData(
         toStatus: ModerationStatus::Approved,
@@ -43,7 +45,7 @@ it('updates service rating_avg and rating_count when a review is approved', func
     ));
 
     // Run queued jobs synchronously
-    \Illuminate\Support\Facades\Queue::fake();
+    Queue::fake();
     event(new ReviewApproved(
         reviewId: $review1->id,
         reviewPublicId: $review1->public_id,
@@ -67,8 +69,8 @@ it('updates service rating_avg and rating_count when a review is approved', func
     ));
 
     $this->assertDatabaseHas('services', [
-        'id'           => $data['service']->id,
-        'rating_avg'   => 4.0,
+        'id' => $data['service']->id,
+        'rating_avg' => 4.0,
         'rating_count' => 1,
     ]);
 })->group('reviews');
@@ -76,12 +78,12 @@ it('updates service rating_avg and rating_count when a review is approved', func
 it('does not recompute rating when ReviewRejected previousStatus is not approved', function (): void {
     $data = makeCompletedBookingItem();
     $review = ServiceReview::create([
-        'public_id'         => (string) Str::ulid(),
-        'service_id'        => $data['service']->id,
-        'booking_item_id'   => $data['bookingItem']->id,
-        'user_id'           => $data['customer']->id,
-        'rating'            => 5,
-        'locale'            => 'en',
+        'public_id' => (string) Str::ulid(),
+        'service_id' => $data['service']->id,
+        'booking_item_id' => $data['bookingItem']->id,
+        'user_id' => $data['customer']->id,
+        'rating' => 5,
+        'locale' => 'en',
         'moderation_status' => 'pending',
     ]);
 
@@ -98,7 +100,7 @@ it('does not recompute rating when ReviewRejected previousStatus is not approved
 
     // rating_count should remain 0 (no aggregation happened)
     $this->assertDatabaseHas('services', [
-        'id'           => $data['service']->id,
+        'id' => $data['service']->id,
         'rating_count' => 0,
     ]);
 })->group('reviews');
@@ -107,12 +109,12 @@ it('excludes soft-deleted reviews from aggregation', function (): void {
     $data = makeCompletedBookingItem();
 
     $review = ServiceReview::create([
-        'public_id'         => (string) Str::ulid(),
-        'service_id'        => $data['service']->id,
-        'booking_item_id'   => $data['bookingItem']->id,
-        'user_id'           => $data['customer']->id,
-        'rating'            => 5,
-        'locale'            => 'en',
+        'public_id' => (string) Str::ulid(),
+        'service_id' => $data['service']->id,
+        'booking_item_id' => $data['bookingItem']->id,
+        'user_id' => $data['customer']->id,
+        'rating' => 5,
+        'locale' => 'en',
         'moderation_status' => 'approved',
     ]);
 
@@ -127,7 +129,7 @@ it('excludes soft-deleted reviews from aggregation', function (): void {
     ));
 
     $this->assertDatabaseHas('services', [
-        'id'           => $data['service']->id,
+        'id' => $data['service']->id,
         'rating_count' => 0,
     ]);
 })->group('reviews');

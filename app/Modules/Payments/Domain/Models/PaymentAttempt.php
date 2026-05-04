@@ -4,10 +4,14 @@ declare(strict_types=1);
 
 namespace App\Modules\Payments\Domain\Models;
 
+use App\Modules\Payments\Database\Factories\PaymentAttemptFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class PaymentAttempt extends Model
 {
+    use HasFactory;
+
     public $timestamps = false;
 
     protected $fillable = [
@@ -19,4 +23,9 @@ class PaymentAttempt extends Model
         'response_payload' => 'array',
         'created_at' => 'datetime',
     ];
+
+    protected static function newFactory(): PaymentAttemptFactory
+    {
+        return PaymentAttemptFactory::new();
+    }
 }

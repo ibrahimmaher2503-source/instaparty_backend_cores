@@ -19,9 +19,9 @@ enum ModerationStatus: string
     public function canTransitionTo(self $target): bool
     {
         return match ($this) {
-            self::Pending  => in_array($target, [self::Approved, self::Rejected], true),
+            self::Pending => in_array($target, [self::Approved, self::Rejected], true),
             self::Approved => in_array($target, [self::Hidden, self::Rejected], true),
-            self::Hidden   => $target === self::Approved,
+            self::Hidden => $target === self::Approved,
             self::Rejected => false,
         };
     }

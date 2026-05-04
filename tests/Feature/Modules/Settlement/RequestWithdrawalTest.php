@@ -200,3 +200,31 @@ it('returns 422 when requested amount exceeds available balance', function (): v
         ->postJson('/api/v1/vendor/withdrawals', withdrawalPayload(['amount_minor' => 50000]))
         ->assertStatus(422);
 })->group('settlement', 'withdrawal', 'T322');
+
+// ─────────────────────────────────────────────────────
+// T321 — Idempotency: same key returns cached response
+// ─────────────────────────────────────────────────────
+
+it('returns the cached 201 response when the same Idempotency-Key is replayed', function (): void {
+    [, , $token] = makeVendorWithWallet(500000);
+
+    $payload = withdrawalPayload(['amount_minor' => 50000]);
+
+    // First call — creates the withdrawal
+    $first = $this->withHeader('Authorization', "Bearer {$token}")
+        ->withHeader('Idempotency-Key', 'idem-repeat-001')
+        ->postJson('/api/v1/vendor/withdrawals', $payload);
+
+    $first->assertStatus(201);
+
+    // Second call with the SAME key and SAME body — must replay cached response
+    $second = $this->withHeader('Authorization', "Bearer {$token}")
+        ->withHeader('Idempotency-Key', 'idem-repeat-001')
+        ->postJson('/api/v1/vendor/withdrawals', $payload);
+
+    $second->assertStatus(201)
+        ->assertJsonPath('data.public_id', $first->json('data.public_id'));
+
+    // Only one withdrawal must exist in the database
+    expect(Withdrawal::count())->toBe(1);
+})->group('settlement', 'withdrawal', 'idempotency', 'T321');

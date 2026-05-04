@@ -8,6 +8,7 @@ use App\Modules\Identity\Application\Listeners\RevokeAllVendorTypesOnStatusChang
 use App\Modules\Identity\Domain\Contracts\OtpGatewayInterface;
 use App\Modules\Identity\Domain\Events\VendorRejected;
 use App\Modules\Identity\Domain\Events\VendorSuspended;
+use App\Modules\Identity\Http\Middleware\EnsureAccountIsActive;
 use App\Modules\Identity\Infrastructure\Gateways\StubOtpGateway;
 use App\Modules\Identity\Infrastructure\Repositories\EloquentVendorRatingWriter;
 use App\Modules\Reviews\Domain\Contracts\VendorRatingWriter;
@@ -29,6 +30,8 @@ class IdentityServiceProvider extends ServiceProvider
 
         $this->registerEventListeners();
         $this->registerRoutes();
+
+        $this->app['router']->aliasMiddleware('ensure.account.active', EnsureAccountIsActive::class);
     }
 
     private function registerEventListeners(): void

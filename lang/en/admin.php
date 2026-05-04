@@ -9,10 +9,18 @@ return [
             'identity' => 'Identity',
             'vendor_onboarding' => 'Vendor Onboarding',
             'catalog' => 'Catalog',
-            'booking' => 'Booking',
+            'services' => 'Services',
+            'booking' => 'Bookings',
             'payments' => 'Payments',
+            'settlement' => 'Settlements',
+            'loyalty' => 'Loyalty',
+            'discovery' => 'Discovery',
+            'communication' => 'Communications',
+            'moderation' => 'Moderation',
             'reports' => 'Reports',
             'settings' => 'Settings',
+            'activity_logs' => 'Activity Logs',
+            'users' => 'Users',
         ],
     ],
 
@@ -27,8 +35,8 @@ return [
         'review' => 'Review',
         'download' => 'Download',
         'revoke' => 'Revoke',
-        'approve_for_type' => 'Approve for Type',
-        'revoke_type' => 'Revoke Type',
+        'approve_for_type' => 'Approve Product Type',
+        'revoke_type' => 'Revoke Product Type Approval',
     ],
 
     'common' => [
@@ -40,13 +48,13 @@ return [
         'inactive' => 'Inactive',
         'yes' => 'Yes',
         'no' => 'No',
-        'no_results' => 'No results',
+        'no_results' => 'No results found',
         'untranslated' => 'Untranslated',
     ],
 
     'empty_states' => [
-        'no_records' => 'No records',
+        'no_records' => 'No records found',
         'no_pending_vendors' => 'No pending vendors',
-        'no_pending_vendors_description' => 'All vendor registrations have been reviewed.',
+        'no_pending_vendors_description' => 'All vendor registration requests have been reviewed.',
     ],
 ];

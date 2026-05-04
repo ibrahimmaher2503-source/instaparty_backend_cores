@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Modules\Settlement\Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Spatie\Permission\Exceptions\RoleDoesNotExist;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
@@ -53,7 +54,7 @@ class SettlementPermissionsSeeder extends Seeder
         try {
             $regularAdminRole = Role::findByName('admin', 'web');
             $regularAdminRole->givePermissionTo(self::ADMIN_PERMISSIONS);
-        } catch (\Spatie\Permission\Exceptions\RoleDoesNotExist) {
+        } catch (RoleDoesNotExist) {
             // Role doesn't exist — skip gracefully
         }
     }

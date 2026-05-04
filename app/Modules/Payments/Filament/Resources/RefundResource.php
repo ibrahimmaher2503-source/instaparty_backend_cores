@@ -15,7 +15,29 @@ class RefundResource extends Resource
 {
     protected static ?string $model = Refund::class;
 
-    protected static ?string $navigationGroup = 'Payments';
+    public static function getNavigationGroup(): ?string
+    {
+        return __('admin.nav.groups.payments');
+    }
+
+    protected static ?string $navigationIcon = 'heroicon-o-arrow-uturn-left';
+
+    protected static ?int $navigationSort = 20;
+
+    public static function getNavigationLabel(): string
+    {
+        return __('payments.navigation.refunds');
+    }
+
+    public static function getModelLabel(): string
+    {
+        return __('payments.models.refund.singular');
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('payments.models.refund.plural');
+    }
 
     public static function canCreate(): bool
     {

@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 use App\Modules\Communication\Application\Services\InvalidSegmentFilterException;
 use App\Modules\Communication\Application\Services\SegmentResolver;
-use App\Modules\Identity\Database\Factories\UserFactory;
+use App\Modules\Identity\Domain\Models\User;
 
 beforeEach(function () {
     $this->resolver = app(SegmentResolver::class);
 });
 
 it('resolves rental bookings within 30 days', function () {
-    $matchUser = UserFactory::new()->customer()->create(['preferred_locale' => 'en', 'status' => 'active']);
-    $tooOldUser = UserFactory::new()->customer()->create(['preferred_locale' => 'en', 'status' => 'active']);
-    $saleUser = UserFactory::new()->customer()->create(['preferred_locale' => 'en', 'status' => 'active']);
+    $matchUser = User::factory()->asCustomer()->create(['preferred_locale' => 'en', 'status' => 'active']);
+    $tooOldUser = User::factory()->asCustomer()->create(['preferred_locale' => 'en', 'status' => 'active']);
+    $saleUser = User::factory()->asCustomer()->create(['preferred_locale' => 'en', 'status' => 'active']);
 
     createBookingForUser($matchUser->id, 'rental', now()->subDays(5));
     createBookingForUser($tooOldUser->id, 'rental', now()->subDays(60));
@@ -27,7 +27,7 @@ it('resolves rental bookings within 30 days', function () {
 })->group('communication', 'rental');
 
 it('resolves sale bookings within 30 days', function () {
-    $matchUser = UserFactory::new()->customer()->create(['preferred_locale' => 'en', 'status' => 'active']);
+    $matchUser = User::factory()->asCustomer()->create(['preferred_locale' => 'en', 'status' => 'active']);
     createBookingForUser($matchUser->id, 'sale', now()->subDays(10));
 
     $result = $this->resolver->resolve(['booked_product_type' => 'sale', 'booked_within_days' => 30]);
@@ -36,7 +36,7 @@ it('resolves sale bookings within 30 days', function () {
 })->group('communication', 'sale');
 
 it('resolves digital bookings within 30 days', function () {
-    $matchUser = UserFactory::new()->customer()->create(['preferred_locale' => 'en', 'status' => 'active']);
+    $matchUser = User::factory()->asCustomer()->create(['preferred_locale' => 'en', 'status' => 'active']);
     createBookingForUser($matchUser->id, 'digital', now()->subDays(3));
 
     $result = $this->resolver->resolve(['booked_product_type' => 'digital', 'booked_within_days' => 30]);
@@ -45,8 +45,8 @@ it('resolves digital bookings within 30 days', function () {
 })->group('communication', 'digital');
 
 it('resolves across all product types when no type filter given', function () {
-    $rentalUser = UserFactory::new()->customer()->create(['preferred_locale' => 'en', 'status' => 'active']);
-    $saleUser = UserFactory::new()->customer()->create(['preferred_locale' => 'en', 'status' => 'active']);
+    $rentalUser = User::factory()->asCustomer()->create(['preferred_locale' => 'en', 'status' => 'active']);
+    $saleUser = User::factory()->asCustomer()->create(['preferred_locale' => 'en', 'status' => 'active']);
 
     createBookingForUser($rentalUser->id, 'rental', now()->subDays(5));
     createBookingForUser($saleUser->id, 'sale', now()->subDays(5));
@@ -57,7 +57,7 @@ it('resolves across all product types when no type filter given', function () {
 })->group('communication', 'rental', 'sale', 'digital');
 
 it('deduplicates customers with multiple qualifying bookings', function () {
-    $user = UserFactory::new()->customer()->create(['preferred_locale' => 'en', 'status' => 'active']);
+    $user = User::factory()->asCustomer()->create(['preferred_locale' => 'en', 'status' => 'active']);
     createBookingForUser($user->id, 'rental', now()->subDays(5));
     createBookingForUser($user->id, 'rental', now()->subDays(10));
 
@@ -67,7 +67,7 @@ it('deduplicates customers with multiple qualifying bookings', function () {
 })->group('communication');
 
 it('excludes suspended users', function () {
-    $suspended = UserFactory::new()->customer()->create(['status' => 'suspended']);
+    $suspended = User::factory()->asCustomer()->create(['status' => 'suspended']);
     createBookingForUser($suspended->id, 'rental', now()->subDays(5));
 
     $result = $this->resolver->resolve(['booked_product_type' => 'rental', 'booked_within_days' => 30]);

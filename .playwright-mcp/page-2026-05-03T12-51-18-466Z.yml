@@ -1,0 +1,827 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - generic [ref=e3]:
+      - navigation [ref=e5]:
+        - generic [ref=e6]:
+          - generic [ref=e9]:
+            - generic [ref=e10]: بحث عام
+            - generic [ref=e11]:
+              - img [ref=e13]
+              - searchbox "بحث عام" [ref=e16]
+          - generic [ref=e18]:
+            - generic [ref=e21] [cursor=pointer]: AR
+            - button "EN الإنجليزية" [ref=e1104] [cursor=pointer]:
+              - generic [ref=e1105]: EN
+              - generic [ref=e1106]: الإنجليزية
+          - button "قائمة المستخدم" [ref=e24] [cursor=pointer]:
+            - img "صورة شخصية لـ InstaParty Admin" [ref=e25]
+      - main [ref=e26]:
+        - generic [ref=e28]:
+          - generic [ref=e29]:
+            - generic [ref=e30]:
+              - navigation [ref=e31]:
+                - list [ref=e32]:
+                  - listitem [ref=e33]:
+                    - link "المحافظات" [ref=e34] [cursor=pointer]:
+                      - /url: http://127.0.0.1:9000/admin/governorates
+                  - listitem [ref=e35]:
+                    - img [ref=e36]
+                    - generic [ref=e38]: القائمة
+              - heading "المحافظات" [level=1] [ref=e39]
+            - link "إضافة المحافظة" [ref=e42] [cursor=pointer]:
+              - /url: http://127.0.0.1:9000/admin/governorates/create
+              - generic [ref=e43]: إضافة المحافظة
+          - generic [ref=e47]:
+            - generic [ref=e48]:
+              - generic [ref=e51]:
+                - generic [ref=e52]:
+                  - generic [ref=e53]: بحث
+                  - generic [ref=e54]:
+                    - img [ref=e56]
+                    - searchbox "بحث" [ref=e59]
+                - button "تصفية 0" [ref=e62] [cursor=pointer]:
+                  - generic [ref=e63]: تصفية
+                  - img [ref=e64]
+                  - generic [ref=e69]: "0"
+                - button "تبديل الأعمدة" [ref=e72] [cursor=pointer]:
+                  - generic [ref=e73]: تبديل الأعمدة
+                  - img [ref=e74]
+              - table [ref=e77]:
+                - rowgroup [ref=e78]:
+                  - row "الرمز الاسم الدولة ترتيب الفرز نشط إجراء" [ref=e79]:
+                    - columnheader "الرمز" [ref=e80]:
+                      - button "الرمز" [ref=e81] [cursor=pointer]:
+                        - generic [ref=e82]: الرمز
+                        - img [ref=e83]
+                    - columnheader "الاسم" [ref=e85]:
+                      - button "الاسم" [ref=e86] [cursor=pointer]:
+                        - generic [ref=e87]: الاسم
+                        - img [ref=e88]
+                    - columnheader "الدولة" [ref=e90]:
+                      - button "الدولة" [ref=e91] [cursor=pointer]:
+                        - generic [ref=e92]: الدولة
+                        - img [ref=e93]
+                    - columnheader "ترتيب الفرز" [ref=e95]:
+                      - button "ترتيب الفرز" [ref=e96] [cursor=pointer]:
+                        - generic [ref=e97]: ترتيب الفرز
+                        - img [ref=e98]
+                    - columnheader "نشط" [ref=e100]:
+                      - button "نشط" [ref=e101] [cursor=pointer]:
+                        - generic [ref=e102]: نشط
+                        - img [ref=e103]
+                    - columnheader "إجراء" [ref=e105]
+                - rowgroup [ref=e106]:
+                  - row "EG-CAI Cairo مصر 1 تعديل حذف" [ref=e107]:
+                    - cell "EG-CAI" [ref=e108]:
+                      - link "EG-CAI" [ref=e110] [cursor=pointer]:
+                        - /url: http://127.0.0.1:9000/admin/governorates/HZ5J93E7HNKMFYQHWHKRQWQPSF/edit
+                        - generic [ref=e116]: EG-CAI
+                    - cell "Cairo" [ref=e117]:
+                      - link "Cairo" [ref=e119] [cursor=pointer]:
+                        - /url: http://127.0.0.1:9000/admin/governorates/HZ5J93E7HNKMFYQHWHKRQWQPSF/edit
+                        - generic [ref=e124]: Cairo
+                    - cell "مصر" [ref=e125]:
+                      - link "مصر" [ref=e127] [cursor=pointer]:
+                        - /url: http://127.0.0.1:9000/admin/governorates/HZ5J93E7HNKMFYQHWHKRQWQPSF/edit
+                        - generic [ref=e132]: مصر
+                    - cell "1" [ref=e133]:
+                      - link "1" [ref=e135] [cursor=pointer]:
+                        - /url: http://127.0.0.1:9000/admin/governorates/HZ5J93E7HNKMFYQHWHKRQWQPSF/edit
+                        - generic [ref=e140]: "1"
+                    - cell [ref=e141]:
+                      - link [ref=e143] [cursor=pointer]:
+                        - /url: http://127.0.0.1:9000/admin/governorates/HZ5J93E7HNKMFYQHWHKRQWQPSF/edit
+                        - img [ref=e145]
+                    - cell "تعديل حذف" [ref=e147]:
+                      - generic [ref=e149]:
+                        - link "تعديل" [ref=e150] [cursor=pointer]:
+                          - /url: http://127.0.0.1:9000/admin/governorates/HZ5J93E7HNKMFYQHWHKRQWQPSF/edit
+                          - img [ref=e151]
+                          - generic [ref=e154]: تعديل
+                        - button "حذف" [ref=e155] [cursor=pointer]:
+                          - img [ref=e156]
+                          - generic [ref=e158]: حذف
+                  - row "EG-GIZ Giza مصر 2 تعديل حذف" [ref=e159]:
+                    - cell "EG-GIZ" [ref=e160]:
+                      - link "EG-GIZ" [ref=e162] [cursor=pointer]:
+                        - /url: http://127.0.0.1:9000/admin/governorates/WJW6QFSJJ8F46AK75XED5KAZSK/edit
+                        - generic [ref=e168]: EG-GIZ
+                    - cell "Giza" [ref=e169]:
+                      - link "Giza" [ref=e171] [cursor=pointer]:
+                        - /url: http://127.0.0.1:9000/admin/governorates/WJW6QFSJJ8F46AK75XED5KAZSK/edit
+                        - generic [ref=e176]: Giza
+                    - cell "مصر" [ref=e177]:
+                      - link "مصر" [ref=e179] [cursor=pointer]:
+                        - /url: http://127.0.0.1:9000/admin/governorates/WJW6QFSJJ8F46AK75XED5KAZSK/edit
+                        - generic [ref=e184]: مصر
+                    - cell "2" [ref=e185]:
+                      - link "2" [ref=e187] [cursor=pointer]:
+                        - /url: http://127.0.0.1:9000/admin/governorates/WJW6QFSJJ8F46AK75XED5KAZSK/edit
+                        - generic [ref=e192]: "2"
+                    - cell [ref=e193]:
+                      - link [ref=e195] [cursor=pointer]:
+                        - /url: http://127.0.0.1:9000/admin/governorates/WJW6QFSJJ8F46AK75XED5KAZSK/edit
+                        - img [ref=e197]
+                    - cell "تعديل حذف" [ref=e199]:
+                      - generic [ref=e201]:
+                        - link "تعديل" [ref=e202] [cursor=pointer]:
+                          - /url: http://127.0.0.1:9000/admin/governorates/WJW6QFSJJ8F46AK75XED5KAZSK/edit
+                          - img [ref=e203]
+                          - generic [ref=e206]: تعديل
+                        - button "حذف" [ref=e207] [cursor=pointer]:
+                          - img [ref=e208]
+                          - generic [ref=e210]: حذف
+                  - row "EG-ALX Alexandria مصر 3 تعديل حذف" [ref=e211]:
+                    - cell "EG-ALX" [ref=e212]:
+                      - link "EG-ALX" [ref=e214] [cursor=pointer]:
+                        - /url: http://127.0.0.1:9000/admin/governorates/75TJ3H79GTDCC87R4D7DMCM2G4/edit
+                        - generic [ref=e220]: EG-ALX
+                    - cell "Alexandria" [ref=e221]:
+                      - link "Alexandria" [ref=e223] [cursor=pointer]:
+                        - /url: http://127.0.0.1:9000/admin/governorates/75TJ3H79GTDCC87R4D7DMCM2G4/edit
+                        - generic [ref=e228]: Alexandria
+                    - cell "مصر" [ref=e229]:
+                      - link "مصر" [ref=e231] [cursor=pointer]:
+                        - /url: http://127.0.0.1:9000/admin/governorates/75TJ3H79GTDCC87R4D7DMCM2G4/edit
+                        - generic [ref=e236]: مصر
+                    - cell "3" [ref=e237]:
+                      - link "3" [ref=e239] [cursor=pointer]:
+                        - /url: http://127.0.0.1:9000/admin/governorates/75TJ3H79GTDCC87R4D7DMCM2G4/edit
+                        - generic [ref=e244]: "3"
+                    - cell [ref=e245]:
+                      - link [ref=e247] [cursor=pointer]:
+                        - /url: http://127.0.0.1:9000/admin/governorates/75TJ3H79GTDCC87R4D7DMCM2G4/edit
+                        - img [ref=e249]
+                    - cell "تعديل حذف" [ref=e251]:
+                      - generic [ref=e253]:
+                        - link "تعديل" [ref=e254] [cursor=pointer]:
+                          - /url: http://127.0.0.1:9000/admin/governorates/75TJ3H79GTDCC87R4D7DMCM2G4/edit
+                          - img [ref=e255]
+                          - generic [ref=e258]: تعديل
+                        - button "حذف" [ref=e259] [cursor=pointer]:
+                          - img [ref=e260]
+                          - generic [ref=e262]: حذف
+                  - row "EG-SHR Sharqia مصر 4 تعديل حذف" [ref=e263]:
+                    - cell "EG-SHR" [ref=e264]:
+                      - link "EG-SHR" [ref=e266] [cursor=pointer]:
+                        - /url: http://127.0.0.1:9000/admin/governorates/KDGR0E93PSYMV1VS9J8VYBK3TM/edit
+                        - generic [ref=e272]: EG-SHR
+                    - cell "Sharqia" [ref=e273]:
+                      - link "Sharqia" [ref=e275] [cursor=pointer]:
+                        - /url: http://127.0.0.1:9000/admin/governorates/KDGR0E93PSYMV1VS9J8VYBK3TM/edit
+                        - generic [ref=e280]: Sharqia
+                    - cell "مصر" [ref=e281]:
+                      - link "مصر" [ref=e283] [cursor=pointer]:
+                        - /url: http://127.0.0.1:9000/admin/governorates/KDGR0E93PSYMV1VS9J8VYBK3TM/edit
+                        - generic [ref=e288]: مصر
+                    - cell "4" [ref=e289]:
+                      - link "4" [ref=e291] [cursor=pointer]:
+                        - /url: http://127.0.0.1:9000/admin/governorates/KDGR0E93PSYMV1VS9J8VYBK3TM/edit
+                        - generic [ref=e296]: "4"
+                    - cell [ref=e297]:
+                      - link [ref=e299] [cursor=pointer]:
+                        - /url: http://127.0.0.1:9000/admin/governorates/KDGR0E93PSYMV1VS9J8VYBK3TM/edit
+                        - img [ref=e301]
+                    - cell "تعديل حذف" [ref=e303]:
+                      - generic [ref=e305]:
+                        - link "تعديل" [ref=e306] [cursor=pointer]:
+                          - /url: http://127.0.0.1:9000/admin/governorates/KDGR0E93PSYMV1VS9J8VYBK3TM/edit
+                          - img [ref=e307]
+                          - generic [ref=e310]: تعديل
+                        - button "حذف" [ref=e311] [cursor=pointer]:
+                          - img [ref=e312]
+                          - generic [ref=e314]: حذف
+                  - row "EG-QLY Qalyubia مصر 5 تعديل حذف" [ref=e315]:
+                    - cell "EG-QLY" [ref=e316]:
+                      - link "EG-QLY" [ref=e318] [cursor=pointer]:
+                        - /url: http://127.0.0.1:9000/admin/governorates/BKAKF1FZ91KM6E56NW98JV46M4/edit
+                        - generic [ref=e324]: EG-QLY
+                    - cell "Qalyubia" [ref=e325]:
+                      - link "Qalyubia" [ref=e327] [cursor=pointer]:
+                        - /url: http://127.0.0.1:9000/admin/governorates/BKAKF1FZ91KM6E56NW98JV46M4/edit
+                        - generic [ref=e332]: Qalyubia
+                    - cell "مصر" [ref=e333]:
+                      - link "مصر" [ref=e335] [cursor=pointer]:
+                        - /url: http://127.0.0.1:9000/admin/governorates/BKAKF1FZ91KM6E56NW98JV46M4/edit
+                        - generic [ref=e340]: مصر
+                    - cell "5" [ref=e341]:
+                      - link "5" [ref=e343] [cursor=pointer]:
+                        - /url: http://127.0.0.1:9000/admin/governorates/BKAKF1FZ91KM6E56NW98JV46M4/edit
+                        - generic [ref=e348]: "5"
+                    - cell [ref=e349]:
+                      - link [ref=e351] [cursor=pointer]:
+                        - /url: http://127.0.0.1:9000/admin/governorates/BKAKF1FZ91KM6E56NW98JV46M4/edit
+                        - img [ref=e353]
+                    - cell "تعديل حذف" [ref=e355]:
+                      - generic [ref=e357]:
+                        - link "تعديل" [ref=e358] [cursor=pointer]:
+                          - /url: http://127.0.0.1:9000/admin/governorates/BKAKF1FZ91KM6E56NW98JV46M4/edit
+                          - img [ref=e359]
+                          - generic [ref=e362]: تعديل
+                        - button "حذف" [ref=e363] [cursor=pointer]:
+                          - img [ref=e364]
+                          - generic [ref=e366]: حذف
+                  - row "EG-DKH Dakahlia مصر 6 تعديل حذف" [ref=e367]:
+                    - cell "EG-DKH" [ref=e368]:
+                      - link "EG-DKH" [ref=e370] [cursor=pointer]:
+                        - /url: http://127.0.0.1:9000/admin/governorates/EBD4PK2PMP6ZAVDJENJW6EBR3D/edit
+                        - generic [ref=e376]: EG-DKH
+                    - cell "Dakahlia" [ref=e377]:
+                      - link "Dakahlia" [ref=e379] [cursor=pointer]:
+                        - /url: http://127.0.0.1:9000/admin/governorates/EBD4PK2PMP6ZAVDJENJW6EBR3D/edit
+                        - generic [ref=e384]: Dakahlia
+                    - cell "مصر" [ref=e385]:
+                      - link "مصر" [ref=e387] [cursor=pointer]:
+                        - /url: http://127.0.0.1:9000/admin/governorates/EBD4PK2PMP6ZAVDJENJW6EBR3D/edit
+                        - generic [ref=e392]: مصر
+                    - cell "6" [ref=e393]:
+                      - link "6" [ref=e395] [cursor=pointer]:
+                        - /url: http://127.0.0.1:9000/admin/governorates/EBD4PK2PMP6ZAVDJENJW6EBR3D/edit
+                        - generic [ref=e400]: "6"
+                    - cell [ref=e401]:
+                      - link [ref=e403] [cursor=pointer]:
+                        - /url: http://127.0.0.1:9000/admin/governorates/EBD4PK2PMP6ZAVDJENJW6EBR3D/edit
+                        - img [ref=e405]
+                    - cell "تعديل حذف" [ref=e407]:
+                      - generic [ref=e409]:
+                        - link "تعديل" [ref=e410] [cursor=pointer]:
+                          - /url: http://127.0.0.1:9000/admin/governorates/EBD4PK2PMP6ZAVDJENJW6EBR3D/edit
+                          - img [ref=e411]
+                          - generic [ref=e414]: تعديل
+                        - button "حذف" [ref=e415] [cursor=pointer]:
+                          - img [ref=e416]
+                          - generic [ref=e418]: حذف
+                  - row "EG-GHB Gharbia مصر 7 تعديل حذف" [ref=e419]:
+                    - cell "EG-GHB" [ref=e420]:
+                      - link "EG-GHB" [ref=e422] [cursor=pointer]:
+                        - /url: http://127.0.0.1:9000/admin/governorates/632B3SSJAT04W766W58Z6QG4NN/edit
+                        - generic [ref=e428]: EG-GHB
+                    - cell "Gharbia" [ref=e429]:
+                      - link "Gharbia" [ref=e431] [cursor=pointer]:
+                        - /url: http://127.0.0.1:9000/admin/governorates/632B3SSJAT04W766W58Z6QG4NN/edit
+                        - generic [ref=e436]: Gharbia
+                    - cell "مصر" [ref=e437]:
+                      - link "مصر" [ref=e439] [cursor=pointer]:
+                        - /url: http://127.0.0.1:9000/admin/governorates/632B3SSJAT04W766W58Z6QG4NN/edit
+                        - generic [ref=e444]: مصر
+                    - cell "7" [ref=e445]:
+                      - link "7" [ref=e447] [cursor=pointer]:
+                        - /url: http://127.0.0.1:9000/admin/governorates/632B3SSJAT04W766W58Z6QG4NN/edit
+                        - generic [ref=e452]: "7"
+                    - cell [ref=e453]:
+                      - link [ref=e455] [cursor=pointer]:
+                        - /url: http://127.0.0.1:9000/admin/governorates/632B3SSJAT04W766W58Z6QG4NN/edit
+                        - img [ref=e457]
+                    - cell "تعديل حذف" [ref=e459]:
+                      - generic [ref=e461]:
+                        - link "تعديل" [ref=e462] [cursor=pointer]:
+                          - /url: http://127.0.0.1:9000/admin/governorates/632B3SSJAT04W766W58Z6QG4NN/edit
+                          - img [ref=e463]
+                          - generic [ref=e466]: تعديل
+                        - button "حذف" [ref=e467] [cursor=pointer]:
+                          - img [ref=e468]
+                          - generic [ref=e470]: حذف
+                  - row "EG-MNF Monufia مصر 8 تعديل حذف" [ref=e471]:
+                    - cell "EG-MNF" [ref=e472]:
+                      - link "EG-MNF" [ref=e474] [cursor=pointer]:
+                        - /url: http://127.0.0.1:9000/admin/governorates/J8K32PHMG0CC894A7RVHRYJPZG/edit
+                        - generic [ref=e480]: EG-MNF
+                    - cell "Monufia" [ref=e481]:
+                      - link "Monufia" [ref=e483] [cursor=pointer]:
+                        - /url: http://127.0.0.1:9000/admin/governorates/J8K32PHMG0CC894A7RVHRYJPZG/edit
+                        - generic [ref=e488]: Monufia
+                    - cell "مصر" [ref=e489]:
+                      - link "مصر" [ref=e491] [cursor=pointer]:
+                        - /url: http://127.0.0.1:9000/admin/governorates/J8K32PHMG0CC894A7RVHRYJPZG/edit
+                        - generic [ref=e496]: مصر
+                    - cell "8" [ref=e497]:
+                      - link "8" [ref=e499] [cursor=pointer]:
+                        - /url: http://127.0.0.1:9000/admin/governorates/J8K32PHMG0CC894A7RVHRYJPZG/edit
+                        - generic [ref=e504]: "8"
+                    - cell [ref=e505]:
+                      - link [ref=e507] [cursor=pointer]:
+                        - /url: http://127.0.0.1:9000/admin/governorates/J8K32PHMG0CC894A7RVHRYJPZG/edit
+                        - img [ref=e509]
+                    - cell "تعديل حذف" [ref=e511]:
+                      - generic [ref=e513]:
+                        - link "تعديل" [ref=e514] [cursor=pointer]:
+                          - /url: http://127.0.0.1:9000/admin/governorates/J8K32PHMG0CC894A7RVHRYJPZG/edit
+                          - img [ref=e515]
+                          - generic [ref=e518]: تعديل
+                        - button "حذف" [ref=e519] [cursor=pointer]:
+                          - img [ref=e520]
+                          - generic [ref=e522]: حذف
+                  - row "EG-KFS Kafr El Sheikh مصر 9 تعديل حذف" [ref=e523]:
+                    - cell "EG-KFS" [ref=e524]:
+                      - link "EG-KFS" [ref=e526] [cursor=pointer]:
+                        - /url: http://127.0.0.1:9000/admin/governorates/4WJ6THBAZPKH9E2QZ40R86YV0G/edit
+                        - generic [ref=e532]: EG-KFS
+                    - cell "Kafr El Sheikh" [ref=e533]:
+                      - link "Kafr El Sheikh" [ref=e535] [cursor=pointer]:
+                        - /url: http://127.0.0.1:9000/admin/governorates/4WJ6THBAZPKH9E2QZ40R86YV0G/edit
+                        - generic [ref=e540]: Kafr El Sheikh
+                    - cell "مصر" [ref=e541]:
+                      - link "مصر" [ref=e543] [cursor=pointer]:
+                        - /url: http://127.0.0.1:9000/admin/governorates/4WJ6THBAZPKH9E2QZ40R86YV0G/edit
+                        - generic [ref=e548]: مصر
+                    - cell "9" [ref=e549]:
+                      - link "9" [ref=e551] [cursor=pointer]:
+                        - /url: http://127.0.0.1:9000/admin/governorates/4WJ6THBAZPKH9E2QZ40R86YV0G/edit
+                        - generic [ref=e556]: "9"
+                    - cell [ref=e557]:
+                      - link [ref=e559] [cursor=pointer]:
+                        - /url: http://127.0.0.1:9000/admin/governorates/4WJ6THBAZPKH9E2QZ40R86YV0G/edit
+                        - img [ref=e561]
+                    - cell "تعديل حذف" [ref=e563]:
+                      - generic [ref=e565]:
+                        - link "تعديل" [ref=e566] [cursor=pointer]:
+                          - /url: http://127.0.0.1:9000/admin/governorates/4WJ6THBAZPKH9E2QZ40R86YV0G/edit
+                          - img [ref=e567]
+                          - generic [ref=e570]: تعديل
+                        - button "حذف" [ref=e571] [cursor=pointer]:
+                          - img [ref=e572]
+                          - generic [ref=e574]: حذف
+                  - row "EG-BHR Beheira مصر 10 تعديل حذف" [ref=e575]:
+                    - cell "EG-BHR" [ref=e576]:
+                      - link "EG-BHR" [ref=e578] [cursor=pointer]:
+                        - /url: http://127.0.0.1:9000/admin/governorates/1WYSFEDW9WYS5NXW1Y2QP3MEVP/edit
+                        - generic [ref=e584]: EG-BHR
+                    - cell "Beheira" [ref=e585]:
+                      - link "Beheira" [ref=e587] [cursor=pointer]:
+                        - /url: http://127.0.0.1:9000/admin/governorates/1WYSFEDW9WYS5NXW1Y2QP3MEVP/edit
+                        - generic [ref=e592]: Beheira
+                    - cell "مصر" [ref=e593]:
+                      - link "مصر" [ref=e595] [cursor=pointer]:
+                        - /url: http://127.0.0.1:9000/admin/governorates/1WYSFEDW9WYS5NXW1Y2QP3MEVP/edit
+                        - generic [ref=e600]: مصر
+                    - cell "10" [ref=e601]:
+                      - link "10" [ref=e603] [cursor=pointer]:
+                        - /url: http://127.0.0.1:9000/admin/governorates/1WYSFEDW9WYS5NXW1Y2QP3MEVP/edit
+                        - generic [ref=e608]: "10"
+                    - cell [ref=e609]:
+                      - link [ref=e611] [cursor=pointer]:
+                        - /url: http://127.0.0.1:9000/admin/governorates/1WYSFEDW9WYS5NXW1Y2QP3MEVP/edit
+                        - img [ref=e613]
+                    - cell "تعديل حذف" [ref=e615]:
+                      - generic [ref=e617]:
+                        - link "تعديل" [ref=e618] [cursor=pointer]:
+                          - /url: http://127.0.0.1:9000/admin/governorates/1WYSFEDW9WYS5NXW1Y2QP3MEVP/edit
+                          - img [ref=e619]
+                          - generic [ref=e622]: تعديل
+                        - button "حذف" [ref=e623] [cursor=pointer]:
+                          - img [ref=e624]
+                          - generic [ref=e626]: حذف
+              - navigation "التنقل بين الصفحات" [ref=e627]:
+                - generic [ref=e628]: عرض 1 إلى 10 من 27 نتيجة
+                - generic [ref=e631]:
+                  - generic [ref=e633]: لكل صفحة
+                  - combobox "لكل صفحة" [ref=e635]:
+                    - option "5"
+                    - option "10" [selected]
+                    - option "25"
+                    - option "50"
+                    - option "الكل"
+                - list [ref=e636]:
+                  - listitem [ref=e637]:
+                    - button "انتقل إلى صفحة 1" [ref=e638] [cursor=pointer]:
+                      - generic [ref=e639]: "1"
+                  - listitem [ref=e640]:
+                    - button "انتقل إلى صفحة 2" [ref=e641] [cursor=pointer]:
+                      - generic [ref=e642]: "2"
+                  - listitem [ref=e643]:
+                    - button "انتقل إلى صفحة 3" [ref=e644] [cursor=pointer]:
+                      - generic [ref=e645]: "3"
+                  - listitem [ref=e646]:
+                    - button "التالي" [ref=e647] [cursor=pointer]:
+                      - img [ref=e648]
+            - generic:
+              - dialog
+            - generic:
+              - dialog
+            - generic:
+              - dialog
+            - generic:
+              - dialog
+            - generic:
+              - dialog
+    - complementary [ref=e650]:
+      - link "Laravel" [ref=e654] [cursor=pointer]:
+        - /url: http://127.0.0.1:9000/admin
+        - generic [ref=e655]: Laravel
+      - navigation [ref=e656]:
+        - list [ref=e657]:
+          - listitem [ref=e658]:
+            - list [ref=e659]:
+              - listitem [ref=e660]:
+                - link "لوحة التحكم" [ref=e661] [cursor=pointer]:
+                  - /url: http://127.0.0.1:9000/admin
+                  - img [ref=e662]
+                  - generic [ref=e664]: لوحة التحكم
+              - listitem [ref=e665]:
+                - link "Activity Logs" [ref=e666] [cursor=pointer]:
+                  - /url: http://127.0.0.1:9000/admin/activitylogs
+                  - img [ref=e667]
+                  - generic [ref=e669]: Activity Logs
+          - listitem [ref=e670]:
+            - generic [ref=e671] [cursor=pointer]:
+              - generic [ref=e672]: إدارة الصلاحيات
+              - button "إدارة الصلاحيات" [expanded] [ref=e673]:
+                - generic [ref=e674]: إدارة الصلاحيات
+                - img [ref=e675]
+            - list [ref=e677]:
+              - listitem [ref=e678]:
+                - link "الأدوار 4" [ref=e679] [cursor=pointer]:
+                  - /url: http://127.0.0.1:9000/admin/shield/roles
+                  - img [ref=e680]
+                  - generic [ref=e682]: الأدوار
+                  - generic [ref=e686]: "4"
+          - listitem [ref=e687]:
+            - generic [ref=e688] [cursor=pointer]:
+              - generic [ref=e689]: Moderation
+              - button "Moderation" [expanded] [ref=e690]:
+                - generic [ref=e691]: Moderation
+                - img [ref=e692]
+            - list [ref=e694]:
+              - listitem [ref=e695]:
+                - link "إشراف التقييمات" [ref=e696] [cursor=pointer]:
+                  - /url: http://127.0.0.1:9000/admin/review-moderation-page
+                  - img [ref=e697]
+                  - generic [ref=e699]: إشراف التقييمات
+              - listitem [ref=e700]:
+                - link "تقييمات الخدمات" [ref=e701] [cursor=pointer]:
+                  - /url: http://127.0.0.1:9000/admin/service-reviews
+                  - img [ref=e702]
+                  - generic [ref=e704]: تقييمات الخدمات
+              - listitem [ref=e705]:
+                - link "تقييمات الموردين" [ref=e706] [cursor=pointer]:
+                  - /url: http://127.0.0.1:9000/admin/vendor-reviews
+                  - img [ref=e707]
+                  - generic [ref=e709]: تقييمات الموردين
+              - listitem [ref=e710]:
+                - link "سجلات الإشراف" [ref=e711] [cursor=pointer]:
+                  - /url: http://127.0.0.1:9000/admin/review-moderation-logs
+                  - img [ref=e712]
+                  - generic [ref=e714]: سجلات الإشراف
+          - listitem [ref=e715]:
+            - generic [ref=e716] [cursor=pointer]:
+              - generic [ref=e717]: Booking
+              - button "Booking" [expanded] [ref=e718]:
+                - generic [ref=e719]: Booking
+                - img [ref=e720]
+            - list [ref=e722]:
+              - listitem [ref=e723]:
+                - link "الحجوزات" [ref=e724] [cursor=pointer]:
+                  - /url: http://127.0.0.1:9000/admin/bookings
+                  - img [ref=e725]
+                  - generic [ref=e727]: الحجوزات
+              - listitem [ref=e728]:
+                - link "التعديلات" [ref=e729] [cursor=pointer]:
+                  - /url: http://127.0.0.1:9000/admin/booking-modifications
+                  - img [ref=e730]
+                  - generic [ref=e732]: التعديلات
+              - listitem [ref=e733]:
+                - link "انتقالات الحالة" [ref=e734] [cursor=pointer]:
+                  - /url: http://127.0.0.1:9000/admin/booking-state-transitions
+                  - img [ref=e735]
+                  - generic [ref=e737]: انتقالات الحالة
+              - listitem [ref=e738]:
+                - link "مراقبة التفاوض" [ref=e739] [cursor=pointer]:
+                  - /url: http://127.0.0.1:9000/admin/bookings-monitor
+                  - img [ref=e740]
+                  - generic [ref=e742]: مراقبة التفاوض
+          - listitem [ref=e743]:
+            - generic [ref=e744] [cursor=pointer]:
+              - generic [ref=e745]: Catalog
+              - button "Catalog" [expanded] [ref=e746]:
+                - generic [ref=e747]: Catalog
+                - img [ref=e748]
+            - list [ref=e750]:
+              - listitem [ref=e751]:
+                - link "المناسبات" [ref=e752] [cursor=pointer]:
+                  - /url: http://127.0.0.1:9000/admin/occasions
+                  - img [ref=e753]
+                  - generic [ref=e755]: المناسبات
+              - listitem [ref=e756]:
+                - link "التصنيفات" [ref=e757] [cursor=pointer]:
+                  - /url: http://127.0.0.1:9000/admin/categories
+                  - img [ref=e758]
+                  - generic [ref=e761]: التصنيفات
+              - listitem [ref=e762]:
+                - link "مخططات حقول التصنيف" [ref=e763] [cursor=pointer]:
+                  - /url: http://127.0.0.1:9000/admin/category-field-schemas
+                  - img [ref=e764]
+                  - generic [ref=e766]: مخططات حقول التصنيف
+              - listitem [ref=e767]:
+                - link "سمات الخدمات" [ref=e768] [cursor=pointer]:
+                  - /url: http://127.0.0.1:9000/admin/service-themes
+                  - img [ref=e769]
+                  - generic [ref=e771]: سمات الخدمات
+          - listitem [ref=e772]:
+            - generic [ref=e773] [cursor=pointer]:
+              - generic [ref=e774]: Services
+              - button "Services" [expanded] [ref=e775]:
+                - generic [ref=e776]: Services
+                - img [ref=e777]
+            - list [ref=e779]:
+              - listitem [ref=e780]:
+                - link "خدمات الإيجار" [ref=e781] [cursor=pointer]:
+                  - /url: http://127.0.0.1:9000/admin/rental-services
+                  - img [ref=e782]
+                  - generic [ref=e784]: خدمات الإيجار
+              - listitem [ref=e785]:
+                - link "خدمات البيع" [ref=e786] [cursor=pointer]:
+                  - /url: http://127.0.0.1:9000/admin/sale-services
+                  - img [ref=e787]
+                  - generic [ref=e789]: خدمات البيع
+              - listitem [ref=e790]:
+                - link "الخدمات الرقمية" [ref=e791] [cursor=pointer]:
+                  - /url: http://127.0.0.1:9000/admin/digital-services
+                  - img [ref=e792]
+                  - generic [ref=e794]: الخدمات الرقمية
+              - listitem [ref=e795]:
+                - link "استيراد خدمات الإيجار" [ref=e796] [cursor=pointer]:
+                  - /url: http://127.0.0.1:9000/admin/import-rental-services-page
+                  - img [ref=e797]
+                  - generic [ref=e799]: استيراد خدمات الإيجار
+              - listitem [ref=e800]:
+                - link "استيراد خدمات البيع" [ref=e801] [cursor=pointer]:
+                  - /url: http://127.0.0.1:9000/admin/import-sale-services-page
+                  - img [ref=e802]
+                  - generic [ref=e804]: استيراد خدمات البيع
+              - listitem [ref=e805]:
+                - link "استيراد الخدمات الرقمية" [ref=e806] [cursor=pointer]:
+                  - /url: http://127.0.0.1:9000/admin/import-digital-services-page
+                  - img [ref=e807]
+                  - generic [ref=e809]: استيراد الخدمات الرقمية
+              - listitem [ref=e810]:
+                - link "حجوزات المخزون" [ref=e811] [cursor=pointer]:
+                  - /url: http://127.0.0.1:9000/admin/service-inventory-reservations
+                  - img [ref=e812]
+                  - generic [ref=e814]: حجوزات المخزون
+              - listitem [ref=e815]:
+                - link "استيرادات Excel" [ref=e816] [cursor=pointer]:
+                  - /url: http://127.0.0.1:9000/admin/excel-imports
+                  - img [ref=e817]
+                  - generic [ref=e819]: استيرادات Excel
+          - listitem [ref=e820]:
+            - generic [ref=e821] [cursor=pointer]:
+              - generic [ref=e822]: Communication
+              - button "Communication" [expanded] [ref=e823]:
+                - generic [ref=e824]: Communication
+                - img [ref=e825]
+            - list [ref=e827]:
+              - listitem [ref=e828]:
+                - link "قوالب الإشعارات" [ref=e829] [cursor=pointer]:
+                  - /url: http://127.0.0.1:9000/admin/notification-templates
+                  - img [ref=e830]
+                  - generic [ref=e832]: قوالب الإشعارات
+              - listitem [ref=e833]:
+                - link "الحملات التسويقية" [ref=e834] [cursor=pointer]:
+                  - /url: http://127.0.0.1:9000/admin/campaigns
+                  - img [ref=e835]
+                  - generic [ref=e837]: الحملات التسويقية
+              - listitem [ref=e838]:
+                - link "تفضيلات الإشعارات" [ref=e839] [cursor=pointer]:
+                  - /url: http://127.0.0.1:9000/admin/notification-preferences
+                  - img [ref=e840]
+                  - generic [ref=e842]: تفضيلات الإشعارات
+              - listitem [ref=e843]:
+                - link "سجلات الإرسال" [ref=e844] [cursor=pointer]:
+                  - /url: http://127.0.0.1:9000/admin/notification-dispatches
+                  - img [ref=e845]
+                  - generic [ref=e847]: سجلات الإرسال
+          - listitem [ref=e848]:
+            - generic [ref=e849] [cursor=pointer]:
+              - generic [ref=e850]: Discovery
+              - button "Discovery" [expanded] [ref=e851]:
+                - generic [ref=e852]: Discovery
+                - img [ref=e853]
+            - list [ref=e855]:
+              - listitem [ref=e856]:
+                - link "البحوث المحفوظة" [ref=e857] [cursor=pointer]:
+                  - /url: http://127.0.0.1:9000/admin/saved-searches
+                  - img [ref=e858]
+                  - generic [ref=e860]: البحوث المحفوظة
+              - listitem [ref=e861]:
+                - link "سجل البحث" [ref=e862] [cursor=pointer]:
+                  - /url: http://127.0.0.1:9000/admin/search-logs
+                  - img [ref=e863]
+                  - generic [ref=e865]: سجل البحث
+              - listitem [ref=e866]:
+                - link "قوائم الأمنيات" [ref=e867] [cursor=pointer]:
+                  - /url: http://127.0.0.1:9000/admin/wishlists
+                  - img [ref=e868]
+                  - generic [ref=e870]: قوائم الأمنيات
+          - listitem [ref=e871]:
+            - generic [ref=e872] [cursor=pointer]:
+              - generic [ref=e873]: الجغرافيا
+              - button "الجغرافيا" [expanded] [ref=e874]:
+                - generic [ref=e875]: الجغرافيا
+                - img [ref=e876]
+            - list [ref=e878]:
+              - listitem [ref=e879]:
+                - link "الدول" [ref=e880] [cursor=pointer]:
+                  - /url: http://127.0.0.1:9000/admin/countries
+                  - img [ref=e881]
+                  - generic [ref=e883]: الدول
+              - listitem [ref=e884]:
+                - link "المحافظات" [ref=e885] [cursor=pointer]:
+                  - /url: http://127.0.0.1:9000/admin/governorates
+                  - img [ref=e886]
+                  - generic [ref=e888]: المحافظات
+              - listitem [ref=e889]:
+                - link "المناطق" [ref=e890] [cursor=pointer]:
+                  - /url: http://127.0.0.1:9000/admin/regions
+                  - img [ref=e891]
+                  - generic [ref=e894]: المناطق
+              - listitem [ref=e895]:
+                - link "المدن" [ref=e896] [cursor=pointer]:
+                  - /url: http://127.0.0.1:9000/admin/cities
+                  - img [ref=e897]
+                  - generic [ref=e899]: المدن
+          - listitem [ref=e900]:
+            - generic [ref=e901] [cursor=pointer]:
+              - generic [ref=e902]: Identity
+              - button "Identity" [expanded] [ref=e903]:
+                - generic [ref=e904]: Identity
+                - img [ref=e905]
+            - list [ref=e907]:
+              - listitem [ref=e908]:
+                - link "المستخدمون" [ref=e909] [cursor=pointer]:
+                  - /url: http://127.0.0.1:9000/admin/users
+                  - img [ref=e910]
+                  - generic [ref=e912]: المستخدمون
+              - listitem [ref=e913]:
+                - link "ملفات العملاء" [ref=e914] [cursor=pointer]:
+                  - /url: http://127.0.0.1:9000/admin/customer-profiles
+                  - img [ref=e915]
+                  - generic [ref=e917]: ملفات العملاء
+              - listitem [ref=e918]:
+                - link "عناوين العملاء" [ref=e919] [cursor=pointer]:
+                  - /url: http://127.0.0.1:9000/admin/customer-addresses
+                  - img [ref=e920]
+                  - generic [ref=e923]: عناوين العملاء
+              - listitem [ref=e924]:
+                - link "أجهزة المستخدمين" [ref=e925] [cursor=pointer]:
+                  - /url: http://127.0.0.1:9000/admin/user-devices
+                  - img [ref=e926]
+                  - generic [ref=e928]: أجهزة المستخدمين
+          - listitem [ref=e929]:
+            - generic [ref=e930] [cursor=pointer]:
+              - generic [ref=e931]: Vendor Onboarding
+              - button "Vendor Onboarding" [expanded] [ref=e932]:
+                - generic [ref=e933]: Vendor Onboarding
+                - img [ref=e934]
+            - list [ref=e936]:
+              - listitem [ref=e937]:
+                - link "قائمة الانتظار" [ref=e938] [cursor=pointer]:
+                  - /url: http://127.0.0.1:9000/admin/vendor-approval-queue
+                  - img [ref=e939]
+                  - generic [ref=e941]: قائمة الانتظار
+              - listitem [ref=e942]:
+                - link "جميع مقدمي الخدمات" [ref=e943] [cursor=pointer]:
+                  - /url: http://127.0.0.1:9000/admin/vendor-profiles
+                  - img [ref=e944]
+                  - generic [ref=e946]: جميع مقدمي الخدمات
+              - listitem [ref=e947]:
+                - link "المستندات" [ref=e948] [cursor=pointer]:
+                  - /url: http://127.0.0.1:9000/admin/vendor-document-filaments
+                  - img [ref=e949]
+                  - generic [ref=e951]: المستندات
+              - listitem [ref=e952]:
+                - link "مناطق التغطية" [ref=e953] [cursor=pointer]:
+                  - /url: http://127.0.0.1:9000/admin/vendor-coverage-areas
+                  - img [ref=e954]
+                  - generic [ref=e956]: مناطق التغطية
+              - listitem [ref=e957]:
+                - link "ساعات العمل" [ref=e958] [cursor=pointer]:
+                  - /url: http://127.0.0.1:9000/admin/vendor-business-hours
+                  - img [ref=e959]
+                  - generic [ref=e961]: ساعات العمل
+              - listitem [ref=e962]:
+                - link "أنواع المنتجات المعتمدة" [ref=e963] [cursor=pointer]:
+                  - /url: http://127.0.0.1:9000/admin/vendor-approved-product-types
+                  - img [ref=e964]
+                  - generic [ref=e966]: أنواع المنتجات المعتمدة
+          - listitem [ref=e967]:
+            - generic [ref=e968] [cursor=pointer]:
+              - generic [ref=e969]: Payments
+              - button "Payments" [expanded] [ref=e970]:
+                - generic [ref=e971]: Payments
+                - img [ref=e972]
+            - list [ref=e974]:
+              - listitem [ref=e975]:
+                - link "المدفوعات" [ref=e976] [cursor=pointer]:
+                  - /url: http://127.0.0.1:9000/admin/payments
+                  - img [ref=e977]
+                  - generic [ref=e979]: المدفوعات
+              - listitem [ref=e980]:
+                - link "محاولات الدفع" [ref=e981] [cursor=pointer]:
+                  - /url: http://127.0.0.1:9000/admin/payment-attempts
+                  - img [ref=e982]
+                  - generic [ref=e984]: محاولات الدفع
+              - listitem [ref=e985]:
+                - link "المبالغ المستردة" [ref=e986] [cursor=pointer]:
+                  - /url: http://127.0.0.1:9000/admin/refunds
+                  - img [ref=e987]
+                  - generic [ref=e989]: المبالغ المستردة
+              - listitem [ref=e990]:
+                - link "سجلات Webhook" [ref=e991] [cursor=pointer]:
+                  - /url: http://127.0.0.1:9000/admin/gateway-webhook-logs
+                  - img [ref=e992]
+                  - generic [ref=e994]: سجلات Webhook
+              - listitem [ref=e995]:
+                - link "مفاتيح الإيدمبوتنسي" [ref=e996] [cursor=pointer]:
+                  - /url: http://127.0.0.1:9000/admin/idempotency-keys
+                  - img [ref=e997]
+                  - generic [ref=e999]: مفاتيح الإيدمبوتنسي
+          - listitem [ref=e1000]:
+            - generic [ref=e1001] [cursor=pointer]:
+              - generic [ref=e1002]: Settlement
+              - button "Settlement" [expanded] [ref=e1003]:
+                - generic [ref=e1004]: Settlement
+                - img [ref=e1005]
+            - list [ref=e1007]:
+              - listitem [ref=e1008]:
+                - link "قواعد العمولة" [ref=e1009] [cursor=pointer]:
+                  - /url: http://127.0.0.1:9000/admin/settlement-commission-rules
+                  - img [ref=e1010]
+                  - generic [ref=e1012]: قواعد العمولة
+              - listitem [ref=e1013]:
+                - link "سجل المحفظة" [ref=e1014] [cursor=pointer]:
+                  - /url: http://127.0.0.1:9000/admin/settlement-wallets
+                  - img [ref=e1015]
+                  - generic [ref=e1017]: سجل المحفظة
+              - listitem [ref=e1018]:
+                - link "طلبات السحب" [ref=e1019] [cursor=pointer]:
+                  - /url: http://127.0.0.1:9000/admin/settlement-withdrawals
+                  - img [ref=e1020]
+                  - generic [ref=e1022]: طلبات السحب
+              - listitem [ref=e1023]:
+                - link "العمولات" [ref=e1024] [cursor=pointer]:
+                  - /url: http://127.0.0.1:9000/admin/commissions
+                  - img [ref=e1025]
+                  - generic [ref=e1027]: العمولات
+              - listitem [ref=e1028]:
+                - link "جولات التسوية" [ref=e1029] [cursor=pointer]:
+                  - /url: http://127.0.0.1:9000/admin/settlement-runs
+                  - img [ref=e1030]
+                  - generic [ref=e1032]: جولات التسوية
+          - listitem [ref=e1033]:
+            - generic [ref=e1034] [cursor=pointer]:
+              - generic [ref=e1035]: Settings
+              - button "Settings" [expanded] [ref=e1036]:
+                - generic [ref=e1037]: Settings
+                - img [ref=e1038]
+            - list [ref=e1040]:
+              - listitem [ref=e1041]:
+                - link "CMS Pages" [ref=e1042] [cursor=pointer]:
+                  - /url: http://127.0.0.1:9000/admin/cms-pages
+                  - img [ref=e1043]
+                  - generic [ref=e1045]: CMS Pages
+              - listitem [ref=e1046]:
+                - link "App Settings" [ref=e1047] [cursor=pointer]:
+                  - /url: http://127.0.0.1:9000/admin/manage-settings
+                  - img [ref=e1048]
+                  - generic [ref=e1051]: App Settings
+          - listitem [ref=e1052]:
+            - generic [ref=e1053] [cursor=pointer]:
+              - generic [ref=e1054]: Loyalty
+              - button "Loyalty" [expanded] [ref=e1055]:
+                - generic [ref=e1056]: Loyalty
+                - img [ref=e1057]
+            - list [ref=e1059]:
+              - listitem [ref=e1060]:
+                - link "قواعد الولاء" [ref=e1061] [cursor=pointer]:
+                  - /url: http://127.0.0.1:9000/admin/loyalty-rules
+                  - img [ref=e1062]
+                  - generic [ref=e1064]: قواعد الولاء
+              - listitem [ref=e1065]:
+                - link "استبدال النقاط" [ref=e1066] [cursor=pointer]:
+                  - /url: http://127.0.0.1:9000/admin/loyalty-redemptions
+                  - img [ref=e1067]
+                  - generic [ref=e1069]: استبدال النقاط
+              - listitem [ref=e1070]:
+                - link "سجل النقاط" [ref=e1071] [cursor=pointer]:
+                  - /url: http://127.0.0.1:9000/admin/loyalty-ledgers
+                  - img [ref=e1072]
+                  - generic [ref=e1074]: سجل النقاط
+              - listitem [ref=e1075]:
+                - link "برامج الولاء" [ref=e1076] [cursor=pointer]:
+                  - /url: http://127.0.0.1:9000/admin/loyalty-programs
+                  - img [ref=e1077]
+                  - generic [ref=e1079]: برامج الولاء
+          - listitem [ref=e1080]:
+            - generic [ref=e1081] [cursor=pointer]:
+              - generic [ref=e1082]: Users
+              - button "Users" [expanded] [ref=e1083]:
+                - generic [ref=e1084]: Users
+                - img [ref=e1085]
+            - list [ref=e1087]:
+              - listitem [ref=e1088]:
+                - link "العملاء" [ref=e1089] [cursor=pointer]:
+                  - /url: http://127.0.0.1:9000/admin/customers
+                  - img [ref=e1090]
+                  - generic [ref=e1092]: العملاء
+  - generic:
+    - status

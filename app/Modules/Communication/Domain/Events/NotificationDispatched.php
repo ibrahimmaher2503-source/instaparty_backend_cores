@@ -7,6 +7,7 @@ namespace App\Modules\Communication\Domain\Events;
 use App\Modules\Communication\Domain\Enums\DispatchStatus;
 use App\Modules\Communication\Domain\Enums\NotificationChannel;
 use App\Modules\Communication\Domain\Models\NotificationDispatch;
+use App\Modules\Communication\Domain\Models\NotificationTemplate;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
@@ -30,12 +31,12 @@ class NotificationDispatched
     public function __construct(NotificationDispatch $dispatch)
     {
         $this->dispatchId = $dispatch->id;
-        $this->userId     = $dispatch->user_id;
-        $this->channel    = $dispatch->channel;
-        $this->status     = $dispatch->status;
+        $this->userId = $dispatch->user_id;
+        $this->channel = $dispatch->channel;
+        $this->status = $dispatch->status;
 
-        /** @var \App\Modules\Communication\Domain\Models\NotificationTemplate|null $template */
-        $template         = $dispatch->template;
-        $this->eventKey   = $template !== null ? $template->event_key : '';
+        /** @var NotificationTemplate|null $template */
+        $template = $dispatch->template;
+        $this->eventKey = $template !== null ? $template->event_key : '';
     }
 }
