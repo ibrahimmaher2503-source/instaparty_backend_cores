@@ -10,15 +10,23 @@ use App\Modules\Communication\Application\Actions\DispatchNotificationAction;
 use App\Modules\Communication\Application\Listeners\OnBookingConfirmed;
 use App\Modules\Communication\Application\Listeners\OnBookingForceCancelledNotifyListener;
 use App\Modules\Communication\Application\Listeners\OnBookingModified;
+use App\Modules\Communication\Application\Listeners\OnBookingStalledInbox;
 use App\Modules\Communication\Application\Listeners\OnBookingSubmitted;
+use App\Modules\Communication\Application\Listeners\OnChatFlaggedInbox;
 use App\Modules\Communication\Application\Listeners\OnPaymentCaptured;
+use App\Modules\Communication\Application\Listeners\OnPaymentFailedInbox;
+use App\Modules\Communication\Application\Listeners\OnServiceSubmittedForReviewInbox;
+use App\Modules\Communication\Application\Listeners\OnVendorRegisteredInbox;
+use App\Modules\Communication\Application\Listeners\OnWithdrawalRequestedInbox;
 use App\Modules\Communication\Application\Services\SegmentResolver;
+use App\Modules\Communication\Console\WakeupSnoozedInboxItemsCommand;
 use App\Modules\Communication\Domain\Contracts\NotificationDispatcher;
 use App\Modules\Communication\Domain\Enums\NotificationChannel;
 use App\Modules\Communication\Infrastructure\Gateways\FcmPushAdapter;
 use App\Modules\Communication\Infrastructure\Gateways\MailchimpEmailAdapter;
 use App\Modules\Communication\Infrastructure\Gateways\VonageSmsAdapter;
 use App\Modules\Communication\Infrastructure\Gateways\WhatsAppStubAdapter;
+use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
@@ -41,9 +49,11 @@ class CommunicationServiceProvider extends ServiceProvider
     {
         $this->loadMigrationsFrom(__DIR__.'/../Database/Migrations');
         $this->loadTranslationsFrom(__DIR__.'/../Resources/lang', 'communication');
+        $this->commands([WakeupSnoozedInboxItemsCommand::class]);
 
         $this->registerRoutes();
         $this->registerListeners();
+        $this->registerSchedule();
     }
 
     private function registerRoutes(): void
@@ -63,6 +73,7 @@ class CommunicationServiceProvider extends ServiceProvider
 
     private function registerListeners(): void
     {
+        // Existing notification listeners
         Event::listen('App\Modules\Booking\Domain\Events\BookingSubmittedToVendor', OnBookingSubmitted::class);
         Event::listen('App\Modules\Booking\Domain\Events\CustomerModificationDecided', OnBookingModified::class);
         Event::listen('App\Modules\Booking\Domain\Events\BookingConfirmed', OnBookingConfirmed::class);
@@ -70,5 +81,23 @@ class CommunicationServiceProvider extends ServiceProvider
         Event::listen('App\Modules\Booking\Domain\Events\BookingForceCancelled', OnBookingForceCancelledNotifyListener::class);
         // OnRentalDeliveryScheduled, OnSalePreparationStarted, OnDigitalDelivered, OnDigitalExpiringSoon
         // are wired in a later phase once those lifecycle events exist in the Booking module.
+
+        // Admin inbox routing listeners
+        Event::listen('App\Modules\Identity\Domain\Events\VendorRegistered', OnVendorRegisteredInbox::class);
+        Event::listen('App\Modules\Payments\Domain\Events\PaymentFailed', OnPaymentFailedInbox::class);
+        Event::listen('App\Modules\Settlement\Domain\Events\WithdrawalRequested', OnWithdrawalRequestedInbox::class);
+        Event::listen('App\Modules\Booking\Domain\Events\BookingStalled', OnBookingStalledInbox::class);
+        Event::listen('App\Modules\Communication\Domain\Events\ChatFlagged', OnChatFlaggedInbox::class);
+        Event::listen('App\Modules\Catalog\Domain\Events\ServiceSubmittedForReview', OnServiceSubmittedForReviewInbox::class);
+    }
+
+    private function registerSchedule(): void
+    {
+        $this->app->booted(function () {
+            $this->app->make(Schedule::class)
+                ->command(WakeupSnoozedInboxItemsCommand::class)
+                ->everyFiveMinutes()
+                ->withoutOverlapping();
+        });
     }
 }

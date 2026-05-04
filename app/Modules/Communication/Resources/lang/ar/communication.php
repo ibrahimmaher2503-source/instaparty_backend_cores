@@ -63,6 +63,40 @@ return [
         ],
     ],
 
+    'created_at' => 'تاريخ الإنشاء',
+
+    'inbox' => [
+        'severity' => 'الأهمية',
+        'title' => 'العنوان',
+        'source' => 'المصدر',
+        'status' => 'الحالة',
+        'received_at' => 'وقت الاستلام',
+        'snooze_duration' => 'مدة التأجيل',
+        'reassign_to' => 'إعادة تعيين إلى',
+        'marked_read' => 'تم التحديد كمقروء.',
+        'snoozed' => 'تم تأجيل التنبيه.',
+        'reassigned' => 'تم إعادة تعيين التنبيه.',
+        'resolved' => 'تم حل التنبيه.',
+        'batch_resolved' => 'تم حل :count تنبيه.',
+        'actions' => [
+            'mark_read' => 'تحديد كمقروء',
+            'snooze' => 'تأجيل',
+            'reassign' => 'إعادة تعيين',
+            'resolve' => 'إنهاء',
+            'batch_resolve' => 'إنهاء جماعي',
+        ],
+    ],
+
+    'routing' => [
+        'event_key' => 'مفتاح الحدث',
+        'severity' => 'الأهمية',
+        'route_to_role' => 'توجيه إلى دور',
+        'route_to_admin' => 'توجيه إلى مشرف',
+        'is_active' => 'نشط',
+        'target' => 'الوجهة',
+        'role_or_admin_hint' => 'حدد إما دوراً أو مشرفاً محدداً — لا كليهما.',
+    ],
+
     'columns' => [
         'public_id' => 'المعرّف العام',
         'template' => 'القالب',

@@ -72,6 +72,40 @@ return [
         ],
     ],
 
+    'created_at' => 'Created At',
+
+    'inbox' => [
+        'severity' => 'Severity',
+        'title' => 'Title',
+        'source' => 'Source',
+        'status' => 'Status',
+        'received_at' => 'Received At',
+        'snooze_duration' => 'Snooze Duration',
+        'reassign_to' => 'Reassign To',
+        'marked_read' => 'Marked as read.',
+        'snoozed' => 'Item snoozed.',
+        'reassigned' => 'Item reassigned.',
+        'resolved' => 'Item resolved.',
+        'batch_resolved' => ':count item(s) resolved.',
+        'actions' => [
+            'mark_read' => 'Mark as Read',
+            'snooze' => 'Snooze',
+            'reassign' => 'Reassign',
+            'resolve' => 'Resolve',
+            'batch_resolve' => 'Batch Resolve',
+        ],
+    ],
+
+    'routing' => [
+        'event_key' => 'Event Key',
+        'severity' => 'Severity',
+        'route_to_role' => 'Route to Role',
+        'route_to_admin' => 'Route to Admin',
+        'is_active' => 'Active',
+        'target' => 'Route Target',
+        'role_or_admin_hint' => 'Set either a role or a specific admin — not both.',
+    ],
+
     'columns' => [
         'public_id' => 'Public ID',
         'template' => 'Template',
