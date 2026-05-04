@@ -39,7 +39,7 @@ return new class extends Migration
             $table->timestamp('paid_at')->nullable();
             $table->timestamp('created_at')->useCurrent();
 
-            $table->unique(['vendor_subscription_id', 'period_start', 'period_end']);
+            $table->unique(['vendor_subscription_id', 'period_start', 'period_end'], 'si_subscription_period_unique');
             $table->index(['vendor_subscription_id', 'status']);
         });
     }

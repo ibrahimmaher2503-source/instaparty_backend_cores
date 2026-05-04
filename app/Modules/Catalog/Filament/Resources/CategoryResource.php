@@ -31,27 +31,9 @@ class CategoryResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-tag';
 
-    public static function getNavigationGroup(): ?string
-    {
-        return __('admin.nav.groups.catalog');
-    }
+    protected static ?string $navigationGroup = 'Catalog';
 
     protected static ?int $navigationSort = 2;
-
-    public static function getNavigationLabel(): string
-    {
-        return __('catalog.nav.categories');
-    }
-
-    public static function getModelLabel(): string
-    {
-        return __('catalog.models.category.singular');
-    }
-
-    public static function getPluralModelLabel(): string
-    {
-        return __('catalog.models.category.plural');
-    }
 
     public static function getTranslatableLocales(): array
     {
@@ -99,25 +81,25 @@ class CategoryResource extends Resource
                                 ->maxLength(500)
                                 ->label('Description (English)'),
                         ]),
-                    Tabs\Tab::make('Ø§Ù„Ø¹Ø±Ø¨ÙŠØ©')
-                        ->schema([
-                            TextInput::make('name.ar')
-                                ->required()
-                                ->maxLength(255)
-                                ->label('Ø§Ù„Ø§Ø³Ù… (Ø¹Ø±Ø¨ÙŠ)')
-                                ->extraInputAttributes([
-                                    'dir' => 'rtl',
-                                    'style' => 'text-align: right;',
-                                ]),
+                  Tabs\Tab::make('العربية')
+    ->schema([
+        TextInput::make('name.ar')
+    ->required()
+    ->maxLength(255)
+    ->label('الاسم (عربي)')
+    ->extraInputAttributes([
+        'dir' => 'rtl',
+        'style' => 'text-align: right;',
+    ]),
 
-                            TextInput::make('description.ar')
-                                ->maxLength(500)
-                                ->label('Ø§Ù„ÙˆØµÙ (Ø¹Ø±Ø¨ÙŠ)')
-                                ->extraInputAttributes([
-                                    'dir' => 'rtl',
-                                    'style' => 'text-align: right;',
-                                ]),
-                        ]),
+        TextInput::make('description.ar')
+            ->maxLength(500)
+            ->label('الوصف (عربي)')
+            ->extraInputAttributes([
+                'dir' => 'rtl',
+                'style' => 'text-align: right;',
+            ]),
+    ]),
                 ])
                 ->columnSpanFull(),
 
@@ -146,13 +128,7 @@ class CategoryResource extends Resource
                     ->label(__('catalog.code')),
 
                 TextColumn::make('name')
-                    ->getStateUsing(function (Category $record): string {
-                        $value = $record->getTranslation('name', app()->getLocale(), useFallbackLocale: true);
-                        if (is_array($value)) {
-                            $value = $value[app()->getLocale()] ?? $value['en'] ?? reset($value);
-                        }
-                        return is_string($value) ? $value : '';
-                    })
+                    ->getStateUsing(fn (Category $record): string => $record->getTranslation('name', app()->getLocale(), useFallbackLocale: true))
                     ->searchable(query: fn ($query, $search) => $query->whereJsonContains('name->en', $search)->orWhereJsonContains('name->ar', $search))
                     ->label(__('catalog.name')),
 

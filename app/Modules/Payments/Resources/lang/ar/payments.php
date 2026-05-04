@@ -5,19 +5,19 @@ declare(strict_types=1);
 return [
     'navigation' => [
         'payments' => 'المدفوعات',
-        'refunds' => 'المبالغ المستردة',
+        'refunds' => 'طلبات الاسترداد',
         'attempts' => 'محاولات الدفع',
         'webhook_logs' => 'سجلات Webhook',
-        'idempotency_keys' => 'مفاتيح الإيدمبوتنسي',
+        'idempotency_keys' => 'مفاتيح منع التكرار',
     ],
 
     'models' => [
         'payment' => [
-            'singular' => 'الدفعة',
+            'singular' => 'عملية دفع',
             'plural' => 'المدفوعات',
         ],
         'payment_attempt' => [
-            'singular' => 'محاولة الدفع',
+            'singular' => 'محاولة دفع',
             'plural' => 'محاولات الدفع',
         ],
         'webhook_log' => [
@@ -25,12 +25,12 @@ return [
             'plural' => 'سجلات Webhook',
         ],
         'idempotency_key' => [
-            'singular' => 'مفتاح الإيدمبوتنسي',
-            'plural' => 'مفاتيح الإيدمبوتنسي',
+            'singular' => 'مفتاح منع التكرار',
+            'plural' => 'مفاتيح منع التكرار',
         ],
         'refund' => [
-            'singular' => 'مبلغ مسترد',
-            'plural' => 'المبالغ المستردة',
+            'singular' => 'طلب استرداد',
+            'plural' => 'طلبات الاسترداد',
         ],
     ],
 
@@ -42,31 +42,23 @@ return [
         'method' => 'طريقة الدفع',
         'status' => 'الحالة',
         'captured_at' => 'تاريخ التحصيل',
-        'payment' => 'الدفعة',
+        'payment' => 'عملية الدفع',
         'attempt_no' => 'رقم المحاولة',
         'http_status' => 'حالة HTTP',
         'event_type' => 'نوع الحدث',
-        'signature_valid' => 'التوقيع صالح',
+        'signature_valid' => 'التوقيع صحيح',
         'processed_at' => 'تاريخ المعالجة',
         'key' => 'المفتاح',
         'route' => 'المسار',
         'response_status' => 'حالة الاستجابة',
-        'expires_at' => 'تاريخ الانتهاء',
-    ],
-
-    'event_types' => [
-        'payment_captured' => 'تم تحصيل الدفعة',
-        'payment_failed' => 'فشل الدفع',
-        'payment_authorized' => 'تم تصريح الدفعة',
-        'refund_completed' => 'تم استرداد المبلغ',
-        'refund_failed' => 'فشل الاسترداد',
+        'expires_at' => 'ينتهي في',
     ],
 
     'status' => [
         'pending' => 'قيد الانتظار',
-        'authorized' => 'مُصرَّح به',
+        'authorized' => 'تم التفويض',
         'captured' => 'تم التحصيل',
         'failed' => 'فشل',
-        'refunded' => 'مسترد',
+        'refunded' => 'تم رد المبلغ',
     ],
 ];

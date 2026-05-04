@@ -40,7 +40,7 @@ return new class extends Migration
             $table->timestamps();
 
             $table->unique(['booking_id', 'vendor_profile_id']);
-            $table->index(['vendor_profile_id', 'sub_status', 'response_deadline']);
+            $table->index(['vendor_profile_id', 'sub_status', 'response_deadline'], 'bv_vendor_status_deadline_idx');
         });
     }
 

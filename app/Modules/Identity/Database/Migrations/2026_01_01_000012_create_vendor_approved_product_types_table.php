@@ -24,7 +24,7 @@ return new class extends Migration
             $table->json('revoke_reason')->nullable();
             $table->timestamps();
 
-            $table->unique(['vendor_profile_id', 'product_type', 'revoked_at']);
+            $table->unique(['vendor_profile_id', 'product_type', 'revoked_at'], 'vendor_approved_types_unique');
             $table->index(['product_type']);
         });
     }

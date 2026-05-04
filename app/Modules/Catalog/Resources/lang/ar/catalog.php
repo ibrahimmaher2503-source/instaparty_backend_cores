@@ -3,21 +3,21 @@
 declare(strict_types=1);
 
 return [
-    // Navigation
+    // Navigation groups
     'nav_group_services' => 'الخدمات',
     'nav_group_catalog' => 'الكتالوج',
 
     'nav' => [
         'categories' => 'التصنيفات',
         'occasions' => 'المناسبات',
-        'rental_services' => 'خدمات الإيجار',
+        'rental_services' => 'خدمات التأجير',
         'sale_services' => 'خدمات البيع',
         'digital_services' => 'الخدمات الرقمية',
-        'service_themes' => 'سمات الخدمات',
-        'category_field_schemas' => 'مخططات حقول التصنيف',
-        'excel_imports' => 'استيرادات Excel',
+        'service_themes' => 'ثيمات الخدمات',
+        'category_field_schemas' => 'مخططات حقول التصنيفات',
+        'excel_imports' => 'عمليات استيراد إكسل',
         'inventory_reservations' => 'حجوزات المخزون',
-        'import_rental_services' => 'استيراد خدمات الإيجار',
+        'import_rental_services' => 'استيراد خدمات التأجير',
         'import_sale_services' => 'استيراد خدمات البيع',
         'import_digital_services' => 'استيراد الخدمات الرقمية',
     ],
@@ -32,8 +32,8 @@ return [
             'plural' => 'المناسبات',
         ],
         'rental_service' => [
-            'singular' => 'خدمة إيجار',
-            'plural' => 'خدمات الإيجار',
+            'singular' => 'خدمة تأجير',
+            'plural' => 'خدمات التأجير',
         ],
         'sale_service' => [
             'singular' => 'خدمة بيع',
@@ -44,21 +44,36 @@ return [
             'plural' => 'الخدمات الرقمية',
         ],
         'service_theme' => [
-            'singular' => 'سمة خدمة',
-            'plural' => 'سمات الخدمات',
+            'singular' => 'ثيم خدمة',
+            'plural' => 'ثيمات الخدمات',
         ],
         'category_field_schema' => [
-            'singular' => 'مخطط حقل التصنيف',
-            'plural' => 'مخططات حقول التصنيف',
+            'singular' => 'مخطط حقول التصنيف',
+            'plural' => 'مخططات حقول التصنيفات',
         ],
         'excel_import' => [
-            'singular' => 'استيراد Excel',
-            'plural' => 'استيرادات Excel',
+            'singular' => 'عملية استيراد إكسل',
+            'plural' => 'عمليات استيراد إكسل',
         ],
         'inventory_reservation' => [
             'singular' => 'حجز مخزون',
             'plural' => 'حجوزات المخزون',
         ],
+    ],
+
+    // Service statuses
+    'status_draft' => 'مسودة',
+    'status_pending_review' => 'قيد المراجعة',
+    'status_published' => 'منشور',
+    'status_rejected' => 'مرفوض',
+    'status_archived' => 'مؤرشف',
+
+    'status' => [
+        'draft' => 'مسودة',
+        'pending_review' => 'قيد المراجعة',
+        'published' => 'منشور',
+        'rejected' => 'مرفوض',
+        'archived' => 'مؤرشف',
     ],
 
     // Import statuses
@@ -68,142 +83,121 @@ return [
         'failed' => 'فشل',
     ],
 
+    // Product types
+    'product_type_rental' => 'تأجير',
+    'product_type_sale' => 'بيع',
+    'product_type_digital' => 'رقمي',
+
     // Field types
     'field_types' => [
         'text' => 'نص',
         'number' => 'رقم',
-        'boolean' => 'نعم/لا',
-        'select' => 'اختيار مفرد',
-        'multiselect' => 'اختيار متعدد',
+        'boolean' => 'نعم / لا',
+        'select' => 'اختيار واحد',
+        'multiselect' => 'اختيارات متعددة',
         'date' => 'تاريخ',
     ],
 
     // Hold types
     'hold_types' => [
-        'cart' => 'سلة التسوق',
+        'cart' => 'سلة الشراء',
         'payment' => 'الدفع',
     ],
 
     // Reservation statuses
-    'reservation_status_held' => 'محجوز',
+    'reservation_status_held' => 'محجوز مؤقتاً',
     'reservation_status_confirmed' => 'مؤكد',
-    'reservation_status_expired' => 'منتهي',
-    'reservation_status_released' => 'محرر',
-
-    // Service statuses
-    'status_draft' => 'مسودة',
-    'status_pending_review' => 'قيد المراجعة',
-    'status_published' => 'منشور',
-    'status_rejected' => 'مرفوض',
-    'status_archived' => 'مؤرشف',
-
-    // Product types
-    'product_type_rental' => 'إيجار',
-    'product_type_sale' => 'بيع',
-    'product_type_digital' => 'رقمي',
+    'reservation_status_expired' => 'منتهي الصلاحية',
+    'reservation_status_released' => 'تم تحريره',
 
     // Table / Form labels
     'code' => 'الكود',
     'name' => 'الاسم',
     'description' => 'الوصف',
-    'sort_order' => 'ترتيب العرض',
-    'is_active' => 'نشط',
-    'parent_category' => 'التصنيف الأب',
-    'no_parent' => 'بدون أب (مستوى أعلى)',
-    'allowed_product_types' => 'أنواع المنتجات المسموح بها',
-    'product_type' => 'نوع المنتج',
-
-    // Section headings
-    'occasion_details' => 'تفاصيل المناسبة',
-    'category_details' => 'تفاصيل التصنيف',
-    'service_theme_details' => 'تفاصيل سمة الخدمة',
-    'category_field_schema_details' => 'تفاصيل مخطط حقل التصنيف',
-
-    // Category field schema
-    'field_key' => 'مفتاح الحقل',
-    'field_type' => 'نوع الحقل',
-    'field_label' => 'تسمية الحقل',
-    'field_label_en' => 'تسمية الحقل بالإنجليزية',
-    'field_label_ar' => 'تسمية الحقل بالعربية',
-    'advanced_schema' => 'مخطط متقدم',
-    'is_required' => 'مطلوب',
-    'is_filterable' => 'قابل للتصفية',
-    'icon_path' => 'مسار الأيقونة',
-    'options' => 'الخيارات',
-    'validation_rules' => 'قواعد التحقق',
-
-    // Shared service form
-    'shared' => 'المعلومات العامة',
-    'category' => 'التصنيف',
-    'base_price' => 'السعر الأساسي (قرش)',
-    'status_label' => 'الحالة',
-    'is_featured' => 'مميز',
-    'vendor' => 'مقدم الخدمة',
-    'media' => 'الوسائط / المعرض',
-    'service' => 'الخدمة',
     'short_description' => 'وصف مختصر',
-    'long_description' => 'وصف مفصل',
+    'long_description' => 'وصف تفصيلي',
     'name_en' => 'الاسم بالإنجليزية',
     'name_ar' => 'الاسم بالعربية',
+    'sort_order' => 'ترتيب العرض',
+    'is_active' => 'نشط',
+    'parent_category' => 'التصنيف الرئيسي',
+    'no_parent' => 'بدون تصنيف رئيسي',
+    'allowed_product_types' => 'أنواع المنتجات المسموح بها',
+    'product_type' => 'نوع المنتج',
+    'category' => 'التصنيف',
+    'base_price' => 'السعر الأساسي بالقرش',
+    'status_label' => 'الحالة',
+    'is_featured' => 'مميز',
+    'vendor' => 'المورّد',
+    'media' => 'الوسائط / المعرض',
+    'service' => 'الخدمة',
     'user_id' => 'المستخدم',
     'quantity' => 'الكمية',
-    'public_id' => 'المعرف العام',
+    'public_id' => 'المعرّف العام',
     'original_filename' => 'اسم الملف الأصلي',
     'total_rows' => 'إجمالي الصفوف',
     'imported_rows_count' => 'الصفوف المستوردة',
     'error_rows' => 'صفوف الأخطاء',
-    'hold_type' => 'نوع الحجز',
+    'hold_type' => 'نوع الحجز المؤقت',
     'reserved_starts_at' => 'بداية الحجز',
     'reserved_ends_at' => 'نهاية الحجز',
-    'expires_at' => 'تاريخ الانتهاء',
+    'expires_at' => 'ينتهي في',
+
+    // Category field schema
+    'field_key' => 'مفتاح الحقل',
+    'field_type' => 'نوع الحقل',
+    'field_label' => 'عنوان الحقل',
+    'field_label_en' => 'عنوان الحقل بالإنجليزية',
+    'field_label_ar' => 'عنوان الحقل بالعربية',
+    'advanced_schema' => 'المخطط المتقدم',
+    'is_required' => 'مطلوب',
+    'is_filterable' => 'قابل للتصفية',
+    'icon_path' => 'مسار الأيقونة',
+
+    // Section headings
+    'occasion_details' => 'تفاصيل المناسبة',
+    'category_details' => 'تفاصيل التصنيف',
+    'service_theme_details' => 'تفاصيل ثيم الخدمة',
+    'shared' => 'المعلومات العامة',
 
     // Rental detail form
-    'rental_details' => 'تفاصيل الإيجار',
-    'requires_electricity' => 'يحتاج كهرباء',
-    'requires_outdoor_space' => 'يحتاج مساحة خارجية',
-    'default_rental_duration_hours' => 'مدة الإيجار الافتراضية (ساعات)',
-    'setup_time_minutes' => 'وقت التركيب (دقائق)',
-    'teardown_time_minutes' => 'وقت الفك (دقائق)',
-    'security_deposit' => 'تأمين (قرش)',
-    'minimum_space_sqm' => 'أدنى مساحة (متر مربع)',
+    'rental_details' => 'تفاصيل التأجير',
+    'requires_electricity' => 'يتطلب كهرباء',
+    'requires_outdoor_space' => 'يتطلب مساحة خارجية',
+    'default_rental_duration_hours' => 'مدة التأجير الافتراضية بالساعات',
+    'setup_time_minutes' => 'وقت التركيب بالدقائق',
+    'teardown_time_minutes' => 'وقت الفك بالدقائق',
+    'security_deposit' => 'مبلغ التأمين بالقرش',
+    'minimum_space_sqm' => 'أقل مساحة مطلوبة بالمتر المربع',
 
     // Sale detail form
     'sale_details' => 'تفاصيل البيع',
     'is_perishable' => 'قابل للتلف',
-    'is_made_to_order' => 'يُصنع بالطلب',
-    'lead_time_hours' => 'وقت التجهيز (ساعات)',
+    'is_made_to_order' => 'يُصنع حسب الطلب',
+    'lead_time_hours' => 'وقت التجهيز بالساعات',
     'stock_quantity' => 'الكمية المتاحة',
-    'stock_quantity_hint' => 'اتركه فارغاً للكمية غير المحدودة',
+    'stock_quantity_hint' => 'اتركه فارغاً إذا كانت الكمية غير محدودة',
     'customization_fields' => 'حقول التخصيص',
 
     // Digital detail form
-    'digital_details' => 'التفاصيل الرقمية',
+    'digital_details' => 'تفاصيل الخدمة الرقمية',
     'delivery_method' => 'طريقة التسليم',
-    'has_expiry' => 'له تاريخ انتهاء',
-    'expiry_days_after_purchase' => 'أيام الانتهاء بعد الشراء',
-    'is_refundable_after_delivery' => 'قابل للاسترداد بعد التسليم',
-    'redemption_url_template' => 'نموذج رابط الاستبدال',
+    'has_expiry' => 'له مدة صلاحية',
+    'expiry_days_after_purchase' => 'عدد أيام الصلاحية بعد الشراء',
+    'is_refundable_after_delivery' => 'قابل لرد المبلغ بعد التسليم',
+    'redemption_url_template' => 'قالب رابط الاستخدام',
 
     // Translatable content section
-    'translatable_fields' => 'المحتوى (قابل للترجمة)',
-
-    // Status nested array (for use in Filament filter options and display)
-    'status' => [
-        'draft' => 'مسودة',
-        'pending_review' => 'قيد المراجعة',
-        'published' => 'منشور',
-        'rejected' => 'مرفوض',
-        'archived' => 'مؤرشف',
-    ],
+    'translatable_fields' => 'المحتوى القابل للترجمة',
 
     // Excel import
-    'import_file_label' => 'ملف إكسل (.xlsx, .xls, .csv)',
+    'import_file_label' => 'ملف إكسل أو CSV',
     'import_button' => 'استيراد',
-    'import_no_vendor' => 'لا يوجد ملف بائع مرتبط بحسابك.',
+    'import_no_vendor' => 'لا يوجد ملف مورّد مرتبط بحسابك.',
     'import_success' => 'تم استيراد :count خدمة بنجاح.',
-    'import_failed' => 'فشل الاستيراد. يرجى مراجعة الأخطاء أدناه.',
+    'import_failed' => 'فشلت عملية الاستيراد. يرجى مراجعة الأخطاء أدناه.',
     'imported_rows' => 'تم استيراد :count صف بنجاح.',
-    'import_failed_rows' => 'فشل الاستيراد بـ :count خطأ.',
+    'import_failed_rows' => 'فشلت عملية الاستيراد بسبب :count خطأ.',
     'row' => 'الصف',
     'field' => 'الحقل',
     'error' => 'الخطأ',

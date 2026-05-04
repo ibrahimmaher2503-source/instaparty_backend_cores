@@ -49,7 +49,7 @@ return new class extends Migration
             $table->timestamps();
 
             // Rental overlap query
-            $table->index(['service_id', 'reserved_starts_at', 'reserved_ends_at', 'status']);
+            $table->index(['service_id', 'reserved_starts_at', 'reserved_ends_at', 'status'], 'sir_service_reserved_status_idx');
 
             // Cleanup job
             $table->index(['status', 'expires_at']);

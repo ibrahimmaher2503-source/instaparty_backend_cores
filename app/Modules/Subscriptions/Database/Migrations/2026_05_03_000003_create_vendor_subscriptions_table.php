@@ -50,7 +50,7 @@ return new class extends Migration
             $table->timestamps();
 
             $table->index(['vendor_profile_id', 'status']);
-            $table->index(['vendor_profile_id', 'is_admin_override', 'status']);
+            $table->index(['vendor_profile_id', 'is_admin_override', 'status'], 'vs_vendor_override_status_idx');
             $table->index(['status', 'current_period_end']);
             $table->index(['status', 'grace_period_ends_at']);
             $table->index(['status', 'override_expires_at']);

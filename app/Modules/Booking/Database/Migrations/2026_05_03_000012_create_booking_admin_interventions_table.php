@@ -29,7 +29,7 @@ return new class extends Migration
             $table->timestamps();
 
             $table->index(['booking_id', 'intervention_type']);
-            $table->index(['customer_consent_status', 'consent_expires_at']);
+            $table->index(['customer_consent_status', 'consent_expires_at'], 'bai_consent_status_expires_idx');
             $table->index(['admin_id', 'created_at']);
         });
     }

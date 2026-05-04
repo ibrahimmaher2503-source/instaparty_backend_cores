@@ -29,7 +29,7 @@ return new class extends Migration
 
             $table->timestamp('created_at')->useCurrent();
 
-            $table->index(['transitionable_type', 'transitionable_id', 'created_at']);
+            $table->index(['transitionable_type', 'transitionable_id', 'created_at'], 'bst_transitionable_created_idx');
         });
     }
 
