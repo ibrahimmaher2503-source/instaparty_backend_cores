@@ -4,15 +4,11 @@ declare(strict_types=1);
 
 namespace App\Modules\Loyalty\Database\Factories;
 
-use App\Modules\Booking\Domain\Models\Booking;
-use App\Modules\Booking\Domain\Models\BookingItem;
-use App\Modules\Catalog\Domain\Enums\ProductType;
 use App\Modules\Identity\Domain\Models\User;
 use App\Modules\Identity\Domain\Models\VendorProfile;
-use App\Modules\Loyalty\Domain\Enums\LedgerEntryType;
+use App\Modules\Loyalty\Domain\Enums\LedgerDirection;
 use App\Modules\Loyalty\Domain\Models\LoyaltyLedgerEntry;
 use App\Modules\Loyalty\Domain\Models\LoyaltyProgram;
-use App\Modules\Loyalty\Domain\Models\LoyaltyRedemption;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
@@ -25,42 +21,43 @@ class LoyaltyLedgerEntryFactory extends Factory
 
     public function definition(): array
     {
+        $points = $this->faker->numberBetween(10, 200);
+
         return [
             'public_id' => (string) Str::ulid(),
-            'customer_id' => User::factory()->asCustomer(),
+            'user_id' => User::factory()->asCustomer(),
             'vendor_profile_id' => VendorProfile::factory()->approved(),
             'loyalty_program_id' => LoyaltyProgram::factory(),
-            'entry_type' => LedgerEntryType::Earn,
-            'points' => $this->faker->numberBetween(10, 200),
-            'booking_id' => Booking::factory(),
-            'booking_item_id' => BookingItem::factory(),
-            'redemption_id' => LoyaltyRedemption::factory(),
-            'reversed_from_ledger_id' => null,
-            'product_type' => $this->faker->randomElement(ProductType::cases()),
+            'direction' => LedgerDirection::Earn,
+            'points' => $points,
+            'balance_after' => $points,
+            'reference_type' => null,
+            'reference_id' => null,
             'reason' => [
                 'en' => $this->faker->sentence(),
                 'ar' => 'سبب السجل.',
             ],
+            'expires_at' => null,
         ];
     }
 
     public function earn(): static
     {
-        return $this->state(['entry_type' => LedgerEntryType::Earn]);
+        return $this->state(['direction' => LedgerDirection::Earn]);
     }
 
     public function redeem(): static
     {
-        return $this->state(['entry_type' => LedgerEntryType::Redeem]);
+        return $this->state(['direction' => LedgerDirection::Redeem]);
     }
 
-    public function reversal(): static
+    public function expire(): static
     {
-        return $this->state(['entry_type' => LedgerEntryType::Reversal]);
+        return $this->state(['direction' => LedgerDirection::Expire]);
     }
 
-    public function voidRelease(): static
+    public function adjust(): static
     {
-        return $this->state(['entry_type' => LedgerEntryType::VoidRelease]);
+        return $this->state(['direction' => LedgerDirection::Adjust]);
     }
 }

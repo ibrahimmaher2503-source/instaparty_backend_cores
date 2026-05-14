@@ -8,24 +8,24 @@ final readonly class RuleDraft
 {
     public function __construct(
         public array $label,
-        public int $earnPointsPerMinor,
-        public int $earnMinorPerUnit,
-        public int $redemptionRatioPoints,
-        public int $redemptionRatioMinor,
-        public int $minPointsToRedeem,
-        public int $maxRedeemPctBps,
+        public string $ruleKind,
+        public float $multiplier,
+        public ?array $conditions,
+        public bool $isActive,
+        public ?string $startsAt,
+        public ?string $endsAt,
     ) {}
 
     public static function fromRequest(array $data): self
     {
         return new self(
             label: $data['label'],
-            earnPointsPerMinor: $data['earn_points_per_minor'],
-            earnMinorPerUnit: $data['earn_minor_per_unit'],
-            redemptionRatioPoints: $data['redemption_ratio_points'],
-            redemptionRatioMinor: $data['redemption_ratio_minor'],
-            minPointsToRedeem: $data['min_points_to_redeem'] ?? 0,
-            maxRedeemPctBps: $data['max_redeem_pct_bps'] ?? 5000,
+            ruleKind: $data['rule_kind'],
+            multiplier: (float) ($data['multiplier'] ?? 1.0),
+            conditions: $data['conditions'] ?? null,
+            isActive: (bool) ($data['is_active'] ?? true),
+            startsAt: $data['starts_at'] ?? null,
+            endsAt: $data['ends_at'] ?? null,
         );
     }
 }

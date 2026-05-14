@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use App\Modules\Identity\Domain\Models\User;
 use App\Modules\Communication\Application\Actions\AcknowledgeInboxItemAction;
 use App\Modules\Communication\Application\Actions\BatchResolveInboxItemsAction;
 use App\Modules\Communication\Application\Actions\ReassignInboxItemAction;
@@ -10,44 +9,18 @@ use App\Modules\Communication\Application\Actions\ResolveInboxItemAction;
 use App\Modules\Communication\Application\Actions\RouteToAdminInboxAction;
 use App\Modules\Communication\Application\Actions\SnoozeInboxItemAction;
 use App\Modules\Communication\Application\Listeners\OnVendorRegisteredInbox;
-use App\Modules\Communication\Database\Factories\AdminInboxItemFactory;
-use App\Modules\Communication\Database\Factories\AdminInboxRoutingRuleFactory;
 use App\Modules\Communication\Domain\Enums\AdminInboxSeverity;
 use App\Modules\Communication\Domain\Enums\AdminInboxStatus;
 use App\Modules\Communication\Domain\Models\AdminInboxItem;
 use App\Modules\Communication\Domain\Models\AdminInboxRoutingRule;
 use App\Modules\Identity\Domain\Events\VendorRegistered;
+use App\Modules\Identity\Domain\Models\User;
 use App\Modules\Identity\Domain\Models\VendorProfile;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Str;
 use Spatie\Permission\Models\Role;
 
 uses(RefreshDatabase::class);
-
-// ─────────────────────────────────────────────────────────────────────────────
-// Helpers
-// ─────────────────────────────────────────────────────────────────────────────
-
-function makeAdminWithRole(string $roleName): User
-{
-    $role = Role::firstOrCreate(['name' => $roleName, 'guard_name' => 'web']);
-    $admin = User::factory()->create();
-    $admin->assignRole($role);
-
-    return $admin;
-}
-
-function makeRoutingRule(string $eventKey, AdminInboxSeverity $severity, int $roleId): AdminInboxRoutingRule
-{
-    return AdminInboxRoutingRule::create([
-        'public_id'         => Str::ulid()->toBase32(),
-        'event_key'         => $eventKey,
-        'severity'          => $severity->value,
-        'route_to_role_id'  => $roleId,
-        'route_to_admin_id' => null,
-        'is_active'         => true,
-    ]);
-}
 
 // ─────────────────────────────────────────────────────────────────────────────
 // P1 — Vendor registration creates inbox items for vendor-manager role
@@ -90,11 +63,11 @@ it('does not create inbox items when routing rule is inactive', function () {
     $admin = makeAdminWithRole('vendor_manager');
 
     AdminInboxRoutingRule::create([
-        'public_id'        => Str::ulid()->toBase32(),
-        'event_key'        => 'vendor.registered',
-        'severity'         => AdminInboxSeverity::Info->value,
+        'public_id' => Str::ulid()->toBase32(),
+        'event_key' => 'vendor.registered',
+        'severity' => AdminInboxSeverity::Info->value,
         'route_to_role_id' => $role->id,
-        'is_active'        => false,
+        'is_active' => false,
     ]);
 
     $vendorProfile = VendorProfile::factory()->create();
@@ -113,12 +86,12 @@ it('does not create duplicate items for the same source + admin from overlapping
 
     $vendorProfile = VendorProfile::factory()->create();
     app(RouteToAdminInboxAction::class)->execute(
-        eventKey:   'vendor.registered',
-        severity:   AdminInboxSeverity::Info,
+        eventKey: 'vendor.registered',
+        severity: AdminInboxSeverity::Info,
         sourceType: 'vendor_profile',
-        sourceId:   $vendorProfile->id,
-        title:      ['en' => 'Test', 'ar' => 'اختبار'],
-        body:       ['en' => 'Body', 'ar' => 'النص'],
+        sourceId: $vendorProfile->id,
+        title: ['en' => 'Test', 'ar' => 'اختبار'],
+        body: ['en' => 'Body', 'ar' => 'النص'],
     );
 
     // UNIQUE (source_type, source_id, admin_id) constraint — only 1 item created
@@ -147,10 +120,10 @@ it('transitions item to resolved and writes audit log', function () {
     expect($item->fresh()->status)->toBe(AdminInboxStatus::Resolved);
 
     $this->assertDatabaseHas('activity_log', [
-        'log_name'   => 'default',
+        'log_name' => 'default',
         'description' => 'inbox_item_resolved',
         'subject_id' => $item->id,
-        'causer_id'  => $admin->id,
+        'causer_id' => $admin->id,
     ]);
 })->group('admin-inbox');
 
@@ -229,8 +202,8 @@ it('reassign writes an audit log row', function () {
 
     $this->assertDatabaseHas('activity_log', [
         'description' => 'inbox_item_reassigned',
-        'subject_id'  => $newItem->id,
-        'causer_id'   => $adminA->id,
+        'subject_id' => $newItem->id,
+        'causer_id' => $adminA->id,
     ]);
 })->group('admin-inbox');
 
@@ -266,4 +239,3 @@ it('batch resolve resolves only items owned by the actor', function () {
 
     expect($othersItem->fresh()->status)->toBe(AdminInboxStatus::Unread);
 })->group('admin-inbox');
-

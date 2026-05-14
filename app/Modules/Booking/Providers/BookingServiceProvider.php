@@ -14,13 +14,10 @@ use App\Modules\Booking\Console\Commands\ExpireVendorProposalsCommand;
 use App\Modules\Booking\Console\Commands\ReleaseExpiredReservationsCommand;
 use App\Modules\Booking\Domain\Contracts\BookingHistoryReader;
 use App\Modules\Booking\Domain\Contracts\BookingRepository;
-use App\Modules\Booking\Domain\Events\AlternativeVendorProposed;
 use App\Modules\Booking\Domain\Events\BookingCancelled;
-use App\Modules\Booking\Domain\Events\BookingForceCancelled;
-use App\Modules\Booking\Domain\Events\VendorProposalDecided;
-use App\Modules\Booking\Domain\Events\VendorResponseTimedOut;
 use App\Modules\Booking\Domain\Events\BookingConfirmed;
 use App\Modules\Booking\Domain\Events\BookingDraftCreated;
+use App\Modules\Booking\Domain\Events\BookingForceCancelled;
 use App\Modules\Booking\Domain\Events\BookingItemAdded;
 use App\Modules\Booking\Domain\Events\BookingItemRemoved;
 use App\Modules\Booking\Domain\Events\BookingSubmittedToVendor;
@@ -28,16 +25,23 @@ use App\Modules\Booking\Domain\Events\CustomerModificationDecided;
 use App\Modules\Booking\Domain\Events\VendorAccepted;
 use App\Modules\Booking\Domain\Events\VendorModificationProposed;
 use App\Modules\Booking\Domain\Events\VendorRejected;
+use App\Modules\Booking\Infrastructure\Loyalty\EloquentBookingDiscountWriter;
+use App\Modules\Booking\Infrastructure\Loyalty\EloquentBookingDraftReader;
+use App\Modules\Booking\Infrastructure\Loyalty\EloquentBookingItemNetAmountReader;
 use App\Modules\Booking\Infrastructure\Repositories\EloquentBookingHistoryReader;
 use App\Modules\Booking\Infrastructure\Repositories\EloquentBookingItemReviewabilityReader;
 use App\Modules\Booking\Infrastructure\Repositories\EloquentBookingRepository;
 use App\Modules\Booking\Infrastructure\Repositories\EloquentBookingVendorReviewabilityReader;
 use App\Modules\Booking\Infrastructure\Repositories\EloquentPaymentsBookingReader;
 use App\Modules\Booking\Infrastructure\Repositories\EloquentSettlementBookingReader;
+use App\Modules\Loyalty\Domain\Contracts\BookingDiscountWriter;
+use App\Modules\Loyalty\Domain\Contracts\BookingDraftReader;
+use App\Modules\Loyalty\Domain\Contracts\BookingItemNetAmountReader;
 use App\Modules\Payments\Domain\Contracts\PaymentsBookingReader;
 use App\Modules\Reviews\Domain\Contracts\BookingItemReviewabilityReader;
 use App\Modules\Reviews\Domain\Contracts\BookingVendorReviewabilityReader;
 use App\Modules\Settlement\Domain\Contracts\SettlementBookingReader;
+use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 
@@ -51,6 +55,11 @@ class BookingServiceProvider extends ServiceProvider
         $this->app->singleton(BookingItemReviewabilityReader::class, EloquentBookingItemReviewabilityReader::class);
         $this->app->singleton(BookingVendorReviewabilityReader::class, EloquentBookingVendorReviewabilityReader::class);
         $this->app->singleton(BookingHistoryReader::class, EloquentBookingHistoryReader::class);
+
+        // Cross-module contracts consumed by the Loyalty module.
+        $this->app->singleton(BookingItemNetAmountReader::class, EloquentBookingItemNetAmountReader::class);
+        $this->app->singleton(BookingDraftReader::class, EloquentBookingDraftReader::class);
+        $this->app->singleton(BookingDiscountWriter::class, EloquentBookingDiscountWriter::class);
     }
 
     public function boot(): void
@@ -90,7 +99,7 @@ class BookingServiceProvider extends ServiceProvider
         // Scheduler for proposal expiry
         if ($this->app->runningInConsole()) {
             $this->app->booted(function () {
-                $schedule = $this->app->make(\Illuminate\Console\Scheduling\Schedule::class);
+                $schedule = $this->app->make(Schedule::class);
                 $schedule->command('booking:expire-vendor-proposals')->hourly();
             });
         }

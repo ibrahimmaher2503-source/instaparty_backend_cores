@@ -6,10 +6,10 @@ namespace App\Modules\Subscriptions\Domain\Enums;
 
 enum SubscriptionStatus: string
 {
-    case Active     = 'active';
-    case PastDue    = 'past_due';
-    case Cancelled  = 'cancelled';
-    case Expired    = 'expired';
+    case Active = 'active';
+    case PastDue = 'past_due';
+    case Cancelled = 'cancelled';
+    case Expired = 'expired';
     case Superseded = 'superseded';
 
     public function isTerminal(): bool

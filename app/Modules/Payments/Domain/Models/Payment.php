@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Modules\Payments\Domain\Models;
 
+use App\Modules\Booking\Domain\Models\Booking;
 use App\Modules\Payments\Database\Factories\PaymentFactory;
 use App\Modules\Payments\Domain\Enums\PaymentMethod;
 use App\Modules\Payments\Domain\Enums\PaymentStatus;
@@ -43,7 +44,7 @@ class Payment extends Model
 
     public function booking(): BelongsTo
     {
-        return $this->belongsTo(\App\Modules\Booking\Domain\Models\Booking::class, 'booking_id');
+        return $this->belongsTo(Booking::class, 'booking_id');
     }
 
     public function attempts(): HasMany

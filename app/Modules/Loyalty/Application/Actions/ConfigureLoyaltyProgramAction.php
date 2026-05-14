@@ -19,19 +19,26 @@ class ConfigureLoyaltyProgramAction
         private readonly LoyaltyRuleRepository $rules,
     ) {}
 
-    public function execute(int $vendorProfileId, ProgramDraft $draft, ?RuleDraft $ruleDraft = null): LoyaltyProgram
+    /**
+     * @param  array<int, RuleDraft>|null  $ruleDrafts  null = leave rules untouched; [] = deactivate all
+     */
+    public function execute(int $vendorProfileId, ProgramDraft $draft, ?array $ruleDrafts = null): LoyaltyProgram
     {
-        return DB::transaction(function () use ($vendorProfileId, $draft, $ruleDraft) {
+        return DB::transaction(function () use ($vendorProfileId, $draft, $ruleDrafts) {
             $existing = $this->programs->findByVendor($vendorProfileId);
 
-            if ($existing) {
-                $program = $this->programs->update($existing, $draft);
-            } else {
-                $program = $this->programs->create($draft, $vendorProfileId);
-            }
+            $program = $existing
+                ? $this->programs->update($existing, $draft)
+                : $this->programs->create($draft, $vendorProfileId);
 
-            if ($ruleDraft !== null) {
-                $this->rules->replaceActive($program->id, $ruleDraft);
+            if ($ruleDrafts !== null) {
+                foreach ($this->rules->activeRulesFor((int) $program->id) as $activeRule) {
+                    $this->rules->deactivate($activeRule);
+                }
+
+                foreach ($ruleDrafts as $ruleDraft) {
+                    $this->rules->create((int) $program->id, $ruleDraft);
+                }
             }
 
             DB::afterCommit(fn () => event(new LoyaltyProgramConfigured($program)));

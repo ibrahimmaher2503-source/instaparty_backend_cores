@@ -24,6 +24,13 @@ class VendorModifyBookingAction
 {
     public function execute(VendorModifyDTO $dto): BookingModification
     {
+        if ($dto->idempotencyKey !== null) {
+            $cached = $this->getCachedIdempotencyResponse($dto);
+            if ($cached !== null) {
+                return $cached;
+            }
+        }
+
         return DB::transaction(function () use ($dto): BookingModification {
             /** @var BookingVendor $bookingVendor */
             $bookingVendor = BookingVendor::query()->with('items')->where('id', $dto->bookingVendorId)->lockForUpdate()->firstOrFail();
@@ -103,10 +110,56 @@ class VendorModifyBookingAction
 
             $modification->load('bookingVendor');
 
-            DB::afterCommit(fn () => event(new VendorModificationProposed($modification)));
+            DB::afterCommit(function () use ($modification, $dto): void {
+                event(new VendorModificationProposed($modification));
+                if ($dto->idempotencyKey !== null) {
+                    $this->storeIdempotencyResponse($dto, $modification);
+                }
+            });
 
             return $modification;
         });
+    }
+
+    private function requestHash(VendorModifyDTO $dto): string
+    {
+        return hash('sha256', 'vendor.modify|'.$dto->vendorProfileId.'|'.$dto->bookingVendorId);
+    }
+
+    private function getCachedIdempotencyResponse(VendorModifyDTO $dto): ?BookingModification
+    {
+        $row = DB::table('idempotency_keys')
+            ->where('key', $dto->idempotencyKey)
+            ->where('user_id', $dto->proposedByUserId)
+            ->where('expires_at', '>', now())
+            ->first();
+
+        if ($row === null) {
+            return null;
+        }
+
+        if (! hash_equals($row->request_hash, $this->requestHash($dto))) {
+            abort(Response::HTTP_CONFLICT, 'Idempotency key conflict');
+        }
+
+        /** @var array<string,mixed> $body */
+        $body = json_decode($row->response_body, true) ?? [];
+
+        return BookingModification::find((int) ($body['booking_modification_id'] ?? 0));
+    }
+
+    private function storeIdempotencyResponse(VendorModifyDTO $dto, BookingModification $modification): void
+    {
+        DB::table('idempotency_keys')->insertOrIgnore([
+            'key' => $dto->idempotencyKey,
+            'user_id' => $dto->proposedByUserId,
+            'route' => 'vendor.modify',
+            'request_hash' => $this->requestHash($dto),
+            'response_status' => Response::HTTP_CREATED,
+            'response_body' => json_encode(['booking_modification_id' => $modification->id]),
+            'expires_at' => now()->addHours(24),
+            'created_at' => now(),
+        ]);
     }
 
     /** @return array<string,mixed> */
@@ -126,34 +179,11 @@ class VendorModifyBookingAction
         $subtotalAfter = $subtotalBefore;
 
         foreach ($dto->changes as $change) {
-            $kind = $change['change_kind'];
-
-            if ($kind === ModificationChangeKind::Update->value && isset($change['target_item_public_id'])) {
-                $pubId = $change['target_item_public_id'];
-                if (isset($afterItems[$pubId])) {
-                    $payload = $change['payload'];
-                    $oldPrice = (int) $afterItems[$pubId]['unit_price_minor'];
-                    $newPrice = isset($payload['unit_price_minor']) ? (int) $payload['unit_price_minor'] : $oldPrice;
-                    $qty = (int) $afterItems[$pubId]['quantity'];
-                    $afterItems[$pubId] = array_merge($afterItems[$pubId], $payload);
-                    $subtotalAfter += ($newPrice - $oldPrice) * $qty;
-                }
-            } elseif ($kind === ModificationChangeKind::Add->value) {
-                $payload = $change['payload'];
-                $newPubId = (string) Str::ulid();
-                $price = (int) ($payload['unit_price_minor'] ?? 0);
-                $qty = (int) ($payload['quantity'] ?? 1);
-                $afterItems[$newPubId] = array_merge(['public_id' => $newPubId], $payload);
-                $subtotalAfter += $price * $qty;
-            } elseif ($kind === ModificationChangeKind::Remove->value && isset($change['target_item_public_id'])) {
-                $pubId = $change['target_item_public_id'];
-                if (isset($afterItems[$pubId])) {
-                    $price = (int) $afterItems[$pubId]['unit_price_minor'];
-                    $qty = (int) $afterItems[$pubId]['quantity'];
-                    $subtotalAfter -= $price * $qty;
-                    unset($afterItems[$pubId]);
-                }
-            }
+            match (ModificationChangeKind::from($change['change_kind'])) {
+                ModificationChangeKind::Update => $this->applyDiffUpdate($change, $afterItems, $subtotalAfter),
+                ModificationChangeKind::Add    => $this->applyDiffAdd($change, $afterItems, $subtotalAfter),
+                ModificationChangeKind::Remove => $this->applyDiffRemove($change, $afterItems, $subtotalAfter),
+            };
         }
 
         return [
@@ -166,5 +196,50 @@ class VendorModifyBookingAction
                 'subtotal_minor' => $subtotalAfter,
             ],
         ];
+    }
+
+    /** @param array<string,mixed> $change @param array<string,mixed> $afterItems */
+    private function applyDiffUpdate(array $change, array &$afterItems, int &$subtotalAfter): void
+    {
+        if (! isset($change['target_item_public_id'])) {
+            return;
+        }
+        $pubId = $change['target_item_public_id'];
+        if (! isset($afterItems[$pubId])) {
+            return;
+        }
+        $payload  = $change['payload'];
+        $oldPrice = (int) $afterItems[$pubId]['unit_price_minor'];
+        $newPrice = isset($payload['unit_price_minor']) ? (int) $payload['unit_price_minor'] : $oldPrice;
+        $qty      = (int) $afterItems[$pubId]['quantity'];
+        $afterItems[$pubId] = array_merge($afterItems[$pubId], $payload);
+        $subtotalAfter     += ($newPrice - $oldPrice) * $qty;
+    }
+
+    /** @param array<string,mixed> $change @param array<string,mixed> $afterItems */
+    private function applyDiffAdd(array $change, array &$afterItems, int &$subtotalAfter): void
+    {
+        $payload  = $change['payload'];
+        $newPubId = (string) Str::ulid();
+        $price    = (int) ($payload['unit_price_minor'] ?? 0);
+        $qty      = (int) ($payload['quantity'] ?? 1);
+        $afterItems[$newPubId] = array_merge(['public_id' => $newPubId], $payload);
+        $subtotalAfter        += $price * $qty;
+    }
+
+    /** @param array<string,mixed> $change @param array<string,mixed> $afterItems */
+    private function applyDiffRemove(array $change, array &$afterItems, int &$subtotalAfter): void
+    {
+        if (! isset($change['target_item_public_id'])) {
+            return;
+        }
+        $pubId = $change['target_item_public_id'];
+        if (! isset($afterItems[$pubId])) {
+            return;
+        }
+        $price          = (int) $afterItems[$pubId]['unit_price_minor'];
+        $qty            = (int) $afterItems[$pubId]['quantity'];
+        $subtotalAfter -= $price * $qty;
+        unset($afterItems[$pubId]);
     }
 }

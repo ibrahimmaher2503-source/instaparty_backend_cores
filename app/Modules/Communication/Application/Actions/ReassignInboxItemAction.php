@@ -13,9 +13,12 @@ use InvalidArgumentException;
 
 class ReassignInboxItemAction
 {
+    /** Roles that may own an inbox item. Keep in sync with Shield role seeder. */
+    private const ADMIN_ROLES = ['super_admin', 'admin', 'vendor_manager', 'ops_manager'];
+
     public function execute(AdminInboxItem $item, User $actor, User $target): AdminInboxItem
     {
-        if (! $target->hasAnyRole(['super_admin', 'admin', 'vendor_manager', 'ops_manager'])) {
+        if (! $target->hasAnyRole(self::ADMIN_ROLES)) {
             throw new InvalidArgumentException("Target user #{$target->id} does not have an admin role.");
         }
 

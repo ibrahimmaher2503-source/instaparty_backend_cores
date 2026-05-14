@@ -8,6 +8,9 @@ use App\Modules\Booking\Database\Factories\BookingFactory;
 use App\Modules\Booking\Domain\Enums\FulfillmentStatus;
 use App\Modules\Booking\Domain\Enums\LifecycleStatus;
 use App\Modules\Booking\Domain\Enums\PaymentStatus;
+use App\Modules\Catalog\Domain\Models\Occasion;
+use App\Modules\Identity\Domain\Models\User;
+use App\Modules\Payments\Domain\Models\Payment;
 use App\Modules\Shared\Domain\Casts\MoneyCast;
 use App\Modules\Shared\Domain\Concerns\HasPublicId;
 use Illuminate\Database\Eloquent\Builder;
@@ -42,6 +45,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $event_ends_at
  * @property BookingAddress|null $address
  * @property Collection<int, BookingVendor> $vendors
+ * @property Collection<int, Payment> $payments
  */
 class Booking extends Model
 {
@@ -57,7 +61,7 @@ class Booking extends Model
         'subtotal_minor', 'subtotal_currency',
         'delivery_total_minor', 'delivery_total_currency',
         'discount_total_minor', 'discount_total_currency',
-        'loyalty_redeemed_minor', 'loyalty_redeemed_currency',
+        'loyalty_redeemed_minor', 'loyalty_redeemed_currency', 'loyalty_redemption_public_id',
         'total_minor', 'total_currency',
         'amount_paid_minor', 'amount_paid_currency',
         'submitted_at', 'confirmed_at', 'cancelled_at', 'cancelled_by',
@@ -90,12 +94,12 @@ class Booking extends Model
 
     public function customer(): BelongsTo
     {
-        return $this->belongsTo(\App\Modules\Identity\Domain\Models\User::class, 'customer_id');
+        return $this->belongsTo(User::class, 'customer_id');
     }
 
     public function occasion(): BelongsTo
     {
-        return $this->belongsTo(\App\Modules\Catalog\Domain\Models\Occasion::class, 'occasion_id');
+        return $this->belongsTo(Occasion::class, 'occasion_id');
     }
 
     public function address(): HasOne
@@ -107,6 +111,11 @@ class Booking extends Model
     public function vendors(): HasMany
     {
         return $this->hasMany(BookingVendor::class);
+    }
+
+    public function payments(): HasMany
+    {
+        return $this->hasMany(Payment::class);
     }
 
     public function items(): HasManyThrough

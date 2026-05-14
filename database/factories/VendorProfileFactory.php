@@ -63,4 +63,18 @@ class VendorProfileFactory extends Factory
             'suspended_at' => now(),
         ]);
     }
+
+    public function pending(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'approval_status' => ApprovalStatus::Pending->value,
+        ]);
+    }
+
+    public function changesRequested(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'approval_status' => ApprovalStatus::ChangesRequested->value,
+        ]);
+    }
 }

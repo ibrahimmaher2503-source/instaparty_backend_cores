@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Modules\Booking\Application\Actions;
 
+use App\Modules\Booking\Application\DTOs\VendorRejectDTO;
 use App\Modules\Booking\Domain\Enums\LifecycleStatus;
 use App\Modules\Booking\Domain\Enums\VendorSubStatus;
 use App\Modules\Booking\Domain\Events\BookingCancelled;
@@ -16,15 +17,21 @@ use Illuminate\Support\Facades\DB;
 
 class VendorRejectBookingAction
 {
-    /** @param array<string,string>|null $rejectionReason */
-    public function execute(int $bookingVendorId, int $vendorProfileId, ?array $rejectionReason = null): BookingVendor
+    public function execute(VendorRejectDTO $dto): BookingVendor
     {
-        return DB::transaction(function () use ($bookingVendorId, $vendorProfileId, $rejectionReason): BookingVendor {
+        if ($dto->idempotencyKey !== null) {
+            $cached = $this->getCachedIdempotencyResponse($dto);
+            if ($cached !== null) {
+                return $cached;
+            }
+        }
+
+        return DB::transaction(function () use ($dto): BookingVendor {
             /** @var BookingVendor $bookingVendor */
-            $bookingVendor = BookingVendor::query()->where('id', $bookingVendorId)->lockForUpdate()->firstOrFail();
+            $bookingVendor = BookingVendor::query()->where('id', $dto->bookingVendorId)->lockForUpdate()->firstOrFail();
 
             abort_if(
-                $bookingVendor->vendor_profile_id !== $vendorProfileId,
+                $bookingVendor->vendor_profile_id !== $dto->vendorProfileId,
                 Response::HTTP_FORBIDDEN
             );
 
@@ -38,8 +45,8 @@ class VendorRejectBookingAction
                 'sub_status' => VendorSubStatus::Rejected,
                 'responded_at' => now(),
             ];
-            if ($rejectionReason !== null) {
-                $updateData['rejection_reason'] = $rejectionReason;
+            if ($dto->rejectionReason !== null) {
+                $updateData['rejection_reason'] = $dto->rejectionReason;
             }
             $bookingVendor->update($updateData);
 
@@ -49,7 +56,7 @@ class VendorRejectBookingAction
                 'from_state' => VendorSubStatus::Pending->value,
                 'to_state' => VendorSubStatus::Rejected->value,
                 'trigger_kind' => 'vendor',
-                'triggered_by' => $vendorProfileId,
+                'triggered_by' => $dto->vendorProfileId,
             ]);
 
             $booking = Booking::query()->where('id', $bookingVendor->booking_id)->lockForUpdate()->firstOrFail();
@@ -86,14 +93,58 @@ class VendorRejectBookingAction
                 ]);
             }
 
-            DB::afterCommit(function () use ($bookingVendor, $booking, $bookingCancelled): void {
+            DB::afterCommit(function () use ($bookingVendor, $booking, $bookingCancelled, $dto): void {
                 event(new VendorRejected($bookingVendor));
                 if ($bookingCancelled) {
                     event(new BookingCancelled($booking));
+                }
+                if ($dto->idempotencyKey !== null) {
+                    $this->storeIdempotencyResponse($dto, $bookingVendor);
                 }
             });
 
             return $bookingVendor;
         });
+    }
+
+    private function requestHash(VendorRejectDTO $dto): string
+    {
+        return hash('sha256', 'vendor.reject|'.$dto->vendorProfileId.'|'.$dto->bookingVendorId);
+    }
+
+    private function getCachedIdempotencyResponse(VendorRejectDTO $dto): ?BookingVendor
+    {
+        $row = DB::table('idempotency_keys')
+            ->where('key', $dto->idempotencyKey)
+            ->where('user_id', $dto->proposedByUserId)
+            ->where('expires_at', '>', now())
+            ->first();
+
+        if ($row === null) {
+            return null;
+        }
+
+        if (! hash_equals($row->request_hash, $this->requestHash($dto))) {
+            abort(Response::HTTP_CONFLICT, 'Idempotency key conflict');
+        }
+
+        /** @var array<string,mixed> $body */
+        $body = json_decode($row->response_body, true) ?? [];
+
+        return BookingVendor::find((int) ($body['booking_vendor_id'] ?? 0));
+    }
+
+    private function storeIdempotencyResponse(VendorRejectDTO $dto, BookingVendor $bookingVendor): void
+    {
+        DB::table('idempotency_keys')->insertOrIgnore([
+            'key' => $dto->idempotencyKey,
+            'user_id' => $dto->proposedByUserId,
+            'route' => 'vendor.reject',
+            'request_hash' => $this->requestHash($dto),
+            'response_status' => Response::HTTP_OK,
+            'response_body' => json_encode(['booking_vendor_id' => $bookingVendor->id]),
+            'expires_at' => now()->addHours(24),
+            'created_at' => now(),
+        ]);
     }
 }

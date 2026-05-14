@@ -6,17 +6,17 @@ namespace App\Modules\Subscriptions\Domain\Enums;
 
 enum PlanCode: string
 {
-    case Free    = 'free';
-    case Silver  = 'silver';
-    case Gold    = 'gold';
+    case Free = 'free';
+    case Silver = 'silver';
+    case Gold = 'gold';
     case Premium = 'premium';
 
     public function label(): string
     {
         return match ($this) {
-            self::Free    => 'Free',
-            self::Silver  => 'Silver',
-            self::Gold    => 'Gold',
+            self::Free => 'Free',
+            self::Silver => 'Silver',
+            self::Gold => 'Gold',
             self::Premium => 'Premium',
         };
     }
@@ -30,9 +30,9 @@ enum PlanCode: string
     public function upgradeOptions(): array
     {
         return match ($this) {
-            self::Free    => [self::Silver, self::Gold, self::Premium],
-            self::Silver  => [self::Gold, self::Premium],
-            self::Gold    => [self::Premium],
+            self::Free => [self::Silver, self::Gold, self::Premium],
+            self::Silver => [self::Gold, self::Premium],
+            self::Gold => [self::Premium],
             self::Premium => [],
         };
     }

@@ -13,9 +13,5 @@ interface LoyaltyRedemptionRepository
 
     public function findActiveForBooking(int $bookingId): ?LoyaltyRedemption;
 
-    public function findPendingForCustomerAndVendor(int $customerId, int $vendorProfileId): ?LoyaltyRedemption;
-
     public function findByPublicId(string $publicId): ?LoyaltyRedemption;
-
-    public function transitionTo(LoyaltyRedemption $redemption, string $state): LoyaltyRedemption;
 }

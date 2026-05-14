@@ -6,6 +6,7 @@ namespace App\Modules\Booking\Domain\Models;
 
 use App\Modules\Booking\Database\Factories\BookingVendorFactory;
 use App\Modules\Booking\Domain\Enums\VendorSubStatus;
+use App\Modules\Identity\Domain\Models\VendorProfile;
 use App\Modules\Shared\Domain\Casts\MoneyCast;
 use App\Modules\Shared\Domain\Concerns\HasPublicId;
 use Carbon\Carbon;
@@ -73,6 +74,11 @@ class BookingVendor extends Model
     public function booking(): BelongsTo
     {
         return $this->belongsTo(Booking::class);
+    }
+
+    public function vendor(): BelongsTo
+    {
+        return $this->belongsTo(VendorProfile::class, 'vendor_profile_id');
     }
 
     /** @return HasMany<BookingItem, $this> */

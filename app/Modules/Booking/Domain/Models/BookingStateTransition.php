@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace App\Modules\Booking\Domain\Models;
 
 use App\Modules\Booking\Database\Factories\BookingStateTransitionFactory;
+use App\Modules\Identity\Domain\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class BookingStateTransition extends Model
@@ -33,5 +35,10 @@ class BookingStateTransition extends Model
     public function transitionable(): MorphTo
     {
         return $this->morphTo();
+    }
+
+    public function triggeredByUser(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'triggered_by');
     }
 }

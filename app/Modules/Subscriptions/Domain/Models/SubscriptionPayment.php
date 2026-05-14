@@ -13,7 +13,19 @@ class SubscriptionPayment extends Model
 
     // Insert-only: no timestamps
     public $timestamps = false;
+
     const CREATED_AT = 'created_at';
+
+    protected $fillable = [
+        'subscription_invoice_id',
+        'attempt_no',
+        'mode',
+        'status',
+        'gateway',
+        'gateway_ref',
+        'failure_code',
+        'failure_reason',
+    ];
 
     protected $casts = [
         'created_at' => 'datetime',

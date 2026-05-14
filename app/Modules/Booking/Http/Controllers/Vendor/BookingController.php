@@ -7,7 +7,9 @@ namespace App\Modules\Booking\Http\Controllers\Vendor;
 use App\Modules\Booking\Application\Actions\VendorAcceptBookingAction;
 use App\Modules\Booking\Application\Actions\VendorModifyBookingAction;
 use App\Modules\Booking\Application\Actions\VendorRejectBookingAction;
+use App\Modules\Booking\Application\DTOs\VendorAcceptDTO;
 use App\Modules\Booking\Application\DTOs\VendorModifyDTO;
+use App\Modules\Booking\Application\DTOs\VendorRejectDTO;
 use App\Modules\Booking\Domain\Enums\ModificationProposalKind;
 use App\Modules\Booking\Domain\Enums\VendorSubStatus;
 use App\Modules\Booking\Domain\Models\BookingModification;
@@ -20,6 +22,7 @@ use App\Modules\Identity\Domain\Models\User;
 use App\Modules\Identity\Domain\Models\VendorProfile;
 use App\Modules\Shared\Http\ApiResponse;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class BookingController
 {
@@ -31,6 +34,17 @@ class BookingController
         $profile = $user->vendorProfile;
 
         return $profile->id;
+    }
+
+    private function optionalIdempotencyKey(Request $request): ?string
+    {
+        $key = $request->header('Idempotency-Key');
+
+        if (! $key || ! preg_match('/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i', $key)) {
+            return null;
+        }
+
+        return $key;
     }
 
     public function index(): JsonResponse
@@ -45,11 +59,16 @@ class BookingController
         return ApiResponse::success(BookingVendorResource::collection($bookingVendors));
     }
 
-    public function accept(string $bookingVendorPublicId): JsonResponse
+    public function accept(Request $request, string $bookingVendorPublicId): JsonResponse
     {
         $bookingVendor = BookingVendor::where('public_id', $bookingVendorPublicId)->firstOrFail();
 
-        $result = app(VendorAcceptBookingAction::class)->execute((int) $bookingVendor->id, $this->vendorProfileId());
+        $result = app(VendorAcceptBookingAction::class)->execute(new VendorAcceptDTO(
+            bookingVendorId: (int) $bookingVendor->id,
+            vendorProfileId: $this->vendorProfileId(),
+            proposedByUserId: (int) auth()->id(),
+            idempotencyKey: $this->optionalIdempotencyKey($request),
+        ));
 
         return ApiResponse::success(new BookingVendorResource($result));
     }
@@ -65,6 +84,7 @@ class BookingController
             proposalKind: ModificationProposalKind::from($request->validated('proposal_kind')),
             changes: $request->validated('changes'),
             vendorExplanation: $request->validated('vendor_explanation'),
+            idempotencyKey: $this->optionalIdempotencyKey($request),
         ));
 
         return ApiResponse::success(new BookingModificationResource($result), [], 201);
@@ -85,11 +105,13 @@ class BookingController
     {
         $bookingVendor = BookingVendor::where('public_id', $bookingVendorPublicId)->firstOrFail();
 
-        $result = app(VendorRejectBookingAction::class)->execute(
-            (int) $bookingVendor->id,
-            $this->vendorProfileId(),
-            $request->validated('rejection_reason')
-        );
+        $result = app(VendorRejectBookingAction::class)->execute(new VendorRejectDTO(
+            bookingVendorId: (int) $bookingVendor->id,
+            vendorProfileId: $this->vendorProfileId(),
+            proposedByUserId: (int) auth()->id(),
+            rejectionReason: $request->validated('rejection_reason'),
+            idempotencyKey: $this->optionalIdempotencyKey($request),
+        ));
 
         return ApiResponse::success(new BookingVendorResource($result));
     }

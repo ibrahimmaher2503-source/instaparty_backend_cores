@@ -64,4 +64,9 @@ class UserFactory extends Factory
     {
         return $this->afterCreating(fn (User $user) => $user->assignRole('admin'));
     }
+
+    public function superAdmin(): static
+    {
+        return $this->afterCreating(fn (User $user) => $user->assignRole('super_admin'));
+    }
 }

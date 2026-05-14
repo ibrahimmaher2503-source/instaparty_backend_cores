@@ -5,39 +5,37 @@ declare(strict_types=1);
 namespace App\Modules\Loyalty\Infrastructure\Repositories;
 
 use App\Modules\Loyalty\Domain\Contracts\LoyaltyLedgerRepository;
-use App\Modules\Loyalty\Domain\Enums\LedgerEntryType;
+use App\Modules\Loyalty\Domain\Enums\LedgerDirection;
 use App\Modules\Loyalty\Domain\Events\LoyaltyLedgerEntryAppended;
 use App\Modules\Loyalty\Domain\Models\LoyaltyLedgerEntry;
-use App\Modules\Loyalty\Domain\Models\LoyaltyRedemption;
+use Carbon\CarbonInterface;
 use Illuminate\Support\Facades\DB;
 
 class EloquentLoyaltyLedgerRepository implements LoyaltyLedgerRepository
 {
     public function append(
-        LedgerEntryType $type,
-        int $customerId,
+        int $userId,
         int $vendorProfileId,
         int $programId,
+        LedgerDirection $direction,
         int $points,
-        array $reason,
-        ?int $bookingId = null,
-        ?int $bookingItemId = null,
-        ?int $redemptionId = null,
-        ?int $reversedFromLedgerId = null,
-        ?string $productType = null,
+        int $balanceAfter,
+        ?string $referenceType = null,
+        ?int $referenceId = null,
+        ?array $reason = null,
+        ?CarbonInterface $expiresAt = null,
     ): LoyaltyLedgerEntry {
         $entry = LoyaltyLedgerEntry::create([
-            'customer_id' => $customerId,
+            'user_id' => $userId,
             'vendor_profile_id' => $vendorProfileId,
             'loyalty_program_id' => $programId,
-            'entry_type' => $type->value,
+            'direction' => $direction,
             'points' => $points,
-            'booking_id' => $bookingId,
-            'booking_item_id' => $bookingItemId,
-            'redemption_id' => $redemptionId,
-            'reversed_from_ledger_id' => $reversedFromLedgerId,
-            'product_type' => $productType,
+            'balance_after' => $balanceAfter,
+            'reference_type' => $referenceType,
+            'reference_id' => $referenceId,
             'reason' => $reason,
+            'expires_at' => $direction === LedgerDirection::Earn ? $expiresAt : null,
         ]);
 
         DB::afterCommit(fn () => event(new LoyaltyLedgerEntryAppended($entry)));
@@ -45,18 +43,51 @@ class EloquentLoyaltyLedgerRepository implements LoyaltyLedgerRepository
         return $entry;
     }
 
-    public function balanceFor(int $customerId, int $vendorProfileId): int
+    public function balanceFor(int $userId, int $vendorProfileId): int
     {
-        return (int) LoyaltyLedgerEntry::where('customer_id', $customerId)
+        $latest = LoyaltyLedgerEntry::query()
+            ->where('user_id', $userId)
             ->where('vendor_profile_id', $vendorProfileId)
-            ->sum('points');
+            ->orderByDesc('id')
+            ->first(['balance_after']);
+
+        return $latest === null ? 0 : max(0, (int) $latest->balance_after);
     }
 
-    public function heldPointsFor(int $customerId, int $vendorProfileId): int
+    public function hasPriorEarnFor(int $userId, int $vendorProfileId): bool
     {
-        return (int) LoyaltyRedemption::where('customer_id', $customerId)
+        return LoyaltyLedgerEntry::query()
+            ->where('user_id', $userId)
             ->where('vendor_profile_id', $vendorProfileId)
-            ->where('status', 'pending')
-            ->sum('points_held');
+            ->where('direction', LedgerDirection::Earn->value)
+            ->exists();
+    }
+
+    public function hasEarnForReference(string $referenceType, int $referenceId): bool
+    {
+        return LoyaltyLedgerEntry::query()
+            ->where('direction', LedgerDirection::Earn->value)
+            ->where('reference_type', $referenceType)
+            ->where('reference_id', $referenceId)
+            ->exists();
+    }
+
+    public function hasAdjustForReference(string $referenceType, int $referenceId): bool
+    {
+        return LoyaltyLedgerEntry::query()
+            ->where('direction', LedgerDirection::Adjust->value)
+            ->where('reference_type', $referenceType)
+            ->where('reference_id', $referenceId)
+            ->exists();
+    }
+
+    public function pointsEarnedTodayFor(int $userId, int $vendorProfileId): int
+    {
+        return (int) LoyaltyLedgerEntry::query()
+            ->where('user_id', $userId)
+            ->where('vendor_profile_id', $vendorProfileId)
+            ->where('direction', LedgerDirection::Earn->value)
+            ->where('created_at', '>=', now()->startOfDay())
+            ->sum('points');
     }
 }

@@ -1,4 +1,4 @@
-# AGENTS.md — InstaParty Backend (Codex CLI)
+﻿# AGENTS.md — InstaParty Backend (Codex CLI)
 
 > Loaded by Codex CLI at every session start. Treat as the project's operating contract for autonomous agents. When this file conflicts with chat instructions, **this file wins** unless Ibrahim explicitly overrides in conversation.
 >

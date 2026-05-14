@@ -25,51 +25,52 @@ class ForceCancelBookingAction
         return DB::transaction(function () use ($booking, $dto): BookingAdminIntervention {
             $beforeState = [
                 'lifecycle_status' => $booking->lifecycle_status->value,
-                'payment_status'   => $booking->payment_status->value,
+                'payment_status' => $booking->payment_status->value,
                 'fulfillment_status' => $booking->fulfillment_status->value,
             ];
 
             $booking->lifecycle_status = LifecycleStatus::Cancelled;
-            $booking->cancelled_by = 'admin';
+            $booking->cancelled_by = $dto->adminId;
+            $booking->cancelled_at = now();
             $booking->save();
 
             $afterState = [
                 'lifecycle_status' => LifecycleStatus::Cancelled->value,
-                'payment_status'   => $booking->payment_status->value,
+                'payment_status' => $booking->payment_status->value,
                 'fulfillment_status' => $booking->fulfillment_status->value,
             ];
 
             $intervention = BookingAdminIntervention::create([
-                'public_id'         => (string) Str::ulid(),
-                'booking_id'        => $booking->id,
-                'admin_id'          => $dto->adminId,
+                'public_id' => Str::ulid()->toBase32(),
+                'booking_id' => $booking->id,
+                'admin_id' => $dto->adminId,
                 'intervention_type' => InterventionType::ForceCancel,
-                'reason'            => $dto->reason,
-                'before_state'      => $beforeState,
-                'after_state'       => $afterState,
+                'reason' => $dto->reason,
+                'before_state' => $beforeState,
+                'after_state' => $afterState,
             ]);
 
             BookingStateTransition::create([
                 'transitionable_type' => Booking::class,
-                'transitionable_id'   => $booking->id,
-                'from_state'          => $beforeState['lifecycle_status'],
-                'to_state'            => LifecycleStatus::Cancelled->value,
-                'trigger_kind'        => 'admin',
-                'triggered_by'        => $dto->adminId,
-                'context'             => ['intervention_id' => $intervention->id, 'reason' => $dto->reason],
+                'transitionable_id' => $booking->id,
+                'from_state' => $beforeState['lifecycle_status'],
+                'to_state' => LifecycleStatus::Cancelled->value,
+                'trigger_kind' => 'admin',
+                'triggered_by' => $dto->adminId,
+                'context' => ['intervention_id' => $intervention->id, 'reason' => $dto->reason],
             ]);
 
             DB::table('audit_logs')->insert([
-                'public_id'      => (string) Str::ulid(),
+                'public_id' => Str::ulid()->toBase32(),
                 'auditable_type' => Booking::class,
-                'auditable_id'   => $booking->id,
-                'user_id'        => $dto->adminId,
-                'action'         => 'force_cancel_booking',
-                'changes'        => json_encode([
+                'auditable_id' => $booking->id,
+                'user_id' => $dto->adminId,
+                'action' => 'force_cancel_booking',
+                'changes' => json_encode([
                     'before' => $beforeState,
-                    'after'  => $afterState,
+                    'after' => $afterState,
                 ]),
-                'created_at'     => now(),
+                'created_at' => now(),
             ]);
 
             DB::afterCommit(fn () => event(new BookingForceCancelled($booking, $intervention)));

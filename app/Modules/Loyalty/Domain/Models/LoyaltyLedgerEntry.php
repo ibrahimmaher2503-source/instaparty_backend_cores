@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace App\Modules\Loyalty\Domain\Models;
 
 use App\Modules\Loyalty\Database\Factories\LoyaltyLedgerEntryFactory;
-use App\Modules\Loyalty\Domain\Enums\LedgerEntryType;
+use App\Modules\Loyalty\Domain\Enums\LedgerDirection;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -30,24 +31,26 @@ class LoyaltyLedgerEntry extends Model
 
     protected $fillable = [
         'public_id',
-        'customer_id',
+        'user_id',
         'vendor_profile_id',
         'loyalty_program_id',
-        'entry_type',
+        'direction',
         'points',
-        'booking_id',
-        'booking_item_id',
-        'redemption_id',
-        'reversed_from_ledger_id',
-        'product_type',
+        'balance_after',
+        'reference_type',
+        'reference_id',
         'reason',
+        'expires_at',
     ];
 
     protected function casts(): array
     {
         return [
-            'entry_type' => LedgerEntryType::class,
+            'direction' => LedgerDirection::class,
             'points' => 'integer',
+            'balance_after' => 'integer',
+            'reference_id' => 'integer',
+            'expires_at' => 'datetime',
             'created_at' => 'datetime',
         ];
     }
@@ -78,18 +81,8 @@ class LoyaltyLedgerEntry extends Model
         return $this->belongsTo(LoyaltyProgram::class, 'loyalty_program_id');
     }
 
-    public function redemption(): BelongsTo
+    public function scopeForUserAndVendor(Builder $query, int $userId, int $vendorProfileId): Builder
     {
-        return $this->belongsTo(LoyaltyRedemption::class, 'redemption_id');
-    }
-
-    public function reversedFrom(): BelongsTo
-    {
-        return $this->belongsTo(self::class, 'reversed_from_ledger_id');
-    }
-
-    public function scopeForCustomerAndVendor($query, int $customerId, int $vendorProfileId)
-    {
-        return $query->where('customer_id', $customerId)->where('vendor_profile_id', $vendorProfileId);
+        return $query->where('user_id', $userId)->where('vendor_profile_id', $vendorProfileId);
     }
 }

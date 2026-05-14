@@ -24,8 +24,8 @@ class CountryFactory extends Factory
         return [
             'public_id' => (string) Str::ulid(),
             'name' => ['en' => fake()->country(), 'ar' => fake()->country()],
-            'iso2' => $this->alphaCode($sequence, 2),
-            'iso3' => $this->alphaCode($sequence, 3),
+            'iso2' => str_pad((string) ($sequence % 100), 2, '0', STR_PAD_LEFT),
+            'iso3' => str_pad((string) ($sequence % 1000), 3, '0', STR_PAD_LEFT),
             'default_currency' => 'EGP',
             'default_locale' => 'ar',
             'default_timezone' => 'Africa/Cairo',

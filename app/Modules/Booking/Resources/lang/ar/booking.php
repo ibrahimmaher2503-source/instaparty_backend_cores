@@ -33,12 +33,38 @@ return [
         'public_id' => 'المعرّف العام',
         'reference_no' => 'رقم المرجع',
         'customer_id' => 'العميل',
+        'customer_phone' => 'رقم الهاتف',
         'occasion_id' => 'المناسبة',
+        'guest_count' => 'عدد الضيوف',
+        'event_starts_at' => 'بداية الحدث',
+        'event_ends_at' => 'نهاية الحدث',
         'lifecycle_status' => 'حالة الحجز',
         'payment_status' => 'حالة الدفع',
         'fulfillment_status' => 'حالة التنفيذ',
         'total' => 'الإجمالي',
+        'amount_paid' => 'المبلغ المدفوع',
         'submitted_at' => 'تاريخ الإرسال',
+        'vendor' => 'المورد',
+        'vendor_status' => 'حالة المورد',
+        'service' => 'الخدمة',
+        'product_type' => 'نوع المنتج',
+        'quantity' => 'الكمية',
+        'line_total' => 'إجمالي السطر',
+        'item_status' => 'حالة العنصر',
+        'response_deadline' => 'الموعد النهائي للرد',
+        'city' => 'المدينة',
+        'address_line' => 'العنوان',
+        'building' => 'المبنى',
+        'floor' => 'الطابق',
+        'apartment' => 'الشقة',
+        'landmark' => 'علامة مميزة',
+        'recipient_name' => 'المستلم',
+        'recipient_phone' => 'هاتف المستلم',
+        'version' => 'الإصدار',
+        'trigger_kind' => 'نوع الحدث',
+        'actor' => 'المنفذ',
+        'context' => 'السياق',
+        'snapshot' => 'اللقطة',
         'nearest_deadline' => 'أقرب موعد مستحق',
         'booking_vendor' => 'مورد الحجز',
         'proposed_by' => 'مقدّم الاقتراح',
@@ -50,6 +76,59 @@ return [
         'from_state' => 'الحالة السابقة',
         'to_state' => 'الحالة الجديدة',
         'triggered_by' => 'تم بواسطة',
+    ],
+
+    'sections' => [
+        'summary' => 'ملخص الحجز',
+    ],
+
+    'relations' => [
+        'vendors' => 'موردو الحجز',
+        'items' => 'عناصر الحجز',
+        'addresses' => 'عناوين الحجز',
+        'payments' => 'المدفوعات',
+        'snapshots' => 'لقطات الحجز',
+        'state_transitions' => 'انتقالات الحالة',
+    ],
+
+    'actions' => [
+        'edit' => 'تعديل',
+        'force_cancel' => 'إلغاء إجباري',
+        'add_admin_note' => 'إضافة ملاحظة إدارية',
+        'save_changes' => 'حفظ التغييرات',
+    ],
+
+    'modals' => [
+        'force_cancel_title' => 'إلغاء الحجز إجباريًا',
+        'force_cancel_description' => 'سيؤدي ذلك إلى إلغاء الحجز وتسجيل أثر تدقيقي.',
+        'force_cancel_reason' => 'السبب',
+        'admin_note_body' => 'الملاحظة الإدارية',
+    ],
+
+    'notifications' => [
+        'booking_updated' => 'تم تحديث الحجز بنجاح.',
+        'force_cancelled' => 'تم إلغاء الحجز إجباريًا بنجاح.',
+        'admin_note_added' => 'تمت إضافة الملاحظة الإدارية بنجاح.',
+    ],
+
+    'empty_states' => [
+        'vendors' => 'لا توجد سجلات موردين بعد.',
+        'items' => 'لا توجد عناصر للحجز بعد.',
+        'addresses' => 'لا يوجد عنوان للحجز بعد.',
+        'payments' => 'لا توجد مدفوعات بعد.',
+        'snapshots' => 'لا توجد لقطات بعد.',
+        'state_transitions' => 'لا توجد انتقالات حالة بعد.',
+    ],
+
+    'vendor_status' => [
+        'pending' => 'قيد الانتظار',
+        'accepted' => 'تم القبول',
+        'modified' => 'تم التعديل',
+        'rejected' => 'مرفوض',
+        'cancelled' => 'ملغي',
+        'in_progress' => 'قيد التنفيذ',
+        'completed' => 'مكتمل',
+        'timed_out' => 'انتهت المهلة',
     ],
 
     'lifecycle_status' => [
@@ -64,20 +143,23 @@ return [
     ],
 
     'payment_status' => [
-        'pending' => 'قيد الانتظار',
-        'authorized' => 'تم التفويض',
-        'captured' => 'تم التحصيل',
-        'failed' => 'فشل الدفع',
-        'refunded' => 'تم رد المبلغ',
-        'partially_refunded' => 'تم رد المبلغ جزئياً',
-        'voided' => 'مُبطلة',
+        'unpaid' => 'غير مدفوع',
+        'partial' => 'مدفوع جزئيًا',
+        'paid' => 'مدفوع',
+        'refund_pending' => 'في انتظار الاسترداد',
+        'partially_refunded' => 'تم رد المبلغ جزئيًا',
+        'refunded' => 'مسترد',
     ],
 
     'fulfillment_status' => [
-        'pending' => 'قيد الانتظار',
-        'confirmed' => 'مؤكد',
+        'not_started' => 'لم يبدأ',
         'in_progress' => 'قيد التنفيذ',
+        'partially_completed' => 'مكتمل جزئيًا',
         'completed' => 'مكتمل',
-        'cancelled' => 'ملغي',
+        'failed' => 'فشل',
+    ],
+
+    'placeholders' => [
+        'none' => '—',
     ],
 ];

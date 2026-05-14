@@ -23,6 +23,27 @@ use Illuminate\Support\Str;
 
 class CustomerConfirmModifiedBookingAction
 {
+    /** Fields a vendor may change on an existing item via a modification. */
+    private const ALLOWED_UPDATE_PAYLOAD_KEYS = [
+        'unit_price_minor',
+        'unit_price_currency',
+        'quantity',
+        'effective_starts_at',
+        'effective_ends_at',
+        'customization_data',
+    ];
+
+    /** Fields a vendor may supply when adding a new item via a modification. */
+    private const ALLOWED_ADD_PAYLOAD_KEYS = [
+        'service_id',
+        'product_type',
+        'unit_price_minor',
+        'unit_price_currency',
+        'quantity',
+        'effective_starts_at',
+        'effective_ends_at',
+        'customization_data',
+    ];
     public function execute(CustomerModificationDecisionDTO $dto): Booking
     {
         $cached = $this->getCachedIdempotencyResponse($dto);
@@ -172,16 +193,24 @@ class CustomerConfirmModifiedBookingAction
 
         $item = BookingItem::find($modItem->target_booking_item_id);
         if ($item !== null) {
-            $item->update($modItem->payload);
+            $safePayload = array_intersect_key(
+                $modItem->payload,
+                array_flip(self::ALLOWED_UPDATE_PAYLOAD_KEYS)
+            );
+            $item->update($safePayload);
             $item->update(['line_total_minor' => $item->unit_price_minor * $item->quantity]);
         }
     }
 
     private function applyAdd(BookingModificationItem $modItem, int $bookingVendorId): void
     {
+        $safePayload = array_intersect_key(
+            $modItem->payload,
+            array_flip(self::ALLOWED_ADD_PAYLOAD_KEYS)
+        );
         BookingItem::create(array_merge(
             ['public_id' => (string) Str::ulid(), 'booking_vendor_id' => $bookingVendorId],
-            $modItem->payload
+            $safePayload
         ));
     }
 
@@ -207,6 +236,7 @@ class CustomerConfirmModifiedBookingAction
     {
         $row = DB::table('idempotency_keys')
             ->where('key', $dto->idempotencyKey)
+            ->where('user_id', $dto->customerId)
             ->where('expires_at', '>', now())
             ->first();
 

@@ -28,15 +28,15 @@ class SubscriptionLimitReachedException extends RuntimeException
         app()->setLocale(in_array($locale, ['en', 'ar']) ? $locale : 'en');
 
         return response()->json([
-            'data'   => null,
-            'meta'   => [],
+            'data' => null,
+            'meta' => [],
             'errors' => [
                 [
-                    'code'    => 'subscription_limit_reached',
+                    'code' => 'subscription_limit_reached',
                     'message' => trans('subscriptions::subscription.errors.limit_reached', [
-                        'feature'          => $this->featureKey,
-                        'plan'             => $this->currentPlanCode,
-                        'unblocking_plan'  => $this->unblockingPlanCode,
+                        'feature' => $this->featureKey,
+                        'plan' => $this->currentPlanCode,
+                        'unblocking_plan' => $this->unblockingPlanCode,
                     ]),
                 ],
             ],

@@ -7,6 +7,8 @@ namespace App\Modules\Identity\Filament\Resources;
 use App\Modules\Catalog\Domain\Enums\ProductType;
 use App\Modules\Identity\Application\Actions\ApproveVendorForTypeAction;
 use App\Modules\Identity\Application\Actions\ImpersonateVendorAction;
+use App\Modules\Identity\Application\Actions\ImpersonateVendorViaWebAction;
+use App\Modules\Identity\Application\Actions\RequestVendorChangesAction;
 use App\Modules\Identity\Application\Actions\RevokeVendorTypeAction;
 use App\Modules\Identity\Application\Actions\SuspendVendorAction;
 use App\Modules\Identity\Domain\Enums\ApprovalStatus;
@@ -316,6 +318,19 @@ class VendorProfileResource extends Resource
                             ->send();
                     }),
 
+                Action::make('loginAsVendor')
+                    ->label(__('identity.actions.login_as_vendor'))
+                    ->icon('heroicon-o-arrow-right-on-rectangle')
+                    ->color('warning')
+                    ->requiresConfirmation()
+                    ->modalDescription(__('identity.confirmations.impersonate_warning'))
+                    ->visible(fn () => auth()->user()?->can('impersonate_vendor'))
+                    ->action(function (VendorProfile $record): void {
+                        app(ImpersonateVendorViaWebAction::class)->execute($record, auth()->user());
+
+                        redirect(filament()->getPanel('vendor')->getUrl());
+                    }),
+
                 Action::make('approveForType')
                     ->label(__('identity.actions.approve_for_type'))
                     ->icon('heroicon-o-check-badge')
@@ -382,6 +397,51 @@ class VendorProfileResource extends Resource
                     ->action(function (VendorProfile $record): void {
                         app(SuspendVendorAction::class)->execute($record);
                         Notification::make()->title(__('identity.notifications.vendor_suspended'))->danger()->send();
+                    }),
+
+                Action::make('requestChanges')
+                    ->label(__('identity.actions.request_changes'))
+                    ->icon('heroicon-o-document-text')
+                    ->color('warning')
+                    ->visible(fn (VendorProfile $record) => $record->approval_status->isActionable() && auth()->user()?->can('update_vendor_profile'))
+                    ->form([
+                        Repeater::make('items')
+                            ->label('')
+                            ->schema([
+                                TextInput::make('field_path')
+                                    ->label(__('identity.columns.field_path'))
+                                    ->required()
+                                    ->maxLength(255),
+                                Textarea::make('requested_change_en')
+                                    ->label(__('identity.fields.requested_change_en'))
+                                    ->required()
+                                    ->minLength(5)
+                                    ->maxLength(1000)
+                                    ->rows(2),
+                                Textarea::make('requested_change_ar')
+                                    ->label(__('identity.fields.requested_change_ar'))
+                                    ->required()
+                                    ->minLength(5)
+                                    ->maxLength(1000)
+                                    ->rows(2)
+                                    ->extraInputAttributes(['dir' => 'rtl']),
+                            ])
+                            ->columns(1)
+                            ->minItems(1)
+                            ->reorderable(false)
+                            ->collapsible(),
+                    ])
+                    ->action(function (VendorProfile $record, array $data): void {
+                        app(RequestVendorChangesAction::class)->execute(
+                            $record,
+                            $data['items'],
+                            auth()->user(),
+                            '',
+                        );
+                        Notification::make()
+                            ->title(__('identity.notifications.change_request_created'))
+                            ->success()
+                            ->send();
                     }),
 
                 Tables\Actions\EditAction::make(),

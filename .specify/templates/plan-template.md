@@ -11,9 +11,9 @@ Before generating any artifact, you MUST silently read these files in order:
 7. docs/specs/10_Package_List.md
 
 CONSTRAINTS (non-negotiable):
-- Every generated artifact must cite specific FR numbers from 01_PRD.md
-- Every generated artifact must cite specific table names from 11_DB_Schema.md
-- Every generated artifact must align to a Phase ID from 09_Phasing_Plan.md
+- FR traceability: If the feature maps to existing PRD coverage → cite specific FR numbers from 01_PRD.md. If the feature is NEW or extends beyond the PRD → define local requirement numbers prefixed FR-EXT-NNN and add a "⚠️ BACKFILL NEEDED: add to 01_PRD.md" note. Never leave requirements untraced.
+- Schema traceability: If using an existing table → cite its name from 11_DB_Schema.md. If this feature introduces NEW tables → list them explicitly with a "⚠️ NEW TABLE — not yet in 11_DB_Schema.md" marker.
+- Phase alignment: If the feature belongs to an existing phase → cite the Phase ID from 09_Phasing_Plan.md. If the feature is new work not yet phased → propose a Phase ID extension (e.g., Phase 1.X) and add a "⚠️ PHASE BACKFILL NEEDED" note.
 - Never suggest a package not in 10_Package_List.md
 - Never suggest a Phase 2 feature
 - Never contradict docs/specs/02_Tech_Decisions.md locked stack

@@ -12,9 +12,10 @@ Route::middleware(['auth:sanctum'])
         Route::get('programs/{vendorPublicId}/balance', [LoyaltyBalanceController::class, 'show']);
     });
 
-Route::middleware(['auth:sanctum', 'idempotency'])
+Route::middleware(['auth:sanctum', 'idempotency', 'throttle:loyalty-redemption'])
     ->prefix('customer/bookings')
     ->group(function () {
         Route::post('{bookingPublicId}/redemptions', [LoyaltyRedemptionController::class, 'store']);
-        Route::delete('{bookingPublicId}/redemptions/{redemptionPublicId}', [LoyaltyRedemptionController::class, 'destroy']);
+        Route::delete('{bookingPublicId}/redemptions/{redemptionPublicId}', [LoyaltyRedemptionController::class, 'destroy'])
+            ->withoutMiddleware(['idempotency']);
     });

@@ -15,6 +15,7 @@ abstract class SaleItemStatus extends State
             ->default(PendingState::class)
             ->allowTransition(PendingState::class, InPreparationState::class)
             ->allowTransition(InPreparationState::class, ReadyState::class)
-            ->allowTransition(ReadyState::class, DeliveredState::class);
+            ->allowTransition(ReadyState::class, OutForDeliveryState::class)
+            ->allowTransition(OutForDeliveryState::class, DeliveredState::class);
     }
 }

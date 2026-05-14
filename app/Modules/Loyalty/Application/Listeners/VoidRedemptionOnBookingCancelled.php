@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace App\Modules\Loyalty\Application\Listeners;
 
-use App\Modules\Loyalty\Application\Actions\FinalizeRedemptionAction;
+use App\Modules\Booking\Domain\Events\BookingCancelled;
+use App\Modules\Loyalty\Application\Actions\VoidRedemptionAction;
 use App\Modules\Loyalty\Domain\Contracts\LoyaltyRedemptionRepository;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
@@ -14,20 +15,21 @@ class VoidRedemptionOnBookingCancelled implements ShouldQueue
 
     public function __construct(
         private readonly LoyaltyRedemptionRepository $redemptions,
-        private readonly FinalizeRedemptionAction $finalize,
+        private readonly VoidRedemptionAction $void,
     ) {}
 
-    public function handle(object $event): void
+    public function handle(BookingCancelled $event): void
     {
-        if (! isset($event->bookingId)) {
+        $bookingId = (int) ($event->booking->id ?? 0);
+        if ($bookingId === 0) {
             return;
         }
 
-        $redemption = $this->redemptions->findActiveForBooking($event->bookingId);
-        if ($redemption === null || (string) $redemption->status !== 'pending') {
+        $redemption = $this->redemptions->findActiveForBooking($bookingId);
+        if ($redemption === null) {
             return;
         }
 
-        $this->finalize->voidPending($redemption);
+        $this->void->execute($redemption);
     }
 }

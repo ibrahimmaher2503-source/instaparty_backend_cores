@@ -46,6 +46,9 @@ class VendorDocument extends Model
         'reviewed_at',
         'reviewed_by',
         'review_notes',
+        'expires_at',
+        'is_critical',
+        'last_reminder_sent_at',
     ];
 
     public function vendorProfile(): BelongsTo
@@ -69,6 +72,26 @@ class VendorDocument extends Model
             'doc_type' => DocumentType::class,
             'status' => DocumentStatus::class,
             'reviewed_at' => 'datetime',
+            'expires_at' => 'date',
+            'is_critical' => 'bool',
+            'last_reminder_sent_at' => 'date',
         ];
+    }
+
+    public function scopeWithExpiry($query)
+    {
+        return $query->whereNotNull('expires_at');
+    }
+
+    public function scopeExpiringWithinDays($query, int $days)
+    {
+        $expiryDate = today()->addDays($days)->toDateString();
+
+        return $query->where('expires_at', '<=', $expiryDate);
+    }
+
+    public function scopeExpired($query)
+    {
+        return $query->where('expires_at', '<', now()->toDateString());
     }
 }

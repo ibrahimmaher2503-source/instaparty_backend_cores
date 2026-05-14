@@ -41,6 +41,16 @@ class IdentityRolesSeeder extends Seeder
             }
         }
 
+        $serviceModerationPermissions = [
+            'publish_rental_service',
+            'publish_sale_service',
+            'publish_digital_service',
+            'reject_service',
+            'request_service_edits',
+            'archive_service',
+            'moderate_service',
+        ];
+
         $adminPermissions = [
             'approve_vendor_profile',
             'reject_vendor_profile',
@@ -61,6 +71,24 @@ class IdentityRolesSeeder extends Seeder
             'wallet.withdraw.own',
         ];
 
-        return array_merge($perTypePermissions, $adminPermissions, $vendorOwnPermissions);
+        $bookingMonitorPermissions = [
+            'view_any_bookings::monitor',
+            'view_bookings::monitor',
+            'update_bookings::monitor',
+        ];
+
+        $paymentViewPermissions = [
+            'view_any_payment',
+            'view_payment',
+        ];
+
+        return array_merge(
+            $perTypePermissions,
+            $serviceModerationPermissions,
+            $adminPermissions,
+            $vendorOwnPermissions,
+            $bookingMonitorPermissions,
+            $paymentViewPermissions,
+        );
     }
 }

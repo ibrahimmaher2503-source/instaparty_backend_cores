@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Modules\Loyalty\Database\Factories;
 
+use App\Modules\Loyalty\Domain\Enums\RuleKind;
 use App\Modules\Loyalty\Domain\Models\LoyaltyProgram;
 use App\Modules\Loyalty\Domain\Models\LoyaltyRule;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -21,19 +22,30 @@ class LoyaltyRuleFactory extends Factory
         return [
             'public_id' => (string) Str::ulid(),
             'loyalty_program_id' => LoyaltyProgram::factory(),
+            'rule_kind' => RuleKind::FirstBooking,
+            'multiplier' => 2.00,
+            'conditions' => null,
             'label' => [
                 'en' => $this->faker->words(3, true),
                 'ar' => 'قاعدة '.Str::title($this->faker->word()),
             ],
-            'earn_points_per_minor' => 1,
-            'earn_minor_per_unit' => 100,
-            'redemption_ratio_points' => 100,
-            'redemption_ratio_minor' => 1000,
-            'min_points_to_redeem' => 0,
-            'max_redeem_pct_bps' => 5000,
             'is_active' => true,
-            'effective_from' => now(),
+            'starts_at' => null,
+            'ends_at' => null,
         ];
+    }
+
+    public function firstBooking(): static
+    {
+        return $this->state(['rule_kind' => RuleKind::FirstBooking]);
+    }
+
+    public function categoryBonus(int $categoryId = 1): static
+    {
+        return $this->state([
+            'rule_kind' => RuleKind::CategoryBonus,
+            'conditions' => ['category_id' => $categoryId],
+        ]);
     }
 
     public function active(): static

@@ -7,38 +7,23 @@ namespace App\Modules\Loyalty\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-/**
- * @response {
- *   "data": {
- *     "vendor_public_id": "01HZXXXXXXXXXXXXXXXXXXXXXX",
- *     "vendor_name": "Ibrahim's Party Shop",
- *     "available_points": 850,
- *     "held_points": 150,
- *     "total_points": 1000
- *   }
- * }
- * @response scenario="Arabic" {
- *   "data": {
- *     "vendor_public_id": "01HZXXXXXXXXXXXXXXXXXXXXXX",
- *     "vendor_name": "متجر إبراهيم للحفلات",
- *     "available_points": 850,
- *     "held_points": 150,
- *     "total_points": 1000
- *   }
- * }
- */
 class LoyaltyBalanceResource extends JsonResource
 {
     public function toArray(Request $request): array
     {
-        $locale = $request->header('Accept-Language', 'en');
+        $locale = str_starts_with((string) $request->header('Accept-Language', app()->getLocale()), 'ar') ? 'ar' : 'en';
+
+        $name = $this->resource['vendor_name'] ?? null;
+        if (is_array($name)) {
+            $name = $name[$locale] ?? ($name['en'] ?? null);
+        }
 
         return [
             'vendor_public_id' => $this->resource['vendor_public_id'],
-            'vendor_name' => $this->resource['vendor_name'][$locale] ?? $this->resource['vendor_name']['en'] ?? null,
-            'available_points' => $this->resource['available_points'],
-            'held_points' => $this->resource['held_points'],
-            'total_points' => $this->resource['total_points'],
+            'vendor_name' => $name,
+            'available_points' => (int) ($this->resource['available_points'] ?? 0),
+            'held_points' => (int) ($this->resource['held_points'] ?? 0),
+            'total_points' => (int) ($this->resource['total_points'] ?? 0),
         ];
     }
 }

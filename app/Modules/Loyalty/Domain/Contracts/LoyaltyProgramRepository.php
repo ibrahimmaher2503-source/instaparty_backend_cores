@@ -15,7 +15,7 @@ interface LoyaltyProgramRepository
 
     public function create(ProgramDraft $draft, int $vendorProfileId): LoyaltyProgram;
 
-    public function updateStatus(LoyaltyProgram $program, string $status): LoyaltyProgram;
-
     public function update(LoyaltyProgram $program, ProgramDraft $draft): LoyaltyProgram;
+
+    public function setActive(LoyaltyProgram $program, bool $isActive): LoyaltyProgram;
 }

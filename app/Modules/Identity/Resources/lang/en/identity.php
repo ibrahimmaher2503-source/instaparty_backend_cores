@@ -147,7 +147,8 @@ return [
         'unsuspend_customer' => 'Unsuspend Customer',
         'force_logout' => 'Force Logout',
         'edit_profile' => 'Edit Profile',
-        'impersonate' => 'Impersonate Vendor',
+        'impersonate' => 'Impersonate Vendor (API Token)',
+        'login_as_vendor' => 'Login as Vendor (Web)',
         'replace_coverage' => 'Replace Coverage Areas',
         're_upload_document' => 'Re-upload Document',
     ],
@@ -287,6 +288,8 @@ return [
         6 => 'Saturday',
     ],
 
+    'invalid_current_password' => 'The current password is incorrect.',
+
     // Customer management keys
     'account_suspended' => 'Your account has been suspended. Contact support for assistance.',
     'customer_already_suspended' => 'This account is already suspended.',
@@ -344,12 +347,26 @@ return [
         'type_revoked' => 'Product type approval revoked.',
     ],
     'days' => [
-        'sunday'    => 'Sunday',
-        'monday'    => 'Monday',
-        'tuesday'   => 'Tuesday',
+        'sunday' => 'Sunday',
+        'monday' => 'Monday',
+        'tuesday' => 'Tuesday',
         'wednesday' => 'Wednesday',
-        'thursday'  => 'Thursday',
-        'friday'    => 'Friday',
-        'saturday'  => 'Saturday',
+        'thursday' => 'Thursday',
+        'friday' => 'Friday',
+        'saturday' => 'Saturday',
+    ],
+    'account_suspended' => 'Your account has been suspended. Please contact support.',
+    'account_suspended_title' => 'Account Suspended',
+    'account_suspended_body' => 'Your vendor account has been suspended. Please contact InstaParty support to resolve this.',
+    'vendor_portal' => [
+        'impersonation_banner' => 'InstaParty Support is currently acting on your account. Started :time.',
+        'impersonation_end' => 'End Session',
+    ],
+
+    'errors' => [
+        'document_not_owned'   => 'This document does not belong to your profile.',
+        'document_not_deletable' => 'Only rejected documents can be deleted.',
+        'profile_not_approved' => 'Your profile must be approved before requesting product-type approval.',
+        'type_already_approved' => 'You are already approved for this product type.',
     ],
 ];

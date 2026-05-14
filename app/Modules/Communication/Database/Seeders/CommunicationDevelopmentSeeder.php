@@ -35,6 +35,7 @@ final class CommunicationDevelopmentSeeder extends Seeder
 
         DB::transaction(function (): void {
             app(NotificationTemplateSeeder::class)->run();
+            app(DocExpiryNotificationTemplateSeeder::class)->run();
 
             $users = User::query()
                 ->whereIn('email', [

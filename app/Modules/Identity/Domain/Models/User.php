@@ -6,6 +6,8 @@ namespace App\Modules\Identity\Domain\Models;
 
 use App\Modules\Shared\Domain\Concerns\HasPublicId;
 use Database\Factories\UserFactory;
+use Filament\Models\Contracts\FilamentUser;
+use Filament\Panel;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -36,7 +38,7 @@ use Spatie\Permission\Traits\HasRoles;
  * @property-read CustomerProfile|null $customerProfile
  * @property-read VendorProfile|null $vendorProfile
  */
-class User extends Authenticatable
+class User extends Authenticatable implements FilamentUser
 {
     /** @use HasFactory<UserFactory> */
     use HasApiTokens, HasFactory, HasPublicId, HasRoles, Notifiable, SoftDeletes;
@@ -94,6 +96,14 @@ class User extends Authenticatable
     public function scopeCustomers(Builder $query): Builder
     {
         return $query->whereHas('roles', fn (Builder $q) => $q->where('name', 'customer'));
+    }
+
+    public function canAccessPanel(Panel $panel): bool
+    {
+        return match ($panel->getId()) {
+            'vendor' => $this->hasRole('vendor') && $this->status !== 'suspended',
+            default  => $this->hasAnyRole(['admin', 'booking_manager', 'super_admin', 'panel_user']),
+        };
     }
 
     protected function casts(): array

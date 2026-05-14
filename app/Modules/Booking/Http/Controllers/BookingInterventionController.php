@@ -10,38 +10,27 @@ use App\Modules\Booking\Domain\Enums\InterventionType;
 use App\Modules\Booking\Domain\Models\Booking;
 use App\Modules\Booking\Http\Requests\ForceCancelBookingRequest;
 use App\Modules\Booking\Http\Resources\BookingAdminInterventionResource;
+use App\Modules\Shared\Application\Services\IdempotencyService;
 use App\Modules\Shared\Http\ApiResponse;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 
 class BookingInterventionController
 {
     public function __construct(
         private readonly ForceCancelBookingAction $forceCancelAction,
+        private readonly IdempotencyService $idempotency,
     ) {}
 
     public function forceCancel(ForceCancelBookingRequest $request, string $bookingPublicId): JsonResponse
     {
         Gate::authorize('force_cancel_booking');
-
-        if (! $request->hasHeader('Idempotency-Key')) {
-            return ApiResponse::error('The Idempotency-Key header is required.', 422);
-        }
-
-        $idempotencyKey = $request->header('Idempotency-Key');
-
-        $cached = DB::table('idempotency_keys')
-            ->where('key', $idempotencyKey)
-            ->where('expires_at', '>', now())
-            ->first();
-
-        if ($cached) {
-            return response()->json(json_decode($cached->response_body, true), 200);
-        }
-
         $booking = Booking::where('public_id', $bookingPublicId)->firstOrFail();
+        return $this->idempotency->wrap($request, 'admin.bookings.force-cancel', fn () => $this->doForceCancel($booking, $request));
+    }
 
+    private function doForceCancel(Booking $booking, ForceCancelBookingRequest $request): JsonResponse
+    {
         try {
             $intervention = $this->forceCancelAction->execute(
                 $booking,
@@ -56,20 +45,6 @@ class BookingInterventionController
             return ApiResponse::error($e->getMessage(), 409);
         }
 
-        $resource = new BookingAdminInterventionResource($intervention->load('booking'));
-        $responseBody = ApiResponse::success($resource)->getContent();
-
-        DB::table('idempotency_keys')->insert([
-            'key'             => $idempotencyKey,
-            'user_id'         => auth()->id(),
-            'route'           => 'admin.bookings.force-cancel',
-            'request_hash'    => hash('sha256', $idempotencyKey),
-            'response_status' => 200,
-            'response_body'   => $responseBody,
-            'expires_at'      => now()->addHours(24),
-            'created_at'      => now(),
-        ]);
-
-        return ApiResponse::success($resource);
+        return ApiResponse::success(new BookingAdminInterventionResource($intervention->load('booking')));
     }
 }

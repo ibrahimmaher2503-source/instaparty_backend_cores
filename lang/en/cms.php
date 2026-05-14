@@ -9,21 +9,21 @@ return [
     ],
 
     'actions' => [
-        'publish'   => 'Publish',
+        'publish' => 'Publish',
         'unpublish' => 'Unpublish',
     ],
 
     'messages' => [
-        'published_successfully'   => 'Page published successfully.',
+        'published_successfully' => 'Page published successfully.',
         'unpublished_successfully' => 'Page unpublished.',
     ],
 
     'fields' => [
-        'slug'             => 'Slug',
-        'title'            => 'Title',
-        'body'             => 'Body',
+        'slug' => 'Slug',
+        'title' => 'Title',
+        'body' => 'Body',
         'meta_description' => 'Meta Description',
-        'is_published'     => 'Published',
-        'published_at'     => 'Published At',
+        'is_published' => 'Published',
+        'published_at' => 'Published At',
     ],
 ];

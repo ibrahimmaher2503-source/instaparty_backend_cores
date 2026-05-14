@@ -33,12 +33,38 @@ return [
         'public_id' => 'Public ID',
         'reference_no' => 'Reference Number',
         'customer_id' => 'Customer',
+        'customer_phone' => 'Phone',
         'occasion_id' => 'Occasion',
+        'guest_count' => 'Guest Count',
+        'event_starts_at' => 'Event Starts At',
+        'event_ends_at' => 'Event Ends At',
         'lifecycle_status' => 'Booking Status',
         'payment_status' => 'Payment Status',
         'fulfillment_status' => 'Fulfillment Status',
         'total' => 'Total',
+        'amount_paid' => 'Amount Paid',
         'submitted_at' => 'Submitted At',
+        'vendor' => 'Vendor',
+        'vendor_status' => 'Vendor Status',
+        'service' => 'Service',
+        'product_type' => 'Product Type',
+        'quantity' => 'Quantity',
+        'line_total' => 'Line Total',
+        'item_status' => 'Item Status',
+        'response_deadline' => 'Response Deadline',
+        'city' => 'City',
+        'address_line' => 'Address Line',
+        'building' => 'Building',
+        'floor' => 'Floor',
+        'apartment' => 'Apartment',
+        'landmark' => 'Landmark',
+        'recipient_name' => 'Recipient',
+        'recipient_phone' => 'Recipient Phone',
+        'version' => 'Version',
+        'trigger_kind' => 'Trigger Kind',
+        'actor' => 'Actor',
+        'context' => 'Context',
+        'snapshot' => 'Snapshot',
         'nearest_deadline' => 'Nearest Due Date',
         'booking_vendor' => 'Booking Vendor',
         'proposed_by' => 'Proposed By',
@@ -50,6 +76,58 @@ return [
         'from_state' => 'Previous State',
         'to_state' => 'New State',
         'triggered_by' => 'Triggered By',
+    ],
+
+    'sections' => [
+        'summary' => 'Booking Summary',
+    ],
+
+    'relations' => [
+        'vendors' => 'Booking Vendors',
+        'items' => 'Booking Items',
+        'addresses' => 'Booking Addresses',
+        'payments' => 'Payments',
+        'snapshots' => 'Booking Snapshots',
+        'state_transitions' => 'State Transitions',
+    ],
+
+    'actions' => [
+        'edit' => 'Edit',
+        'force_cancel' => 'Force Cancel',
+        'add_admin_note' => 'Add Admin Note',
+        'save_changes' => 'Save Changes',
+    ],
+
+    'modals' => [
+        'force_cancel_title' => 'Force cancel booking',
+        'force_cancel_description' => 'This will cancel the booking and record an audit trail.',
+        'force_cancel_reason' => 'Reason',
+        'admin_note_body' => 'Admin note',
+    ],
+
+    'notifications' => [
+        'booking_updated' => 'Booking updated successfully.',
+        'force_cancelled' => 'Booking force-cancelled successfully.',
+        'admin_note_added' => 'Admin note added successfully.',
+    ],
+
+    'empty_states' => [
+        'vendors' => 'No vendor records yet.',
+        'items' => 'No booking items yet.',
+        'addresses' => 'No booking address yet.',
+        'payments' => 'No payments yet.',
+        'snapshots' => 'No snapshots yet.',
+        'state_transitions' => 'No state transitions yet.',
+    ],
+
+    'vendor_status' => [
+        'pending' => 'Pending',
+        'accepted' => 'Accepted',
+        'modified' => 'Modified',
+        'rejected' => 'Rejected',
+        'cancelled' => 'Cancelled',
+        'in_progress' => 'In Progress',
+        'completed' => 'Completed',
     ],
 
     'lifecycle_status' => [
@@ -64,20 +142,23 @@ return [
     ],
 
     'payment_status' => [
-        'pending' => 'Pending',
-        'authorized' => 'Authorized',
-        'captured' => 'Captured',
-        'failed' => 'Payment Failed',
-        'refunded' => 'Refunded',
+        'unpaid' => 'Unpaid',
+        'partial' => 'Partial',
+        'paid' => 'Paid',
+        'refund_pending' => 'Refund Pending',
         'partially_refunded' => 'Partially Refunded',
-        'voided' => 'Voided',
+        'refunded' => 'Refunded',
     ],
 
     'fulfillment_status' => [
-        'pending' => 'Pending',
-        'confirmed' => 'Confirmed',
+        'not_started' => 'Not Started',
         'in_progress' => 'In Progress',
+        'partially_completed' => 'Partially Completed',
         'completed' => 'Completed',
-        'cancelled' => 'Cancelled',
+        'failed' => 'Failed',
+    ],
+
+    'placeholders' => [
+        'none' => '—',
     ],
 ];

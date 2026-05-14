@@ -2,10 +2,12 @@
 
 declare(strict_types=1);
 
+use App\Modules\Identity\Http\Controllers\VendorAccountController;
 use App\Modules\Identity\Http\Controllers\VendorBusinessHourController;
 use App\Modules\Identity\Http\Controllers\VendorCoverageAreaController;
 use App\Modules\Identity\Http\Controllers\VendorDocumentController;
 use App\Modules\Identity\Http\Controllers\VendorProfileController;
+use App\Modules\Identity\Http\Controllers\VendorProfileResubmitController;
 use App\Modules\Identity\Http\Controllers\VendorRegistrationController;
 use App\Modules\Identity\Http\Middleware\SetLocaleMiddleware;
 use Illuminate\Support\Facades\Route;
@@ -26,5 +28,11 @@ Route::prefix('api/v1')->middleware(['api', SetLocaleMiddleware::class])->group(
         Route::post('coverage-areas', [VendorCoverageAreaController::class, 'store']);
 
         Route::put('business-hours', [VendorBusinessHourController::class, 'update']);
+
+        Route::post('vendor-profiles/{publicId}/resubmit', [VendorProfileResubmitController::class, 'store']);
+
+        Route::post('account/password', [VendorAccountController::class, 'changePassword']);
+        Route::post('account/email', [VendorAccountController::class, 'updateEmail']);
+        Route::post('account/phone', [VendorAccountController::class, 'updatePhone']);
     });
 });

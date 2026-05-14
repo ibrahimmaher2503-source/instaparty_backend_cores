@@ -33,6 +33,7 @@
 | `docs/adr/0004-catalog-module.md` | Accepted (2026-04-29) | Catalog module — polymorphic services + 3 detail tables, per-type Resources/Actions, inventory reservations |
 | `docs/adr/0005-payments-module.md` | Accepted (2026-05-02) | Payments module — Paymob gateway adapter, HMAC-only webhook auth, PCI SAQ-A scope, single `RefundPolicyService` with `match($enum)` |
 | `docs/adr/0011-reviews-module.md` | Accepted (2026-05-03) | Reviews module — service + vendor reviews with admin moderation gate, listener-driven rating aggregation, vendor responses deferred to Phase 6.0 |
+| `docs/adr/ADR-0013-admin-service-moderation.md` | Accepted (2026-05-04) | Admin service moderation and publish workflow — per-type pending queues, approve/reject/request-edits decisions, material-edit re-review |
 | `docs/adr/ADR-001-geography-module.md` | Accepted | Geography as first-class module — owns governorates / regions / cities, exposed via `GeographyRepository` contract |
 | `docs/adr/README.md` | — | ADR log index — naming convention (`NNNN-slug.md`), template location, status lifecycle |
 

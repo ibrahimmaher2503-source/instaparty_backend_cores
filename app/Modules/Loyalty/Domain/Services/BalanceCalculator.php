@@ -4,20 +4,27 @@ declare(strict_types=1);
 
 namespace App\Modules\Loyalty\Domain\Services;
 
-use App\Modules\Loyalty\Domain\Contracts\LoyaltyLedgerRepository;
 use App\Modules\Loyalty\Domain\Contracts\PointsBalanceReader;
+use App\Modules\Loyalty\Domain\Models\LoyaltyLedgerEntry;
 
 class BalanceCalculator implements PointsBalanceReader
 {
-    public function __construct(
-        private readonly LoyaltyLedgerRepository $ledger,
-    ) {}
-
+    /**
+     * Available balance = balance_after of the most recent ledger row for (user, vendor).
+     * Each append-only write recomputes and snapshots balance_after, so we never sum.
+     */
     public function availableFor(int $customerId, int $vendorProfileId): int
     {
-        $total = $this->ledger->balanceFor($customerId, $vendorProfileId);
-        $held = $this->ledger->heldPointsFor($customerId, $vendorProfileId);
+        $latest = LoyaltyLedgerEntry::query()
+            ->where('user_id', $customerId)
+            ->where('vendor_profile_id', $vendorProfileId)
+            ->orderByDesc('id')
+            ->first(['balance_after']);
 
-        return max(0, $total - $held);
+        if ($latest === null) {
+            return 0;
+        }
+
+        return max(0, (int) $latest->balance_after);
     }
 }

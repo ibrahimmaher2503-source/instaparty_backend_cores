@@ -27,8 +27,8 @@ class ShowSubscriptionController
             ?? $this->autoEnrol->execute($vendorProfileId);
 
         return response()->json([
-            'data'   => (new SubscriptionResource($subscription->load('plan.features')))->toArray($request),
-            'meta'   => [],
+            'data' => (new SubscriptionResource($subscription->load('plan.features')))->toArray($request),
+            'meta' => [],
             'errors' => [],
         ]);
     }

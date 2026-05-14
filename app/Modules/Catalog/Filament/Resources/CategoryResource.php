@@ -81,25 +81,25 @@ class CategoryResource extends Resource
                                 ->maxLength(500)
                                 ->label('Description (English)'),
                         ]),
-                  Tabs\Tab::make('العربية')
-    ->schema([
-        TextInput::make('name.ar')
-    ->required()
-    ->maxLength(255)
-    ->label('الاسم (عربي)')
-    ->extraInputAttributes([
-        'dir' => 'rtl',
-        'style' => 'text-align: right;',
-    ]),
+                    Tabs\Tab::make('العربية')
+                        ->schema([
+                            TextInput::make('name.ar')
+                                ->required()
+                                ->maxLength(255)
+                                ->label('الاسم (عربي)')
+                                ->extraInputAttributes([
+                                    'dir' => 'rtl',
+                                    'style' => 'text-align: right;',
+                                ]),
 
-        TextInput::make('description.ar')
-            ->maxLength(500)
-            ->label('الوصف (عربي)')
-            ->extraInputAttributes([
-                'dir' => 'rtl',
-                'style' => 'text-align: right;',
-            ]),
-    ]),
+                            TextInput::make('description.ar')
+                                ->maxLength(500)
+                                ->label('الوصف (عربي)')
+                                ->extraInputAttributes([
+                                    'dir' => 'rtl',
+                                    'style' => 'text-align: right;',
+                                ]),
+                        ]),
                 ])
                 ->columnSpanFull(),
 

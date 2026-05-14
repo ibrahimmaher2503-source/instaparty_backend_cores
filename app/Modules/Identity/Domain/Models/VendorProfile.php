@@ -13,6 +13,8 @@ use App\Modules\Reviews\Domain\Models\VendorReview;
 use App\Modules\Settlement\Domain\Models\Wallet;
 use App\Modules\Settlement\Domain\Models\Withdrawal;
 use App\Modules\Shared\Domain\Concerns\HasPublicId;
+use App\Modules\Shared\Domain\Contracts\ChangeRequestSubject;
+use App\Modules\Shared\Domain\Enums\ChangeRequestSubjectType;
 use Database\Factories\VendorProfileFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -66,13 +68,13 @@ use Spatie\Translatable\HasTranslations;
  * @method static \Illuminate\Database\Eloquent\Builder<static> approved()
  * @method static \Illuminate\Database\Eloquent\Builder<static> approvedForType(\App\Modules\Catalog\Domain\Enums\ProductType $type)
  */
-class VendorProfile extends Model
+class VendorProfile extends Model implements ChangeRequestSubject
 {
     /** @use HasFactory<VendorProfileFactory> */
     use HasFactory, HasPublicId, HasTranslations, SoftDeletes;
 
     /** @var array<int, string> */
-    public $translatable = ['business_name', 'bio', 'address_line', 'rejection_reason'];
+    public $translatable = ['business_name', 'bio', 'address_line', 'rejection_reason', 'suspension_reason'];
 
     protected $fillable = [
         'public_id',
@@ -99,6 +101,7 @@ class VendorProfile extends Model
         'suspended_at',
         'suspended_by',
         'rejection_reason',
+        'suspension_reason',
         'bank_name',
         'bank_account_holder',
         'bank_iban',
@@ -187,6 +190,16 @@ class VendorProfile extends Model
             'approvedTypes',
             fn (Builder $q) => $q->where('product_type', $type->value)
         );
+    }
+
+    public function getChangeRequestSubjectType(): ChangeRequestSubjectType
+    {
+        return ChangeRequestSubjectType::VendorProfile;
+    }
+
+    public function getKey(): int
+    {
+        return $this->id;
     }
 
     protected function casts(): array

@@ -147,7 +147,8 @@ return [
         'unsuspend_customer' => 'إلغاء تعليق العميل',
         'force_logout' => 'إنهاء جميع الجلسات',
         'edit_profile' => 'تعديل الملف الشخصي',
-        'impersonate' => 'انتحال صفة المورد',
+        'impersonate' => 'انتحال صفة المورد (رمز API)',
+        'login_as_vendor' => 'الدخول كمورد (ويب)',
         'replace_coverage' => 'استبدال مناطق التغطية',
         're_upload_document' => 'إعادة رفع المستند',
     ],
@@ -287,6 +288,8 @@ return [
         6 => 'السبت',
     ],
 
+    'invalid_current_password' => 'كلمة المرور الحالية غير صحيحة.',
+
     // Customer management keys
     'account_suspended' => 'تم تعليق حسابك. يرجى التواصل مع الدعم للمساعدة.',
     'customer_already_suspended' => 'هذا الحساب معلّق بالفعل.',
@@ -344,12 +347,26 @@ return [
         'type_revoked' => 'تم سحب اعتماد نوع المنتج.',
     ],
     'days' => [
-        'sunday'    => 'الأحد',
-        'monday'    => 'الإثنين',
-        'tuesday'   => 'الثلاثاء',
+        'sunday' => 'الأحد',
+        'monday' => 'الإثنين',
+        'tuesday' => 'الثلاثاء',
         'wednesday' => 'الأربعاء',
-        'thursday'  => 'الخميس',
-        'friday'    => 'الجمعة',
-        'saturday'  => 'السبت',
+        'thursday' => 'الخميس',
+        'friday' => 'الجمعة',
+        'saturday' => 'السبت',
+    ],
+    'account_suspended' => 'تم إيقاف حسابك. يرجى التواصل مع الدعم.',
+    'account_suspended_title' => 'الحساب موقوف',
+    'account_suspended_body' => 'تم إيقاف حساب المورد الخاص بك. يرجى التواصل مع دعم إنستا باتي لحل هذه المشكلة.',
+    'vendor_portal' => [
+        'impersonation_banner' => 'فريق دعم إنستا باتي يتصرف الآن نيابةً عن حسابك. بدأ في: :time.',
+        'impersonation_end' => 'إنهاء الجلسة',
+    ],
+
+    'errors' => [
+        'document_not_owned'     => 'هذه الوثيقة لا تنتمي إلى ملفك الشخصي.',
+        'document_not_deletable' => 'يمكن حذف الوثائق المرفوضة فقط.',
+        'profile_not_approved'   => 'يجب أن يكون ملفك الشخصي معتمداً قبل طلب اعتماد نوع المنتج.',
+        'type_already_approved'  => 'أنت معتمد بالفعل لهذا النوع من المنتجات.',
     ],
 ];

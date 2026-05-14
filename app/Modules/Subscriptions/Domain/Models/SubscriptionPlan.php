@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Modules\Subscriptions\Domain\Models;
 
 use App\Modules\Shared\Domain\Casts\MoneyCast;
-use App\Modules\Subscriptions\Domain\Enums\PlanCode;
 use App\Modules\Subscriptions\Database\Factories\SubscriptionPlanFactory;
+use App\Modules\Subscriptions\Domain\Enums\PlanCode;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -22,14 +22,31 @@ class SubscriptionPlan extends Model
 
     protected $table = 'subscription_plans';
 
+    protected $fillable = [
+        'public_id',
+        'plan_code',
+        'name',
+        'description',
+        'monthly_price_minor',
+        'monthly_price_currency',
+        'yearly_price_minor',
+        'yearly_price_currency',
+        'is_default',
+        'is_published',
+        'display_order',
+        'created_by',
+        'updated_by',
+        'deleted_by',
+    ];
+
     protected $translatable = ['name', 'description'];
 
     protected $casts = [
-        'plan_code'     => PlanCode::class,
-        'monthly_price' => MoneyCast::class . ':monthly_price',
-        'yearly_price'  => MoneyCast::class . ':yearly_price',
-        'is_default'    => 'boolean',
-        'is_published'  => 'boolean',
+        'plan_code' => PlanCode::class,
+        'monthly_price' => MoneyCast::class.':monthly_price',
+        'yearly_price' => MoneyCast::class.':yearly_price',
+        'is_default' => 'boolean',
+        'is_published' => 'boolean',
     ];
 
     protected $hidden = ['id'];

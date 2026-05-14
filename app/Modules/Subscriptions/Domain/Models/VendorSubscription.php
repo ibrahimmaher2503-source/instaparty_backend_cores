@@ -22,17 +22,38 @@ class VendorSubscription extends Model
 
     protected $table = 'vendor_subscriptions';
 
+    protected $fillable = [
+        'public_id',
+        'vendor_profile_id',
+        'subscription_plan_id',
+        'status',
+        'billing_cycle',
+        'current_period_start',
+        'current_period_end',
+        'grace_period_ends_at',
+        'cancel_at_period_end',
+        'is_admin_override',
+        'override_reason',
+        'override_expires_at',
+        'gateway_token_ref',
+        'started_at',
+        'ended_at',
+        'ended_reason',
+        'created_by',
+        'updated_by',
+    ];
+
     protected $casts = [
-        'status'                => SubscriptionState::class,
-        'billing_cycle'         => BillingCycle::class,
-        'cancel_at_period_end'  => 'boolean',
-        'is_admin_override'     => 'boolean',
-        'current_period_start'  => 'datetime',
-        'current_period_end'    => 'datetime',
-        'grace_period_ends_at'  => 'datetime',
-        'override_expires_at'   => 'datetime',
-        'started_at'            => 'datetime',
-        'ended_at'              => 'datetime',
+        'status' => SubscriptionState::class,
+        'billing_cycle' => BillingCycle::class,
+        'cancel_at_period_end' => 'boolean',
+        'is_admin_override' => 'boolean',
+        'current_period_start' => 'datetime',
+        'current_period_end' => 'datetime',
+        'grace_period_ends_at' => 'datetime',
+        'override_expires_at' => 'datetime',
+        'started_at' => 'datetime',
+        'ended_at' => 'datetime',
     ];
 
     protected $hidden = ['id'];

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Modules\Booking\Domain\Models;
 
 use App\Modules\Booking\Database\Factories\BookingAddressFactory;
+use App\Modules\Geography\Domain\Models\City;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -43,5 +44,10 @@ class BookingAddress extends Model
     public function booking(): BelongsTo
     {
         return $this->belongsTo(Booking::class);
+    }
+
+    public function city(): BelongsTo
+    {
+        return $this->belongsTo(City::class);
     }
 }

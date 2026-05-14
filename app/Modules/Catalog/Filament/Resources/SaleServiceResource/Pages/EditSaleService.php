@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Modules\Catalog\Filament\Resources\SaleServiceResource\Pages;
 
+use App\Modules\Catalog\Application\Actions\MarkServicePendingReviewForMaterialEditAction;
+use App\Modules\Catalog\Domain\Models\Service;
 use App\Modules\Catalog\Filament\Resources\SaleServiceResource;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\ForceDeleteAction;
@@ -17,6 +19,8 @@ class EditSaleService extends EditRecord
 
     protected static string $resource = SaleServiceResource::class;
 
+    private ?string $serviceModerationMediaSignature = null;
+
     protected function getHeaderActions(): array
     {
         return [
@@ -24,5 +28,37 @@ class EditSaleService extends EditRecord
             ForceDeleteAction::make(),
             RestoreAction::make(),
         ];
+    }
+
+    protected function beforeSave(): void
+    {
+        $this->serviceModerationMediaSignature = $this->gallerySignature();
+    }
+
+    protected function afterSave(): void
+    {
+        $record = $this->record;
+
+        if (! $record instanceof Service) {
+            return;
+        }
+
+        app(MarkServicePendingReviewForMaterialEditAction::class)->execute(
+            $record,
+            coreMediaChanged: $this->serviceModerationMediaSignature !== $this->gallerySignature(),
+        );
+    }
+
+    private function gallerySignature(): string
+    {
+        $record = $this->record;
+
+        if (! $record instanceof Service) {
+            return '';
+        }
+
+        return $record->getMedia('gallery')
+            ->map(fn ($media): string => $media->id.':'.$media->updated_at?->getTimestamp())
+            ->implode('|');
     }
 }

@@ -9,21 +9,21 @@ return [
     ],
 
     'actions' => [
-        'publish'   => 'نشر',
+        'publish' => 'نشر',
         'unpublish' => 'إلغاء النشر',
     ],
 
     'messages' => [
-        'published_successfully'   => 'تم نشر الصفحة بنجاح.',
+        'published_successfully' => 'تم نشر الصفحة بنجاح.',
         'unpublished_successfully' => 'تم إلغاء نشر الصفحة.',
     ],
 
     'fields' => [
-        'slug'             => 'المسار',
-        'title'            => 'العنوان',
-        'body'             => 'المحتوى',
+        'slug' => 'المسار',
+        'title' => 'العنوان',
+        'body' => 'المحتوى',
         'meta_description' => 'وصف الميتا',
-        'is_published'     => 'منشور',
-        'published_at'     => 'تاريخ النشر',
+        'is_published' => 'منشور',
+        'published_at' => 'تاريخ النشر',
     ],
 ];

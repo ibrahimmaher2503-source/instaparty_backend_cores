@@ -46,6 +46,7 @@ class AdminPanelProvider extends PanelProvider
             ->colors([
                 'primary' => Color::Amber,
             ])
+            // Flat Filament/Resources/ paths (existing resources — do not move)
             ->discoverResources(in: app_path('Modules/Booking/Filament/Resources'), for: 'App\\Modules\\Booking\\Filament\\Resources')
             ->discoverResources(in: app_path('Modules/Catalog/Filament/Resources'), for: 'App\\Modules\\Catalog\\Filament\\Resources')
             ->discoverResources(in: app_path('Modules/Communication/Filament/Resources'), for: 'App\\Modules\\Communication\\Filament\\Resources')
@@ -56,9 +57,24 @@ class AdminPanelProvider extends PanelProvider
             ->discoverResources(in: app_path('Modules/Payments/Filament/Resources'), for: 'App\\Modules\\Payments\\Filament\\Resources')
             ->discoverResources(in: app_path('Modules/Reviews/Filament/Resources'), for: 'App\\Modules\\Reviews\\Filament\\Resources')
             ->discoverResources(in: app_path('Modules/Settlement/Filament/Resources'), for: 'App\\Modules\\Settlement\\Filament\\Resources')
+            ->discoverResources(in: app_path('Modules/Subscriptions/Filament/Resources'), for: 'App\\Modules\\Subscriptions\\Filament\\Resources')
             ->discoverResources(in: app_path('Modules/Shared/Filament/Resources'), for: 'App\\Modules\\Shared\\Filament\\Resources')
+            // Filament/Admin/Resources/ paths (forward-compatible; new admin resources go here)
+            ->discoverResources(in: app_path('Modules/Booking/Filament/Admin/Resources'), for: 'App\\Modules\\Booking\\Filament\\Admin\\Resources')
+            ->discoverResources(in: app_path('Modules/Catalog/Filament/Admin/Resources'), for: 'App\\Modules\\Catalog\\Filament\\Admin\\Resources')
+            ->discoverResources(in: app_path('Modules/Communication/Filament/Admin/Resources'), for: 'App\\Modules\\Communication\\Filament\\Admin\\Resources')
+            ->discoverResources(in: app_path('Modules/Discovery/Filament/Admin/Resources'), for: 'App\\Modules\\Discovery\\Filament\\Admin\\Resources')
+            ->discoverResources(in: app_path('Modules/Geography/Filament/Admin/Resources'), for: 'App\\Modules\\Geography\\Filament\\Admin\\Resources')
+            ->discoverResources(in: app_path('Modules/Identity/Filament/Admin/Resources'), for: 'App\\Modules\\Identity\\Filament\\Admin\\Resources')
+            ->discoverResources(in: app_path('Modules/Loyalty/Filament/Admin/Resources'), for: 'App\\Modules\\Loyalty\\Filament\\Admin\\Resources')
+            ->discoverResources(in: app_path('Modules/Payments/Filament/Admin/Resources'), for: 'App\\Modules\\Payments\\Filament\\Admin\\Resources')
+            ->discoverResources(in: app_path('Modules/Reviews/Filament/Admin/Resources'), for: 'App\\Modules\\Reviews\\Filament\\Admin\\Resources')
+            ->discoverResources(in: app_path('Modules/Settlement/Filament/Admin/Resources'), for: 'App\\Modules\\Settlement\\Filament\\Admin\\Resources')
+            ->discoverResources(in: app_path('Modules/Subscriptions/Filament/Admin/Resources'), for: 'App\\Modules\\Subscriptions\\Filament\\Admin\\Resources')
+            ->discoverResources(in: app_path('Modules/Shared/Filament/Admin/Resources'), for: 'App\\Modules\\Shared\\Filament\\Admin\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->discoverPages(in: app_path('Modules/Catalog/Filament/Pages'), for: 'App\\Modules\\Catalog\\Filament\\Pages')
+            ->discoverPages(in: app_path('Modules/Payments/Filament/Pages'), for: 'App\\Modules\\Payments\\Filament\\Pages')
             ->discoverPages(in: app_path('Modules/Reviews/Filament/Pages'), for: 'App\\Modules\\Reviews\\Filament\\Pages')
             ->discoverPages(in: app_path('Modules/Shared/Filament/Pages'), for: 'App\\Modules\\Shared\\Filament\\Pages')
             ->pages([
@@ -66,6 +82,7 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->discoverWidgets(in: app_path('Modules/Booking/Filament/Widgets'), for: 'App\\Modules\\Booking\\Filament\\Widgets')
+            ->discoverWidgets(in: app_path('Modules/Subscriptions/Filament/Widgets'), for: 'App\\Modules\\Subscriptions\\Filament\\Widgets')
             ->widgets([
                 Widgets\AccountWidget::class,
                 Widgets\FilamentInfoWidget::class,
@@ -89,6 +106,8 @@ class AdminPanelProvider extends PanelProvider
                     ->label(fn (): string => __('admin.nav.groups.payments')),
                 NavigationGroup::make(__('admin.nav.groups.settlement'))
                     ->label(fn (): string => __('admin.nav.groups.settlement')),
+                NavigationGroup::make('subscriptions')
+                    ->label(fn (): string => __('subscription.nav_group')),
                 NavigationGroup::make(__('admin.nav.groups.loyalty'))
                     ->label(fn (): string => __('admin.nav.groups.loyalty')),
                 NavigationGroup::make(__('admin.nav.groups.discovery'))

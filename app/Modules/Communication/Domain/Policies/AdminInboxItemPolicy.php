@@ -2,8 +2,8 @@
 
 namespace App\Modules\Communication\Domain\Policies;
 
-use App\Modules\Communication\Domain\Models\AdminInboxItem;
 use App\Modules\Identity\Domain\Models\User;
+use App\Modules\Communication\Domain\Models\AdminInboxItem;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class AdminInboxItemPolicy

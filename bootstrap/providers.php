@@ -14,6 +14,7 @@ use App\Modules\Shared\Providers\SharedServiceProvider;
 use App\Modules\Subscriptions\Providers\SubscriptionsServiceProvider;
 use App\Providers\AppServiceProvider;
 use App\Providers\Filament\AdminPanelProvider;
+use App\Providers\Filament\VendorPanelProvider;
 
 return [
     AppServiceProvider::class,
@@ -30,4 +31,5 @@ return [
     LoyaltyServiceProvider::class,
     SubscriptionsServiceProvider::class,
     AdminPanelProvider::class,
+    VendorPanelProvider::class,
 ];

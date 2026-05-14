@@ -4,181 +4,123 @@ declare(strict_types=1);
 
 namespace App\Modules\Loyalty\Database\Seeders;
 
-use App\Modules\Booking\Domain\Models\Booking;
-use App\Modules\Booking\Domain\Models\BookingItem;
 use App\Modules\Identity\Domain\Models\User;
 use App\Modules\Identity\Domain\Models\VendorProfile;
-use App\Modules\Loyalty\Domain\Enums\LedgerEntryType;
-use App\Modules\Loyalty\Domain\Enums\ProgramStatus;
+use App\Modules\Loyalty\Domain\Enums\LedgerDirection;
+use App\Modules\Loyalty\Domain\Enums\RuleKind;
 use App\Modules\Loyalty\Domain\Models\LoyaltyLedgerEntry;
 use App\Modules\Loyalty\Domain\Models\LoyaltyProgram;
-use App\Modules\Loyalty\Domain\Models\LoyaltyRedemption;
 use App\Modules\Loyalty\Domain\Models\LoyaltyRule;
-use App\Modules\Shared\Database\Seeders\Concerns\SeedsDevelopmentData;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
+/**
+ * Seeds two active loyalty programs across two existing vendor profiles,
+ * one FirstBooking rule per program, and a handful of sample earn entries
+ * across two customers. Idempotent: skips when prerequisites are missing
+ * or programs already exist.
+ */
 final class LoyaltyDevelopmentSeeder extends Seeder
 {
-    use SeedsDevelopmentData;
-
     public function run(): void
     {
-        fake()->seed(2026050311);
+        $vendors = VendorProfile::query()->take(2)->get();
+        if ($vendors->count() < 2) {
+            $this->command?->warn('LoyaltyDevelopmentSeeder: needs at least 2 vendor profiles; skipping.');
 
-        DB::transaction(function (): void {
-            $programs = $this->seedPrograms();
-            $this->seedEarnLedger($programs);
-            $this->seedRedemption($programs);
-        });
-    }
-
-    /**
-     * @return array<int, array{program: LoyaltyProgram, rule: LoyaltyRule}>
-     */
-    private function seedPrograms(): array
-    {
-        $rows = [
-            'joy-rentals-cairo' => ['name' => ['en' => 'Joy Rewards', 'ar' => 'مكافآت جوي'], 'points' => 1, 'unit' => 1000],
-            'sweet-table-studio' => ['name' => ['en' => 'Sweet Points', 'ar' => 'نقاط سويت'], 'points' => 2, 'unit' => 1000],
-            'pixel-party-cards' => ['name' => ['en' => 'Pixel Club', 'ar' => 'نادي بيكسل'], 'points' => 1, 'unit' => 500],
-        ];
-
-        $programs = [];
-
-        foreach ($rows as $slug => $row) {
-            $vendor = VendorProfile::query()->where('slug', $slug)->firstOrFail();
-
-            /** @var LoyaltyProgram $program */
-            $program = $this->updateOrCreateFactoryModel(
-                LoyaltyProgram::factory()->active()->make([
-                    'public_id' => $this->stablePublicId('loyalty-program:'.$slug),
-                    'vendor_profile_id' => $vendor->id,
-                    'name' => $row['name'],
-                    'terms' => [
-                        'en' => 'Earn points on completed bookings and redeem them on future events.',
-                        'ar' => 'اكسب نقاطا على الحجوزات المكتملة واستبدلها في مناسبات قادمة.',
-                    ],
-                    'currency' => 'EGP',
-                    'status' => ProgramStatus::Active,
-                    'expiration_days' => 180,
-                    'created_by' => $vendor->user_id,
-                ]),
-                ['vendor_profile_id' => $vendor->id],
-            );
-
-            /** @var LoyaltyRule $rule */
-            $rule = $this->updateOrCreateFactoryModel(
-                LoyaltyRule::factory()->active()->make([
-                    'public_id' => $this->stablePublicId('loyalty-rule:'.$slug.':default'),
-                    'loyalty_program_id' => $program->id,
-                    'label' => ['en' => 'Default earn and redeem rule', 'ar' => 'قاعدة الكسب والاستبدال الافتراضية'],
-                    'earn_points_per_minor' => $row['points'],
-                    'earn_minor_per_unit' => $row['unit'],
-                    'redemption_ratio_points' => 100,
-                    'redemption_ratio_minor' => 1000,
-                    'min_points_to_redeem' => 100,
-                    'max_redeem_pct_bps' => 3000,
-                    'is_active' => true,
-                    'effective_from' => '2026-05-01 00:00:00',
-                ]),
-                ['loyalty_program_id' => $program->id, 'effective_from' => '2026-05-01 00:00:00'],
-            );
-
-            $programs[$vendor->id] = ['program' => $program, 'rule' => $rule];
+            return;
         }
 
-        return $programs;
-    }
+        $customers = User::query()
+            ->whereHas('roles', fn ($q) => $q->where('name', 'customer'))
+            ->take(2)
+            ->get();
+        if ($customers->count() < 2) {
+            $this->command?->warn('LoyaltyDevelopmentSeeder: needs at least 2 customers; skipping.');
 
-    /**
-     * @param  array<int, array{program: LoyaltyProgram, rule: LoyaltyRule}>  $programs
-     */
-    private function seedEarnLedger(array $programs): void
-    {
-        $booking = Booking::query()->where('reference_no', 'BK-DEV-1001')->firstOrFail();
+            return;
+        }
 
-        BookingItem::query()
-            ->whereHas('bookingVendor.booking', fn ($query) => $query->where('reference_no', $booking->reference_no))
-            ->with('bookingVendor')
-            ->get()
-            ->each(function (BookingItem $item) use ($programs, $booking): void {
-                $vendorId = $item->bookingVendor->vendor_profile_id;
-                $program = $programs[$vendorId]['program'] ?? null;
-                $rule = $programs[$vendorId]['rule'] ?? null;
+        foreach ($vendors as $vendor) {
+            $program = LoyaltyProgram::query()
+                ->where('vendor_profile_id', $vendor->id)
+                ->first();
 
-                if (! $program instanceof LoyaltyProgram || ! $rule instanceof LoyaltyRule) {
-                    return;
-                }
+            if ($program === null) {
+                $program = LoyaltyProgram::create([
+                    'public_id' => (string) Str::ulid(),
+                    'vendor_profile_id' => $vendor->id,
+                    'is_active' => true,
+                    'points_per_currency_unit' => 1.0000,
+                    'points_value_minor' => 100,
+                    'points_value_currency' => 'EGP',
+                    'min_points_to_redeem' => 100,
+                    'max_redeem_pct' => 50,
+                    'points_expire_after_days' => 365,
+                    'name' => [
+                        'en' => 'Loyalty rewards',
+                        'ar' => 'مكافآت الولاء',
+                    ],
+                    'terms' => [
+                        'en' => 'Earn points on every booking. Redeem for discounts.',
+                        'ar' => 'اكسب نقاطًا في كل حجز. استبدلها بخصومات.',
+                    ],
+                ]);
+            }
 
-                $points = max(10, $rule->computeEarnPoints($item->line_total_minor - $item->commission_minor));
+            $hasFirstBookingRule = LoyaltyRule::query()
+                ->where('loyalty_program_id', $program->id)
+                ->where('rule_kind', RuleKind::FirstBooking->value)
+                ->exists();
 
-                $this->firstOrCreateFactoryModel(
-                    LoyaltyLedgerEntry::factory()->earn()->make([
-                        'public_id' => $this->stablePublicId('loyalty-ledger:earn:booking-item:'.$item->public_id),
-                        'customer_id' => $booking->customer_id,
-                        'vendor_profile_id' => $vendorId,
-                        'loyalty_program_id' => $program->id,
-                        'entry_type' => LedgerEntryType::Earn,
-                        'points' => $points,
-                        'booking_id' => $booking->id,
-                        'booking_item_id' => $item->id,
-                        'redemption_id' => null,
-                        'reversed_from_ledger_id' => null,
-                        'product_type' => $item->product_type,
-                        'reason' => ['en' => 'Points earned from completed booking.', 'ar' => 'نقاط مكتسبة من حجز مكتمل.'],
-                    ]),
-                    ['entry_type' => LedgerEntryType::Earn->value, 'booking_item_id' => $item->id],
-                );
-            });
-    }
+            if (! $hasFirstBookingRule) {
+                LoyaltyRule::create([
+                    'public_id' => (string) Str::ulid(),
+                    'loyalty_program_id' => $program->id,
+                    'rule_kind' => RuleKind::FirstBooking,
+                    'multiplier' => 2.00,
+                    'conditions' => null,
+                    'label' => [
+                        'en' => 'First booking bonus 2x',
+                        'ar' => 'مكافأة أول حجز 2x',
+                    ],
+                    'is_active' => true,
+                    'starts_at' => null,
+                    'ends_at' => null,
+                ]);
+            }
 
-    /**
-     * @param  array<int, array{program: LoyaltyProgram, rule: LoyaltyRule}>  $programs
-     */
-    private function seedRedemption(array $programs): void
-    {
-        $booking = Booking::query()->where('reference_no', 'BK-DEV-1002')->firstOrFail();
-        $vendor = VendorProfile::query()->where('slug', 'sweet-table-studio')->firstOrFail();
-        $program = $programs[$vendor->id]['program'];
-        $rule = $programs[$vendor->id]['rule'];
-        $customer = User::query()->findOrFail($booking->customer_id);
+            // Seed sample earn entries (5 per program, alternating customers).
+            $existingEntryCount = LoyaltyLedgerEntry::query()
+                ->where('loyalty_program_id', $program->id)
+                ->count();
+            if ($existingEntryCount > 0) {
+                continue;
+            }
 
-        /** @var LoyaltyRedemption $redemption */
-        $redemption = $this->updateOrCreateFactoryModel(
-            LoyaltyRedemption::factory()->make([
-                'public_id' => $this->stablePublicId('loyalty-redemption:'.$booking->reference_no.':sweet-table-studio'),
-                'customer_id' => $customer->id,
-                'vendor_profile_id' => $vendor->id,
-                'loyalty_program_id' => $program->id,
-                'loyalty_rule_id' => $rule->id,
-                'booking_id' => $booking->id,
-                'points_held' => 100,
-                'discount_minor' => 1000,
-                'discount_currency' => 'EGP',
-                'status' => 'pending',
-                'applied_at' => null,
-                'voided_at' => null,
-                'reversed_at' => null,
-            ]),
-            ['public_id' => $this->stablePublicId('loyalty-redemption:'.$booking->reference_no.':sweet-table-studio')],
-        );
+            $running = [];
+            foreach (range(1, 5) as $i) {
+                $customer = $customers[$i % 2];
+                $points = 50 + ($i * 25);
+                $running[$customer->id] = ($running[$customer->id] ?? 0) + $points;
 
-        $this->firstOrCreateFactoryModel(
-            LoyaltyLedgerEntry::factory()->redeem()->make([
-                'public_id' => $this->stablePublicId('loyalty-ledger:redeem:'.$redemption->public_id),
-                'customer_id' => $customer->id,
-                'vendor_profile_id' => $vendor->id,
-                'loyalty_program_id' => $program->id,
-                'entry_type' => LedgerEntryType::Redeem,
-                'points' => -100,
-                'booking_id' => $booking->id,
-                'booking_item_id' => null,
-                'redemption_id' => $redemption->id,
-                'product_type' => null,
-                'reason' => ['en' => 'Points reserved for booking discount.', 'ar' => 'نقاط محجوزة لخصم الحجز.'],
-            ]),
-            ['entry_type' => LedgerEntryType::Redeem->value, 'redemption_id' => $redemption->id],
-        );
+                LoyaltyLedgerEntry::create([
+                    'public_id' => (string) Str::ulid(),
+                    'user_id' => $customer->id,
+                    'vendor_profile_id' => $vendor->id,
+                    'loyalty_program_id' => $program->id,
+                    'direction' => LedgerDirection::Earn,
+                    'points' => $points,
+                    'balance_after' => $running[$customer->id],
+                    'reference_type' => 'seeder',
+                    'reference_id' => $i,
+                    'reason' => [
+                        'en' => 'Seeded earn #'.$i,
+                        'ar' => 'إدخال مكتسب رقم '.$i,
+                    ],
+                    'expires_at' => now()->addDays(365),
+                ]);
+            }
+        }
     }
 }

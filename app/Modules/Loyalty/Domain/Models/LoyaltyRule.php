@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Modules\Loyalty\Domain\Models;
 
 use App\Modules\Loyalty\Database\Factories\LoyaltyRuleFactory;
+use App\Modules\Loyalty\Domain\Enums\RuleKind;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -22,28 +24,24 @@ class LoyaltyRule extends Model
     protected $fillable = [
         'public_id',
         'loyalty_program_id',
+        'rule_kind',
+        'multiplier',
+        'conditions',
         'label',
-        'earn_points_per_minor',
-        'earn_minor_per_unit',
-        'redemption_ratio_points',
-        'redemption_ratio_minor',
-        'min_points_to_redeem',
-        'max_redeem_pct_bps',
         'is_active',
-        'effective_from',
+        'starts_at',
+        'ends_at',
     ];
 
     protected function casts(): array
     {
         return [
-            'earn_points_per_minor' => 'integer',
-            'earn_minor_per_unit' => 'integer',
-            'redemption_ratio_points' => 'integer',
-            'redemption_ratio_minor' => 'integer',
-            'min_points_to_redeem' => 'integer',
-            'max_redeem_pct_bps' => 'integer',
+            'rule_kind' => RuleKind::class,
+            'multiplier' => 'decimal:2',
+            'conditions' => 'array',
             'is_active' => 'boolean',
-            'effective_from' => 'datetime',
+            'starts_at' => 'datetime',
+            'ends_at' => 'datetime',
         ];
     }
 
@@ -62,18 +60,21 @@ class LoyaltyRule extends Model
         return $this->belongsTo(LoyaltyProgram::class, 'loyalty_program_id');
     }
 
-    public function scopeActive($query)
+    public function scopeActive(Builder $query): Builder
     {
         return $query->where('is_active', true);
     }
 
-    public function computeEarnPoints(int $netMinorAmount): int
+    public function scopeCurrentlyValid(Builder $query): Builder
     {
-        return (int) floor($netMinorAmount * $this->earn_points_per_minor / $this->earn_minor_per_unit);
-    }
+        $now = now();
 
-    public function computeDiscountMinor(int $points): int
-    {
-        return (int) floor($points * $this->redemption_ratio_minor / $this->redemption_ratio_points);
+        return $query
+            ->where(function (Builder $q) use ($now) {
+                $q->whereNull('starts_at')->orWhere('starts_at', '<=', $now);
+            })
+            ->where(function (Builder $q) use ($now) {
+                $q->whereNull('ends_at')->orWhere('ends_at', '>=', $now);
+            });
     }
 }

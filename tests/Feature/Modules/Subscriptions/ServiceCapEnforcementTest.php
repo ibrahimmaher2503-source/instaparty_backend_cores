@@ -20,6 +20,7 @@ use App\Modules\Subscriptions\Database\Seeders\SubscriptionPlansSeeder;
 use App\Modules\Subscriptions\Domain\Exceptions\SubscriptionLimitReachedException;
 use Database\Seeders\IdentityRolesSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
 uses(RefreshDatabase::class);
@@ -32,7 +33,7 @@ beforeEach(function (): void {
 
 function makeFreeVendor(): VendorProfile
 {
-    $user   = User::factory()->phoneVerified()->asVendor()->create();
+    $user = User::factory()->phoneVerified()->asVendor()->create();
     $vendor = VendorProfile::factory()->approved()->create(['user_id' => $user->id]);
     app(AutoEnrolFreeTierAction::class)->execute($vendor->id);
 
@@ -45,15 +46,15 @@ function fillServices(VendorProfile $vendor, ProductType $type, int $count): voi
 
     for ($i = 0; $i < $count; $i++) {
         Service::create([
-            'public_id'           => Str::ulid()->toBase32(),
-            'vendor_profile_id'   => $vendor->id,
-            'category_id'         => $category->id,
-            'product_type'        => $type,
-            'name'                => ['en' => "Svc $i", 'ar' => "خدمة $i"],
-            'short_description'   => ['en' => 'd', 'ar' => 'd'],
-            'slug'                => 'svc-'.$i.'-'.Str::lower(Str::random(4)),
-            'status'              => ServiceStatus::Published,
-            'base_price_minor'    => 10000,
+            'public_id' => Str::ulid()->toBase32(),
+            'vendor_profile_id' => $vendor->id,
+            'category_id' => $category->id,
+            'product_type' => $type,
+            'name' => ['en' => "Svc $i", 'ar' => "خدمة $i"],
+            'short_description' => ['en' => 'd', 'ar' => 'd'],
+            'slug' => 'svc-'.$i.'-'.Str::lower(Str::random(4)),
+            'status' => ServiceStatus::Published,
+            'base_price_minor' => 10000,
             'base_price_currency' => 'EGP',
         ]);
     }
@@ -72,6 +73,10 @@ it('blocks the 6th rental service for a Free-tier vendor', function (): void {
         requiresElectricity: false,
         requiresOutdoorSpace: false,
         defaultRentalDurationHours: 4,
+        setupTimeMinutes: null,
+        teardownTimeMinutes: null,
+        securityDepositMinor: null,
+        minimumSpaceSqm: null,
     );
 
     expect(fn () => app(CreateRentalServiceAction::class)->execute($dto))
@@ -133,6 +138,10 @@ it('exception names Silver as the unblocking tier (EN+AR)', function (): void {
         requiresElectricity: false,
         requiresOutdoorSpace: false,
         defaultRentalDurationHours: 4,
+        setupTimeMinutes: null,
+        teardownTimeMinutes: null,
+        securityDepositMinor: null,
+        minimumSpaceSqm: null,
     );
 
     try {
@@ -145,14 +154,14 @@ it('exception names Silver as the unblocking tier (EN+AR)', function (): void {
 
         // EN locale render
         app()->setLocale('en');
-        $req = \Illuminate\Http\Request::create('/test', 'POST', [], [], [], ['HTTP_Accept-Language' => 'en']);
+        $req = Request::create('/test', 'POST', [], [], [], ['HTTP_Accept-Language' => 'en']);
         $resp = $e->render($req);
         expect($resp->getStatusCode())->toBe(422);
         $payload = $resp->getData(true);
         expect($payload['errors'][0]['code'])->toBe('subscription_limit_reached');
 
         // AR locale render
-        $reqAr = \Illuminate\Http\Request::create('/test', 'POST', [], [], [], ['HTTP_Accept-Language' => 'ar']);
+        $reqAr = Request::create('/test', 'POST', [], [], [], ['HTTP_Accept-Language' => 'ar']);
         $respAr = $e->render($reqAr);
         $payloadAr = $respAr->getData(true);
         expect($payloadAr['errors'][0]['code'])->toBe('subscription_limit_reached');

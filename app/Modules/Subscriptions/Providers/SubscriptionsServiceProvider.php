@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace App\Modules\Subscriptions\Providers;
 
+use App\Modules\Identity\Domain\Events\VendorApproved;
+use App\Modules\Identity\Domain\Events\VendorRegistered;
+use App\Modules\Payments\Domain\Events\PaymentCaptured;
 use App\Modules\Subscriptions\Application\Listeners\OnPaymentCaptured;
 use App\Modules\Subscriptions\Application\Listeners\OnSubscriptionExpired;
 use App\Modules\Subscriptions\Application\Listeners\OnVendorRegistered;
@@ -40,17 +43,17 @@ class SubscriptionsServiceProvider extends ServiceProvider
     private function registerEventListeners(): void
     {
         Event::listen(
-            \App\Modules\Identity\Domain\Events\VendorRegistered::class,
+            VendorRegistered::class,
             OnVendorRegistered::class,
         );
 
         Event::listen(
-            \App\Modules\Identity\Domain\Events\VendorApproved::class,
+            VendorApproved::class,
             OnVendorRegistered::class,
         );
 
         Event::listen(
-            \App\Modules\Payments\Domain\Events\PaymentCaptured::class,
+            PaymentCaptured::class,
             OnPaymentCaptured::class,
         );
 

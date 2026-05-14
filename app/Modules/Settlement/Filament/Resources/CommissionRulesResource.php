@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Modules\Settlement\Filament\Resources;
 
 use App\Modules\Catalog\Domain\Enums\ProductType;
+use App\Modules\Catalog\Domain\Models\Category;
 use App\Modules\Settlement\Domain\Models\CommissionRate;
 use App\Modules\Settlement\Filament\Resources\CommissionRulesResource\Pages\CreateCommissionRule;
 use App\Modules\Settlement\Filament\Resources\CommissionRulesResource\Pages\EditCommissionRule;
@@ -74,7 +75,7 @@ class CommissionRulesResource extends Resource
                         ->label('Category (null = any)')
                         ->relationship('category', 'id')
                         ->getOptionLabelFromRecordUsing(fn ($record): string => self::categoryLabel($record))
-                        ->getSearchResultsUsing(fn (string $search) => \App\Modules\Catalog\Domain\Models\Category::query()
+                        ->getSearchResultsUsing(fn (string $search) => Category::query()
                             ->where('name->en', 'like', "%{$search}%")
                             ->orWhere('name->ar', 'like', "%{$search}%")
                             ->limit(50)

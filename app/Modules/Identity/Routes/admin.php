@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Modules\Identity\Http\Controllers\AdminVendorApprovalController;
+use App\Modules\Identity\Http\Controllers\VendorChangeRequestController;
 use App\Modules\Identity\Http\Middleware\SetLocaleMiddleware;
 use Illuminate\Support\Facades\Route;
 
@@ -13,4 +14,5 @@ Route::prefix('api/v1/admin')->middleware(['api', SetLocaleMiddleware::class, 'a
     Route::post('vendor-profiles/{vendorProfile}/approve-for-type', [AdminVendorApprovalController::class, 'approveForType']);
     Route::post('vendor-profiles/{vendorProfile}/revoke-type', [AdminVendorApprovalController::class, 'revokeType']);
     Route::post('vendor-profiles/{vendorProfile}/suspend', [AdminVendorApprovalController::class, 'suspend']);
+    Route::post('vendor-profiles/{publicId}/change-requests', [VendorChangeRequestController::class, 'store'])->middleware('can:update_vendor_profile');
 });

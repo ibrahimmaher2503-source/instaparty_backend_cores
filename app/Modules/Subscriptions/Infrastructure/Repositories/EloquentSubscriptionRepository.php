@@ -78,6 +78,7 @@ class EloquentSubscriptionRepository implements SubscriptionRepository
     public function persist(VendorSubscription $subscription): VendorSubscription
     {
         $subscription->save();
+
         return $subscription->fresh(['plan']);
     }
 }

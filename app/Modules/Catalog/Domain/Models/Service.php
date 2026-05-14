@@ -7,9 +7,13 @@ namespace App\Modules\Catalog\Domain\Models;
 use App\Modules\Catalog\Database\Factories\ServiceFactory;
 use App\Modules\Catalog\Domain\Enums\ProductType;
 use App\Modules\Catalog\Domain\Enums\ServiceStatus;
+use App\Modules\Identity\Domain\Models\User;
 use App\Modules\Identity\Domain\Models\VendorProfile;
 use App\Modules\Shared\Domain\Casts\MoneyCast;
 use App\Modules\Shared\Domain\Concerns\HasPublicId;
+use App\Modules\Shared\Domain\Contracts\ChangeRequestSubject;
+use App\Modules\Shared\Domain\Enums\ChangeRequestSubjectType;
+use App\Modules\Shared\Domain\Models\ChangeRequest;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -22,7 +26,7 @@ use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Translatable\HasTranslations;
 
-class Service extends Model implements HasMedia
+class Service extends Model implements ChangeRequestSubject, HasMedia
 {
     use HasFactory;
     use HasPublicId;
@@ -46,17 +50,21 @@ class Service extends Model implements HasMedia
         'long_description',
         'slug',
         'status',
+        'moderation_notes',
+        'moderated_at',
+        'moderated_by',
         'base_price_minor',
         'base_price_currency',
         'is_featured',
     ];
 
     /** @var list<string> */
-    public array $translatable = ['name', 'short_description', 'long_description'];
+    public array $translatable = ['name', 'short_description', 'long_description', 'moderation_notes'];
 
     protected $casts = [
         'product_type' => ProductType::class,
         'status' => ServiceStatus::class,
+        'moderated_at' => 'datetime',
         'is_featured' => 'boolean',
         'base_price' => MoneyCast::class.':base_price',
     ];
@@ -66,6 +74,16 @@ class Service extends Model implements HasMedia
         $this->addMediaCollection('gallery')
             ->acceptsMimeTypes(['image/jpeg', 'image/png', 'image/webp'])
             ->onlyKeepLatest(11);
+    }
+
+    public function getChangeRequestSubjectType(): ChangeRequestSubjectType
+    {
+        return ChangeRequestSubjectType::Service;
+    }
+
+    public function getKey(): int
+    {
+        return $this->id;
     }
 
     // -------------------------------------------------------------------------
@@ -83,6 +101,11 @@ class Service extends Model implements HasMedia
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
+    }
+
+    public function moderator(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'moderated_by');
     }
 
     public function rentalDetail(): HasOne
@@ -105,6 +128,17 @@ class Service extends Model implements HasMedia
         return $this->hasMany(ServiceInventoryReservation::class);
     }
 
+    public function availabilityBlocks(): HasMany
+    {
+        return $this->hasMany(ServiceAvailabilityBlock::class);
+    }
+
+    public function changeRequests(): HasMany
+    {
+        return $this->hasMany(ChangeRequest::class, 'subject_id')
+            ->where('subject_type', 'service');
+    }
+
     // -------------------------------------------------------------------------
     // Scopes
     // -------------------------------------------------------------------------
@@ -112,6 +146,11 @@ class Service extends Model implements HasMedia
     public function scopePublished(Builder $query): Builder
     {
         return $query->where('status', ServiceStatus::Published);
+    }
+
+    public function scopePendingReview(Builder $query): Builder
+    {
+        return $query->where('status', ServiceStatus::PendingReview);
     }
 
     public function scopeForType(Builder $query, ProductType $type): Builder

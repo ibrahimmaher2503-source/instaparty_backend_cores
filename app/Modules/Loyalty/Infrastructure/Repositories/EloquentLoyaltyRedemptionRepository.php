@@ -13,51 +13,23 @@ class EloquentLoyaltyRedemptionRepository implements LoyaltyRedemptionRepository
     public function create(RedemptionRequest $request): LoyaltyRedemption
     {
         return LoyaltyRedemption::create([
-            'customer_id' => $request->customerId,
+            'user_id' => $request->userId,
             'vendor_profile_id' => $request->vendorProfileId,
             'loyalty_program_id' => $request->programId,
-            'loyalty_rule_id' => $request->ruleId,
             'booking_id' => $request->bookingId,
-            'points_held' => $request->pointsToRedeem,
-            'discount_minor' => $request->discountMinor,
-            'discount_currency' => $request->discountCurrency,
-            'status' => 'pending',
+            'points_redeemed' => $request->pointsRedeemed,
+            'amount_minor' => $request->amountMinor,
+            'amount_currency' => $request->amountCurrency,
         ]);
     }
 
     public function findActiveForBooking(int $bookingId): ?LoyaltyRedemption
     {
-        return LoyaltyRedemption::where('booking_id', $bookingId)
-            ->whereIn('status', ['pending', 'applied'])
-            ->first();
-    }
-
-    public function findPendingForCustomerAndVendor(int $customerId, int $vendorProfileId): ?LoyaltyRedemption
-    {
-        return LoyaltyRedemption::where('customer_id', $customerId)
-            ->where('vendor_profile_id', $vendorProfileId)
-            ->where('status', 'pending')
-            ->first();
+        return LoyaltyRedemption::query()->where('booking_id', $bookingId)->first();
     }
 
     public function findByPublicId(string $publicId): ?LoyaltyRedemption
     {
-        return LoyaltyRedemption::where('public_id', $publicId)->first();
-    }
-
-    public function transitionTo(LoyaltyRedemption $redemption, string $state): LoyaltyRedemption
-    {
-        $redemption->status->transitionTo($state);
-        $tsColumn = match ($state) {
-            'applied' => 'applied_at',
-            'voided' => 'voided_at',
-            'reversed' => 'reversed_at',
-            default => null,
-        };
-        if ($tsColumn) {
-            $redemption->update([$tsColumn => now()]);
-        }
-
-        return $redemption->fresh();
+        return LoyaltyRedemption::query()->where('public_id', $publicId)->first();
     }
 }

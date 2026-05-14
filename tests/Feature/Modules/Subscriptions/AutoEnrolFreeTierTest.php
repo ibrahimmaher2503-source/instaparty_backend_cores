@@ -25,7 +25,7 @@ beforeEach(function (): void {
 });
 
 it('auto-enrols a vendor on the Free tier when VendorRegistered fires', function (): void {
-    $user   = User::factory()->phoneVerified()->asVendor()->create();
+    $user = User::factory()->phoneVerified()->asVendor()->create();
     $vendor = VendorProfile::factory()->approved()->create(['user_id' => $user->id]);
 
     app(OnVendorRegistered::class)->handle(new VendorRegistered($vendor));
@@ -39,7 +39,7 @@ it('auto-enrols a vendor on the Free tier when VendorRegistered fires', function
 })->group('subscriptions', 'us1');
 
 it('is idempotent when the registration event is replayed', function (): void {
-    $user   = User::factory()->phoneVerified()->asVendor()->create();
+    $user = User::factory()->phoneVerified()->asVendor()->create();
     $vendor = VendorProfile::factory()->approved()->create(['user_id' => $user->id]);
 
     $listener = app(OnVendorRegistered::class);

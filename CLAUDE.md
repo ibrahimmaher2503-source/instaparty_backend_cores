@@ -45,6 +45,7 @@ All significant architectural decisions are documented in `/docs/adr`.
 Current ADRs:
 - ADR-001: Geography Module Introduction and Ownership (`docs/adr/ADR-001-geography-module.md`)
 - ADR-0013: Subscription Tiers Module — Phase 1.7 (`docs/adr/ADR-0013-subscription-tiers-module.md`)
+- ADR-0021: Vendor Document Expiry and Compliance Lifecycle — Phase 6.9 (`docs/adr/ADR-0021-vendor-doc-expiry.md`)
 
 ## Stack & Architecture (LOCKED — Tech Decisions §1)
 

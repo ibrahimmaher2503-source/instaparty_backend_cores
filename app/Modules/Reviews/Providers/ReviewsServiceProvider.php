@@ -40,6 +40,10 @@ class ReviewsServiceProvider extends ServiceProvider
 
         Route::middleware(['api'])
             ->prefix('api/v1')
+            ->group(__DIR__.'/../Routes/vendor.php');
+
+        Route::middleware(['api'])
+            ->prefix('api/v1')
             ->group(__DIR__.'/../Routes/public.php');
 
         Event::listen(ReviewApproved::class, RecomputeRatingOnApproval::class);

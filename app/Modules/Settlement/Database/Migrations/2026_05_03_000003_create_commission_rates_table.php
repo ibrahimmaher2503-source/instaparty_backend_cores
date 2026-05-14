@@ -41,7 +41,7 @@ return new class extends Migration
         // MySQL 8 / MariaDB 10.5+ compatible approach using IFNULL
         DB::statement(
             "CREATE UNIQUE INDEX commission_rates_cat_type_unique
-             ON commission_rates (IFNULL(category_id, 0), IFNULL(product_type, ''))"
+             ON commission_rates ((IFNULL(category_id, 0)), (IFNULL(product_type, '')))"
         );
     }
 

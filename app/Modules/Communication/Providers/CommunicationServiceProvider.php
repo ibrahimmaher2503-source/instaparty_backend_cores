@@ -7,6 +7,10 @@ namespace App\Modules\Communication\Providers;
 use App\Modules\Booking\Domain\Contracts\BookingHistoryReader;
 use App\Modules\Booking\Infrastructure\Repositories\EloquentBookingHistoryReader;
 use App\Modules\Communication\Application\Actions\DispatchNotificationAction;
+use App\Modules\Communication\Application\Listeners\DispatchServiceChangesRequestedNotificationListener;
+use App\Modules\Communication\Application\Listeners\DispatchServiceResubmittedNotificationListener;
+use App\Modules\Communication\Application\Listeners\DispatchVendorChangesRequestedNotificationListener;
+use App\Modules\Communication\Application\Listeners\DispatchVendorResubmittedNotificationListener;
 use App\Modules\Communication\Application\Listeners\OnBookingConfirmed;
 use App\Modules\Communication\Application\Listeners\OnBookingForceCancelledNotifyListener;
 use App\Modules\Communication\Application\Listeners\OnBookingModified;
@@ -26,6 +30,9 @@ use App\Modules\Communication\Infrastructure\Gateways\FcmPushAdapter;
 use App\Modules\Communication\Infrastructure\Gateways\MailchimpEmailAdapter;
 use App\Modules\Communication\Infrastructure\Gateways\VonageSmsAdapter;
 use App\Modules\Communication\Infrastructure\Gateways\WhatsAppStubAdapter;
+use App\Modules\Identity\Domain\Events\VendorProfileResubmitted;
+use App\Modules\Shared\Domain\Events\ChangeRequestCreated;
+use App\Modules\Shared\Domain\Events\ChangeRequestResubmitted;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Route;
@@ -81,6 +88,12 @@ class CommunicationServiceProvider extends ServiceProvider
         Event::listen('App\Modules\Booking\Domain\Events\BookingForceCancelled', OnBookingForceCancelledNotifyListener::class);
         // OnRentalDeliveryScheduled, OnSalePreparationStarted, OnDigitalDelivered, OnDigitalExpiringSoon
         // are wired in a later phase once those lifecycle events exist in the Booking module.
+
+        // Change request notification listeners
+        Event::listen(ChangeRequestCreated::class, DispatchVendorChangesRequestedNotificationListener::class);
+        Event::listen(VendorProfileResubmitted::class, DispatchVendorResubmittedNotificationListener::class);
+        Event::listen(ChangeRequestCreated::class, DispatchServiceChangesRequestedNotificationListener::class);
+        Event::listen(ChangeRequestResubmitted::class, DispatchServiceResubmittedNotificationListener::class);
 
         // Admin inbox routing listeners
         Event::listen('App\Modules\Identity\Domain\Events\VendorRegistered', OnVendorRegisteredInbox::class);

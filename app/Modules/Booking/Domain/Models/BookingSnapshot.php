@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Modules\Booking\Domain\Models;
 
 use App\Modules\Booking\Database\Factories\BookingSnapshotFactory;
+use App\Modules\Identity\Domain\Models\User;
 use App\Modules\Shared\Domain\Concerns\HasPublicId;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -35,5 +36,10 @@ class BookingSnapshot extends Model
     public function booking(): BelongsTo
     {
         return $this->belongsTo(Booking::class);
+    }
+
+    public function triggeredBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'triggered_by');
     }
 }

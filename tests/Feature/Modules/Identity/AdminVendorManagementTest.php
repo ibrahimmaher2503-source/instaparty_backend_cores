@@ -11,6 +11,7 @@ use App\Modules\Identity\Domain\Models\VendorProfile;
 use Database\Seeders\IdentityRolesSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
+use Spatie\Activitylog\Models\Activity;
 
 uses(RefreshDatabase::class);
 
@@ -25,7 +26,7 @@ it('admin can edit vendor profile without touching approval_status', function ()
 
     $vendor = VendorProfile::factory()->create([
         'approval_status' => ApprovalStatus::Approved,
-        'bank_name'       => 'Old Bank',
+        'bank_name' => 'Old Bank',
     ]);
 
     $originalStatus = $vendor->approval_status;
@@ -33,7 +34,7 @@ it('admin can edit vendor profile without touching approval_status', function ()
     $this->actingAs($admin);
 
     app(UpdateVendorProfileAction::class)->execute($vendor, [
-        'bank_name'       => 'New Bank',
+        'bank_name' => 'New Bank',
         'approval_status' => ApprovalStatus::Rejected->value, // should be stripped
     ]);
 
@@ -49,16 +50,16 @@ it('UpdateVendorProfileAction strips all protected fields', function (): void {
 
     $vendor = VendorProfile::factory()->create([
         'approval_status' => ApprovalStatus::Approved,
-        'slug'            => 'original-slug',
+        'slug' => 'original-slug',
     ]);
 
     $this->actingAs($admin);
 
     app(UpdateVendorProfileAction::class)->execute($vendor, [
-        'bank_name'       => 'Updated Bank',
-        'slug'            => 'hacked-slug',
+        'bank_name' => 'Updated Bank',
+        'slug' => 'hacked-slug',
         'approval_status' => ApprovalStatus::Rejected->value,
-        'user_id'         => 999,
+        'user_id' => 999,
     ]);
 
     $vendor->refresh();
@@ -80,7 +81,7 @@ it('impersonation creates activity log entry', function (): void {
 
     app(ImpersonateVendorAction::class)->execute($vendor, $admin);
 
-    $logEntry = \Spatie\Activitylog\Models\Activity::where('log_name', 'default')
+    $logEntry = Activity::where('log_name', 'default')
         ->where('description', 'vendor_impersonated')
         ->where('subject_id', $vendor->id)
         ->first();
@@ -136,8 +137,8 @@ it('edit does not break existing type approvals', function (): void {
 
     $vendor->approvedProductTypes()->create([
         'product_type' => 'rental',
-        'approved_at'  => now(),
-        'approved_by'  => $admin->id,
+        'approved_at' => now(),
+        'approved_by' => $admin->id,
     ]);
 
     $this->actingAs($admin);

@@ -88,6 +88,7 @@ cp docs/adr/templates/0001-generic-decision.md \
 | 0010 | Communication Module | Accepted | [`0010-communication-module.md`](./0010-communication-module.md) |
 | 0011 | Reviews Module | Accepted | [`0011-reviews-module.md`](./0011-reviews-module.md) |
 | 0012 | Loyalty Module | Accepted | [`0012-loyalty-module.md`](./0012-loyalty-module.md) |
+| 0013 | Admin Service Moderation & Publish Workflow | Accepted | [`ADR-0013-admin-service-moderation.md`](./ADR-0013-admin-service-moderation.md) |
 
 > **هذا الجدول لازم يتحدث يدوياً مع كل ADR جديد.** Claude Code هيصرّ على تحديثه كجزء من spec-guard hook (لو فعلت ده).
 

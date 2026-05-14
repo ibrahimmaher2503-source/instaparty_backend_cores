@@ -39,16 +39,16 @@ class AutoEnrolFreeTierAction
 
         return DB::transaction(function () use ($vendorProfileId, $plan): VendorSubscription {
             $subscription = VendorSubscription::create([
-                'public_id'             => (string) Str::ulid(),
-                'vendor_profile_id'     => $vendorProfileId,
-                'subscription_plan_id'  => $plan->id,
-                'status'                => SubscriptionStatus::Active->value,
-                'billing_cycle'         => BillingCycle::None->value,
-                'current_period_start'  => now(),
-                'current_period_end'    => null,
-                'cancel_at_period_end'  => false,
-                'is_admin_override'     => false,
-                'started_at'            => now(),
+                'public_id' => (string) Str::ulid(),
+                'vendor_profile_id' => $vendorProfileId,
+                'subscription_plan_id' => $plan->id,
+                'status' => SubscriptionStatus::Active->value,
+                'billing_cycle' => BillingCycle::None->value,
+                'current_period_start' => now(),
+                'current_period_end' => null,
+                'cancel_at_period_end' => false,
+                'is_admin_override' => false,
+                'started_at' => now(),
             ]);
 
             $subscription->setRelation('plan', $plan);

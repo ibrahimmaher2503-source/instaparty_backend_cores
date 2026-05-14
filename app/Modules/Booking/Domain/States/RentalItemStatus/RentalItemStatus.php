@@ -16,6 +16,7 @@ abstract class RentalItemStatus extends State
             ->allowTransition(PendingDeliveryState::class, OutForDeliveryState::class)
             ->allowTransition(OutForDeliveryState::class, DeliveredState::class)
             ->allowTransition(DeliveredState::class, SetupCompleteState::class)
-            ->allowTransition(SetupCompleteState::class, PickedUpState::class);
+            ->allowTransition(SetupCompleteState::class, TeardownState::class)
+            ->allowTransition(TeardownState::class, PickedUpState::class);
     }
 }

@@ -24,10 +24,7 @@ class LoyaltyProgramResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-star';
 
-    public static function getNavigationGroup(): ?string
-    {
-        return __('admin.nav.groups.loyalty');
-    }
+    protected static ?string $navigationGroup = 'Loyalty';
 
     protected static ?int $navigationSort = 40;
 
@@ -55,7 +52,6 @@ class LoyaltyProgramResource extends Resource
     {
         $query = parent::getEloquentQuery();
 
-        // Scope to own vendor profile if the authenticated user is a vendor (not admin)
         if (auth()->check() && ! auth()->user()->hasRole('super_admin')) {
             $vendorProfileId = auth()->user()->vendorProfile?->id;
             if ($vendorProfileId) {
@@ -69,56 +65,72 @@ class LoyaltyProgramResource extends Resource
     public static function form(Form $form): Form
     {
         return $form->schema([
-            Forms\Components\Tabs::make('Translations')
-                ->tabs([
-                    Forms\Components\Tabs\Tab::make('English')
-                        ->schema([
-                            Forms\Components\TextInput::make('name.en')
-                                ->label('Name (English)')
-                                ->required()
-                                ->maxLength(150),
-                            Forms\Components\Textarea::make('terms.en')
-                                ->label('Terms (English)')
-                                ->rows(3)
-                                ->maxLength(2000),
-                        ]),
-                    Forms\Components\Tabs\Tab::make('Ø§Ù„Ø¹Ø±Ø¨ÙŠØ©')
-                        ->schema([
-                            Forms\Components\TextInput::make('name.ar')
-                                ->label('Ø§Ù„Ø§Ø³Ù… (Ø¹Ø±Ø¨ÙŠ)')
-                                ->required()
-                                ->maxLength(150),
-                            Forms\Components\Textarea::make('terms.ar')
-                                ->label('Ø§Ù„Ø´Ø±ÙˆØ· (Ø¹Ø±Ø¨ÙŠ)')
-                                ->rows(3)
-                                ->maxLength(2000),
-                        ]),
-                ])
-                ->columnSpanFull(),
-
-            Forms\Components\Section::make('Program Settings')
+            Forms\Components\Section::make(__('loyalty.sections.program'))
                 ->schema([
-                    Forms\Components\Select::make('status')
-                        ->options([
-                            'active' => 'Active',
-                            'paused' => 'Paused',
-                            'archived' => 'Archived',
-                        ])
-                        ->default('active')
-                        ->required(),
-                    Forms\Components\TextInput::make('expiration_days')
-                        ->label('Points Expiration (days)')
+                    Forms\Components\TextInput::make('name')
+                        ->label(__('loyalty.fields.name'))
+                        ->required()
+                        ->maxLength(255),
+
+                    Forms\Components\Toggle::make('is_active')
+                        ->label(__('loyalty.fields.is_active'))
+                        ->default(true)
+                        ->onColor('success')
+                        ->offColor('danger'),
+
+                    Forms\Components\Textarea::make('terms')
+                        ->label(__('loyalty.fields.terms'))
+                        ->rows(3)
+                        ->maxLength(2000)
+                        ->columnSpanFull(),
+
+                    Forms\Components\TextInput::make('points_per_currency_unit')
+                        ->label(__('loyalty.fields.points_per_currency_unit'))
                         ->numeric()
-                        ->nullable()
-                        ->minValue(1)
-                        ->maxValue(3650)
-                        ->helperText('Leave empty for points that never expire.'),
-                    Forms\Components\TextInput::make('currency')
+                        ->step(0.0001)
+                        ->required()
+                        ->default(1)
+                        ->helperText(__('loyalty.help.points_per_currency_unit')),
+
+                    Forms\Components\TextInput::make('points_value_minor')
+                        ->label(__('loyalty.fields.points_value_minor'))
+                        ->numeric()
+                        ->required()
+                        ->default(1)
+                        ->prefix(fn (Forms\Get $get) => $get('points_value_currency') ?? 'EGP')
+                        ->helperText(__('loyalty.help.points_value_minor')),
+
+                    Forms\Components\TextInput::make('points_value_currency')
+                        ->label(__('loyalty.fields.points_value_currency'))
                         ->default('EGP')
                         ->maxLength(3)
                         ->required(),
+
+                    Forms\Components\TextInput::make('min_points_to_redeem')
+                        ->label(__('loyalty.fields.min_points_to_redeem'))
+                        ->numeric()
+                        ->default(100)
+                        ->required()
+                        ->minValue(1),
+
+                    Forms\Components\TextInput::make('max_redeem_pct')
+                        ->label(__('loyalty.fields.max_redeem_pct'))
+                        ->numeric()
+                        ->minValue(0)
+                        ->maxValue(100)
+                        ->default(50)
+                        ->required()
+                        ->suffix('%'),
+
+                    Forms\Components\TextInput::make('points_expire_after_days')
+                        ->label(__('loyalty.fields.points_expire_after_days'))
+                        ->numeric()
+                        ->minValue(1)
+                        ->maxValue(3650)
+                        ->placeholder(__('loyalty.never_expires'))
+                        ->nullable(),
                 ])
-                ->columns(3),
+                ->columns(2),
         ]);
     }
 
@@ -127,43 +139,52 @@ class LoyaltyProgramResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('public_id')
-                    ->label('ID')
+                    ->label(__('loyalty.columns.public_id'))
+                    ->copyable()
+                    ->searchable()
+                    ->limit(10),
+                Tables\Columns\TextColumn::make('vendor_profile_id')
+                    ->label(__('loyalty.columns.vendor'))
+                    ->sortable()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('name')
-                    ->label('Name')
+                    ->label(__('loyalty.columns.name'))
                     ->searchable()
-                    ->formatStateUsing(fn ($state) => is_array($state) ? ($state['en'] ?? '') : $state),
-                Tables\Columns\TextColumn::make('status')
-                    ->badge()
-                    ->color(function ($state): string {
-                        $value = $state instanceof \BackedEnum ? $state->value : (string) $state;
-
-                        return match ($value) {
-                            'active' => 'success',
-                            'paused' => 'warning',
-                            'archived' => 'gray',
-                            default => 'gray',
-                        };
-                    }),
-                Tables\Columns\TextColumn::make('currency'),
-                Tables\Columns\TextColumn::make('expiration_days')
-                    ->label('Expires (days)')
-                    ->default('Never'),
+                    ->formatStateUsing(fn ($state) => is_array($state)
+                        ? ($state[app()->getLocale()] ?? $state['en'] ?? '')
+                        : (string) $state),
+                Tables\Columns\IconColumn::make('is_active')
+                    ->label(__('loyalty.columns.is_active'))
+                    ->boolean(),
+                Tables\Columns\TextColumn::make('points_per_currency_unit')
+                    ->label(__('loyalty.columns.points_per_currency_unit'))
+                    ->numeric(decimalPlaces: 4),
+                Tables\Columns\TextColumn::make('points_value_minor')
+                    ->label(__('loyalty.columns.point_value'))
+                    ->money('EGP', divideBy: 100),
+                Tables\Columns\TextColumn::make('min_points_to_redeem')
+                    ->label(__('loyalty.columns.min_points_to_redeem'))
+                    ->numeric(),
+                Tables\Columns\TextColumn::make('max_redeem_pct')
+                    ->label(__('loyalty.columns.max_redeem_pct'))
+                    ->suffix('%'),
+                Tables\Columns\TextColumn::make('points_expire_after_days')
+                    ->label(__('loyalty.columns.points_expire_after_days'))
+                    ->default(__('loyalty.never_expires')),
                 Tables\Columns\TextColumn::make('created_at')
+                    ->label(__('admin.common.created_at'))
                     ->dateTime()
                     ->sortable(),
             ])
             ->defaultSort('created_at', 'desc')
             ->filters([
-                Tables\Filters\SelectFilter::make('status')
-                    ->options([
-                        'active' => 'Active',
-                        'paused' => 'Paused',
-                        'archived' => 'Archived',
-                    ]),
+                Tables\Filters\TernaryFilter::make('is_active')
+                    ->label(__('loyalty.columns.is_active')),
+                Tables\Filters\TrashedFilter::make(),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ]);
     }
 

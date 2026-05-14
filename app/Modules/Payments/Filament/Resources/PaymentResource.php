@@ -11,11 +11,14 @@ use App\Modules\Payments\Filament\Resources\PaymentResource\Pages;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Str;
 
 class PaymentResource extends Resource
 {
     protected static ?string $model = Payment::class;
+
+    protected static ?string $recordTitleAttribute = 'public_id';
 
     public static function getNavigationGroup(): ?string
     {
@@ -41,7 +44,7 @@ class PaymentResource extends Resource
         return __('payments.models.payment.plural');
     }
 
-    public static function getEloquentQuery(): \Illuminate\Database\Eloquent\Builder
+    public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()->with(['booking']);
     }
@@ -49,6 +52,16 @@ class PaymentResource extends Resource
     public static function canCreate(): bool
     {
         return false;
+    }
+
+    public static function canViewAny(): bool
+    {
+        return auth()->user()?->hasAnyRole(['admin', 'booking_manager', 'super_admin']) === true;
+    }
+
+    public static function canView($record): bool
+    {
+        return auth()->user()?->hasAnyRole(['admin', 'booking_manager', 'super_admin']) === true;
     }
 
     public static function canEdit($record): bool
@@ -98,6 +111,9 @@ class PaymentResource extends Resource
                     ->dateTime()
                     ->sortable(),
             ])
+            ->actions([
+                Tables\Actions\ViewAction::make(),
+            ])
             ->defaultSort('created_at', 'desc');
     }
 
@@ -105,6 +121,7 @@ class PaymentResource extends Resource
     {
         return [
             'index' => Pages\ListPayments::route('/'),
+            'view' => Pages\ViewPayment::route('/{record}'),
         ];
     }
 }

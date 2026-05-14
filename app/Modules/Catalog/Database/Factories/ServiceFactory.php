@@ -8,6 +8,7 @@ use App\Modules\Catalog\Domain\Enums\ProductType;
 use App\Modules\Catalog\Domain\Enums\ServiceStatus;
 use App\Modules\Catalog\Domain\Models\Category;
 use App\Modules\Catalog\Domain\Models\Service;
+use App\Modules\Identity\Domain\Models\User;
 use App\Modules\Identity\Domain\Models\VendorProfile;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
@@ -74,7 +75,11 @@ class ServiceFactory extends Factory
 
     public function published(): static
     {
-        return $this->state(['status' => ServiceStatus::Published]);
+        return $this->state([
+            'status' => ServiceStatus::Published,
+            'moderated_at' => now(),
+            'moderated_by' => User::factory(),
+        ]);
     }
 
     public function pendingReview(): static
@@ -82,8 +87,34 @@ class ServiceFactory extends Factory
         return $this->state(['status' => ServiceStatus::PendingReview]);
     }
 
+    public function changesRequested(): static
+    {
+        return $this->state(['status' => ServiceStatus::ChangesRequested]);
+    }
+
+    public function rejected(): static
+    {
+        return $this->state([
+            'status' => ServiceStatus::Rejected,
+            'moderation_notes' => [
+                'en' => 'Rejected during moderation.',
+                'ar' => 'Rejected during moderation.',
+            ],
+            'moderated_at' => now(),
+            'moderated_by' => User::factory(),
+        ]);
+    }
+
     public function archived(): static
     {
         return $this->state(['status' => ServiceStatus::Archived]);
+    }
+
+    public function moderatedBy(User|int $moderator): static
+    {
+        return $this->state([
+            'moderated_by' => $moderator instanceof User ? $moderator->id : $moderator,
+            'moderated_at' => now(),
+        ]);
     }
 }

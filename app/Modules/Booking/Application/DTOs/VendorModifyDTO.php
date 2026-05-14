@@ -19,5 +19,6 @@ final readonly class VendorModifyDTO
         public ModificationProposalKind $proposalKind,
         public array $changes,
         public ?array $vendorExplanation,
+        public ?string $idempotencyKey = null,
     ) {}
 }

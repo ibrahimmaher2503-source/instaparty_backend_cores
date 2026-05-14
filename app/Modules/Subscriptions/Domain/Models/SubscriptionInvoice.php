@@ -21,16 +21,32 @@ class SubscriptionInvoice extends Model
 
     // Append-only: no updated_at
     public $timestamps = false;
+
     const CREATED_AT = 'created_at';
 
+    protected $fillable = [
+        'public_id',
+        'vendor_subscription_id',
+        'idempotency_key',
+        'status',
+        'billing_cycle',
+        'amount_minor',
+        'amount_currency',
+        'period_start',
+        'period_end',
+        'gateway_ref',
+        'checkout_url',
+        'paid_at',
+    ];
+
     protected $casts = [
-        'status'        => InvoiceStatus::class,
+        'status' => InvoiceStatus::class,
         'billing_cycle' => BillingCycle::class,
-        'amount'        => MoneyCast::class . ':amount',
-        'period_start'  => 'datetime',
-        'period_end'    => 'datetime',
-        'paid_at'       => 'datetime',
-        'created_at'    => 'datetime',
+        'amount' => MoneyCast::class.':amount',
+        'period_start' => 'datetime',
+        'period_end' => 'datetime',
+        'paid_at' => 'datetime',
+        'created_at' => 'datetime',
     ];
 
     protected $hidden = ['id'];

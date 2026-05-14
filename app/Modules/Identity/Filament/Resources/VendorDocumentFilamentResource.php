@@ -5,14 +5,21 @@ declare(strict_types=1);
 namespace App\Modules\Identity\Filament\Resources;
 
 use App\Modules\Identity\Application\Actions\GenerateDocumentSignedUrlAction;
+use App\Modules\Identity\Application\Actions\SetDocumentExpiryAction;
 use App\Modules\Identity\Domain\Models\VendorDocument;
 use App\Modules\Identity\Filament\Resources\VendorDocumentFilamentResource\Pages;
+use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Toggle;
+use Filament\Forms\Form;
 use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables\Actions\Action;
+use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
+use Illuminate\Support\Carbon;
 
 class VendorDocumentFilamentResource extends Resource
 {
@@ -40,6 +47,21 @@ class VendorDocumentFilamentResource extends Resource
     public static function getPluralModelLabel(): string
     {
         return __('identity.vendor_documents');
+    }
+
+    public static function form(Form $form): Form
+    {
+        return $form->schema([
+            Section::make(__('identity.compliance.expiry_and_criticality'))
+                ->schema([
+                    DatePicker::make('expires_at')
+                        ->nullable()
+                        ->minDate(today()->addDay())
+                        ->label(__('identity.expires_at')),
+                    Toggle::make('is_critical')
+                        ->label(__('identity.is_critical')),
+                ])->columns(2),
+        ]);
     }
 
     public static function table(Table $table): Table
@@ -103,6 +125,18 @@ class VendorDocumentFilamentResource extends Resource
                             ->success()
                             ->send();
                     }),
+                EditAction::make()
+                    ->using(function (VendorDocument $record, array $data) {
+                        app(SetDocumentExpiryAction::class)->execute(
+                            $record,
+                            Carbon::parse($data['expires_at']),
+                            (bool) ($data['is_critical'] ?? false)
+                        );
+                        Notification::make()
+                            ->title(__('identity.notifications.expiry_set_successfully'))
+                            ->success()
+                            ->send();
+                    }),
             ]);
     }
 
@@ -110,6 +144,7 @@ class VendorDocumentFilamentResource extends Resource
     {
         return [
             'index' => Pages\ListVendorDocuments::route('/'),
+            'edit' => Pages\EditVendorDocument::route('/{record}/edit'),
         ];
     }
 

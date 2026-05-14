@@ -25,7 +25,7 @@ class AdminInboxItem extends Model
         return AdminInboxItemFactory::new();
     }
 
-    public array $translatable = ['title', 'body'];
+    protected array $translatable = ['title', 'body'];
 
     protected $fillable = [
         'public_id',

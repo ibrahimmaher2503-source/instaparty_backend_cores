@@ -18,16 +18,17 @@ class SubscriptionInvoiceFactory extends Factory
     public function definition(): array
     {
         $start = now()->subDays(15);
+
         return [
-            'public_id'               => (string) Str::ulid(),
-            'vendor_subscription_id'  => VendorSubscription::factory(),
-            'idempotency_key'         => (string) Str::ulid(),
-            'status'                  => InvoiceStatus::Pending->value,
-            'billing_cycle'           => BillingCycle::Monthly->value,
-            'amount_minor'            => 19900,
-            'amount_currency'         => 'EGP',
-            'period_start'            => $start,
-            'period_end'              => $start->copy()->addMonth(),
+            'public_id' => (string) Str::ulid(),
+            'vendor_subscription_id' => VendorSubscription::factory(),
+            'idempotency_key' => (string) Str::ulid(),
+            'status' => InvoiceStatus::Pending->value,
+            'billing_cycle' => BillingCycle::Monthly->value,
+            'amount_minor' => 19900,
+            'amount_currency' => 'EGP',
+            'period_start' => $start,
+            'period_end' => $start->copy()->addMonth(),
         ];
     }
 

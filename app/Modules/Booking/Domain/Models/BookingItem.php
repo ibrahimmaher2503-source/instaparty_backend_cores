@@ -9,6 +9,7 @@ use App\Modules\Booking\Domain\States\DigitalItemStatus\DigitalItemStatus;
 use App\Modules\Booking\Domain\States\RentalItemStatus\RentalItemStatus;
 use App\Modules\Booking\Domain\States\SaleItemStatus\SaleItemStatus;
 use App\Modules\Catalog\Domain\Enums\ProductType;
+use App\Modules\Catalog\Domain\Models\Service;
 use App\Modules\Shared\Domain\Casts\MoneyCast;
 use App\Modules\Shared\Domain\Concerns\HasPublicId;
 use Carbon\Carbon;
@@ -76,12 +77,17 @@ class BookingItem extends Model
         return $this->belongsTo(BookingVendor::class);
     }
 
+    public function service(): BelongsTo
+    {
+        return $this->belongsTo(Service::class);
+    }
+
     public function resolveItemState(): State
     {
         return match ($this->product_type) {
-            ProductType::Rental => app(RentalItemStatus::class, ['model' => $this]),
-            ProductType::Sale => app(SaleItemStatus::class, ['model' => $this]),
-            ProductType::Digital => app(DigitalItemStatus::class, ['model' => $this]),
+            ProductType::Rental => RentalItemStatus::make($this->item_status, $this)->setField('item_status'),
+            ProductType::Sale => SaleItemStatus::make($this->item_status, $this)->setField('item_status'),
+            ProductType::Digital => DigitalItemStatus::make($this->item_status, $this)->setField('item_status'),
         };
     }
 }

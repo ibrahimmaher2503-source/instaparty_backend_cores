@@ -7,6 +7,12 @@ namespace App\Modules\Catalog\Filament\Resources;
 use App\Modules\Catalog\Domain\Enums\ProductType;
 use App\Modules\Catalog\Domain\Enums\ServiceStatus;
 use App\Modules\Catalog\Domain\Models\Service;
+use App\Modules\Catalog\Filament\Actions\ApproveServiceAction;
+use App\Modules\Catalog\Filament\Actions\BulkApproveServicesAction;
+use App\Modules\Catalog\Filament\Actions\BulkArchiveServicesAction;
+use App\Modules\Catalog\Filament\Actions\BulkRejectServicesAction;
+use App\Modules\Catalog\Filament\Actions\RejectServiceAction;
+use App\Modules\Catalog\Filament\Actions\RequestServiceEditsAction;
 use App\Modules\Catalog\Filament\Resources\RentalServiceResource\Pages;
 use App\Modules\Discovery\Filament\Actions\ReindexServicesAction;
 use Filament\Forms\Components\Section;
@@ -50,6 +56,21 @@ class RentalServiceResource extends Resource
     public static function getNavigationLabel(): string
     {
         return __('catalog.nav.rental_services');
+    }
+
+    public static function getNavigationBadge(): ?string
+    {
+        $count = Service::query()
+            ->forType(ProductType::Rental)
+            ->pendingReview()
+            ->count();
+
+        return $count > 0 ? (string) $count : null;
+    }
+
+    public static function getNavigationBadgeColor(): ?string
+    {
+        return 'warning';
     }
 
     public static function getModelLabel(): string
@@ -111,6 +132,9 @@ class RentalServiceResource extends Resource
                         ->required(),
                     Select::make('status')
                         ->options(ServiceStatus::class)
+                        ->default(ServiceStatus::Draft)
+                        ->disabled()
+                        ->dehydrated(false)
                         ->required()
                         ->label(__('catalog.status_label')),
                     Toggle::make('is_featured')
@@ -215,18 +239,26 @@ class RentalServiceResource extends Resource
                 ReindexServicesAction::make(),
             ])
             ->actions([
+                ApproveServiceAction::make(),
+                RejectServiceAction::make(),
+                RequestServiceEditsAction::make(),
                 EditAction::make(),
                 DeleteAction::make(),
                 ForceDeleteAction::make(),
                 RestoreAction::make(),
             ])
-            ->bulkActions([]);
+            ->bulkActions([
+                BulkApproveServicesAction::make(),
+                BulkRejectServicesAction::make(),
+                BulkArchiveServicesAction::make(),
+            ]);
     }
 
     public static function getPages(): array
     {
         return [
             'index' => Pages\ListRentalServices::route('/'),
+            'pending' => Pages\PendingRentalServicesPage::route('/pending-review'),
             'create' => Pages\CreateRentalService::route('/create'),
             'edit' => Pages\EditRentalService::route('/{record}/edit'),
         ];

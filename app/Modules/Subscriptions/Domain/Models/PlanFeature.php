@@ -15,11 +15,21 @@ class PlanFeature extends Model
 
     protected $table = 'plan_features';
 
+    protected $fillable = [
+        'subscription_plan_id',
+        'feature_key',
+        'value_type',
+        'value_int',
+        'value_bool',
+        'value_string',
+        'label',
+    ];
+
     protected $translatable = ['label'];
 
     protected $casts = [
         'value_bool' => 'boolean',
-        'value_int'  => 'integer',
+        'value_int' => 'integer',
     ];
 
     public function plan(): BelongsTo
@@ -35,10 +45,10 @@ class PlanFeature extends Model
     public function typedValue(): int|bool|string|null
     {
         return match ($this->value_type) {
-            'int'    => $this->value_int,
-            'bool'   => $this->value_bool,
+            'int' => $this->value_int,
+            'bool' => $this->value_bool,
             'string' => $this->value_string,
-            default  => null,
+            default => null,
         };
     }
 }

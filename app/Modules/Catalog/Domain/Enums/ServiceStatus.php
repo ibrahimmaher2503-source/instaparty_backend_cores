@@ -8,7 +8,9 @@ enum ServiceStatus: string
 {
     case Draft = 'draft';
     case PendingReview = 'pending_review';
+    case ChangesRequested = 'changes_requested';
     case Published = 'published';
+    case Rejected = 'rejected';
     case Archived = 'archived';
 
     public function label(): string
@@ -21,7 +23,9 @@ enum ServiceStatus: string
         return match ($this) {
             self::Draft => 'gray',
             self::PendingReview => 'warning',
+            self::ChangesRequested => 'warning',
             self::Published => 'success',
+            self::Rejected => 'danger',
             self::Archived => 'danger',
         };
     }
@@ -30,9 +34,19 @@ enum ServiceStatus: string
     {
         return match ($this) {
             self::Draft => $next === self::PendingReview,
-            self::PendingReview => $next === self::Published || $next === self::Draft,
-            self::Published => $next === self::Archived || $next === self::Draft,
+            self::PendingReview => $next === self::Published
+                || $next === self::Rejected
+                || $next === self::ChangesRequested
+                || $next === self::Draft,
+            self::ChangesRequested => $next === self::PendingReview || $next === self::Draft,
+            self::Published => $next === self::PendingReview || $next === self::Archived || $next === self::Draft,
+            self::Rejected => $next === self::Archived,
             self::Archived => $next === self::Draft,
         };
+    }
+
+    public function isActionable(): bool
+    {
+        return $this === self::PendingReview;
     }
 }

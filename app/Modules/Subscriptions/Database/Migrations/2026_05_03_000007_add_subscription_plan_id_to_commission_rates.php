@@ -30,13 +30,16 @@ return new class extends Migration
                 ->constrained('subscription_plans')
                 ->nullOnDelete();
 
-            $table->index(['subscription_plan_id', 'product_type', 'category_id']);
+            $table->index(
+                ['subscription_plan_id', 'product_type', 'category_id'],
+                'commission_rates_plan_type_cat_index'
+            );
         });
 
         if (! $isSqlite) {
             DB::statement(
                 "CREATE UNIQUE INDEX commission_rates_cat_type_unique
-                 ON commission_rates (IFNULL(category_id, 0), IFNULL(product_type, ''), IFNULL(subscription_plan_id, 0))"
+                 ON commission_rates ((IFNULL(category_id, 0)), (IFNULL(product_type, '')), (IFNULL(subscription_plan_id, 0)))"
             );
         }
     }
@@ -45,7 +48,7 @@ return new class extends Migration
     {
         Schema::table('commission_rates', function (Blueprint $table): void {
             $table->dropForeign(['subscription_plan_id']);
-            $table->dropIndex(['subscription_plan_id', 'product_type', 'category_id']);
+            $table->dropIndex('commission_rates_plan_type_cat_index');
             $table->dropColumn('subscription_plan_id');
         });
     }

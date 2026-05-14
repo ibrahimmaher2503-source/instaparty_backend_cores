@@ -130,8 +130,7 @@ class BookingsMonitorResource extends Resource
                             ->minLength(10)
                             ->maxLength(1000),
                     ])
-                    ->visible(fn (Booking $record): bool =>
-                        auth()->user()?->can('force_cancel_booking') === true
+                    ->visible(fn (Booking $record): bool => auth()->user()?->can('force_cancel_booking') === true
                         && $record->lifecycle_status !== LifecycleStatus::Completed
                     )
                     ->action(function (Booking $record, array $data): void {

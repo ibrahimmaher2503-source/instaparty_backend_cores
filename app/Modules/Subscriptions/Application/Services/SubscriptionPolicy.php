@@ -12,7 +12,7 @@ use App\Modules\Subscriptions\Domain\Contracts\SubscriptionRepository;
 use App\Modules\Subscriptions\Domain\Enums\PlanCode;
 use App\Modules\Subscriptions\Domain\Models\VendorSubscription;
 
-class SubscriptionPolicy implements SubscriptionPolicyContract, CommissionTierLookup
+class SubscriptionPolicy implements CommissionTierLookup, SubscriptionPolicyContract
 {
     public function __construct(
         private readonly SubscriptionRepository $repository,
@@ -69,6 +69,7 @@ class SubscriptionPolicy implements SubscriptionPolicyContract, CommissionTierLo
 
         if (! $features->canFeature) {
             $unblocking = $planCode->firstUpgrade();
+
             return PolicyDecisionDto::deny('can_feature', 0, 0, $unblocking?->value ?? 'silver', $planCode->value);
         }
 
@@ -87,6 +88,7 @@ class SubscriptionPolicy implements SubscriptionPolicyContract, CommissionTierLo
 
         if (! $features->canImportExcel) {
             $unblocking = $planCode->firstUpgrade();
+
             return PolicyDecisionDto::deny('can_import_excel', 0, 0, $unblocking?->value ?? 'gold', $planCode->value);
         }
 
@@ -99,6 +101,7 @@ class SubscriptionPolicy implements SubscriptionPolicyContract, CommissionTierLo
         if ($sub === null) {
             return 0;
         }
+
         return $this->featureResolver->resolveForPlan($sub->subscription_plan_id)->featuredCap;
     }
 
@@ -108,6 +111,7 @@ class SubscriptionPolicy implements SubscriptionPolicyContract, CommissionTierLo
         if ($sub === null) {
             return 5; // Free tier default
         }
+
         return $this->featureResolver->resolveForPlan($sub->subscription_plan_id)->maxActiveServices;
     }
 
@@ -117,18 +121,21 @@ class SubscriptionPolicy implements SubscriptionPolicyContract, CommissionTierLo
         if ($sub === null) {
             return 0;
         }
+
         return $this->featureResolver->resolveForPlan($sub->subscription_plan_id)->commissionDiscountBps;
     }
 
     public function currentPlanCode(int $vendorProfileId): string
     {
         $sub = $this->effectiveSubscription($vendorProfileId);
+
         return $sub?->plan?->plan_code->value ?? PlanCode::Free->value;
     }
 
     public function resolveTierBps(int $vendorProfileId): ?int
     {
         $bps = $this->commissionDiscountBps($vendorProfileId);
+
         return $bps > 0 ? $bps : null;
     }
 

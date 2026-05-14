@@ -16,13 +16,13 @@ class BookingAdminInterventionResource extends JsonResource
         $beforePaymentStatus = $this->resource->before_state['payment_status'] ?? null;
 
         return [
-            'intervention_public_id'  => $this->resource->public_id,
-            'booking_public_id'       => $this->resource->booking?->public_id,
-            'intervention_type'       => $this->resource->intervention_type->value,
+            'intervention_public_id' => $this->resource->public_id,
+            'booking_public_id' => $this->resource->booking?->public_id,
+            'intervention_type' => $this->resource->intervention_type->value,
             'before_lifecycle_status' => $this->resource->before_state['lifecycle_status'] ?? null,
-            'after_lifecycle_status'  => $this->resource->after_state['lifecycle_status'] ?? null,
-            'refund_initiated'        => $beforePaymentStatus === 'paid',
-            'created_at'              => $this->resource->created_at?->toIso8601String(),
+            'after_lifecycle_status' => $this->resource->after_state['lifecycle_status'] ?? null,
+            'refund_initiated' => $beforePaymentStatus === 'paid',
+            'created_at' => $this->resource->created_at?->toIso8601String(),
         ];
     }
 }

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Modules\Loyalty\Database\Factories;
 
 use App\Modules\Identity\Domain\Models\VendorProfile;
-use App\Modules\Loyalty\Domain\Enums\ProgramStatus;
 use App\Modules\Loyalty\Domain\Models\LoyaltyProgram;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
@@ -24,6 +23,13 @@ class LoyaltyProgramFactory extends Factory
         return [
             'public_id' => (string) Str::ulid(),
             'vendor_profile_id' => VendorProfile::factory()->approved(),
+            'is_active' => true,
+            'points_per_currency_unit' => 1.0000,
+            'points_value_minor' => 100, // 1 point = 1 EGP (100 piastres)
+            'points_value_currency' => 'EGP',
+            'min_points_to_redeem' => 100,
+            'max_redeem_pct' => 50,
+            'points_expire_after_days' => $this->faker->numberBetween(30, 365),
             'name' => [
                 'en' => $name,
                 'ar' => 'برنامج '.Str::title($this->faker->word()),
@@ -32,9 +38,6 @@ class LoyaltyProgramFactory extends Factory
                 'en' => $this->faker->sentence(),
                 'ar' => 'شروط البرنامج.',
             ],
-            'currency' => 'EGP',
-            'status' => ProgramStatus::Active,
-            'expiration_days' => $this->faker->numberBetween(30, 365),
             'created_by' => null,
             'updated_by' => null,
         ];
@@ -42,16 +45,11 @@ class LoyaltyProgramFactory extends Factory
 
     public function active(): static
     {
-        return $this->state(['status' => ProgramStatus::Active]);
+        return $this->state(['is_active' => true]);
     }
 
-    public function paused(): static
+    public function inactive(): static
     {
-        return $this->state(['status' => ProgramStatus::Paused]);
-    }
-
-    public function archived(): static
-    {
-        return $this->state(['status' => ProgramStatus::Archived]);
+        return $this->state(['is_active' => false]);
     }
 }

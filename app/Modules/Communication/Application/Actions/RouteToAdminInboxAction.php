@@ -34,16 +34,19 @@ class RouteToAdminInboxAction
             return;
         }
 
+        // Batch-load all referenced roles with their users in two queries.
+        $roleIds = $rules->whereNotNull('route_to_role_id')->pluck('route_to_role_id')->unique();
+        $roleUsers = $roleIds->isNotEmpty()
+            ? Role::with('users')->whereIn('id', $roleIds)->get()->keyBy('id')
+            : collect();
+
         $adminIds = collect();
 
         foreach ($rules as $rule) {
             if ($rule->route_to_admin_id !== null) {
                 $adminIds->push($rule->route_to_admin_id);
-            } elseif ($rule->route_to_role_id !== null) {
-                $role = Role::find($rule->route_to_role_id);
-                if ($role !== null) {
-                    $role->users()->pluck('users.id')->each(fn ($id) => $adminIds->push($id));
-                }
+            } elseif ($rule->route_to_role_id !== null && $roleUsers->has($rule->route_to_role_id)) {
+                $roleUsers->get($rule->route_to_role_id)->users->each(fn ($u) => $adminIds->push($u->id));
             }
         }
 

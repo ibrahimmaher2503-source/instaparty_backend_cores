@@ -7,7 +7,9 @@ namespace App\Modules\Payments\Domain\Contracts;
 use App\Modules\Payments\Application\DTOs\InitiatePaymentDto;
 use App\Modules\Payments\Application\DTOs\PaymentIntentDto;
 use App\Modules\Payments\Application\DTOs\PaymobWebhookDto;
+use App\Modules\Payments\Application\DTOs\PingResult;
 use App\Modules\Payments\Application\DTOs\RefundResultDto;
+use App\Modules\Payments\Application\DTOs\VoidResult;
 use App\Modules\Payments\Domain\Models\Payment;
 use Brick\Money\Money;
 
@@ -20,4 +22,10 @@ interface PaymentGateway
     public function parseWebhook(array $payload): PaymobWebhookDto;
 
     public function refund(Payment $payment, Money $amount): RefundResultDto;
+
+    public function void(string $gatewayRef): VoidResult;
+
+    public function ping(): PingResult;
+
+    public function getTodayCapturedCount(): int;
 }

@@ -23,7 +23,7 @@ return new class extends Migration
             $table->unsignedBigInteger('amount_minor');
             $table->char('amount_currency', 3)->default('EGP');
             $table->enum('method', ['card', 'wallet', 'installment', 'cash_on_delivery', 'transfer']);
-            $table->enum('status', ['pending', 'authorized', 'captured', 'failed', 'refunded', 'partially_refunded', 'voided'])
+            $table->enum('status', ['pending', 'authorized', 'captured', 'failed', 'refunded', 'partially_refunded', 'voided', 'abandoned'])
                 ->default('pending');
             $table->timestamp('captured_at')->nullable();
             $table->string('failure_code', 80)->nullable();

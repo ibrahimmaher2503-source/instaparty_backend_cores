@@ -18,16 +18,17 @@ class VendorSubscriptionFactory extends Factory
     public function definition(): array
     {
         $start = now()->subDays(15);
+
         return [
-            'public_id'            => (string) Str::ulid(),
+            'public_id' => (string) Str::ulid(),
             'subscription_plan_id' => SubscriptionPlan::factory(),
-            'status'               => SubscriptionStatus::Active->value,
-            'billing_cycle'        => BillingCycle::Monthly->value,
+            'status' => SubscriptionStatus::Active->value,
+            'billing_cycle' => BillingCycle::Monthly->value,
             'current_period_start' => $start,
-            'current_period_end'   => $start->copy()->addMonth(),
+            'current_period_end' => $start->copy()->addMonth(),
             'cancel_at_period_end' => false,
-            'is_admin_override'    => false,
-            'started_at'           => $start,
+            'is_admin_override' => false,
+            'started_at' => $start,
         ];
     }
 
@@ -39,7 +40,7 @@ class VendorSubscriptionFactory extends Factory
     public function pastDue(): static
     {
         return $this->state([
-            'status'               => SubscriptionStatus::PastDue->value,
+            'status' => SubscriptionStatus::PastDue->value,
             'grace_period_ends_at' => now()->addDays(5),
         ]);
     }
@@ -47,16 +48,16 @@ class VendorSubscriptionFactory extends Factory
     public function cancelled(): static
     {
         return $this->state([
-            'status'    => SubscriptionStatus::Cancelled->value,
-            'ended_at'  => now()->subDay(),
+            'status' => SubscriptionStatus::Cancelled->value,
+            'ended_at' => now()->subDay(),
         ]);
     }
 
     public function expired(): static
     {
         return $this->state([
-            'status'    => SubscriptionStatus::Expired->value,
-            'ended_at'  => now()->subDay(),
+            'status' => SubscriptionStatus::Expired->value,
+            'ended_at' => now()->subDay(),
         ]);
     }
 
@@ -64,7 +65,7 @@ class VendorSubscriptionFactory extends Factory
     {
         return $this->state([
             'is_admin_override' => true,
-            'override_reason'   => 'Beta partner',
+            'override_reason' => 'Beta partner',
             'override_expires_at' => now()->addDays(30),
         ]);
     }
