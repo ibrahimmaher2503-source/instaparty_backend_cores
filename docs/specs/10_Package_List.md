@@ -292,7 +292,46 @@ npm install --save-dev \
   autoprefixer
 ```
 
-That's the standard Filament-friendly Vite setup. **No frontend framework in this repo** — Next.js is a separate codebase in Phase 1.5.
+That's the standard Filament-friendly Vite setup.
+
+---
+
+## 5b. NPM — Customer Frontend (`apps/frontend/`)
+
+Co-located in this same git repo under `apps/frontend/`. The root Vite setup above stays untouched.
+
+```bash
+cd apps/frontend
+npm install
+```
+
+### Production dependencies
+| Package | Why |
+|---|---|
+| `next@15` | App Router + RSC (Tech Decisions §1) |
+| `react@19`, `react-dom@19` | Pinned to Next 15's React requirement |
+| `next-intl` | EN/AR locale routing with RTL `dir` attribute |
+| `@tanstack/react-query` | Client-side cache for the cart/wizard surfaces |
+| `zustand` | Cart + booking-wizard state |
+| `react-hook-form` + `@hookform/resolvers` + `zod` | Forms that mirror Laravel FormRequest validation |
+| `axios` | Sanctum SPA cookie + CSRF interceptor |
+| `lucide-react` | Icon set |
+| `date-fns` + `date-fns-tz` | Africa/Cairo timezone formatting |
+| `firebase` | Firestore SDK for chat (mirrors `chat_message_log`) |
+| `clsx`, `class-variance-authority`, `tailwind-merge` | Class composition helpers |
+| `@radix-ui/react-{dialog,popover,tabs,accordion,slot}` | Headless primitives (shadcn-style) |
+
+### Dev dependencies
+| Package | Why |
+|---|---|
+| `typescript`, `@types/node`, `@types/react`, `@types/react-dom` | TS strict mode |
+| `tailwindcss@4-beta` + `@tailwindcss/postcss` | Tailwind v4 with CSS-variable theming (driven by `/api/v1/theme/tokens`) |
+| `postcss`, `autoprefixer` | PostCSS pipeline |
+| `eslint`, `eslint-config-next` | Linting |
+| `vitest`, `@vitejs/plugin-react` | Unit tests for theme mapper + cart reducer |
+| `@playwright/test` | E2E for all three product-type golden paths in EN + AR |
+
+**No new packages may be added without an entry above in the same PR**, per CLAUDE.md Package Discipline.
 
 ---
 

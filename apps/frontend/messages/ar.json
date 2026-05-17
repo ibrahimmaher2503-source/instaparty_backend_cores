@@ -1,0 +1,46 @@
+{
+  "common": {
+    "site_name": "إنستا بارتي",
+    "search": "بحث",
+    "menu": "القائمة",
+    "close": "إغلاق",
+    "loading": "جاري التحميل…",
+    "retry": "إعادة المحاولة",
+    "skip_to_content": "تخطي إلى المحتوى"
+  },
+  "nav": {
+    "home": "الرئيسية",
+    "search": "تصفح",
+    "wizard": "خطّط لمناسبتك",
+    "cart": "السلة",
+    "my_bookings": "حجوزاتي",
+    "wishlist": "المفضلة",
+    "profile": "الملف الشخصي",
+    "login": "تسجيل الدخول",
+    "register": "إنشاء حساب",
+    "logout": "تسجيل الخروج",
+    "language": "English"
+  },
+  "home": {
+    "hero_default_headline": "خطّط لحفلتك في دقائق",
+    "hero_default_sub": "اكتشف أفضل خدمات الإيجار والبيع والرقمية لحفلتك في مكان واحد.",
+    "browse_services": "تصفح الخدمات"
+  },
+  "service": {
+    "from": "ابتداءً من",
+    "per_day": "لليوم",
+    "per_unit": "للقطعة",
+    "book_now": "احجز الآن",
+    "add_to_cart": "أضف إلى السلة",
+    "delivery_required": "عنوان التوصيل مطلوب",
+    "security_deposit": "تأمين",
+    "setup_time": "وقت التركيب",
+    "lead_time": "مدة التحضير",
+    "delivery_method": "طريقة التسليم",
+    "expiry_note": "تنتهي بعد التسليم",
+    "quantity": "الكمية"
+  },
+  "errors": {
+    "generic": "حدث خطأ ما. حاول مرة أخرى."
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "common": {
+    "site_name": "InstaParty",
+    "search": "Search",
+    "menu": "Menu",
+    "close": "Close",
+    "loading": "Loading…",
+    "retry": "Retry",
+    "skip_to_content": "Skip to content"
+  },
+  "nav": {
+    "home": "Home",
+    "search": "Browse",
+    "wizard": "Plan event",
+    "cart": "Cart",
+    "my_bookings": "My bookings",
+    "wishlist": "Wishlist",
+    "profile": "Profile",
+    "login": "Sign in",
+    "register": "Sign up",
+    "logout": "Sign out",
+    "language": "العربية"
+  },
+  "home": {
+    "hero_default_headline": "Plan your party in minutes",
+    "hero_default_sub": "Discover the best rental, sale and digital party services in one place.",
+    "browse_services": "Browse services"
+  },
+  "service": {
+    "from": "From",
+    "per_day": "per day",
+    "per_unit": "per unit",
+    "book_now": "Book now",
+    "add_to_cart": "Add to cart",
+    "delivery_required": "Delivery address required",
+    "security_deposit": "Security deposit",
+    "setup_time": "Setup time",
+    "lead_time": "Lead time",
+    "delivery_method": "Delivery method",
+    "expiry_note": "Expires after delivery",
+    "quantity": "Quantity"
+  },
+  "errors": {
+    "generic": "Something went wrong. Please try again."
+  }
+}
