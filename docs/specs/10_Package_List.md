@@ -329,7 +329,9 @@ npm install
 | `postcss`, `autoprefixer` | PostCSS pipeline |
 | `eslint`, `eslint-config-next` | Linting |
 | `vitest`, `@vitejs/plugin-react` | Unit tests for theme mapper + cart reducer |
+| `jsdom` | DOM environment for Vitest (token mapper, store, form helpers) |
 | `@playwright/test` | E2E for all three product-type golden paths in EN + AR |
+| `@axe-core/playwright` | a11y assertions in Playwright (WCAG 2 A + AA) |
 
 **No new packages may be added without an entry above in the same PR**, per CLAUDE.md Package Discipline.
 
