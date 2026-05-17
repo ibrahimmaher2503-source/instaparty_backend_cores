@@ -25,6 +25,7 @@ return [
             'subscriptions' => 'Packages & Subscriptions',
             'tax' => 'VAT & Tax',
             'advertising' => 'Advertising & Marketing',
+            'appearance' => 'Appearance',
         ],
     ],
 

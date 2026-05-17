@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace App\Modules\Shared\Providers;
 
+use App\Modules\Shared\Application\Listeners\PingFrontendRevalidate;
 use App\Modules\Shared\Application\Listeners\StateTransitionObserver;
 use App\Modules\Shared\Domain\Contracts\StateTransitionLogger;
+use App\Modules\Shared\Domain\Events\PublicThemeChanged;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 use Spatie\ModelStates\Events\StateChanged;
@@ -24,6 +26,7 @@ class SharedServiceProvider extends ServiceProvider
         $this->registerRoutes();
 
         Event::listen(StateChanged::class, StateTransitionObserver::class);
+        Event::listen(PublicThemeChanged::class, PingFrontendRevalidate::class);
     }
 
     private function registerRoutes(): void
