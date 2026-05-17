@@ -10,6 +10,7 @@ use App\Modules\Settlement\Domain\Exceptions\ExistingPendingWithdrawalException;
 use App\Modules\Settlement\Domain\Exceptions\InsufficientWalletBalanceException;
 use App\Modules\Settlement\Domain\Exceptions\WithdrawalBelowMinimumException;
 use App\Modules\Settlement\Http\Requests\RequestWithdrawalRequest;
+use App\Modules\Settlement\Http\Resources\WithdrawalListResource;
 use App\Modules\Settlement\Http\Resources\WithdrawalResource;
 use App\Modules\Settlement\Infrastructure\Repositories\EloquentWithdrawalRepository;
 use App\Modules\Shared\Http\ApiResponse;
@@ -50,7 +51,7 @@ class WithdrawalController extends Controller
         );
 
         return ApiResponse::success(
-            WithdrawalResource::collection($paginator),
+            WithdrawalListResource::collection($paginator),
             meta: [
                 'pagination' => [
                     'per_page' => $paginator->perPage(),

@@ -11,6 +11,7 @@ use App\Modules\Booking\Filament\Resources\BookingModificationResource\Pages;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Str;
 
 class BookingModificationResource extends Resource
@@ -56,6 +57,11 @@ class BookingModificationResource extends Resource
         return false;
     }
 
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()->with(['bookingVendor.vendor', 'proposedBy']);
+    }
+
     public static function table(Table $table): Table
     {
         return $table
@@ -64,12 +70,16 @@ class BookingModificationResource extends Resource
                     ->label(__('booking.columns.public_id'))
                     ->copyable()
                     ->searchable(),
-                Tables\Columns\TextColumn::make('booking_vendor_id')
+                Tables\Columns\TextColumn::make('bookingVendor.vendor.business_name')
                     ->label(__('booking.columns.booking_vendor'))
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('proposed_by')
+                    ->formatStateUsing(fn ($state): string => is_array($state) ? ($state[app()->getLocale()] ?? $state['en'] ?? '—') : ($state ?? '—'))
+                    ->searchable(query: fn (Builder $query, string $search) => $query->whereHas(
+                        'bookingVendor.vendor',
+                        fn ($q) => $q->where('business_name->en', 'LIKE', "%{$search}%")
+                    )),
+                Tables\Columns\TextColumn::make('proposedBy.name')
                     ->label(__('booking.columns.proposed_by'))
-                    ->sortable(),
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('proposal_kind')
                     ->label(__('booking.columns.proposal_kind'))
                     ->badge()

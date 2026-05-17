@@ -9,9 +9,12 @@ use App\Modules\Booking\Domain\Enums\LifecycleStatus;
 use App\Modules\Booking\Domain\Enums\VendorSubStatus;
 use App\Modules\Booking\Domain\Events\BookingCancelled;
 use App\Modules\Booking\Domain\Events\VendorRejected;
+use App\Modules\Booking\Domain\Exceptions\ResponseDeadlineExpiredException;
 use App\Modules\Booking\Domain\Models\Booking;
-use App\Modules\Booking\Domain\Models\BookingStateTransition;
 use App\Modules\Booking\Domain\Models\BookingVendor;
+use App\Modules\Booking\Domain\States\BookingLifecycleStatus\CancelledState;
+use App\Modules\Booking\Domain\States\BookingLifecycleStatus\CustomerReviewState;
+use App\Modules\Shared\Domain\Models\StateTransition;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 
@@ -41,6 +44,11 @@ class VendorRejectBookingAction
                 'Booking vendor is not in pending status'
             );
 
+            if ($bookingVendor->response_deadline !== null
+                && $bookingVendor->response_deadline->isPast()) {
+                throw new ResponseDeadlineExpiredException($bookingVendor->id);
+            }
+
             $updateData = [
                 'sub_status' => VendorSubStatus::Rejected,
                 'responded_at' => now(),
@@ -50,7 +58,7 @@ class VendorRejectBookingAction
             }
             $bookingVendor->update($updateData);
 
-            BookingStateTransition::create([
+            StateTransition::create([
                 'transitionable_type' => BookingVendor::class,
                 'transitionable_id' => $bookingVendor->id,
                 'from_state' => VendorSubStatus::Pending->value,
@@ -68,11 +76,11 @@ class VendorRejectBookingAction
             $bookingCancelled = false;
             if ($allRejected) {
                 $booking->update([
-                    'lifecycle_status' => LifecycleStatus::Cancelled,
+                    'lifecycle_status' => CancelledState::class,
                     'cancelled_at' => now(),
                 ]);
 
-                BookingStateTransition::create([
+                StateTransition::create([
                     'transitionable_type' => Booking::class,
                     'transitionable_id' => $booking->id,
                     'from_state' => $booking->getOriginal('lifecycle_status') ?? LifecycleStatus::VendorReview->value,
@@ -82,9 +90,9 @@ class VendorRejectBookingAction
 
                 $bookingCancelled = true;
             } else {
-                $booking->update(['lifecycle_status' => LifecycleStatus::CustomerReview]);
+                $booking->update(['lifecycle_status' => CustomerReviewState::class]);
 
-                BookingStateTransition::create([
+                StateTransition::create([
                     'transitionable_type' => Booking::class,
                     'transitionable_id' => $booking->id,
                     'from_state' => LifecycleStatus::VendorReview->value,

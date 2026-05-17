@@ -1,0 +1,24 @@
+{
+  "data": {
+    "public_id": "01HXY7VWNQTQX5ZP3ZK1NE5K2C",
+    "amount": {"minor": 50000, "currency": "EGP", "formatted": "500.00 EGP"},
+    "status": "paid",
+    "timeline": {
+      "requested_at": "2026-05-12T08:00:00Z",
+      "approved_at": "2026-05-14T10:30:00Z",
+      "paid_at": "2026-05-16T11:00:00Z"
+    },
+    "approved_at": "2026-05-14T10:30:00Z",
+    "paid_at": "2026-05-16T11:00:00Z",
+    "requested_at": "2026-05-12T08:00:00Z",
+    "bank_transfer_reference": "EGTBNK-2026-05-16-00041",
+    "admin_payment_note": "تم تأكيد التحويل من الفرع.",
+    "has_proof": true,
+    "proof_download_url": "https://s3-private.instaparty.example/withdrawals/proof.pdf?X-Amz-Expires=900",
+    "proof_download_url_expires_at": "2026-05-16T11:15:00Z",
+    "rejected_reason": null,
+    "processed_at": "2026-05-16T11:00:00Z"
+  },
+  "meta": null,
+  "errors": null
+}

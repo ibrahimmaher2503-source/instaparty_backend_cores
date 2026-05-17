@@ -16,5 +16,7 @@ final readonly class AdminInterventionDTO
         public string $reason,
         public ?int $proposedVendorId = null,
         public ?Carbon $consentExpiresAt = null,
+        public ?int $bookingVendorId = null,
+        public ?array $suggestedVendorIds = null,
     ) {}
 }

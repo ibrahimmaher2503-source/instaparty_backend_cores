@@ -7,8 +7,12 @@ namespace App\Modules\Identity\Domain\Models;
 use App\Modules\Booking\Domain\Models\BookingVendor;
 use App\Modules\Catalog\Domain\Enums\ProductType;
 use App\Modules\Catalog\Domain\Models\Service;
-use App\Modules\Identity\Domain\Enums\ApprovalStatus;
+use App\Modules\Geography\Domain\Models\City;
+use App\Modules\Geography\Domain\Models\Governorate;
 use App\Modules\Identity\Domain\Enums\BusinessType;
+use App\Modules\Identity\Domain\States\VendorApprovalStatus\ApprovedState;
+use App\Modules\Identity\Domain\States\VendorApprovalStatus\PendingState as VendorPendingState;
+use App\Modules\Identity\Domain\States\VendorApprovalStatus\VendorApprovalState;
 use App\Modules\Reviews\Domain\Models\VendorReview;
 use App\Modules\Settlement\Domain\Models\Wallet;
 use App\Modules\Settlement\Domain\Models\Withdrawal;
@@ -25,6 +29,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
+use Spatie\ModelStates\HasStates;
 use Spatie\Translatable\HasTranslations;
 
 /**
@@ -45,7 +50,7 @@ use Spatie\Translatable\HasTranslations;
  * @property array<string, string>|null $address_line
  * @property string|null $latitude
  * @property string|null $longitude
- * @property ApprovalStatus $approval_status
+ * @property VendorApprovalState $approval_status
  * @property Carbon|null $approved_at
  * @property int|null $approved_by
  * @property Carbon|null $rejected_at
@@ -71,7 +76,7 @@ use Spatie\Translatable\HasTranslations;
 class VendorProfile extends Model implements ChangeRequestSubject
 {
     /** @use HasFactory<VendorProfileFactory> */
-    use HasFactory, HasPublicId, HasTranslations, SoftDeletes;
+    use HasFactory, HasPublicId, HasStates, HasTranslations, SoftDeletes;
 
     /** @var array<int, string> */
     public $translatable = ['business_name', 'bio', 'address_line', 'rejection_reason', 'suspension_reason'];
@@ -93,7 +98,6 @@ class VendorProfile extends Model implements ChangeRequestSubject
         'address_line',
         'latitude',
         'longitude',
-        'approval_status',
         'approved_at',
         'approved_by',
         'rejected_at',
@@ -122,6 +126,16 @@ class VendorProfile extends Model implements ChangeRequestSubject
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function primaryGovernorate(): BelongsTo
+    {
+        return $this->belongsTo(Governorate::class, 'primary_governorate_id');
+    }
+
+    public function primaryCity(): BelongsTo
+    {
+        return $this->belongsTo(City::class, 'primary_city_id');
     }
 
     public function documents(): HasMany
@@ -176,17 +190,17 @@ class VendorProfile extends Model implements ChangeRequestSubject
 
     public function scopePending(Builder $query): Builder
     {
-        return $query->where('approval_status', ApprovalStatus::Pending->value);
+        return $query->whereState('approval_status', VendorPendingState::class);
     }
 
     public function scopeApproved(Builder $query): Builder
     {
-        return $query->where('approval_status', ApprovalStatus::Approved->value);
+        return $query->whereState('approval_status', ApprovedState::class);
     }
 
     public function scopeApprovedForType(Builder $query, ProductType $type): Builder
     {
-        return $query->where('approval_status', ApprovalStatus::Approved->value)->whereHas(
+        return $query->whereState('approval_status', ApprovedState::class)->whereHas(
             'approvedTypes',
             fn (Builder $q) => $q->where('product_type', $type->value)
         );
@@ -205,7 +219,7 @@ class VendorProfile extends Model implements ChangeRequestSubject
     protected function casts(): array
     {
         return [
-            'approval_status' => ApprovalStatus::class,
+            'approval_status' => VendorApprovalState::class,
             'business_type' => BusinessType::class,
             'approved_at' => 'datetime',
             'rejected_at' => 'datetime',

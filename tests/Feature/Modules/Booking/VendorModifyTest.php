@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-use App\Modules\Booking\Domain\Enums\LifecycleStatus;
 use App\Modules\Booking\Domain\Enums\VendorSubStatus;
 use App\Modules\Booking\Domain\Models\Booking;
 use App\Modules\Booking\Domain\Models\BookingModification;
 use App\Modules\Booking\Domain\Models\BookingVendor;
+use App\Modules\Booking\Domain\States\BookingLifecycleStatus\CustomerReviewState;
 use App\Modules\Identity\Domain\Models\VendorProfile;
 use Database\Seeders\IdentityRolesSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -60,7 +60,7 @@ it('vendor modifies → booking lifecycle_status becomes customer_review', funct
     )->assertCreated();
 
     $booking->refresh();
-    expect($booking->lifecycle_status)->toBe(LifecycleStatus::CustomerReview);
+    expect($booking->lifecycle_status)->toBeInstanceOf(CustomerReviewState::class);
 })->group('booking', 'negotiation');
 
 it('modification has diff_snapshot with before and after', function (): void {
@@ -106,14 +106,14 @@ it('booking_state_transitions has row to modified after vendor modifies', functi
         ]
     );
 
-    expect(DB::table('booking_state_transitions')
+    expect(DB::table('state_transitions')
         ->where('transitionable_type', BookingVendor::class)
         ->where('transitionable_id', $bv->id)
         ->where('to_state', 'modified')
         ->exists()
     )->toBeTrue();
 
-    expect(DB::table('booking_state_transitions')
+    expect(DB::table('state_transitions')
         ->where('transitionable_type', Booking::class)
         ->where('transitionable_id', $booking->id)
         ->where('to_state', 'customer_review')

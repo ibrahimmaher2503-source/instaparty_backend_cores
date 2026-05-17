@@ -9,6 +9,8 @@ use App\Modules\Reviews\Filament\Resources\ReviewModerationLogResource\Pages;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Str;
 
 class ReviewModerationLogResource extends Resource
 {
@@ -53,6 +55,11 @@ class ReviewModerationLogResource extends Resource
         return false;
     }
 
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()->with(['moderator']);
+    }
+
     public static function table(Table $table): Table
     {
         return $table
@@ -62,16 +69,18 @@ class ReviewModerationLogResource extends Resource
                     ->badge(),
                 Tables\Columns\TextColumn::make('review_id')
                     ->label(__('reviews.columns.review_id'))
-                    ->sortable(),
+                    ->formatStateUsing(fn ($state, $record): string =>
+                        Str::upper(Str::before($record->review_type ?? '', '_review')).' #'.$state
+                    ),
                 Tables\Columns\TextColumn::make('from_status')
                     ->label(__('reviews.columns.from_status'))
                     ->badge(),
                 Tables\Columns\TextColumn::make('to_status')
                     ->label(__('reviews.columns.to_status'))
                     ->badge(),
-                Tables\Columns\TextColumn::make('moderator_id')
+                Tables\Columns\TextColumn::make('moderator.name')
                     ->label(__('reviews.columns.moderator'))
-                    ->sortable(),
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->label(__('admin.common.created_at'))
                     ->dateTime()

@@ -42,7 +42,7 @@ class ExcelImportResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-        return parent::getEloquentQuery()->withCount('errors');
+        return parent::getEloquentQuery()->withCount('errors')->with(['vendor']);
     }
 
     public static function canCreate(): bool
@@ -68,9 +68,13 @@ class ExcelImportResource extends Resource
                     ->label(__('catalog.public_id'))
                     ->copyable()
                     ->searchable(),
-                Tables\Columns\TextColumn::make('vendor_profile_id')
+                Tables\Columns\TextColumn::make('vendor.business_name')
                     ->label(__('catalog.vendor'))
-                    ->sortable(),
+                    ->formatStateUsing(fn ($state): string => is_array($state) ? ($state[app()->getLocale()] ?? $state['en'] ?? '—') : ($state ?? '—'))
+                    ->searchable(query: fn (Builder $query, string $search) => $query->whereHas(
+                        'vendor',
+                        fn ($q) => $q->whereRaw("JSON_UNQUOTE(JSON_EXTRACT(business_name, '$.en')) LIKE ?", ["%{$search}%"])
+                    )),
                 Tables\Columns\TextColumn::make('product_type')
                     ->label(__('catalog.product_type'))
                     ->badge()

@@ -11,6 +11,7 @@ use App\Modules\Settlement\Filament\Resources\CommissionResource\Pages;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Str;
 
 class CommissionResource extends Resource
@@ -56,6 +57,11 @@ class CommissionResource extends Resource
         return false;
     }
 
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()->with(['bookingItem', 'payment', 'vendor']);
+    }
+
     public static function table(Table $table): Table
     {
         return $table
@@ -64,15 +70,21 @@ class CommissionResource extends Resource
                     ->label(__('settlement.columns.public_id'))
                     ->copyable()
                     ->searchable(),
-                Tables\Columns\TextColumn::make('booking_item_id')
-                    ->label(__('settlement.columns.booking_item'))
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('payment_id')
-                    ->label(__('settlement.columns.payment'))
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('vendor_profile_id')
+                Tables\Columns\TextColumn::make('vendor.business_name')
                     ->label(__('settlement.columns.vendor'))
-                    ->sortable(),
+                    ->formatStateUsing(fn ($state): string => is_array($state) ? ($state[app()->getLocale()] ?? $state['en'] ?? '—') : ($state ?? '—'))
+                    ->searchable(query: fn (Builder $query, string $search) => $query->whereHas(
+                        'vendor',
+                        fn ($q) => $q->whereRaw("JSON_UNQUOTE(JSON_EXTRACT(business_name, '$.en')) LIKE ?", ["%{$search}%"])
+                    )),
+                Tables\Columns\TextColumn::make('bookingItem.public_id')
+                    ->label(__('settlement.columns.booking_item'))
+                    ->copyable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('payment.public_id')
+                    ->label(__('settlement.columns.payment'))
+                    ->copyable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('product_type')
                     ->label(__('settlement.columns.product_type'))
                     ->badge()

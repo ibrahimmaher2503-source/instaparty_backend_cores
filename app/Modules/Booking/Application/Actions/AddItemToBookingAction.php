@@ -7,11 +7,11 @@ namespace App\Modules\Booking\Application\Actions;
 use App\Modules\Booking\Application\DTOs\AddBookingItemDTO;
 use App\Modules\Booking\Application\DTOs\ServiceReadDTO;
 use App\Modules\Booking\Domain\Contracts\CatalogServiceReader;
-use App\Modules\Booking\Domain\Enums\LifecycleStatus;
 use App\Modules\Booking\Domain\Events\BookingItemAdded;
 use App\Modules\Booking\Domain\Models\Booking;
 use App\Modules\Booking\Domain\Models\BookingItem;
 use App\Modules\Booking\Domain\Models\BookingVendor;
+use App\Modules\Booking\Domain\States\BookingLifecycleStatus\DraftState;
 use App\Modules\Catalog\Domain\Enums\HoldType;
 use App\Modules\Catalog\Domain\Enums\ProductType;
 use App\Modules\Catalog\Domain\Enums\ReservationStatus;
@@ -36,7 +36,7 @@ class AddItemToBookingAction
             if ($booking->customer_id !== $dto->customerId) {
                 $this->abortWith(Response::HTTP_FORBIDDEN, 'Forbidden');
             }
-            if ($booking->lifecycle_status !== LifecycleStatus::Draft) {
+            if (! ($booking->lifecycle_status instanceof DraftState)) {
                 $this->abortWith(Response::HTTP_CONFLICT, 'Booking is not in draft status');
             }
 

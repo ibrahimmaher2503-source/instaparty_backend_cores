@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Modules\Identity\Domain\Models;
 
+use App\Modules\Geography\Domain\Models\City;
 use App\Modules\Shared\Domain\Casts\MoneyCast;
 use Database\Factories\VendorCoverageAreaFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -39,6 +40,11 @@ class VendorCoverageArea extends Model
     public function vendorProfile(): BelongsTo
     {
         return $this->belongsTo(VendorProfile::class);
+    }
+
+    public function city(): BelongsTo
+    {
+        return $this->belongsTo(City::class);
     }
 
     protected static function newFactory(): VendorCoverageAreaFactory

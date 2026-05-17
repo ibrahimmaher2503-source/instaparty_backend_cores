@@ -118,6 +118,28 @@ final class NotificationTemplateSeeder extends Seeder
                 ],
                 'variables' => ['booking_id', 'vendor_name'],
             ],
+            [
+                'event_key' => 'reconciliation_finding_raised',
+                'channel' => NotificationChannel::InApp,
+                'audience' => NotificationAudience::Admin,
+                'subject' => ['en' => 'High-severity reconciliation finding', 'ar' => 'نتيجة مطابقة بخطورة عالية'],
+                'body' => [
+                    'en' => 'Reconciliation run {{run_public_id}} raised a high-severity finding: {{finding_type}} on resource {{resource_type}}#{{resource_id}}. Manual review required.',
+                    'ar' => 'دورة المطابقة {{run_public_id}} كشفت نتيجة عالية الخطورة: {{finding_type}} على {{resource_type}}#{{resource_id}}. مطلوب مراجعة يدوية.',
+                ],
+                'variables' => ['run_public_id', 'finding_type', 'resource_type', 'resource_id'],
+            ],
+            [
+                'event_key' => 'reconciliation_finding_raised',
+                'channel' => NotificationChannel::Email,
+                'audience' => NotificationAudience::Admin,
+                'subject' => ['en' => '[ACTION REQUIRED] High-severity reconciliation finding', 'ar' => '[إجراء مطلوب] نتيجة مطابقة بخطورة عالية'],
+                'body' => [
+                    'en' => "Reconciliation run {{run_public_id}} raised a high-severity finding.\n\nFinding Type: {{finding_type}}\nResource: {{resource_type}}#{{resource_id}}\n\nPlease review this finding in the admin panel.",
+                    'ar' => "دورة المطابقة {{run_public_id}} كشفت نتيجة عالية الخطورة.\n\nنوع النتيجة: {{finding_type}}\nالمورد: {{resource_type}}#{{resource_id}}\n\nيرجى مراجعة هذه النتيجة في لوحة الإدارة.",
+                ],
+                'variables' => ['run_public_id', 'finding_type', 'resource_type', 'resource_id'],
+            ],
         ];
     }
 }

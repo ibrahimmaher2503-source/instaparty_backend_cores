@@ -243,4 +243,7 @@ return [
     'moderation_invalid_transition' => 'لم تعد هذه الخدمة مؤهلة لهذا إجراء المراجعة.',
     'moderation_conflict' => 'تعذر تنفيذ الإجراء على :count خدمة لأن حالتها تغيرت.',
     'moderation_notes' => 'ملاحظات المراجعة',
+    'category_has_children'        => 'لا يمكن حذف فئة تحتوي على فئات فرعية. انقل أو احذف الفئات الفرعية أولاً.',
+    'reorder_unknown_categories'   => 'إحدى الفئات في قائمة الترتيب غير موجودة.',
+    'reorder_parent_mismatch'      => 'جميع الفئات في عملية إعادة ترتيب واحدة يجب أن يكون لها نفس الأب.',
 ];

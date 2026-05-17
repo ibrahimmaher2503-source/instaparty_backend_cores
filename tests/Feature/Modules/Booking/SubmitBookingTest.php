@@ -5,14 +5,17 @@ declare(strict_types=1);
 use App\Modules\Booking\Domain\Enums\FulfillmentStatus;
 use App\Modules\Booking\Domain\Enums\LifecycleStatus;
 use App\Modules\Booking\Domain\Enums\PaymentStatus;
+use App\Modules\Booking\Domain\States\BookingLifecycleStatus\DraftState;
+use App\Modules\Booking\Domain\States\BookingLifecycleStatus\VendorReviewState;
+use App\Modules\Booking\Domain\States\BookingPaymentStatus\UnpaidState;
 use App\Modules\Booking\Domain\Enums\VendorSubStatus;
 use App\Modules\Booking\Domain\Models\Booking;
 use App\Modules\Booking\Domain\Models\BookingAddress;
 use App\Modules\Booking\Domain\Models\BookingItem;
 use App\Modules\Booking\Domain\Models\BookingVendor;
 use App\Modules\Catalog\Domain\Enums\ProductType;
-use App\Modules\Catalog\Domain\Enums\ServiceStatus;
 use App\Modules\Catalog\Domain\Models\Category;
+use App\Modules\Catalog\Domain\States\ServiceStatus\PublishedState;
 use App\Modules\Catalog\Domain\Models\Occasion;
 use App\Modules\Catalog\Domain\Models\Service;
 use App\Modules\Geography\Domain\Models\City;
@@ -44,8 +47,8 @@ function makeNegotiationDraftBooking(User $customer): Booking
         'reference_no' => 'IP-2026-N0001',
         'customer_id' => $customer->id,
         'occasion_id' => $occasion->id,
-        'lifecycle_status' => LifecycleStatus::Draft,
-        'payment_status' => PaymentStatus::Unpaid,
+        'lifecycle_status' => DraftState::class,
+        'payment_status' => UnpaidState::class,
         'fulfillment_status' => FulfillmentStatus::NotStarted,
         'event_starts_at' => now()->addDays(30),
         'event_ends_at' => now()->addDays(30)->addHours(5),
@@ -75,7 +78,7 @@ function makeNegotiationService(?VendorProfile $vendor = null, ProductType $type
 
     return Service::factory()->create([
         'product_type' => $type,
-        'status' => ServiceStatus::Published,
+        'status' => PublishedState::class,
         'vendor_profile_id' => $vendor->id,
         'category_id' => $category->id,
     ]);
@@ -138,7 +141,7 @@ it('submits a draft booking — lifecycle_status becomes vendor_review', functio
     $response->assertJsonPath('data.lifecycle_status', 'vendor_review');
 
     $booking->refresh();
-    expect($booking->lifecycle_status)->toBe(LifecycleStatus::VendorReview);
+    expect($booking->lifecycle_status)->toBeInstanceOf(VendorReviewState::class);
     expect($booking->submitted_at)->not->toBeNull();
 })->group('booking', 'negotiation');
 
@@ -171,7 +174,7 @@ it('creates a booking_state_transitions row to vendor_review on submit', functio
         ['Idempotency-Key' => (string) Str::uuid()]
     );
 
-    expect(DB::table('booking_state_transitions')
+    expect(DB::table('state_transitions')
         ->where('transitionable_type', Booking::class)
         ->where('transitionable_id', $booking->id)
         ->where('to_state', 'vendor_review')
@@ -197,7 +200,7 @@ it('returns 409 when submitting a non-draft booking', function (): void {
     $booking = makeNegotiationDraftBooking($customer);
     addItemToBookingForTest($booking);
 
-    $booking->update(['lifecycle_status' => LifecycleStatus::VendorReview]);
+    $booking->update(['lifecycle_status' => VendorReviewState::class]);
 
     $response = $this->actingAs($customer)->postJson(
         "/api/v1/customer/bookings/{$booking->public_id}/submit",
@@ -262,7 +265,7 @@ it('idempotency: duplicate submit key returns same response without re-submittin
         ['Idempotency-Key' => $idempotencyKey]
     )->assertOk();
 
-    $transitionCount = DB::table('booking_state_transitions')
+    $transitionCount = DB::table('state_transitions')
         ->where('transitionable_type', Booking::class)
         ->where('transitionable_id', $booking->id)
         ->where('to_state', 'vendor_review')
@@ -277,7 +280,7 @@ it('idempotency: duplicate submit key returns same response without re-submittin
 
     $response2->assertOk();
 
-    $transitionCountAfter = DB::table('booking_state_transitions')
+    $transitionCountAfter = DB::table('state_transitions')
         ->where('transitionable_type', Booking::class)
         ->where('transitionable_id', $booking->id)
         ->where('to_state', 'vendor_review')

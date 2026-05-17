@@ -207,7 +207,7 @@ final class IdentityDevelopmentSeeder extends Seeder
                     'primary_governorate_id' => $row['governorate']->id,
                     'primary_city_id' => $row['city']->id,
                     'address_line' => ['en' => 'Development showroom address', 'ar' => 'عنوان معرض تجريبي'],
-                    'approval_status' => ApprovalStatus::Approved,
+                    'approval_status' => ApprovalStatus::Approved->value,
                     'approved_at' => now(),
                     'approved_by' => $admin->id,
                     'bank_name' => 'Banque Misr',

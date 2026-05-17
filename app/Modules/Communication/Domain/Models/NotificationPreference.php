@@ -7,9 +7,11 @@ namespace App\Modules\Communication\Domain\Models;
 use App\Modules\Communication\Database\Factories\NotificationPreferenceFactory;
 use App\Modules\Communication\Domain\Enums\EventCategory;
 use App\Modules\Communication\Domain\Enums\NotificationChannel;
+use App\Modules\Identity\Domain\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class NotificationPreference extends Model
 {
@@ -31,6 +33,11 @@ class NotificationPreference extends Model
     protected static function newFactory(): NotificationPreferenceFactory
     {
         return NotificationPreferenceFactory::new();
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 
     protected function casts(): array

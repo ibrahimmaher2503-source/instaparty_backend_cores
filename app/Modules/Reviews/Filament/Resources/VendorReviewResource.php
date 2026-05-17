@@ -11,6 +11,7 @@ use App\Modules\Reviews\Filament\Resources\VendorReviewResource\Pages;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class VendorReviewResource extends Resource
 {
@@ -55,6 +56,11 @@ class VendorReviewResource extends Resource
         return false;
     }
 
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()->with(['vendor', 'bookingVendor', 'reviewer']);
+    }
+
     public static function table(Table $table): Table
     {
         return $table
@@ -63,15 +69,16 @@ class VendorReviewResource extends Resource
                     ->label(__('reviews.columns.public_id'))
                     ->copyable()
                     ->searchable(),
-                Tables\Columns\TextColumn::make('vendor_profile_id')
+                Tables\Columns\TextColumn::make('vendor.business_name')
                     ->label(__('reviews.columns.vendor'))
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('booking_vendor_id')
-                    ->label(__('reviews.columns.booking_vendor'))
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('user_id')
+                    ->formatStateUsing(fn ($state): string => is_array($state) ? ($state[app()->getLocale()] ?? $state['en'] ?? '—') : ($state ?? '—'))
+                    ->searchable(query: fn (Builder $query, string $search) => $query->whereHas(
+                        'vendor',
+                        fn ($q) => $q->whereRaw("JSON_UNQUOTE(JSON_EXTRACT(business_name, '$.en')) LIKE ?", ["%{$search}%"])
+                    )),
+                Tables\Columns\TextColumn::make('reviewer.name')
                     ->label(__('reviews.columns.reviewer'))
-                    ->sortable(),
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('rating')
                     ->label(__('reviews.columns.rating'))
                     ->sortable(),
@@ -83,6 +90,10 @@ class VendorReviewResource extends Resource
                     ->label(__('reviews.columns.moderation_status'))
                     ->badge()
                     ->formatStateUsing(fn (ModerationStatus $state): string => __('reviews.moderation_status.'.$state->value)),
+                Tables\Columns\TextColumn::make('bookingVendor.public_id')
+                    ->label(__('reviews.columns.booking_vendor'))
+                    ->copyable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('created_at')
                     ->label(__('admin.common.created_at'))
                     ->dateTime()

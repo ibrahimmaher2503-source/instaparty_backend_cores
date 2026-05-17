@@ -6,14 +6,17 @@ namespace App\Modules\Booking\Domain\Models;
 
 use App\Modules\Booking\Database\Factories\BookingFactory;
 use App\Modules\Booking\Domain\Enums\FulfillmentStatus;
-use App\Modules\Booking\Domain\Enums\LifecycleStatus;
-use App\Modules\Booking\Domain\Enums\PaymentStatus;
+use App\Modules\Booking\Domain\States\BookingLifecycleStatus\BookingLifecycleState;
+use App\Modules\Booking\Domain\States\BookingLifecycleStatus\DraftState as LifecycleDraftState;
+use App\Modules\Booking\Domain\States\BookingPaymentStatus\BookingPaymentState;
 use App\Modules\Catalog\Domain\Models\Occasion;
 use App\Modules\Identity\Domain\Models\User;
 use App\Modules\Payments\Domain\Models\Payment;
 use App\Modules\Shared\Domain\Casts\MoneyCast;
 use App\Modules\Shared\Domain\Concerns\HasPublicId;
+use App\Modules\Shared\Domain\Models\StateTransition;
 use Illuminate\Database\Eloquent\Builder;
+use Spatie\ModelStates\HasStates;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -26,8 +29,8 @@ use Illuminate\Support\Carbon;
 
 /**
  * @property string $reference_no
- * @property LifecycleStatus $lifecycle_status
- * @property PaymentStatus $payment_status
+ * @property BookingLifecycleState $lifecycle_status
+ * @property BookingPaymentState $payment_status
  * @property FulfillmentStatus $fulfillment_status
  * @property int $subtotal_minor
  * @property string $subtotal_currency
@@ -51,6 +54,7 @@ class Booking extends Model
 {
     use HasFactory;
     use HasPublicId;
+    use HasStates;
     use SoftDeletes;
 
     protected $fillable = [
@@ -62,15 +66,15 @@ class Booking extends Model
         'delivery_total_minor', 'delivery_total_currency',
         'discount_total_minor', 'discount_total_currency',
         'loyalty_redeemed_minor', 'loyalty_redeemed_currency', 'loyalty_redemption_public_id',
-        'total_minor', 'total_currency',
+        'total_minor', 'total_currency', 'total_vat_minor',
         'amount_paid_minor', 'amount_paid_currency',
         'submitted_at', 'confirmed_at', 'cancelled_at', 'cancelled_by',
         'payment_hold_expires_at',
     ];
 
     protected $casts = [
-        'lifecycle_status' => LifecycleStatus::class,
-        'payment_status' => PaymentStatus::class,
+        'lifecycle_status' => BookingLifecycleState::class,
+        'payment_status' => BookingPaymentState::class,
         'fulfillment_status' => FulfillmentStatus::class,
         'event_starts_at' => 'datetime',
         'event_ends_at' => 'datetime',
@@ -130,13 +134,42 @@ class Booking extends Model
 
     public function stateTransitions(): HasMany
     {
-        return $this->hasMany(BookingStateTransition::class, 'transitionable_id')
+        return $this->hasMany(StateTransition::class, 'transitionable_id')
             ->where('transitionable_type', self::class);
+    }
+
+    /** @return HasMany<BookingCustomerNote, $this> */
+    public function customerNotes(): HasMany
+    {
+        return $this->hasMany(BookingCustomerNote::class)->latest('created_at');
+    }
+
+    /** @return HasMany<BookingAdminIntervention, $this> */
+    public function adminInterventions(): HasMany
+    {
+        return $this->hasMany(BookingAdminIntervention::class)->latest();
+    }
+
+    /**
+     * Shortcut to the booking modifications that are still pending customer decision.
+     * Modifications are stored on booking_vendors (via booking_modifications table),
+     * so this traverses through the vendors relationship.
+     *
+     * @return HasManyThrough<BookingModification, $this>
+     */
+    public function pendingModifications(): HasManyThrough
+    {
+        return $this->hasManyThrough(
+            BookingModification::class,
+            BookingVendor::class,
+            'booking_id',
+            'booking_vendor_id',
+        )->where('booking_modifications.status', 'pending');
     }
 
     public function scopeDraft(Builder $query): Builder
     {
-        return $query->where('lifecycle_status', LifecycleStatus::Draft);
+        return $query->whereState('lifecycle_status', LifecycleDraftState::class);
     }
 
     public function scopeForCustomer(Builder $query, int $customerId): Builder

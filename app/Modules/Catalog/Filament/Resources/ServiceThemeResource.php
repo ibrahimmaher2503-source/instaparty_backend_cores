@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Modules\Catalog\Filament\Resources;
 
+use App\Modules\Catalog\Application\Actions\DeleteServiceThemeAction;
 use App\Modules\Catalog\Domain\Models\ServiceTheme;
 use App\Modules\Catalog\Filament\Resources\ServiceThemeResource\Pages;
 use Filament\Forms\Components\Section;
@@ -112,7 +113,12 @@ class ServiceThemeResource extends Resource
             ->defaultSort('code')
             ->actions([
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\DeleteAction::make()
+                    ->using(function (ServiceTheme $record): bool {
+                        app(DeleteServiceThemeAction::class)->execute($record, auth()->user());
+
+                        return true;
+                    }),
             ]);
     }
 

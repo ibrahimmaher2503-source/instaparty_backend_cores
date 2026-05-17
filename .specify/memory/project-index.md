@@ -41,10 +41,12 @@
 
 ## Current Phase
 
-**Active:** Phase 4.0 + 4.1 — Payments: Paymob Gateway + Refunds (per-type) — spec + plan ready (ADR-0005 Accepted 2026-05-02). Awaiting `/speckit.tasks`.
-**Next up:** Phase 4.2 — Settlement: Wallets + Commissions + Withdrawals (3 days, Week 5–6).
+**Active:** Phase 6.5 + 7.0 — Admin Booking Intervention Page (ADR-0029 Accepted 2026-05-16). Implementing `specs/029-admin-booking-intervention/` — 6 new Actions, `AdminBookingInterventionResource`, 7 granular permissions, hard boundary on replacement-vendor assignment.
+**Feature branch:** `030-vendor-booking-decision-page` (working branch for 029 spec).
+**Feature folder:** `specs/029-admin-booking-intervention/`.
+**Cut-list gate:** US6 (FreezeBookingChatAction / ResumeBookingChatAction) deferred — `chat_threads` base table not yet migrated.
 
-The 26-phase index lives in `docs/specs/09_Phasing_Plan.md`; phases run from `0.0` (Foundation Setup) through `7.2` (Documentation + Retrospective). Active feature branch is `007-payments-paymob-refunds`; spec-kit feature folder is `specs/007-payments-paymob-refunds/`.
+The 26-phase index lives in `docs/specs/09_Phasing_Plan.md`; phases run from `0.0` (Foundation Setup) through `7.2` (Documentation + Retrospective).
 
 ---
 
@@ -86,6 +88,25 @@ The 26-phase index lives in `docs/specs/09_Phasing_Plan.md`; phases run from `0.
 **Dev / quality:** `pestphp/pest`, `pestphp/pest-plugin-laravel`, `larastan/larastan`, `laravel/pint`, `barryvdh/laravel-debugbar` (dev-only).
 
 **Locked rule:** No new package without an entry in `10_Package_List.md` in the same commit. When tempted to install something else, push back, justify in one paragraph, then update the list.
+
+---
+
+## Identity Module — Key Components
+
+| Component | Path | Purpose |
+|---|---|---|
+| `VendorOnboardingChecklistWidget` | `app/Modules/Identity/Filament/Vendor/Widgets/VendorOnboardingChecklistWidget.php` | Vendor dashboard onboarding-progress display — 10-row checklist with status icons, progress bar, next-recommended-action CTA, rejection/suspension banners. Registered as header widget on `VendorDashboardPage`. |
+| `VendorOnboardingChecklistService` | `app/Modules/Identity/Application/Services/VendorOnboardingChecklistService.php` | Computes the checklist DTO from 6 indexed queries (vendor_profiles, vendor_documents, vendor_approved_product_types, vendor_coverage_areas, vendor_business_hours, services via contract). No cache per Decision 0.6. |
+| `VendorServicePresenceQuery` contract | `app/Modules/Catalog/Domain/Contracts/VendorServicePresenceQuery.php` | Cross-module contract allowing Identity to check service presence without importing Catalog models. Bound in `CatalogServiceProvider`. |
+
+---
+
+## Booking Module — Key Constraints
+
+| Rule | Where | Spec |
+|---|---|---|
+| `BookingPolicy::assignReplacementVendor` always returns `false` (hard refusal gate) — no role or permission can enable it | `app/Modules/Booking/Domain/Policies/BookingPolicy.php` | [`specs/032-replacement-vendor-guard/`](../../specs/032-replacement-vendor-guard/) — FR-EXT-021 |
+| Admin may suggest alternative vendors (`SuggestAlternativeVendorsAction`) but `proposed_vendor_id` must always be `null` | `app/Modules/Booking/Application/Actions/SuggestAlternativeVendorsAction.php` | Feature 029 — FR-EXT-012 |
 
 ---
 

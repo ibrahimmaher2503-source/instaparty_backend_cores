@@ -14,6 +14,7 @@ use Filament\Resources\Concerns\Translatable;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class LoyaltyRuleResource extends Resource
 {
@@ -108,6 +109,11 @@ class LoyaltyRuleResource extends Resource
         ]);
     }
 
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()->with(['program']);
+    }
+
     public static function table(Table $table): Table
     {
         return $table
@@ -117,9 +123,9 @@ class LoyaltyRuleResource extends Resource
                     ->copyable()
                     ->searchable()
                     ->limit(10),
-                Tables\Columns\TextColumn::make('loyalty_program_id')
+                Tables\Columns\TextColumn::make('program.name')
                     ->label(__('loyalty.columns.program'))
-                    ->sortable(),
+                    ->formatStateUsing(fn ($state): string => is_array($state) ? ($state[app()->getLocale()] ?? $state['en'] ?? '—') : ($state ?? '—')),
                 Tables\Columns\TextColumn::make('label')
                     ->label(__('loyalty.columns.label'))
                     ->searchable()

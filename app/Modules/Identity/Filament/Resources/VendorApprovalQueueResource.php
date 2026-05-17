@@ -166,8 +166,12 @@ class VendorApprovalQueueResource extends Resource
                         ->label(__('identity.forms.business_name_ar'))
                         ->getStateUsing(fn (VendorProfile $record): ?string => $record->getTranslation('business_name', 'ar', false) ?: null),
                     TextEntry::make('slug')->label(__('identity.columns.slug')),
-                    TextEntry::make('primary_governorate_id')->label(__('identity.columns.governorate')),
-                    TextEntry::make('primary_city_id')->label(__('identity.columns.city')),
+                    TextEntry::make('primaryGovernorate.name')
+                        ->label(__('identity.columns.governorate'))
+                        ->formatStateUsing(fn ($state): string => is_array($state) ? ($state[app()->getLocale()] ?? $state['en'] ?? '—') : ($state ?? '—')),
+                    TextEntry::make('primaryCity.name')
+                        ->label(__('identity.columns.city'))
+                        ->formatStateUsing(fn ($state): string => is_array($state) ? ($state[app()->getLocale()] ?? $state['en'] ?? '—') : ($state ?? '—')),
                     TextEntry::make('created_at')->label(__('identity.columns.created_at'))->dateTime(),
                     TextEntry::make('bio_en')
                         ->label(__('identity.forms.bio_en'))

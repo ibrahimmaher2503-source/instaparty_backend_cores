@@ -78,6 +78,13 @@ class VendorIncomingBookingsPage extends Page implements HasTable
                     ->color(fn (BookingVendor $record) => $record->response_deadline?->isPast() ? 'danger' : 'warning'),
             ])
             ->actions([
+                TableAction::make('decide')
+                    ->label(__('vendor-portal.decision.title'))
+                    ->icon('heroicon-o-scale')
+                    ->color('primary')
+                    ->visible(fn (BookingVendor $record): bool => $record->sub_status === VendorSubStatus::Pending)
+                    ->url(fn (BookingVendor $record) => VendorBookingDecisionPage::getUrl(['bookingVendor' => $record->public_id])),
+
                 TableAction::make('view_details')
                     ->label(__('vendor-portal.bookings.view_details'))
                     ->icon('heroicon-o-eye')

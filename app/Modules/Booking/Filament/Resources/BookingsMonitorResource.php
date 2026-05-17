@@ -9,6 +9,9 @@ use App\Modules\Booking\Application\DTOs\AdminInterventionDTO;
 use App\Modules\Booking\Domain\Enums\InterventionType;
 use App\Modules\Booking\Domain\Enums\LifecycleStatus;
 use App\Modules\Booking\Domain\Models\Booking;
+use App\Modules\Booking\Domain\States\BookingLifecycleStatus\BookingLifecycleState;
+use App\Modules\Booking\Domain\States\BookingLifecycleStatus\CustomerReviewState;
+use App\Modules\Booking\Domain\States\BookingLifecycleStatus\VendorReviewState;
 use App\Modules\Booking\Filament\Resources\BookingsMonitorResource\Pages\ListBookingsMonitor;
 use Filament\Forms\Components\Textarea;
 use Filament\Notifications\Notification;
@@ -80,12 +83,14 @@ class BookingsMonitorResource extends Resource
 
                 Tables\Columns\TextColumn::make('lifecycle_status')
                     ->badge()
-                    ->color(fn (LifecycleStatus $state): string => match ($state) {
-                        LifecycleStatus::VendorReview => 'warning',
-                        LifecycleStatus::CustomerReview => 'info',
+                    ->color(fn (mixed $state): string => match (true) {
+                        $state instanceof VendorReviewState => 'warning',
+                        $state instanceof CustomerReviewState => 'info',
                         default => 'gray',
                     })
-                    ->formatStateUsing(fn (LifecycleStatus $state): string => __('booking.lifecycle_status.'.$state->value))
+                    ->formatStateUsing(fn (mixed $state): string => $state instanceof BookingLifecycleState
+                        ? __('booking.lifecycle_status.'.$state->getValue())
+                        : (string) $state)
                     ->label(__('booking.columns.lifecycle_status')),
 
                 Tables\Columns\TextColumn::make('total_minor')

@@ -20,6 +20,8 @@ class Refund extends Model
     protected $fillable = [
         'public_id', 'payment_id', 'booking_id', 'amount_minor', 'amount_currency', 'reason_code',
         'reason_notes', 'gateway_ref', 'status', 'initiated_by', 'processed_at',
+        // Phase 4.9
+        'ledger_group_id', 'idempotency_key',
     ];
 
     public array $translatable = ['reason_notes'];

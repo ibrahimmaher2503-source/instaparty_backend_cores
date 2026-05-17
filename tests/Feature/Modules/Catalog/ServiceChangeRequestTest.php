@@ -49,15 +49,6 @@ describe('Request service changes', function () {
             'Idempotency-Key' => 'test-key-1',
         ]);
 
-        if ($response->status() !== 201) {
-            dd([
-                'status' => $response->status(),
-                'body' => $response->getContent(),
-                'service_id' => $service->id,
-                'url' => "/api/v1/admin/services/{$service->id}/request-changes",
-            ]);
-        }
-
         $response->assertStatus(201);
         expect($response->json('data.subject_type'))->toBe('service');
         expect($response->json('data.cycle_number'))->toBe(1);

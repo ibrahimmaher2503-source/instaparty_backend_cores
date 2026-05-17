@@ -50,7 +50,7 @@ class LoyaltyProgramResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-        $query = parent::getEloquentQuery();
+        $query = parent::getEloquentQuery()->with(['vendor']);
 
         if (auth()->check() && ! auth()->user()->hasRole('super_admin')) {
             $vendorProfileId = auth()->user()->vendorProfile?->id;
@@ -143,10 +143,13 @@ class LoyaltyProgramResource extends Resource
                     ->copyable()
                     ->searchable()
                     ->limit(10),
-                Tables\Columns\TextColumn::make('vendor_profile_id')
+                Tables\Columns\TextColumn::make('vendor.business_name')
                     ->label(__('loyalty.columns.vendor'))
-                    ->sortable()
-                    ->searchable(),
+                    ->formatStateUsing(fn ($state): string => is_array($state) ? ($state[app()->getLocale()] ?? $state['en'] ?? '—') : ($state ?? '—'))
+                    ->searchable(query: fn (Builder $query, string $search) => $query->whereHas(
+                        'vendor',
+                        fn ($q) => $q->whereRaw("JSON_UNQUOTE(JSON_EXTRACT(business_name, '$.en')) LIKE ?", ["%{$search}%"])
+                    )),
                 Tables\Columns\TextColumn::make('name')
                     ->label(__('loyalty.columns.name'))
                     ->searchable()

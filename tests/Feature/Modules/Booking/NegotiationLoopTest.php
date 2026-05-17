@@ -2,10 +2,12 @@
 
 declare(strict_types=1);
 
-use App\Modules\Booking\Domain\Enums\LifecycleStatus;
 use App\Modules\Booking\Domain\Enums\ModificationStatus;
 use App\Modules\Booking\Domain\Enums\VendorSubStatus;
 use App\Modules\Booking\Domain\Models\Booking;
+use App\Modules\Booking\Domain\States\BookingLifecycleStatus\CancelledState;
+use App\Modules\Booking\Domain\States\BookingLifecycleStatus\ConfirmedState;
+use App\Modules\Booking\Domain\States\BookingLifecycleStatus\CustomerReviewState;
 use App\Modules\Booking\Domain\Models\BookingModification;
 use App\Modules\Booking\Domain\Models\BookingSnapshot;
 use Database\Seeders\IdentityRolesSeeder;
@@ -28,10 +30,10 @@ it('full loop: draft → submit → vendor accepts → confirmed', function (): 
     )->assertOk();
 
     $booking->refresh();
-    expect($booking->lifecycle_status)->toBe(LifecycleStatus::Confirmed);
+    expect($booking->lifecycle_status)->toBeInstanceOf(ConfirmedState::class);
 
     // Verify full state transition chain exists
-    $transitions = DB::table('booking_state_transitions')
+    $transitions = DB::table('state_transitions')
         ->where('transitionable_type', Booking::class)
         ->where('transitionable_id', $booking->id)
         ->orderBy('id')
@@ -60,7 +62,7 @@ it('full loop: submit → vendor modifies → customer accepts → confirmed', f
     )->assertCreated();
 
     $booking->refresh();
-    expect($booking->lifecycle_status)->toBe(LifecycleStatus::CustomerReview);
+    expect($booking->lifecycle_status)->toBeInstanceOf(CustomerReviewState::class);
 
     $modification = BookingModification::where('booking_vendor_id', $bv->id)->latest('id')->first();
 
@@ -72,7 +74,7 @@ it('full loop: submit → vendor modifies → customer accepts → confirmed', f
     )->assertOk();
 
     $booking->refresh();
-    expect($booking->lifecycle_status)->toBe(LifecycleStatus::Confirmed);
+    expect($booking->lifecycle_status)->toBeInstanceOf(ConfirmedState::class);
 
     $item->refresh();
     expect($item->unit_price_minor)->toBe(70000);
@@ -133,7 +135,7 @@ it('full loop: submit → vendor modifies → customer rejects → vendor modifi
     )->assertOk();
 
     $booking->refresh();
-    expect($booking->lifecycle_status)->toBe(LifecycleStatus::Confirmed);
+    expect($booking->lifecycle_status)->toBeInstanceOf(ConfirmedState::class);
 
     $item->refresh();
     expect($item->unit_price_minor)->toBe(65000);
@@ -154,7 +156,7 @@ it('full loop: submit → vendor rejects → booking cancelled', function (): vo
     )->assertOk();
 
     $booking->refresh();
-    expect($booking->lifecycle_status)->toBe(LifecycleStatus::Cancelled);
+    expect($booking->lifecycle_status)->toBeInstanceOf(CancelledState::class);
 })->group('booking', 'negotiation', 'loop');
 
 it('booking snapshots are written at each negotiation event', function (): void {

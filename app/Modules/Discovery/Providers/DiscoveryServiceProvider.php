@@ -9,8 +9,10 @@ use App\Modules\Catalog\Domain\Events\ServicePublished;
 use App\Modules\Catalog\Domain\Models\Service;
 use App\Modules\Discovery\Application\Listeners\LogSearchQueryListener;
 use App\Modules\Discovery\Application\Listeners\ServiceIndexListener;
+use App\Modules\Discovery\Domain\Contracts\AlternativeVendorFinder;
 use App\Modules\Discovery\Domain\Contracts\SearchRepository;
 use App\Modules\Discovery\Domain\Events\ServiceSearchPerformed;
+use App\Modules\Discovery\Infrastructure\Repositories\EloquentAlternativeVendorFinder;
 use App\Modules\Discovery\Infrastructure\Repositories\EloquentSearchRepository;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
@@ -24,6 +26,8 @@ class DiscoveryServiceProvider extends ServiceProvider
             SearchRepository::class,
             EloquentSearchRepository::class,
         );
+
+        $this->app->bind(AlternativeVendorFinder::class, EloquentAlternativeVendorFinder::class);
     }
 
     public function boot(): void

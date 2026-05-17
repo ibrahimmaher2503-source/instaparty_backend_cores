@@ -41,4 +41,13 @@ return [
         'cannot_subscribe_free' => 'تُضاف خطة المجاني تلقائياً ولا يمكن الاشتراك بها مباشرة.',
         'subscription_not_cancellable' => 'لا يمكن إلغاء اشتراكك في حالته الحالية.',
     ],
+    'analytics'               => 'تحليلات الاشتراكات',
+    'send_renewal_reminder'   => 'إرسال تذكير التجديد',
+    'renewal_reminder_sent'   => 'تم إرسال تذكير التجديد',
+    'expiring_soon'           => 'تنتهي خلال 30 يومًا',
+    'active'                  => 'الاشتراكات النشطة',
+    'mrr'                     => 'الإيراد الشهري المتكرر',
+    'expiring_30_days'        => 'تنتهي خلال 30 يومًا',
+    'admin_overrides'         => 'تجاوزات المدير',
+    'revenue_by_month'        => 'إيرادات الاشتراكات شهريًا',
 ];

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Modules\Booking\Application\Actions;
 
 use App\Modules\Booking\Domain\Models\BookingItem;
-use App\Modules\Booking\Domain\Models\BookingStateTransition;
+use App\Modules\Shared\Domain\Models\StateTransition;
 use App\Modules\Identity\Domain\Models\VendorProfile;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
@@ -35,7 +35,7 @@ class MarkBookingItemStateAction
             $toStateName = $toStateClass::$name;
             $item->update(['item_status' => $toStateName]);
 
-            BookingStateTransition::create([
+            StateTransition::create([
                 'transitionable_type' => BookingItem::class,
                 'transitionable_id' => $item->id,
                 'from_state' => $fromState,

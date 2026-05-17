@@ -21,6 +21,10 @@ return [
             'settings' => 'Settings',
             'activity_logs' => 'Activity Logs',
             'users' => 'Users',
+            'inbox' => 'Support Inbox',
+            'subscriptions' => 'Packages & Subscriptions',
+            'tax' => 'VAT & Tax',
+            'advertising' => 'Advertising & Marketing',
         ],
     ],
 

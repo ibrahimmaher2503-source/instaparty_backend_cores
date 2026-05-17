@@ -71,6 +71,14 @@ return [
             'retry_after' => (int) env('REDIS_QUEUE_RETRY_AFTER', 90),
             'block_for' => null,
             'after_commit' => false,
+            // Dedicated supervisor queues for module workloads. Workers are
+            // started with `php artisan queue:work redis --queue=chat-moderation`
+            // (see spec 036 quickstart.md §5).
+            'queues' => [
+                'default',
+                'notifications',
+                'chat-moderation',
+            ],
         ],
 
         'deferred' => [

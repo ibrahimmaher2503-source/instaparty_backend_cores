@@ -3,15 +3,16 @@
 declare(strict_types=1);
 
 use App\Modules\Booking\Domain\Enums\FulfillmentStatus;
-use App\Modules\Booking\Domain\Enums\LifecycleStatus;
-use App\Modules\Booking\Domain\Enums\PaymentStatus;
 use App\Modules\Booking\Domain\Enums\VendorSubStatus;
 use App\Modules\Booking\Domain\Models\Booking;
 use App\Modules\Booking\Domain\Models\BookingAddress;
 use App\Modules\Booking\Domain\Models\BookingItem;
 use App\Modules\Booking\Domain\Models\BookingVendor;
+use App\Modules\Booking\Domain\States\BookingLifecycleStatus\ConfirmedState;
+use App\Modules\Booking\Domain\States\BookingLifecycleStatus\VendorReviewState;
+use App\Modules\Booking\Domain\States\BookingPaymentStatus\UnpaidState;
 use App\Modules\Catalog\Domain\Enums\ProductType;
-use App\Modules\Catalog\Domain\Enums\ServiceStatus;
+use App\Modules\Catalog\Domain\States\ServiceStatus\PublishedState;
 use App\Modules\Catalog\Domain\Models\Category;
 use App\Modules\Catalog\Domain\Models\Occasion;
 use App\Modules\Catalog\Domain\Models\Service;
@@ -52,7 +53,7 @@ it('single vendor accepts → booking lifecycle_status becomes confirmed', funct
     )->assertOk();
 
     $booking->refresh();
-    expect($booking->lifecycle_status)->toBe(LifecycleStatus::Confirmed);
+    expect($booking->lifecycle_status)->toBeInstanceOf(ConfirmedState::class);
     expect($booking->confirmed_at)->not->toBeNull();
 })->group('booking', 'negotiation');
 
@@ -63,7 +64,7 @@ it('booking_state_transitions has row to confirmed after single vendor accepts',
         "/api/v1/vendor/booking-vendors/{$bv->public_id}/accept"
     );
 
-    expect(DB::table('booking_state_transitions')
+    expect(DB::table('state_transitions')
         ->where('transitionable_type', Booking::class)
         ->where('transitionable_id', $booking->id)
         ->where('to_state', 'confirmed')
@@ -79,7 +80,7 @@ it('multi-vendor: first vendor accepts but second still pending → booking stay
     $category = Category::factory()->create();
     $service2 = Service::factory()->create([
         'product_type' => ProductType::Digital,
-        'status' => ServiceStatus::Published,
+        'status' => PublishedState::class,
         'vendor_profile_id' => $vendor2->id,
         'category_id' => $category->id,
     ]);
@@ -125,7 +126,7 @@ it('multi-vendor: first vendor accepts but second still pending → booking stay
     )->assertOk();
 
     $booking->refresh();
-    expect($booking->lifecycle_status)->toBe(LifecycleStatus::VendorReview);
+    expect($booking->lifecycle_status)->toBeInstanceOf(VendorReviewState::class);
 })->group('booking', 'negotiation');
 
 it('Rental inventory reservation upgrades to confirmed when booking confirms', function (): void {
@@ -138,8 +139,8 @@ it('Rental inventory reservation upgrades to confirmed when booking confirms', f
         'reference_no' => 'IP-2026-V002',
         'customer_id' => $customer->id,
         'occasion_id' => $occasion->id,
-        'lifecycle_status' => LifecycleStatus::VendorReview,
-        'payment_status' => PaymentStatus::Unpaid,
+        'lifecycle_status' => VendorReviewState::class,
+        'payment_status' => UnpaidState::class,
         'fulfillment_status' => FulfillmentStatus::NotStarted,
         'event_starts_at' => now()->addDays(30),
         'event_ends_at' => now()->addDays(30)->addHours(5),
@@ -160,7 +161,7 @@ it('Rental inventory reservation upgrades to confirmed when booking confirms', f
     $category = Category::factory()->create();
     $service = Service::factory()->create([
         'product_type' => ProductType::Rental,
-        'status' => ServiceStatus::Published,
+        'status' => PublishedState::class,
         'vendor_profile_id' => $vendor->id,
         'category_id' => $category->id,
     ]);

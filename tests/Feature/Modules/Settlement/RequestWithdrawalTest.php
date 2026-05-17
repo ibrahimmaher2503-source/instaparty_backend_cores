@@ -63,6 +63,8 @@ function makeVendorWithWallet(int $balanceMinor = 200000): array
 it('creates a withdrawal and returns 201', function (): void {
     [, , $token] = makeVendorWithWallet(200000);
 
+    $countBefore = Withdrawal::count();
+
     $response = $this->withHeader('Authorization', "Bearer {$token}")
         ->withHeader('Idempotency-Key', 'withdraw-test-001')
         ->postJson('/api/v1/vendor/withdrawals', withdrawalPayload());
@@ -80,7 +82,7 @@ it('creates a withdrawal and returns 201', function (): void {
             'requested_at',
         ]]);
 
-    expect(Withdrawal::count())->toBe(1);
+    expect(Withdrawal::count())->toBe($countBefore + 1);
 })->group('settlement', 'withdrawal', 'T320');
 
 // ─────────────────────────────────────────────────────
@@ -210,6 +212,8 @@ it('returns the cached 201 response when the same Idempotency-Key is replayed', 
 
     $payload = withdrawalPayload(['amount_minor' => 50000]);
 
+    $countBefore = Withdrawal::count();
+
     // First call — creates the withdrawal
     $first = $this->withHeader('Authorization', "Bearer {$token}")
         ->withHeader('Idempotency-Key', 'idem-repeat-001')
@@ -225,6 +229,6 @@ it('returns the cached 201 response when the same Idempotency-Key is replayed', 
     $second->assertStatus(201)
         ->assertJsonPath('data.public_id', $first->json('data.public_id'));
 
-    // Only one withdrawal must exist in the database
-    expect(Withdrawal::count())->toBe(1);
+    // Exactly one new withdrawal must be created from this test (idempotent replay)
+    expect(Withdrawal::count())->toBe($countBefore + 1);
 })->group('settlement', 'withdrawal', 'idempotency', 'T321');

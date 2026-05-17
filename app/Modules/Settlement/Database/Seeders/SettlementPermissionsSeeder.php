@@ -28,6 +28,13 @@ class SettlementPermissionsSeeder extends Seeder
         'settlement.reject_withdrawal',
         'settlement.view_wallet_ledger_admin',
         'settlement.manage_commission_rates',
+        'audit.view',
+        'settlement.trigger_reconciliation',
+        'settlement.view_reconciliation',
+        // Phase 4.11 — Withdrawal Proof & Finance Audit
+        'withdrawal.approve',
+        'withdrawal.mark_paid',
+        'withdrawal.view_audit',
     ];
 
     public function run(): void

@@ -55,4 +55,22 @@ class BookingModificationFactory extends Factory
             'customer_decision_at' => now(),
         ]);
     }
+
+    public function draft(): static
+    {
+        return $this->state([
+            'status' => ModificationStatus::Draft,
+            'customer_decision_at' => null,
+            'expires_at' => null,
+            'diff_snapshot' => [
+                'totals' => [
+                    'price_delta_minor' => 0,
+                    'currency' => 'EGP',
+                    'item_count' => 0,
+                    'by_change_kind' => [],
+                ],
+                'items' => [],
+            ],
+        ]);
+    }
 }

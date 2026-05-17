@@ -14,7 +14,10 @@ class SubscriptionPaymentResource extends Resource
 {
     protected static ?string $model = SubscriptionPayment::class;
 
-    protected static ?string $navigationGroup = 'subscriptions';
+    public static function getNavigationGroup(): ?string
+    {
+        return __('admin.nav.groups.subscriptions');
+    }
 
     protected static ?string $navigationLabel = 'Payments';
 

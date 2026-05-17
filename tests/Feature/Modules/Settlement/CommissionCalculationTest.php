@@ -95,8 +95,11 @@ it('calculates commission and credits vendor wallet for a rental item', function
     expect($wallet)->not->toBeNull()
         ->and($wallet->balance_minor)->toBe($expectedShare);
 
-    $ledger = WalletLedgerEntry::where('wallet_id', $wallet->id)->first();
-    expect($ledger->entry_type)->toBe(LedgerEntryType::CommissionCredit)
+    // Phase 4.9: ledger entry is CommissionAccrual (credit to vendor wallet = vendor share)
+    $ledger = WalletLedgerEntry::where('wallet_id', $wallet->id)
+        ->where('direction', 'credit')
+        ->first();
+    expect($ledger->entry_type)->toBe(LedgerEntryType::CommissionAccrual)
         ->and($ledger->amount_minor)->toBe($expectedShare);
 })->group('settlement', 'commission', 'rental');
 
@@ -159,21 +162,23 @@ it('creates a zero-commission record when bps is null and the resolver returns n
 // T113 — Idempotency: duplicate booking_item_id is blocked by UNIQUE index
 // ─────────────────────────────────────────────────────
 
-it('throws a QueryException (23000) on duplicate booking_item_id — the action is not idempotent by itself', function (): void {
+it('is idempotent — duplicate commission for same booking item returns replay without creating a second ledger group', function (): void {
     $data = makeConfirmedBookingWithItem(ProductType::Rental);
     $payment = makeCapturedPayment($data['booking'], $data['customer']);
 
     $paymentDto = settlementPaymentDtoFromReal($payment);
     $itemDto = settlementItemDtoFromReal($data['item'], bps: 1500);
 
+    $commissionsBefore = Commission::count();
+    $groupsBefore = \DB::table('ledger_transaction_groups')->count();
+
     $action = app(CalculateCommissionAction::class);
     $action->execute($itemDto, $paymentDto); // First call succeeds
 
-    // Second call must throw — the listener catches this, but the action throws
-    expect(fn () => $action->execute($itemDto, $paymentDto))
-        ->toThrow(QueryException::class);
+    // Second call returns idempotent replay — the new ledger writer deduplicates by idempotency key
+    $action->execute($itemDto, $paymentDto);
 
-    // Exactly one commission and one ledger entry exist
-    expect(Commission::count())->toBe(1)
-        ->and(WalletLedgerEntry::count())->toBe(1);
+    // Exactly one new commission and one new ledger group from this action (no duplication on retry)
+    expect(Commission::count())->toBe($commissionsBefore + 1)
+        ->and(\DB::table('ledger_transaction_groups')->count())->toBe($groupsBefore + 1);
 })->group('settlement', 'commission', 'idempotency');

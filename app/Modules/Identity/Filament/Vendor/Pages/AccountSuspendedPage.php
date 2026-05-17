@@ -28,6 +28,18 @@ class AccountSuspendedPage extends SimplePage
     {
         $user = auth()->user();
 
-        return $user !== null && $user->status === 'suspended';
+        if (! $user) {
+            return false;
+        }
+
+        $profile = $user->vendorProfile;
+        if (! $profile) {
+            return false;
+        }
+
+        $status = $profile->approval_status;
+        $statusValue = $status instanceof \BackedEnum ? $status->value : (string) $status;
+
+        return $statusValue === 'suspended';
     }
 }

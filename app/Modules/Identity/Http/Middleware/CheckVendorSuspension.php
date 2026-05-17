@@ -14,14 +14,20 @@ class CheckVendorSuspension
     {
         $user = $request->user();
 
-        if ($user && $user->status === 'suspended') {
+        $profile = $user?->vendorProfile;
+
+        if ($profile && $this->resolveApprovalStatus($profile) === 'suspended') {
             if ($request->expectsJson()) {
                 return response()->json([
                     'message' => __('identity.account_suspended'),
                 ], 403);
             }
 
-            $suspensionRoute = route('filament.vendor.pages.account-suspended', [], false);
+            try {
+                $suspensionRoute = route('filament.vendor.pages.account-suspended', [], false);
+            } catch (\Symfony\Component\Routing\Exception\RouteNotFoundException $e) {
+                $suspensionRoute = '/vendor/account-suspended';
+            }
 
             // Allow access to the suspension page itself to avoid redirect loops.
             if ($request->is(ltrim($suspensionRoute, '/'))) {
@@ -32,5 +38,20 @@ class CheckVendorSuspension
         }
 
         return $next($request);
+    }
+
+    private function resolveApprovalStatus(mixed $profile): string
+    {
+        $raw = $profile->approval_status;
+
+        if ($raw instanceof \BackedEnum) {
+            return $raw->value;
+        }
+
+        if (is_object($raw) && method_exists($raw, 'getValue')) {
+            return $raw->getValue();
+        }
+
+        return (string) $raw;
     }
 }

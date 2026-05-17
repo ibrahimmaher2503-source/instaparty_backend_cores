@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Modules\Payments\Filament\Resources;
 
 use App\Modules\Payments\Domain\Enums\PaymentMethod;
-use App\Modules\Payments\Domain\Enums\PaymentStatus;
 use App\Modules\Payments\Domain\Models\Payment;
+use App\Modules\Payments\Domain\States\PaymentStatus\PaymentState;
 use App\Modules\Payments\Filament\Resources\PaymentResource\Pages;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -101,7 +101,9 @@ class PaymentResource extends Resource
                 Tables\Columns\TextColumn::make('status')
                     ->label(__('payments.columns.status'))
                     ->badge()
-                    ->formatStateUsing(fn (PaymentStatus $state): string => Str::headline($state->value)),
+                    ->formatStateUsing(fn (mixed $state): string => $state instanceof PaymentState
+                        ? Str::headline($state->getValue())
+                        : Str::headline((string) $state)),
                 Tables\Columns\TextColumn::make('captured_at')
                     ->label(__('payments.columns.captured_at'))
                     ->dateTime()

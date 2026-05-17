@@ -128,8 +128,8 @@ class ViewBooking extends ViewRecord
                 ->visible(fn (): bool => auth()->user()?->hasAnyRole(['admin', 'booking_manager', 'super_admin']) === true)
                 ->action(function (Booking $record, array $data): void {
                     $state = [
-                        'lifecycle_status' => $record->lifecycle_status->value,
-                        'payment_status' => $record->payment_status->value,
+                        'lifecycle_status' => $record->lifecycle_status->getValue(),
+                        'payment_status' => $record->payment_status->getValue(),
                         'fulfillment_status' => $record->fulfillment_status->value,
                     ];
 

@@ -4,15 +4,29 @@ declare(strict_types=1);
 
 namespace App\Modules\Booking\Filament\Resources;
 
-use App\Modules\Booking\Domain\Models\BookingStateTransition;
+use App\Modules\Booking\Domain\Models\Booking;
+use App\Modules\Booking\Domain\Models\BookingItem;
+use App\Modules\Booking\Domain\Models\BookingVendor;
 use App\Modules\Booking\Filament\Resources\BookingStateTransitionResource\Pages;
+use App\Modules\Shared\Domain\Models\StateTransition;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class BookingStateTransitionResource extends Resource
 {
-    protected static ?string $model = BookingStateTransition::class;
+    protected static ?string $model = StateTransition::class;
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->whereIn('transitionable_type', [
+                Booking::class,
+                BookingVendor::class,
+                BookingItem::class,
+            ]);
+    }
 
     public static function getNavigationGroup(): ?string
     {

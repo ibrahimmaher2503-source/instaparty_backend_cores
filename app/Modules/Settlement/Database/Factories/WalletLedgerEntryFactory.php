@@ -34,6 +34,7 @@ class WalletLedgerEntryFactory extends Factory
     {
         return $this->state([
             'entry_type' => LedgerEntryType::CommissionCredit,
+            'direction' => 'credit',
             'description_key' => 'settlement.ledger.commission_credit',
         ]);
     }
@@ -42,7 +43,8 @@ class WalletLedgerEntryFactory extends Factory
     {
         return $this->state(fn (array $attributes): array => [
             'entry_type' => LedgerEntryType::RefundDebit,
-            'amount_minor' => -abs((int) ($attributes['amount_minor'] ?? $this->faker->numberBetween(1000, 50000))),
+            'direction' => 'debit',
+            'amount_minor' => abs((int) ($attributes['amount_minor'] ?? $this->faker->numberBetween(1000, 50000))),
             'description_key' => 'settlement.ledger.refund_debit',
         ]);
     }
@@ -51,7 +53,8 @@ class WalletLedgerEntryFactory extends Factory
     {
         return $this->state(fn (array $attributes): array => [
             'entry_type' => LedgerEntryType::WithdrawalDebit,
-            'amount_minor' => -abs((int) ($attributes['amount_minor'] ?? $this->faker->numberBetween(10000, 100000))),
+            'direction' => 'debit',
+            'amount_minor' => abs((int) ($attributes['amount_minor'] ?? $this->faker->numberBetween(10000, 100000))),
             'description_key' => 'settlement.ledger.withdrawal_debit',
         ]);
     }

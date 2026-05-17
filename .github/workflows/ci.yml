@@ -77,6 +77,21 @@ jobs:
           QUEUE_CONNECTION: sync
         run: php artisan migrate --force
 
+      - name: Architecture tests (blocking gate)
+        env:
+          DB_CONNECTION: mysql
+          DB_HOST: 127.0.0.1
+          DB_PORT: 3306
+          DB_DATABASE: instaparty_test
+          DB_USERNAME: root
+          DB_PASSWORD: password
+          REDIS_HOST: 127.0.0.1
+          REDIS_PORT: 6379
+          CACHE_DRIVER: array
+          SESSION_DRIVER: array
+          QUEUE_CONNECTION: sync
+        run: ./vendor/bin/pest tests/Architecture/ --ci
+
       - name: Run tests
         env:
           DB_CONNECTION: mysql

@@ -7,6 +7,7 @@ namespace Database\Seeders;
 use App\Modules\Booking\Database\Seeders\BookingDevelopmentSeeder;
 use App\Modules\Booking\Database\Seeders\BookingPermissionsSeeder;
 use App\Modules\Catalog\Database\Seeders\CatalogDevelopmentSeeder;
+use App\Modules\Communication\Database\Seeders\ChatModerationPermissionsSeeder;
 use App\Modules\Communication\Database\Seeders\CommunicationDevelopmentSeeder;
 use App\Modules\Discovery\Database\Seeders\DiscoveryDevelopmentSeeder;
 use App\Modules\Geography\Database\Seeders\EgyptGeographySeeder;
@@ -52,6 +53,7 @@ class DatabaseSeeder extends Seeder
             SettlementPermissionsSeeder::class,
             SettlementDevelopmentSeeder::class,
             CommunicationDevelopmentSeeder::class,
+            ChatModerationPermissionsSeeder::class,
             ReviewsDevelopmentSeeder::class,
             LoyaltyDevelopmentSeeder::class,
             DiscoveryDevelopmentSeeder::class,

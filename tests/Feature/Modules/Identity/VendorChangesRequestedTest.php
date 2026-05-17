@@ -9,9 +9,13 @@ use App\Modules\Shared\Domain\Models\ChangeRequest;
 use App\Modules\Shared\Domain\Models\ChangeRequestItem;
 
 describe('Vendor changes-requested workflow', function () {
-    let($admin, null);
-    let($vendor, null);
-    let($vendorProfile, null);
+    // NOTE: these tests were authored against a pest plugin that provides let();
+    // not installed in this codebase. Commented out to keep pest auto-loadable.
+    // The tests below will error at runtime if invoked — pre-existing breakage,
+    // tracked in phase-2.0 exit checklist.
+    // let($admin, null);
+    // let($vendor, null);
+    // let($vendorProfile, null);
 
     beforeEach(function () {
         $this->admin = User::factory()->admin()->create();

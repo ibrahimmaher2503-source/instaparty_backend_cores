@@ -94,3 +94,43 @@ it('NotificationDispatch model does not use the SoftDeletes trait', function ():
     expect(in_array(SoftDeletes::class, class_uses_recursive(NotificationDispatch::class), true))
         ->toBeFalse('NotificationDispatch must not use SoftDeletes trait');
 });
+
+// ─────────────────────────────────────────────────────
+// T058 — Phase 4.9 ledger hardening append-only tables
+// ─────────────────────────────────────────────────────
+
+it('ledger_transaction_groups table has no deleted_at column', function (): void {
+    expect(Schema::hasColumn('ledger_transaction_groups', 'deleted_at'))->toBeFalse();
+})->group('architecture', 'ledger');
+
+it('ledger_transaction_groups table has no updated_at column', function (): void {
+    expect(Schema::hasColumn('ledger_transaction_groups', 'updated_at'))->toBeFalse();
+})->group('architecture', 'ledger');
+
+it('financial_snapshots table has no deleted_at column', function (): void {
+    expect(Schema::hasColumn('financial_snapshots', 'deleted_at'))->toBeFalse();
+})->group('architecture', 'ledger');
+
+it('financial_snapshots table has no updated_at column', function (): void {
+    expect(Schema::hasColumn('financial_snapshots', 'updated_at'))->toBeFalse();
+})->group('architecture', 'ledger');
+
+it('reconciliation_runs table has no deleted_at column', function (): void {
+    expect(Schema::hasColumn('reconciliation_runs', 'deleted_at'))->toBeFalse();
+})->group('architecture', 'ledger');
+
+it('reconciliation_findings table has no deleted_at column', function (): void {
+    expect(Schema::hasColumn('reconciliation_findings', 'deleted_at'))->toBeFalse();
+})->group('architecture', 'ledger');
+
+it('Phase 4.9 new ledger models do not use the SoftDeletes trait', function (): void {
+    foreach ([
+        \App\Modules\Settlement\Domain\Models\LedgerTransactionGroup::class,
+        \App\Modules\Settlement\Domain\Models\FinancialSnapshot::class,
+        \App\Modules\Settlement\Domain\Models\ReconciliationRun::class,
+        \App\Modules\Settlement\Domain\Models\ReconciliationFinding::class,
+    ] as $model) {
+        expect(in_array(SoftDeletes::class, class_uses_recursive($model), true))
+            ->toBeFalse("{$model} must not use SoftDeletes trait");
+    }
+})->group('architecture', 'ledger');

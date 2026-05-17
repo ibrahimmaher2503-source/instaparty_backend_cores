@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Modules\Booking\Filament\Vendor\Pages;
 
+use App\Modules\Booking\Domain\Enums\VendorSubStatus;
 use App\Modules\Booking\Domain\Models\BookingVendor;
 use App\Modules\Catalog\Domain\Enums\ProductType;
 use App\Modules\Identity\Domain\Models\VendorProfile;
@@ -154,6 +155,13 @@ class VendorBookingDetailPage extends Page implements HasInfolists
     protected function getHeaderActions(): array
     {
         return [
+            Action::make('decide')
+                ->label(__('vendor-portal.decision.title'))
+                ->icon('heroicon-o-scale')
+                ->color('primary')
+                ->visible(fn (): bool => $this->getRecord()->sub_status === VendorSubStatus::Pending)
+                ->url(fn () => VendorBookingDecisionPage::getUrl(['bookingVendor' => $this->bookingVendor])),
+
             Action::make('viewPayments')
                 ->label(__('vendor-portal.bookings.view_payments'))
                 ->icon('heroicon-o-banknotes')

@@ -9,6 +9,7 @@ use App\Modules\Discovery\Filament\Resources\SavedSearchResource\Pages;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class SavedSearchResource extends Resource
 {
@@ -53,13 +54,18 @@ class SavedSearchResource extends Resource
         return false;
     }
 
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()->with(['user']);
+    }
+
     public static function table(Table $table): Table
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('user_id')
+                Tables\Columns\TextColumn::make('user.name')
                     ->label(__('discovery.columns.user_id'))
-                    ->sortable(),
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('label')
                     ->label(__('discovery.columns.label'))
                     ->searchable()

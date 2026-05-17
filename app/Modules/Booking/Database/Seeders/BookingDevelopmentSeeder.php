@@ -19,7 +19,7 @@ use App\Modules\Booking\Domain\Models\BookingLock;
 use App\Modules\Booking\Domain\Models\BookingModification;
 use App\Modules\Booking\Domain\Models\BookingModificationItem;
 use App\Modules\Booking\Domain\Models\BookingSnapshot;
-use App\Modules\Booking\Domain\Models\BookingStateTransition;
+use App\Modules\Shared\Domain\Models\StateTransition;
 use App\Modules\Booking\Domain\Models\BookingVendor;
 use App\Modules\Catalog\Domain\Enums\ProductType;
 use App\Modules\Catalog\Domain\Models\Occasion;
@@ -195,8 +195,8 @@ final class BookingDevelopmentSeeder extends Seeder
                 'reference_no' => $reference,
                 'customer_id' => $customer->id,
                 'occasion_id' => $occasion->id,
-                'lifecycle_status' => $lifecycle,
-                'payment_status' => $payment,
+                'lifecycle_status' => $lifecycle->value,
+                'payment_status' => $payment->value,
                 'fulfillment_status' => $fulfillment,
                 'event_starts_at' => $eventStartsAt,
                 'event_ends_at' => $eventEndsAt,
@@ -397,7 +397,7 @@ final class BookingDevelopmentSeeder extends Seeder
     private function seedTransition(Booking $booking, ?string $from, string $to, string $kind, string $createdAt): void
     {
         $this->firstOrCreateFactoryModel(
-            BookingStateTransition::factory()->make([
+            StateTransition::factory()->make([
                 'transitionable_type' => Booking::class,
                 'transitionable_id' => $booking->id,
                 'from_state' => $from,

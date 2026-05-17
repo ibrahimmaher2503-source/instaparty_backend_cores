@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Modules\Catalog\Filament\Resources;
 
+use App\Modules\Catalog\Application\Actions\DeleteCategoryAction;
 use App\Modules\Catalog\Domain\Enums\ProductType;
 use App\Modules\Catalog\Domain\Models\Category;
 use App\Modules\Catalog\Filament\Resources\CategoryResource\Pages\CreateCategory;
@@ -31,7 +32,10 @@ class CategoryResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-tag';
 
-    protected static ?string $navigationGroup = 'Catalog';
+    public static function getNavigationGroup(): ?string
+    {
+        return __('admin.nav.groups.catalog');
+    }
 
     protected static ?int $navigationSort = 2;
 
@@ -147,9 +151,15 @@ class CategoryResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->defaultSort('sort_order')
+            ->reorderable('sort_order')
             ->actions([
                 EditAction::make(),
-                DeleteAction::make(),
+                DeleteAction::make()
+                    ->using(function (Category $record): bool {
+                        app(DeleteCategoryAction::class)->execute($record, auth()->user());
+
+                        return true;
+                    }),
             ]);
     }
 

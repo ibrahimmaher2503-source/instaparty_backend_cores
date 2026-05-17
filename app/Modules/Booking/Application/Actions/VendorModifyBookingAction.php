@@ -10,12 +10,14 @@ use App\Modules\Booking\Domain\Enums\ModificationChangeKind;
 use App\Modules\Booking\Domain\Enums\ModificationStatus;
 use App\Modules\Booking\Domain\Enums\VendorSubStatus;
 use App\Modules\Booking\Domain\Events\VendorModificationProposed;
+use App\Modules\Booking\Domain\Exceptions\ResponseDeadlineExpiredException;
 use App\Modules\Booking\Domain\Models\Booking;
 use App\Modules\Booking\Domain\Models\BookingItem;
 use App\Modules\Booking\Domain\Models\BookingModification;
 use App\Modules\Booking\Domain\Models\BookingModificationItem;
-use App\Modules\Booking\Domain\Models\BookingStateTransition;
 use App\Modules\Booking\Domain\Models\BookingVendor;
+use App\Modules\Booking\Domain\States\BookingLifecycleStatus\CustomerReviewState;
+use App\Modules\Shared\Domain\Models\StateTransition;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -45,6 +47,11 @@ class VendorModifyBookingAction
                 Response::HTTP_CONFLICT,
                 'Booking vendor is not in pending status'
             );
+
+            if ($bookingVendor->response_deadline !== null
+                && $bookingVendor->response_deadline->isPast()) {
+                throw new ResponseDeadlineExpiredException($bookingVendor->id);
+            }
 
             $pendingExists = BookingModification::where('booking_vendor_id', $bookingVendor->id)
                 ->where('status', ModificationStatus::Pending)
@@ -87,7 +94,7 @@ class VendorModifyBookingAction
                 'responded_at' => now(),
             ]);
 
-            BookingStateTransition::create([
+            StateTransition::create([
                 'transitionable_type' => BookingVendor::class,
                 'transitionable_id' => $bookingVendor->id,
                 'from_state' => VendorSubStatus::Pending->value,
@@ -97,10 +104,10 @@ class VendorModifyBookingAction
             ]);
 
             $booking = Booking::query()->where('id', $bookingVendor->booking_id)->lockForUpdate()->firstOrFail();
-            $previousStatus = $booking->lifecycle_status->value;
-            $booking->update(['lifecycle_status' => LifecycleStatus::CustomerReview]);
+            $previousStatus = $booking->lifecycle_status->getValue();
+            $booking->update(['lifecycle_status' => CustomerReviewState::class]);
 
-            BookingStateTransition::create([
+            StateTransition::create([
                 'transitionable_type' => Booking::class,
                 'transitionable_id' => $booking->id,
                 'from_state' => $previousStatus,
@@ -181,7 +188,7 @@ class VendorModifyBookingAction
         foreach ($dto->changes as $change) {
             match (ModificationChangeKind::from($change['change_kind'])) {
                 ModificationChangeKind::Update => $this->applyDiffUpdate($change, $afterItems, $subtotalAfter),
-                ModificationChangeKind::Add    => $this->applyDiffAdd($change, $afterItems, $subtotalAfter),
+                ModificationChangeKind::Add => $this->applyDiffAdd($change, $afterItems, $subtotalAfter),
                 ModificationChangeKind::Remove => $this->applyDiffRemove($change, $afterItems, $subtotalAfter),
             };
         }
@@ -208,23 +215,23 @@ class VendorModifyBookingAction
         if (! isset($afterItems[$pubId])) {
             return;
         }
-        $payload  = $change['payload'];
+        $payload = $change['payload'];
         $oldPrice = (int) $afterItems[$pubId]['unit_price_minor'];
         $newPrice = isset($payload['unit_price_minor']) ? (int) $payload['unit_price_minor'] : $oldPrice;
-        $qty      = (int) $afterItems[$pubId]['quantity'];
+        $qty = (int) $afterItems[$pubId]['quantity'];
         $afterItems[$pubId] = array_merge($afterItems[$pubId], $payload);
-        $subtotalAfter     += ($newPrice - $oldPrice) * $qty;
+        $subtotalAfter += ($newPrice - $oldPrice) * $qty;
     }
 
     /** @param array<string,mixed> $change @param array<string,mixed> $afterItems */
     private function applyDiffAdd(array $change, array &$afterItems, int &$subtotalAfter): void
     {
-        $payload  = $change['payload'];
+        $payload = $change['payload'];
         $newPubId = (string) Str::ulid();
-        $price    = (int) ($payload['unit_price_minor'] ?? 0);
-        $qty      = (int) ($payload['quantity'] ?? 1);
+        $price = (int) ($payload['unit_price_minor'] ?? 0);
+        $qty = (int) ($payload['quantity'] ?? 1);
         $afterItems[$newPubId] = array_merge(['public_id' => $newPubId], $payload);
-        $subtotalAfter        += $price * $qty;
+        $subtotalAfter += $price * $qty;
     }
 
     /** @param array<string,mixed> $change @param array<string,mixed> $afterItems */
@@ -237,8 +244,8 @@ class VendorModifyBookingAction
         if (! isset($afterItems[$pubId])) {
             return;
         }
-        $price          = (int) $afterItems[$pubId]['unit_price_minor'];
-        $qty            = (int) $afterItems[$pubId]['quantity'];
+        $price = (int) $afterItems[$pubId]['unit_price_minor'];
+        $qty = (int) $afterItems[$pubId]['quantity'];
         $subtotalAfter -= $price * $qty;
         unset($afterItems[$pubId]);
     }

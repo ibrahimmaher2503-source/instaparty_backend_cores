@@ -11,6 +11,7 @@ use App\Modules\Reviews\Filament\Resources\ServiceReviewResource\Pages;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class ServiceReviewResource extends Resource
 {
@@ -55,6 +56,11 @@ class ServiceReviewResource extends Resource
         return false;
     }
 
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()->with(['service', 'bookingItem', 'reviewer']);
+    }
+
     public static function table(Table $table): Table
     {
         return $table
@@ -63,15 +69,16 @@ class ServiceReviewResource extends Resource
                     ->label(__('reviews.columns.public_id'))
                     ->copyable()
                     ->searchable(),
-                Tables\Columns\TextColumn::make('service_id')
+                Tables\Columns\TextColumn::make('service.name')
                     ->label(__('reviews.columns.service'))
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('booking_item_id')
-                    ->label(__('reviews.columns.booking_item'))
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('user_id')
+                    ->formatStateUsing(fn ($state): string => is_array($state) ? ($state[app()->getLocale()] ?? $state['en'] ?? '—') : ($state ?? '—'))
+                    ->searchable(query: fn (Builder $query, string $search) => $query->whereHas(
+                        'service',
+                        fn ($q) => $q->whereRaw("JSON_UNQUOTE(JSON_EXTRACT(name, '$.en')) LIKE ?", ["%{$search}%"])
+                    )),
+                Tables\Columns\TextColumn::make('reviewer.name')
                     ->label(__('reviews.columns.reviewer'))
-                    ->sortable(),
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('rating')
                     ->label(__('reviews.columns.rating'))
                     ->sortable(),
@@ -83,6 +90,10 @@ class ServiceReviewResource extends Resource
                     ->label(__('reviews.columns.moderation_status'))
                     ->badge()
                     ->formatStateUsing(fn (ModerationStatus $state): string => __('reviews.moderation_status.'.$state->value)),
+                Tables\Columns\TextColumn::make('bookingItem.public_id')
+                    ->label(__('reviews.columns.booking_item'))
+                    ->copyable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('created_at')
                     ->label(__('admin.common.created_at'))
                     ->dateTime()

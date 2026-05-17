@@ -164,7 +164,7 @@ This section is the locked reference for how the three product types are modeled
 | External IDs | CHAR(26) ULID, column `public_id`, exposed in all API URLs |
 | Primary key on detail tables | `service_id` BIGINT UNSIGNED (1:1 with `services.id`) |
 | Soft deletes | users, vendor profiles, services, bookings, reviews, categories |
-| Append-only (no soft delete) | wallet_ledger, audit_logs, payments, commissions, withdrawals, booking_state_transitions |
+| Append-only (no soft delete) | wallet_ledger, ledger_transaction_groups, financial_snapshots, reconciliation_runs, reconciliation_findings, audit_logs, payments, commissions, withdrawals, booking_state_transitions |
 | Charset enforcement | Set in every migration's `Schema::create` callback |
 | Foreign keys | Always declared; `ON DELETE CASCADE` only where domain-correct |
 | JSON columns | Used for translatable fields, `type_snapshot`, `fulfillment_data`, `customization_fields`, `size_dimensions` |

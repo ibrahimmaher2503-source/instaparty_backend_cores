@@ -20,9 +20,12 @@ headers {
 
 docs {
   Returns paginated list of the authenticated vendor's withdrawal requests.
-  - Phase 4.2 Settlement module.
+  - Phase 4.2 Settlement module; extended in Phase 4.11 (2026-05-16).
   - Requires settlement.view_withdrawals.own permission.
   - Cursor-paginated; use meta.next_cursor for subsequent pages.
+  - Phase 4.11 audit fields: each item now includes `approved_at`, `paid_at`,
+    `bank_transfer_reference`, `has_proof`.
+  - Uses WithdrawalListResource (leaner shape than the show endpoint's WithdrawalResource).
 }
 
 tests {

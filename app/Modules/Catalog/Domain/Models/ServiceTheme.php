@@ -8,6 +8,7 @@ use App\Modules\Catalog\Database\Factories\ServiceThemeFactory;
 use App\Modules\Shared\Domain\Concerns\HasPublicId;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Spatie\Translatable\HasTranslations;
 
 class ServiceTheme extends Model
@@ -35,4 +36,14 @@ class ServiceTheme extends Model
     protected $casts = [
         'is_active' => 'boolean',
     ];
+
+    public function services(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            Service::class,
+            'service_themes_pivot',
+            'service_theme_id',
+            'service_id',
+        )->withPivot('sort_order')->orderBy('sort_order');
+    }
 }

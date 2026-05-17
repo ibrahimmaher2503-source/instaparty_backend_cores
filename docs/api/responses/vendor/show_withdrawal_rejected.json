@@ -1,0 +1,24 @@
+{
+  "data": {
+    "public_id": "01HXY7VWNQTQX5ZP3ZK1NE5K2C",
+    "amount": {"minor": 50000, "currency": "EGP", "formatted": "500.00 EGP"},
+    "status": "rejected",
+    "timeline": {
+      "requested_at": "2026-05-12T08:00:00Z",
+      "approved_at": null,
+      "paid_at": null
+    },
+    "approved_at": null,
+    "paid_at": null,
+    "requested_at": "2026-05-12T08:00:00Z",
+    "bank_transfer_reference": null,
+    "admin_payment_note": null,
+    "has_proof": false,
+    "proof_download_url": null,
+    "proof_download_url_expires_at": null,
+    "rejected_reason": "Invalid IBAN format — please update bank details and resubmit.",
+    "processed_at": "2026-05-13T09:00:00Z"
+  },
+  "meta": null,
+  "errors": null
+}

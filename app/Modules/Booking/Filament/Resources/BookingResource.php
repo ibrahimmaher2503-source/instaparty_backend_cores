@@ -8,6 +8,22 @@ use App\Modules\Booking\Domain\Enums\FulfillmentStatus;
 use App\Modules\Booking\Domain\Enums\LifecycleStatus;
 use App\Modules\Booking\Domain\Enums\PaymentStatus;
 use App\Modules\Booking\Domain\Models\Booking;
+use App\Modules\Booking\Domain\States\BookingLifecycleStatus\ActiveState;
+use App\Modules\Booking\Domain\States\BookingLifecycleStatus\BookingLifecycleState;
+use App\Modules\Booking\Domain\States\BookingLifecycleStatus\CancelledState;
+use App\Modules\Booking\Domain\States\BookingLifecycleStatus\CompletedState;
+use App\Modules\Booking\Domain\States\BookingLifecycleStatus\ConfirmedState;
+use App\Modules\Booking\Domain\States\BookingLifecycleStatus\CustomerReviewState;
+use App\Modules\Booking\Domain\States\BookingLifecycleStatus\DraftState;
+use App\Modules\Booking\Domain\States\BookingLifecycleStatus\SubmittedState;
+use App\Modules\Booking\Domain\States\BookingLifecycleStatus\VendorReviewState;
+use App\Modules\Booking\Domain\States\BookingPaymentStatus\BookingPaymentState;
+use App\Modules\Booking\Domain\States\BookingPaymentStatus\PaidState;
+use App\Modules\Booking\Domain\States\BookingPaymentStatus\PartialState;
+use App\Modules\Booking\Domain\States\BookingPaymentStatus\PartiallyRefundedState;
+use App\Modules\Booking\Domain\States\BookingPaymentStatus\RefundPendingState;
+use App\Modules\Booking\Domain\States\BookingPaymentStatus\RefundedState;
+use App\Modules\Booking\Domain\States\BookingPaymentStatus\UnpaidState;
 use App\Modules\Booking\Filament\Resources\BookingResource\Pages;
 use App\Modules\Booking\Filament\Resources\BookingResource\RelationManagers;
 use Filament\Infolists\Components\Grid;
@@ -108,11 +124,15 @@ class BookingResource extends Resource
                 Tables\Columns\TextColumn::make('lifecycle_status')
                     ->label(__('booking.columns.lifecycle_status'))
                     ->badge()
-                    ->formatStateUsing(fn (LifecycleStatus $state): string => __('booking.lifecycle_status.'.$state->value)),
+                    ->formatStateUsing(fn (mixed $state): string => $state instanceof BookingLifecycleState
+                        ? __('booking.lifecycle_status.'.$state->getValue())
+                        : (string) $state),
                 Tables\Columns\TextColumn::make('payment_status')
                     ->label(__('booking.columns.payment_status'))
                     ->badge()
-                    ->formatStateUsing(fn (PaymentStatus $state): string => __('booking.payment_status.'.$state->value)),
+                    ->formatStateUsing(fn (mixed $state): string => $state instanceof BookingPaymentState
+                        ? __('booking.payment_status.'.$state->getValue())
+                        : (string) $state),
                 Tables\Columns\TextColumn::make('fulfillment_status')
                     ->label(__('booking.columns.fulfillment_status'))
                     ->badge()
@@ -163,25 +183,35 @@ class BookingResource extends Resource
                         TextEntry::make('lifecycle_status')
                             ->label(__('booking.columns.lifecycle_status'))
                             ->badge()
-                            ->color(fn (LifecycleStatus $state): string => match ($state) {
-                                LifecycleStatus::Draft => 'gray',
-                                LifecycleStatus::Submitted, LifecycleStatus::VendorReview, LifecycleStatus::CustomerReview => 'warning',
-                                LifecycleStatus::Confirmed, LifecycleStatus::Active => 'info',
-                                LifecycleStatus::Completed => 'success',
-                                LifecycleStatus::Cancelled => 'danger',
+                            ->color(fn (mixed $state): string => match (true) {
+                                $state instanceof DraftState => 'gray',
+                                $state instanceof SubmittedState,
+                                $state instanceof VendorReviewState,
+                                $state instanceof CustomerReviewState => 'warning',
+                                $state instanceof ConfirmedState,
+                                $state instanceof ActiveState => 'info',
+                                $state instanceof CompletedState => 'success',
+                                $state instanceof CancelledState => 'danger',
+                                default => 'gray',
                             })
-                            ->formatStateUsing(fn (LifecycleStatus $state): string => __('booking.lifecycle_status.'.$state->value)),
+                            ->formatStateUsing(fn (mixed $state): string => $state instanceof BookingLifecycleState
+                                ? __('booking.lifecycle_status.'.$state->getValue())
+                                : (string) $state),
                         TextEntry::make('payment_status')
                             ->label(__('booking.columns.payment_status'))
                             ->badge()
-                            ->color(fn (PaymentStatus $state): string => match ($state) {
-                                PaymentStatus::Unpaid, PaymentStatus::Partial => 'warning',
-                                PaymentStatus::Paid => 'success',
-                                PaymentStatus::RefundPending => 'info',
-                                PaymentStatus::PartiallyRefunded => 'gray',
-                                PaymentStatus::Refunded => 'danger',
+                            ->color(fn (mixed $state): string => match (true) {
+                                $state instanceof UnpaidState,
+                                $state instanceof PartialState => 'warning',
+                                $state instanceof PaidState => 'success',
+                                $state instanceof RefundPendingState => 'info',
+                                $state instanceof PartiallyRefundedState => 'gray',
+                                $state instanceof RefundedState => 'danger',
+                                default => 'gray',
                             })
-                            ->formatStateUsing(fn (PaymentStatus $state): string => __('booking.payment_status.'.$state->value)),
+                            ->formatStateUsing(fn (mixed $state): string => $state instanceof BookingPaymentState
+                                ? __('booking.payment_status.'.$state->getValue())
+                                : (string) $state),
                         TextEntry::make('fulfillment_status')
                             ->label(__('booking.columns.fulfillment_status'))
                             ->badge()

@@ -15,8 +15,10 @@ use App\Modules\Booking\Domain\Models\Booking;
 use App\Modules\Booking\Domain\Models\BookingItem;
 use App\Modules\Booking\Domain\Models\BookingModification;
 use App\Modules\Booking\Domain\Models\BookingModificationItem; // used in applyAdd
-use App\Modules\Booking\Domain\Models\BookingStateTransition;
 use App\Modules\Booking\Domain\Models\BookingVendor;
+use App\Modules\Booking\Domain\States\BookingLifecycleStatus\ConfirmedState;
+use App\Modules\Booking\Domain\States\BookingLifecycleStatus\VendorReviewState;
+use App\Modules\Shared\Domain\Models\StateTransition;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -93,7 +95,7 @@ class CustomerConfirmModifiedBookingAction
                     'responded_at' => now(),
                 ]);
 
-                BookingStateTransition::create([
+                StateTransition::create([
                     'transitionable_type' => BookingVendor::class,
                     'transitionable_id' => $bookingVendor->id,
                     'from_state' => VendorSubStatus::Modified->value,
@@ -108,11 +110,11 @@ class CustomerConfirmModifiedBookingAction
 
                 if ($allAccepted) {
                     $booking->update([
-                        'lifecycle_status' => LifecycleStatus::Confirmed,
+                        'lifecycle_status' => ConfirmedState::class,
                         'confirmed_at' => now(),
                     ]);
 
-                    BookingStateTransition::create([
+                    StateTransition::create([
                         'transitionable_type' => Booking::class,
                         'transitionable_id' => $booking->id,
                         'from_state' => LifecycleStatus::CustomerReview->value,
@@ -120,9 +122,9 @@ class CustomerConfirmModifiedBookingAction
                         'trigger_kind' => 'system',
                     ]);
                 } else {
-                    $booking->update(['lifecycle_status' => LifecycleStatus::VendorReview]);
+                    $booking->update(['lifecycle_status' => VendorReviewState::class]);
 
-                    BookingStateTransition::create([
+                    StateTransition::create([
                         'transitionable_type' => Booking::class,
                         'transitionable_id' => $booking->id,
                         'from_state' => LifecycleStatus::CustomerReview->value,
@@ -138,7 +140,7 @@ class CustomerConfirmModifiedBookingAction
 
                 $bookingVendor->update(['sub_status' => VendorSubStatus::Pending]);
 
-                BookingStateTransition::create([
+                StateTransition::create([
                     'transitionable_type' => BookingVendor::class,
                     'transitionable_id' => $bookingVendor->id,
                     'from_state' => VendorSubStatus::Modified->value,
@@ -147,9 +149,9 @@ class CustomerConfirmModifiedBookingAction
                     'triggered_by' => $dto->customerId,
                 ]);
 
-                $booking->update(['lifecycle_status' => LifecycleStatus::VendorReview]);
+                $booking->update(['lifecycle_status' => VendorReviewState::class]);
 
-                BookingStateTransition::create([
+                StateTransition::create([
                     'transitionable_type' => Booking::class,
                     'transitionable_id' => $booking->id,
                     'from_state' => LifecycleStatus::CustomerReview->value,
@@ -159,7 +161,7 @@ class CustomerConfirmModifiedBookingAction
             }
 
             $booking->refresh();
-            $bookingConfirmed = $booking->lifecycle_status === LifecycleStatus::Confirmed;
+            $bookingConfirmed = $booking->lifecycle_status instanceof ConfirmedState;
 
             DB::afterCommit(function () use ($modification, $dto, $booking, $bookingConfirmed): void {
                 event(new CustomerModificationDecided($modification, $dto->decision));

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Modules\Booking\Filament\Resources\BookingResource\RelationManagers;
 
-use App\Modules\Booking\Domain\Models\BookingStateTransition;
+use App\Modules\Shared\Domain\Models\StateTransition;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -50,10 +50,10 @@ class BookingStateTransitionsRelationManager extends RelationManager
                     ->badge(),
                 Tables\Columns\TextColumn::make('triggered_by')
                     ->label(__('booking.columns.actor'))
-                    ->getStateUsing(fn (BookingStateTransition $record): string => self::resolveActorName($record)),
+                    ->getStateUsing(fn (StateTransition $record): string => self::resolveActorName($record)),
                 Tables\Columns\TextColumn::make('context')
                     ->label(__('booking.columns.context'))
-                    ->getStateUsing(fn (BookingStateTransition $record): string => self::prettyContext($record->context))
+                    ->getStateUsing(fn (StateTransition $record): string => self::prettyContext($record->context))
                     ->wrap(),
             ])
             ->headerActions([])
@@ -79,7 +79,7 @@ class BookingStateTransitionsRelationManager extends RelationManager
         return false;
     }
 
-    private static function resolveActorName(BookingStateTransition $record): string
+    private static function resolveActorName(StateTransition $record): string
     {
         $actor = $record->triggeredByUser;
 

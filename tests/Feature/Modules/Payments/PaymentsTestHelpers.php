@@ -104,7 +104,7 @@ if (! function_exists('makeConfirmedBookingWithItem')) {
         $category = Category::factory()->create();
         $service = Service::factory()->create([
             'product_type' => $productType,
-            'status' => ServiceStatus::Published,
+            'status' => ServiceStatus::Published->value,
             'vendor_profile_id' => $vendor->id,
             'category_id' => $category->id,
         ]);

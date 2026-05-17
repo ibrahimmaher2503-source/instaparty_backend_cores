@@ -779,7 +779,7 @@ Standard Laravel + Sanctum + Spatie Permission + Spatie Media Library. Only Inst
 
 ### `booking_modifications`
 
-> Vendor-proposed change customer must re-approve (FR-11..FR-14).
+> Vendor-proposed change customer must re-approve (FR-11..FR-14). ⚠️ **MINOR SCHEMA CHANGE (2026-05-16)** — `status` ENUM extended with `'draft'`; generated column + UNIQUE index enforces one open draft per booking_vendor (spec 031).
 
 | Column | Type | Null | Notes |
 |---|---|---|---|
@@ -788,12 +788,15 @@ Standard Laravel + Sanctum + Spatie Permission + Spatie Media Library. Only Inst
 | booking_vendor_id | BIGINT UNSIGNED FK | NO | |
 | proposed_by | BIGINT UNSIGNED FK→users | NO | |
 | proposal_kind | ENUM('add_item','remove_item','change_quantity','change_price','change_slot','add_surcharge','add_note') | NO | |
-| status | ENUM('pending','customer_accepted','customer_rejected','withdrawn','expired') | NO | Default `'pending'` |
+| status | ENUM('draft','pending','customer_accepted','customer_rejected','withdrawn','expired') | NO | Default `'pending'`. `'draft'` is internal builder state (spec 031). |
 | customer_decision_at | TIMESTAMP | YES | |
-| expires_at | TIMESTAMP | YES | |
+| expires_at | TIMESTAMP | YES | Set at submit; default `now()+48h`. |
 | vendor_explanation | JSON | YES | Translatable |
 | diff_snapshot | JSON | NO | Before/after for highlighted UI |
+| draft_slot | TINYINT UNSIGNED GENERATED STORED | YES | `1` when `status='draft'`, else NULL. Enables one-draft-per-vendor uniqueness. |
 | created_at, updated_at | TIMESTAMPS | | |
+
+**Indexes:** `(booking_vendor_id, status)`, `(status, expires_at)`, **UNIQUE `(booking_vendor_id, draft_slot)` named `bk_modifs_one_draft_per_vendor`** (partial-unique via generated column).
 
 ### `booking_modification_items`
 
@@ -1011,6 +1014,14 @@ Standard Laravel + Sanctum + Spatie Permission + Spatie Media Library. Only Inst
 | transfer_proof_path | VARCHAR(500) | YES | Private bucket |
 | rejection_reason | JSON | YES | Translatable |
 | created_at, updated_at | TIMESTAMPS | | |
+<!-- 2026-05-16 Phase 4.11 — finance audit columns -->
+| approved_at | TIMESTAMP | YES | Explicit approval timestamp (split from combined processing step) |
+| approved_by_admin_id | BIGINT UNSIGNED FK→users | YES | restrictOnDelete — admin who approved |
+| paid_by_admin_id | BIGINT UNSIGNED FK→users | YES | restrictOnDelete — admin who executed bank transfer |
+| bank_transfer_reference | VARCHAR(120) | YES | Bank/gateway reference number; UNIQUE per (vendor_profile_id, bank_transfer_reference) |
+| admin_payment_note | JSON | YES | Translatable EN/AR note from paying admin |
+
+**Indexes:** UNIQUE `withdrawals_vendor_transfer_ref_unique` on `(vendor_profile_id, bank_transfer_reference)`.
 
 ### `settlement_runs`
 

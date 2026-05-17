@@ -2,13 +2,14 @@
 
 declare(strict_types=1);
 
-use App\Modules\Booking\Domain\Enums\LifecycleStatus;
 use App\Modules\Booking\Domain\Enums\VendorSubStatus;
 use App\Modules\Booking\Domain\Models\Booking;
 use App\Modules\Booking\Domain\Models\BookingItem;
 use App\Modules\Booking\Domain\Models\BookingVendor;
+use App\Modules\Booking\Domain\States\BookingLifecycleStatus\CancelledState;
+use App\Modules\Booking\Domain\States\BookingLifecycleStatus\CustomerReviewState;
 use App\Modules\Catalog\Domain\Enums\ProductType;
-use App\Modules\Catalog\Domain\Enums\ServiceStatus;
+use App\Modules\Catalog\Domain\States\ServiceStatus\PublishedState;
 use App\Modules\Catalog\Domain\Models\Category;
 use App\Modules\Catalog\Domain\Models\Service;
 use App\Modules\Identity\Domain\Models\VendorProfile;
@@ -45,7 +46,7 @@ it('single vendor rejects → booking lifecycle_status becomes cancelled', funct
     )->assertOk();
 
     $booking->refresh();
-    expect($booking->lifecycle_status)->toBe(LifecycleStatus::Cancelled);
+    expect($booking->lifecycle_status)->toBeInstanceOf(CancelledState::class);
     expect($booking->cancelled_at)->not->toBeNull();
 })->group('booking', 'negotiation');
 
@@ -56,7 +57,7 @@ it('booking_state_transitions has row to cancelled after single vendor rejects',
         "/api/v1/vendor/booking-vendors/{$bv->public_id}/reject"
     );
 
-    expect(DB::table('booking_state_transitions')
+    expect(DB::table('state_transitions')
         ->where('transitionable_type', Booking::class)
         ->where('transitionable_id', $booking->id)
         ->where('to_state', 'cancelled')
@@ -101,7 +102,7 @@ it('multi-vendor: first rejects, second still pending → booking goes to custom
     $category = Category::factory()->create();
     $service2 = Service::factory()->create([
         'product_type' => ProductType::Sale,
-        'status' => ServiceStatus::Published,
+        'status' => PublishedState::class,
         'vendor_profile_id' => $vendor2->id,
         'category_id' => $category->id,
     ]);
@@ -148,7 +149,7 @@ it('multi-vendor: first rejects, second still pending → booking goes to custom
     )->assertOk();
 
     $booking->refresh();
-    expect($booking->lifecycle_status)->toBe(LifecycleStatus::CustomerReview);
+    expect($booking->lifecycle_status)->toBeInstanceOf(CustomerReviewState::class);
 })->group('booking', 'negotiation');
 
 it('returns 403 when wrong vendor tries to reject', function (): void {

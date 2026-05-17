@@ -6,11 +6,13 @@ namespace App\Modules\Settlement\Domain\Models;
 
 use App\Modules\Catalog\Domain\Enums\ProductType;
 use App\Modules\Settlement\Database\Factories\CommissionFactory;
-use App\Modules\Settlement\Domain\Enums\CommissionStatus;
+use App\Modules\Settlement\Domain\States\CommissionStatus\CommissionState;
 use App\Modules\Shared\Domain\Concerns\HasPublicId;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
+use Spatie\ModelStates\HasStates;
 
 /**
  * @property string $public_id
@@ -27,7 +29,7 @@ use Illuminate\Support\Carbon;
  * @property int $vendor_share_minor
  * @property string $vendor_share_currency
  * @property int $reversed_amount_minor
- * @property CommissionStatus $status
+ * @property CommissionState $status
  * @property Carbon|null $created_at
  */
 class Commission extends Model
@@ -36,6 +38,7 @@ class Commission extends Model
     use HasFactory;
 
     use HasPublicId;
+    use HasStates;
 
     // Append-only: only created_at, no updated_at (status field only may be updated)
     public $timestamps = false;
@@ -59,11 +62,14 @@ class Commission extends Model
         'vendor_share_minor',
         'vendor_share_currency',
         'reversed_amount_minor',
-        'status',
+        // Phase 4.9 — ledger links
+        'accrual_ledger_entry_id',
+        'reversal_ledger_entry_id',
+        'idempotency_key',
     ];
 
     protected $casts = [
-        'status' => CommissionStatus::class,
+        'status' => CommissionState::class,
         'product_type' => ProductType::class,
         'commission_bps' => 'integer',
         'gross_amount_minor' => 'integer',
@@ -80,5 +86,30 @@ class Commission extends Model
     protected static function newFactory(): CommissionFactory
     {
         return CommissionFactory::new();
+    }
+
+    public function accrualLedgerEntry(): BelongsTo
+    {
+        return $this->belongsTo(WalletLedgerEntry::class, 'accrual_ledger_entry_id');
+    }
+
+    public function reversalLedgerEntry(): BelongsTo
+    {
+        return $this->belongsTo(WalletLedgerEntry::class, 'reversal_ledger_entry_id');
+    }
+
+    public function bookingItem(): BelongsTo
+    {
+        return $this->belongsTo('App\Modules\Booking\Domain\Models\BookingItem');
+    }
+
+    public function payment(): BelongsTo
+    {
+        return $this->belongsTo('App\Modules\Payments\Domain\Models\Payment');
+    }
+
+    public function vendor(): BelongsTo
+    {
+        return $this->belongsTo('App\Modules\Identity\Domain\Models\VendorProfile', 'vendor_profile_id');
     }
 }

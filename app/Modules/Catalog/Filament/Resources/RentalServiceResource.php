@@ -7,6 +7,7 @@ namespace App\Modules\Catalog\Filament\Resources;
 use App\Modules\Catalog\Domain\Enums\ProductType;
 use App\Modules\Catalog\Domain\Enums\ServiceStatus;
 use App\Modules\Catalog\Domain\Models\Service;
+use App\Modules\Catalog\Domain\States\ServiceStatus\ServiceState;
 use App\Modules\Catalog\Filament\Actions\ApproveServiceAction;
 use App\Modules\Catalog\Filament\Actions\BulkApproveServicesAction;
 use App\Modules\Catalog\Filament\Actions\BulkArchiveServicesAction;
@@ -18,6 +19,7 @@ use App\Modules\Discovery\Filament\Actions\ReindexServicesAction;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
+use Filament\Forms\Components\Tabs;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
@@ -98,21 +100,44 @@ class RentalServiceResource extends Resource
     public static function form(Form $form): Form
     {
         return $form->schema([
-            Section::make(__('catalog.translatable_fields'))
-                ->schema([
-                    TextInput::make('name')
-                        ->required()
-                        ->maxLength(255)
-                        ->label(__('catalog.name')),
-                    Textarea::make('short_description')
-                        ->required()
-                        ->maxLength(1000)
-                        ->rows(3)
-                        ->label(__('catalog.short_description')),
-                    Textarea::make('long_description')
-                        ->maxLength(5000)
-                        ->rows(5)
-                        ->label(__('catalog.long_description')),
+            Tabs::make('Translatable Content')
+                ->tabs([
+                    Tabs\Tab::make('English')
+                        ->schema([
+                            TextInput::make('name')
+                                ->markAsRequired()
+                                ->rule('required')
+                                ->maxLength(255)
+                                ->label(__('catalog.name')),
+                            Textarea::make('short_description')
+                                ->markAsRequired()
+                                ->rule('required')
+                                ->maxLength(1000)
+                                ->rows(3)
+                                ->label(__('catalog.short_description')),
+                            Textarea::make('long_description')
+                                ->maxLength(5000)
+                                ->rows(5)
+                                ->label(__('catalog.long_description')),
+                        ]),
+                    Tabs\Tab::make('العربية')
+                        ->schema([
+                            TextInput::make('name')
+                                ->markAsRequired()
+                                ->rule('required')
+                                ->maxLength(255)
+                                ->label(__('catalog.name')),
+                            Textarea::make('short_description')
+                                ->markAsRequired()
+                                ->rule('required')
+                                ->maxLength(1000)
+                                ->rows(3)
+                                ->label(__('catalog.short_description')),
+                            Textarea::make('long_description')
+                                ->maxLength(5000)
+                                ->rows(5)
+                                ->label(__('catalog.long_description')),
+                        ]),
                 ])
                 ->columnSpanFull(),
 
@@ -122,20 +147,21 @@ class RentalServiceResource extends Resource
                         ->relationship('category', 'name->en')
                         ->searchable()
                         ->preload()
-                        ->required()
+                        ->markAsRequired()
+                        ->rule('required')
                         ->label(__('catalog.category')),
                     TextInput::make('base_price_minor')
                         ->label(__('catalog.base_price'))
                         ->helperText('In piastres â€” 10000 = 100.00 EGP')
                         ->numeric()
                         ->minValue(0)
-                        ->required(),
+                        ->markAsRequired()
+                        ->rule('required'),
                     Select::make('status')
                         ->options(ServiceStatus::class)
-                        ->default(ServiceStatus::Draft)
+                        ->default(ServiceStatus::Draft->value)
                         ->disabled()
                         ->dehydrated(false)
-                        ->required()
                         ->label(__('catalog.status_label')),
                     Toggle::make('is_featured')
                         ->label(__('catalog.is_featured')),
@@ -146,15 +172,14 @@ class RentalServiceResource extends Resource
                 ->relationship('rentalDetail')
                 ->schema([
                     Toggle::make('requires_electricity')
-                        ->required()
                         ->label(__('catalog.requires_electricity')),
                     Toggle::make('requires_outdoor_space')
-                        ->required()
                         ->label(__('catalog.requires_outdoor_space')),
                     TextInput::make('default_rental_duration_hours')
                         ->numeric()
                         ->minValue(1)
-                        ->required()
+                        ->markAsRequired()
+                        ->rule('required')
                         ->label(__('catalog.default_rental_duration_hours')),
                     TextInput::make('setup_time_minutes')
                         ->numeric()
@@ -213,8 +238,12 @@ class RentalServiceResource extends Resource
                     ->label(__('catalog.product_type')),
                 TextColumn::make('status')
                     ->badge()
-                    ->color(fn (ServiceStatus $state): string => $state->color())
-                    ->formatStateUsing(fn (ServiceStatus $state): string => $state->label())
+                    ->color(fn (mixed $state): string => $state instanceof ServiceState
+                        ? (ServiceStatus::tryFrom($state->getValue())?->color() ?? 'gray')
+                        : 'gray')
+                    ->formatStateUsing(fn (mixed $state): string => $state instanceof ServiceState
+                        ? (ServiceStatus::tryFrom($state->getValue())?->label() ?? $state->getValue())
+                        : (string) $state)
                     ->label(__('catalog.status_label')),
                 TextColumn::make('base_price_minor')
                     ->money('EGP', divideBy: 100)

@@ -9,6 +9,7 @@ use App\Modules\Discovery\Filament\Resources\WishlistResource\Pages;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class WishlistResource extends Resource
 {
@@ -53,6 +54,11 @@ class WishlistResource extends Resource
         return false;
     }
 
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()->with(['user']);
+    }
+
     public static function table(Table $table): Table
     {
         return $table
@@ -61,9 +67,9 @@ class WishlistResource extends Resource
                     ->label(__('discovery.columns.public_id'))
                     ->copyable()
                     ->searchable(),
-                Tables\Columns\TextColumn::make('user_id')
+                Tables\Columns\TextColumn::make('user.name')
                     ->label(__('discovery.columns.user_id'))
-                    ->sortable(),
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('name')
                     ->label(__('discovery.columns.name'))
                     ->searchable(),

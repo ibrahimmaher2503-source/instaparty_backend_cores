@@ -18,7 +18,7 @@ return new class extends Migration
             $table->char('public_id', 26)->unique();
             $table->foreignId('booking_id')->constrained('bookings')->restrictOnDelete();
             $table->foreignId('admin_id')->constrained('users')->restrictOnDelete();
-            $table->enum('intervention_type', ['force_cancel', 'vendor_timeout', 'vendor_proposal', 'admin_note'])->notNullable();
+            $table->enum('intervention_type', ['force_cancel', 'vendor_timeout', 'vendor_proposal', 'admin_note', 'vendor_reminder', 'chat_frozen', 'chat_resumed', 'customer_review_reminder'])->notNullable();
             $table->text('reason');
             $table->json('before_state');
             $table->json('after_state');

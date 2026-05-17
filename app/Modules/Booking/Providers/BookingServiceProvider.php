@@ -5,6 +5,14 @@ declare(strict_types=1);
 namespace App\Modules\Booking\Providers;
 
 use App\Modules\Booking\Application\Listeners\ConfirmInventoryReservationsListener;
+use App\Modules\Booking\Application\Listeners\OnAdminSuggestedAlternativeVendorsNotifyCustomer;
+use App\Modules\Booking\Application\Listeners\OnBookingChatFrozenNotifyParties;
+use App\Modules\Booking\Application\Listeners\OnBookingChatFrozenPushFirestore;
+use App\Modules\Booking\Application\Listeners\OnBookingChatResumedNotifyParties;
+use App\Modules\Booking\Application\Listeners\OnBookingChatResumedPushFirestore;
+use App\Modules\Booking\Application\Listeners\OnBookingVendorTimedOutNotifyCustomer;
+use App\Modules\Booking\Application\Listeners\OnBookingVendorTimedOutNotifyVendor;
+use App\Modules\Booking\Application\Listeners\OnCustomerReviewReminderSentNotifyCustomer;
 use App\Modules\Booking\Application\Listeners\RecalculateBookingTotalsListener;
 use App\Modules\Booking\Application\Listeners\ReleaseInventoryOnCancellationListener;
 use App\Modules\Booking\Application\Listeners\WriteBookingStateTransitionListener;
@@ -14,17 +22,26 @@ use App\Modules\Booking\Console\Commands\ExpireVendorProposalsCommand;
 use App\Modules\Booking\Console\Commands\ReleaseExpiredReservationsCommand;
 use App\Modules\Booking\Domain\Contracts\BookingHistoryReader;
 use App\Modules\Booking\Domain\Contracts\BookingRepository;
+use App\Modules\Booking\Domain\Events\AdminSuggestedAlternativeVendors;
 use App\Modules\Booking\Domain\Events\BookingCancelled;
+use App\Modules\Booking\Domain\Events\BookingChatFrozen;
+use App\Modules\Booking\Domain\Events\BookingChatResumed;
 use App\Modules\Booking\Domain\Events\BookingConfirmed;
 use App\Modules\Booking\Domain\Events\BookingDraftCreated;
 use App\Modules\Booking\Domain\Events\BookingForceCancelled;
 use App\Modules\Booking\Domain\Events\BookingItemAdded;
 use App\Modules\Booking\Domain\Events\BookingItemRemoved;
 use App\Modules\Booking\Domain\Events\BookingSubmittedToVendor;
+use App\Modules\Booking\Domain\Events\BookingVendorTimedOut;
 use App\Modules\Booking\Domain\Events\CustomerModificationDecided;
+use App\Modules\Booking\Domain\Events\CustomerReviewReminderSent;
 use App\Modules\Booking\Domain\Events\VendorAccepted;
 use App\Modules\Booking\Domain\Events\VendorModificationProposed;
 use App\Modules\Booking\Domain\Events\VendorRejected;
+use App\Modules\Booking\Domain\Models\Booking;
+use App\Modules\Booking\Domain\Models\BookingAdminIntervention;
+use App\Modules\Booking\Domain\Policies\BookingAdminInterventionPolicy;
+use App\Modules\Booking\Domain\Policies\BookingPolicy;
 use App\Modules\Booking\Infrastructure\Loyalty\EloquentBookingDiscountWriter;
 use App\Modules\Booking\Infrastructure\Loyalty\EloquentBookingDraftReader;
 use App\Modules\Booking\Infrastructure\Loyalty\EloquentBookingItemNetAmountReader;
@@ -43,6 +60,7 @@ use App\Modules\Reviews\Domain\Contracts\BookingVendorReviewabilityReader;
 use App\Modules\Settlement\Domain\Contracts\SettlementBookingReader;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 
 class BookingServiceProvider extends ServiceProvider
@@ -70,6 +88,9 @@ class BookingServiceProvider extends ServiceProvider
         $this->loadRoutesFrom(__DIR__.'/../Routes/vendor.php');
         $this->loadRoutesFrom(__DIR__.'/../Routes/admin.php');
 
+        Gate::policy(Booking::class, BookingPolicy::class);
+        Gate::policy(BookingAdminIntervention::class, BookingAdminInterventionPolicy::class);
+
         $this->commands([
             ReleaseExpiredReservationsCommand::class,
             ExpireVendorProposalsCommand::class,
@@ -95,6 +116,16 @@ class BookingServiceProvider extends ServiceProvider
         // Admin override events
         Event::listen(BookingForceCancelled::class, ReleaseInventoryOnCancellationListener::class);
         Event::listen(BookingForceCancelled::class, WriteNegotiationSnapshotListener::class);
+        Event::listen(BookingVendorTimedOut::class, OnBookingVendorTimedOutNotifyVendor::class);
+        Event::listen(BookingVendorTimedOut::class, OnBookingVendorTimedOutNotifyCustomer::class);
+
+        // Admin intervention events
+        Event::listen(AdminSuggestedAlternativeVendors::class, OnAdminSuggestedAlternativeVendorsNotifyCustomer::class);
+        Event::listen(CustomerReviewReminderSent::class, OnCustomerReviewReminderSentNotifyCustomer::class);
+        Event::listen(BookingChatFrozen::class, OnBookingChatFrozenPushFirestore::class);
+        Event::listen(BookingChatFrozen::class, OnBookingChatFrozenNotifyParties::class);
+        Event::listen(BookingChatResumed::class, OnBookingChatResumedPushFirestore::class);
+        Event::listen(BookingChatResumed::class, OnBookingChatResumedNotifyParties::class);
 
         // Scheduler for proposal expiry
         if ($this->app->runningInConsole()) {

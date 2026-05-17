@@ -266,4 +266,7 @@ return [
         'availability_title'  => 'Availability Blocks',
         'cannot_edit_published' => 'Material edits will send this service back to moderation.',
     ],
+    'category_has_children'        => 'Cannot delete a category that has subcategories. Move or delete the children first.',
+    'reorder_unknown_categories'   => 'One or more categories in the supplied order list do not exist.',
+    'reorder_parent_mismatch'      => 'All categories in a single reorder operation must share the same parent.',
 ];

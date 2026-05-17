@@ -7,6 +7,9 @@ namespace App\Modules\Communication\Providers;
 use App\Modules\Booking\Domain\Contracts\BookingHistoryReader;
 use App\Modules\Booking\Infrastructure\Repositories\EloquentBookingHistoryReader;
 use App\Modules\Communication\Application\Actions\DispatchNotificationAction;
+use App\Modules\Communication\Application\Listeners\DispatchChatThreadFrozenNotificationsListener;
+use App\Modules\Communication\Application\Listeners\DispatchChatThreadUnfrozenNotificationsListener;
+use App\Modules\Communication\Application\Listeners\DispatchChatFlagEscalatedNotificationsListener;
 use App\Modules\Communication\Application\Listeners\DispatchServiceChangesRequestedNotificationListener;
 use App\Modules\Communication\Application\Listeners\DispatchServiceResubmittedNotificationListener;
 use App\Modules\Communication\Application\Listeners\DispatchVendorChangesRequestedNotificationListener;
@@ -17,6 +20,15 @@ use App\Modules\Communication\Application\Listeners\OnBookingModified;
 use App\Modules\Communication\Application\Listeners\OnBookingStalledInbox;
 use App\Modules\Communication\Application\Listeners\OnBookingSubmitted;
 use App\Modules\Communication\Application\Listeners\OnChatFlaggedInbox;
+use App\Modules\Communication\Application\Listeners\WriteChatModerationAuditListener;
+use App\Modules\Communication\Domain\Events\ChatFlagEscalatedToInbox;
+use App\Modules\Communication\Domain\Events\ChatMessageFlagged;
+use App\Modules\Communication\Domain\Events\ChatModerationFlagResolved;
+use App\Modules\Communication\Domain\Events\ChatThreadFrozen;
+use App\Modules\Communication\Domain\Events\ChatThreadUnfrozen;
+use App\Modules\Communication\Domain\Events\OffPlatformContactMarked;
+use App\Modules\Communication\Domain\Models\ChatMessageLog;
+use App\Modules\Communication\Domain\Models\ChatModerationFlag;
 use App\Modules\Communication\Application\Listeners\OnPaymentCaptured;
 use App\Modules\Communication\Application\Listeners\OnPaymentFailedInbox;
 use App\Modules\Communication\Application\Listeners\OnServiceSubmittedForReviewInbox;
@@ -24,9 +36,13 @@ use App\Modules\Communication\Application\Listeners\OnVendorRegisteredInbox;
 use App\Modules\Communication\Application\Listeners\OnWithdrawalRequestedInbox;
 use App\Modules\Communication\Application\Services\SegmentResolver;
 use App\Modules\Communication\Console\WakeupSnoozedInboxItemsCommand;
+use App\Modules\Communication\Domain\Contracts\AdminInboxWriter;
+use App\Modules\Communication\Domain\Contracts\FirestoreChatGateway;
 use App\Modules\Communication\Domain\Contracts\NotificationDispatcher;
 use App\Modules\Communication\Domain\Enums\NotificationChannel;
+use App\Modules\Communication\Infrastructure\Repositories\EloquentAdminInboxWriter;
 use App\Modules\Communication\Infrastructure\Gateways\FcmPushAdapter;
+use App\Modules\Communication\Infrastructure\Gateways\FirestoreChatGatewayStub;
 use App\Modules\Communication\Infrastructure\Gateways\MailchimpEmailAdapter;
 use App\Modules\Communication\Infrastructure\Gateways\VonageSmsAdapter;
 use App\Modules\Communication\Infrastructure\Gateways\WhatsAppStubAdapter;
@@ -37,11 +53,14 @@ use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
+use Livewire\Livewire;
 
 class CommunicationServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
+        $this->app->bind(AdminInboxWriter::class, EloquentAdminInboxWriter::class);
+        $this->app->bind(FirestoreChatGateway::class, FirestoreChatGatewayStub::class);
         $this->app->bind(NotificationDispatcher::class, DispatchNotificationAction::class);
         $this->app->singleton(BookingHistoryReader::class, EloquentBookingHistoryReader::class);
         $this->app->singleton(SegmentResolver::class);
@@ -58,9 +77,25 @@ class CommunicationServiceProvider extends ServiceProvider
         $this->loadTranslationsFrom(__DIR__.'/../Resources/lang', 'communication');
         $this->commands([WakeupSnoozedInboxItemsCommand::class]);
 
+        Livewire::component(
+            'communication.vendor.restricted-chat-panel',
+            \App\Modules\Communication\Filament\Vendor\Components\RestrictedChatPanel::class,
+        );
+
         $this->registerRoutes();
         $this->registerListeners();
         $this->registerSchedule();
+        $this->registerRouteModelBindings();
+    }
+
+    private function registerRouteModelBindings(): void
+    {
+        Route::bind('chatMessageLog', fn (string $value) => ChatMessageLog::query()->where('id', $value)->firstOrFail());
+        Route::bind('chatModerationFlag', fn (string $value) => ChatModerationFlag::query()->where('id', $value)->firstOrFail());
+
+        // Admin chat moderation routes use shorter param names matching controller signatures.
+        Route::bind('log', fn (string $value) => ChatMessageLog::query()->where('id', $value)->firstOrFail());
+        Route::bind('flag', fn (string $value) => ChatModerationFlag::query()->where('id', $value)->firstOrFail());
     }
 
     private function registerRoutes(): void
@@ -102,6 +137,19 @@ class CommunicationServiceProvider extends ServiceProvider
         Event::listen('App\Modules\Booking\Domain\Events\BookingStalled', OnBookingStalledInbox::class);
         Event::listen('App\Modules\Communication\Domain\Events\ChatFlagged', OnChatFlaggedInbox::class);
         Event::listen('App\Modules\Catalog\Domain\Events\ServiceSubmittedForReview', OnServiceSubmittedForReviewInbox::class);
+
+        // Chat moderation audit listener — writes one audit_logs row per event.
+        Event::listen(ChatThreadFrozen::class, WriteChatModerationAuditListener::class);
+        Event::listen(ChatThreadUnfrozen::class, WriteChatModerationAuditListener::class);
+        Event::listen(ChatMessageFlagged::class, WriteChatModerationAuditListener::class);
+        Event::listen(ChatModerationFlagResolved::class, WriteChatModerationAuditListener::class);
+        Event::listen(OffPlatformContactMarked::class, WriteChatModerationAuditListener::class);
+        Event::listen(ChatFlagEscalatedToInbox::class, WriteChatModerationAuditListener::class);
+
+        // Chat moderation notification listeners — bilingual push + email per audience.
+        Event::listen(ChatThreadFrozen::class, DispatchChatThreadFrozenNotificationsListener::class);
+        Event::listen(ChatThreadUnfrozen::class, DispatchChatThreadUnfrozenNotificationsListener::class);
+        Event::listen(ChatFlagEscalatedToInbox::class, DispatchChatFlagEscalatedNotificationsListener::class);
     }
 
     private function registerSchedule(): void

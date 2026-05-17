@@ -130,8 +130,8 @@ class ViewCustomer extends ViewRecord
                 '%s | %s | %s / %s / %s | %s EGP',
                 $b->created_at?->format('Y-m-d'),
                 $b->public_id,
-                $b->lifecycle_status->value,
-                $b->payment_status->value,
+                $b->lifecycle_status->getValue(),
+                $b->payment_status->getValue(),
                 $b->fulfillment_status->value,
                 number_format($b->total_minor / 100, 2),
             );

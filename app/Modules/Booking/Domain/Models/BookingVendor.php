@@ -86,4 +86,10 @@ class BookingVendor extends Model
     {
         return $this->hasMany(BookingItem::class);
     }
+
+    /** @return HasMany<BookingModification, $this> */
+    public function modifications(): HasMany
+    {
+        return $this->hasMany(BookingModification::class);
+    }
 }

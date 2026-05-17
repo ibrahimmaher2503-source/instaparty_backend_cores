@@ -1244,7 +1244,7 @@ To ensure both Filament and API stay in sync, build EVERY feature in this order:
 7. **API Controller method** (calls same Action — even if API endpoint not consumed yet in Phase 1, the contract is locked)
 8. **Pest tests** (cover Action + Policy + Filament + API)
 
-**Why step 7 is mandatory even in Phase 1:**
+**Why step 7 is mandatory even in Phase 1:**ok 
 
 Building the API endpoint now (even if only Filament uses the Action today) means:
 - Phase 2 Flutter starts with all endpoints already built and tested

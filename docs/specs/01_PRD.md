@@ -161,6 +161,47 @@ This PRD is the implementation baseline for the development team. It consolidate
 - **FR-29:** Admin must be able to review and approve withdrawal requests
 - **FR-30:** Settlement logic must support commission deduction and booking-related financial tracking for Phase 1 baseline operations
 
+### 7.8 Financial Integrity & Reconciliation (Phase 4.9 — ADR-0028)
+
+- **FR-EXT-101:** Wallet balances must be derived exclusively from an append-only double-entry ledger; no code path may mutate balance columns directly.
+- **FR-EXT-102:** Every debit entry must have a matching credit entry within the same transaction group; the database must enforce this constraint independently of application code.
+- **FR-EXT-103:** The same idempotency key submitted twice must return the same outcome without creating duplicate ledger entries.
+- **FR-EXT-104:** Idempotency must apply at both HTTP endpoint boundaries and internal money-mutating Action boundaries.
+- **FR-EXT-105:** Concurrent requests to overdraw a wallet must result in exactly one success and all others failing with an insufficient-balance error.
+- **FR-EXT-106:** A payment webhook delivered N times must produce exactly one capture transaction regardless of concurrency.
+- **FR-EXT-107:** Partial refunds must not exceed the captured total; the system must reject any refund attempt that would exceed the available refundable amount.
+- **FR-EXT-108:** Every ledger entry must carry a correlation ID (identifying the originating HTTP request or webhook) and an optional causation ID (identifying the triggering domain event).
+- **FR-EXT-109:** The system must provide a reconciliation command that detects drift between the ledger and the wallet projection cache and auto-repairs warning-severity findings.
+- **FR-EXT-110:** Reconciliation must run automatically on a schedule (hourly for recent activity, daily for full scan) and notify admin users on high-severity findings.
+- **FR-EXT-111:** Admin must be able to trigger a manual reconciliation run and inspect its findings via API and Filament admin UI.
+- **FR-EXT-112:** The system must produce daily financial snapshots per wallet to accelerate balance reconstruction without a full ledger scan.
+- **FR-EXT-113:** A settlement batch run interrupted by a crash must be resumable without double-posting any ledger entries.
+- **FR-EXT-114:** Admin must be able to navigate from any wallet ledger entry to its originating HTTP request within three clicks in the Filament admin UI.
+- **FR-EXT-115:** Append-only behaviour of the ledger must be enforced at the database level via triggers that reject UPDATE and DELETE on ledger tables.
+- **FR-EXT-116:** An architecture test in CI must fail if any code outside the designated projection layer directly mutates wallet balance columns.
+- **FR-EXT-117:** Commission accrual and reversal must be linked to specific ledger entries via foreign keys, making commission accounting fully auditable.
+- **FR-EXT-118:** Withdrawal reserve, settle, and reject operations must each post corresponding double-entry ledger groups and link to the withdrawal row via foreign keys.
+- **FR-EXT-119:** All ledger operations must be wrapped in both a Redis distributed lock and a database row-level lock to prevent concurrent mutations.
+- **FR-EXT-120:** The platform must maintain a closed set of platform suspense accounts for in-transit, clearing, commission, refund-payable, and withdrawal-payable balances.
+- **FR-EXT-121:** Refund commission reversals must be proportional to the refunded amount using the commission rate snapshotted at booking time.
+- **FR-EXT-122:** A `ledger:backfill` command must migrate existing ledger rows to the new schema without data loss, with progress reporting and idempotent re-run.
+- **FR-EXT-123:** A `ledger:diff` command must compare every wallet's projection cache against its ledger-computed balance and exit with a non-zero code if any drift is found.
+- **FR-EXT-124:** Reconciliation findings must be classified by severity (info / warning / high) and type (cache drift, orphaned refund, unbalanced group, etc.).
+- **FR-EXT-125:** High-severity findings must trigger admin notifications via the existing notification dispatch infrastructure.
+- **FR-EXT-126:** A `ledger:inventory` command must scan all application code and report any direct balance-mutation calls outside the approved projection layer.
+- **FR-EXT-127:** The admin reconciliation trigger endpoint must require an Idempotency-Key header; duplicate triggers with the same scope must return the in-progress run's identifier rather than starting a second run.
+- **FR-EXT-128:** All reconciliation admin endpoints must support both EN and AR response locales.
+- **FR-EXT-129:** The financial ledger hardening rollout must use a three-stage approach (shadow writes → cut-over → cleanup) with a feature flag controlling the active stage.
+- **FR-EXT-130:** The system must include a comprehensive Pest test suite covering concurrent withdrawals, duplicate webhooks, partial refunds, commission reversals, settlement crash recovery, and all three product types where cross-type behaviour is asserted.
+
+### 7.9 Withdrawal Proof & Finance Audit (Phase 4.11 — ADR-0032)
+
+- **FR-EXT-205:** Approval of a withdrawal request must be recorded with a dedicated timestamp and admin identity, separate from the payment confirmation step. A `MarkPaid` operation on a withdrawal that has not yet been explicitly approved must be rejected by the system.
+- **FR-EXT-206:** Paying out a withdrawal must require both a non-empty bank transfer reference and a proof file (PDF/JPEG/PNG) before any DB or ledger write occurs. Either missing input must cause the operation to fail without mutating ledger or status.
+- **FR-EXT-207:** The bank transfer reference must be unique per vendor profile to prevent duplicate payment records. The database must enforce this constraint via a UNIQUE index on `(vendor_profile_id, bank_transfer_reference)`, and the application must reject duplicates at the request-validation layer with a clear error message.
+- **FR-EXT-208:** Vendors must be able to see the full status timeline (requested, approved, paid timestamps), bank transfer reference, admin payment note (in their locale), and a time-limited download URL for the proof file on their own withdrawals. These fields must be surfaced through the existing vendor withdrawal endpoints.
+- **FR-EXT-209:** A different vendor attempting to access another vendor's withdrawal details must receive a 404 response (not 403), to avoid revealing the existence of the withdrawal's public ID.
+
 ## 8. Business Rules
 
 - **BR-1:** Occasion type is mandatory before meaningful service discovery can proceed

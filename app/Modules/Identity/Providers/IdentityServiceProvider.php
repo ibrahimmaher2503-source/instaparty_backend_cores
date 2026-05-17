@@ -34,6 +34,7 @@ class IdentityServiceProvider extends ServiceProvider
     {
         $this->loadMigrationsFrom(__DIR__.'/../Database/Migrations');
         $this->loadTranslationsFrom(__DIR__.'/../Resources/lang', 'identity');
+        $this->loadViewsFrom(__DIR__.'/../Resources/views', 'identity');
 
         $this->commands([
             CheckDocumentExpiryCommand::class,

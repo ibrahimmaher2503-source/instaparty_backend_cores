@@ -4,67 +4,89 @@ declare(strict_types=1);
 
 namespace App\Modules\Settlement\Application\Actions;
 
+use App\Modules\Settlement\Application\DTOs\LedgerEntryInput;
+use App\Modules\Settlement\Application\DTOs\LedgerTransactionResult;
+use App\Modules\Settlement\Application\DTOs\PostLedgerTransactionInput;
+use App\Modules\Settlement\Domain\Contracts\LedgerWriter;
+use App\Modules\Settlement\Domain\Enums\LedgerDirection;
 use App\Modules\Settlement\Domain\Enums\LedgerEntryType;
+use App\Modules\Settlement\Domain\Enums\SuspenseAccount;
+use App\Modules\Settlement\Domain\Enums\TransactionKind;
 use App\Modules\Settlement\Domain\Events\WalletCredited;
-use App\Modules\Settlement\Domain\Models\WalletLedgerEntry;
-use App\Modules\Settlement\Infrastructure\Repositories\EloquentWalletRepository;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class CreditWalletAction
 {
     public function __construct(
-        private EloquentWalletRepository $walletRepo,
+        private readonly LedgerWriter $ledgerWriter,
     ) {}
 
-    /**
-     * @param  array<string, mixed>|null  $descriptionParams
-     */
     public function execute(
-        string $ownerType,
-        int $ownerId,
+        int $walletId,
         int $amountMinor,
         string $currency,
-        LedgerEntryType $entryType,
+        string $idempotencyKey,
+        string $correlationId,
+        ?string $causationId = null,
+        LedgerEntryType $entryType = LedgerEntryType::ManualAdjustment,
         ?string $relatedEntityType = null,
         ?int $relatedEntityId = null,
-        ?string $descriptionKey = null,
-        ?array $descriptionParams = null,
-    ): WalletLedgerEntry {
-        return DB::transaction(function () use (
-            $ownerType,
-            $ownerId,
-            $amountMinor,
-            $currency,
-            $entryType,
-            $relatedEntityType,
-            $relatedEntityId,
-            $descriptionKey,
-            $descriptionParams,
-        ) {
-            $wallet = $this->walletRepo->firstOrCreate($ownerType, $ownerId, $currency);
+        ?string $walletOwnerType = null,
+        ?int $walletOwnerId = null,
+    ): LedgerTransactionResult {
+        // Resolve the wallet owner from the wallet id if not provided
+        if ($walletOwnerType === null || $walletOwnerId === null) {
+            $row = DB::table('wallets')->where('id', $walletId)->first(['owner_type', 'owner_id']);
+            $walletOwnerType = $row->owner_type;
+            $walletOwnerId   = (int) $row->owner_id;
+        }
 
-            /** @var WalletLedgerEntry $entry */
-            $entry = WalletLedgerEntry::create([
-                'wallet_id' => $wallet->id,
-                'entry_type' => $entryType,
-                'amount_minor' => $amountMinor, // positive for credits
-                'currency' => $currency,
-                'description_key' => $descriptionKey,
-                'description_params' => $descriptionParams,
-                'related_entity_type' => $relatedEntityType,
-                'related_entity_id' => $relatedEntityId,
-            ]);
+        $result = $this->ledgerWriter->post(new PostLedgerTransactionInput(
+            kind: TransactionKind::ManualAdjustment,
+            currency: $currency,
+            idempotencyKey: $idempotencyKey,
+            correlationId: $correlationId,
+            causationId: $causationId ?? (string) Str::ulid(),
+            initiatorType: 'system',
+            initiatedByUserId: null,
+            entries: [
+                new LedgerEntryInput(
+                    walletOwnerType: $walletOwnerType,
+                    walletOwnerId: $walletOwnerId,
+                    direction: LedgerDirection::Credit,
+                    amountMinor: $amountMinor,
+                    entryType: $entryType,
+                    counterAccountType: 'platform_account',
+                    counterAccountId: SuspenseAccount::PlatformAdjustments->value,
+                    descriptionKey: 'settlement.credit',
+                    relatedEntityType: $relatedEntityType,
+                    relatedEntityId: $relatedEntityId,
+                ),
+                new LedgerEntryInput(
+                    walletOwnerType: 'platform_account',
+                    walletOwnerId: SuspenseAccount::PlatformAdjustments->value,
+                    direction: LedgerDirection::Debit,
+                    amountMinor: $amountMinor,
+                    entryType: $entryType,
+                    counterAccountType: $walletOwnerType,
+                    counterAccountId: $walletOwnerId,
+                    descriptionKey: 'settlement.platform_debit',
+                ),
+            ],
+            descriptionKey: 'settlement.credit_wallet',
+            metadata: [],
+        ));
 
-            $this->walletRepo->incrementBalance($wallet->id, $amountMinor);
-
+        if (! $result->wasIdempotentReplay) {
             DB::afterCommit(fn () => event(new WalletCredited(
-                walletId: $wallet->id,
+                walletId: $walletId,
                 amountMinor: $amountMinor,
                 currency: $currency,
                 entryType: $entryType,
             )));
+        }
 
-            return $entry;
-        });
+        return $result;
     }
 }

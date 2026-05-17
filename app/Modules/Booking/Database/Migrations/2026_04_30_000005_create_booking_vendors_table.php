@@ -20,7 +20,7 @@ return new class extends Migration
             $table->foreignId('vendor_profile_id')->constrained('vendor_profiles')->restrictOnDelete();
 
             $table->enum('sub_status', [
-                'pending', 'accepted', 'modified', 'rejected', 'cancelled', 'in_progress', 'completed',
+                'pending', 'accepted', 'modified', 'rejected', 'cancelled', 'in_progress', 'completed', 'timed_out',
             ])->default('pending');
 
             $table->dateTime('response_deadline')->nullable();

@@ -11,6 +11,7 @@ use App\Modules\Communication\Filament\Resources\NotificationPreferenceResource\
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class NotificationPreferenceResource extends Resource
 {
@@ -55,13 +56,18 @@ class NotificationPreferenceResource extends Resource
         return false;
     }
 
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()->with(['user']);
+    }
+
     public static function table(Table $table): Table
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('user_id')
+                Tables\Columns\TextColumn::make('user.name')
                     ->label(__('communication.columns.user_id'))
-                    ->sortable(),
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('channel')
                     ->label(__('communication.columns.channel'))
                     ->badge()
@@ -80,7 +86,7 @@ class NotificationPreferenceResource extends Resource
                 Tables\Columns\TextColumn::make('timezone')
                     ->label(__('communication.columns.timezone')),
             ])
-            ->defaultSort('user_id');
+            ->defaultSort('created_at', 'desc');
     }
 
     public static function getPages(): array

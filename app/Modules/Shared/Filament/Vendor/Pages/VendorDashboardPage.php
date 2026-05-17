@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Modules\Shared\Filament\Vendor\Pages;
 
+use App\Modules\Identity\Filament\Vendor\Widgets\VendorOnboardingChecklistWidget;
 use App\Modules\Shared\Filament\Vendor\Widgets\VendorStatsOverviewWidget;
 use Filament\Pages\Dashboard;
 use Illuminate\Contracts\Support\Htmlable;
@@ -22,6 +23,18 @@ class VendorDashboardPage extends Dashboard
     public static function getNavigationLabel(): string
     {
         return __('vendor-portal.dashboard.title');
+    }
+
+    public function getHeaderWidgets(): array
+    {
+        return [
+            VendorOnboardingChecklistWidget::class,
+        ];
+    }
+
+    public function getHeaderWidgetsColumns(): int|string|array
+    {
+        return 1;
     }
 
     public function getWidgets(): array

@@ -72,17 +72,32 @@ class AdminPanelProvider extends PanelProvider
             ->discoverResources(in: app_path('Modules/Settlement/Filament/Admin/Resources'), for: 'App\\Modules\\Settlement\\Filament\\Admin\\Resources')
             ->discoverResources(in: app_path('Modules/Subscriptions/Filament/Admin/Resources'), for: 'App\\Modules\\Subscriptions\\Filament\\Admin\\Resources')
             ->discoverResources(in: app_path('Modules/Shared/Filament/Admin/Resources'), for: 'App\\Modules\\Shared\\Filament\\Admin\\Resources')
+            ->discoverResources(in: app_path('Modules/Tax/Filament/Resources'), for: 'App\\Modules\\Tax\\Filament\\Resources')
+            ->discoverResources(in: app_path('Modules/Advertising/Filament/Resources'), for: 'App\\Modules\\Advertising\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->discoverPages(in: app_path('Modules/Catalog/Filament/Pages'), for: 'App\\Modules\\Catalog\\Filament\\Pages')
             ->discoverPages(in: app_path('Modules/Payments/Filament/Pages'), for: 'App\\Modules\\Payments\\Filament\\Pages')
             ->discoverPages(in: app_path('Modules/Reviews/Filament/Pages'), for: 'App\\Modules\\Reviews\\Filament\\Pages')
             ->discoverPages(in: app_path('Modules/Shared/Filament/Pages'), for: 'App\\Modules\\Shared\\Filament\\Pages')
+            ->discoverPages(in: app_path('Modules/Reporting/Filament/Pages'), for: 'App\\Modules\\Reporting\\Filament\\Pages')
+            ->discoverPages(in: app_path('Modules/Tax/Filament/Pages'), for: 'App\\Modules\\Tax\\Filament\\Pages')
+            ->discoverPages(in: app_path('Modules/Advertising/Filament/Pages'), for: 'App\\Modules\\Advertising\\Filament\\Pages')
+            ->discoverPages(in: app_path('Modules/Settlement/Filament/Pages'), for: 'App\\Modules\\Settlement\\Filament\\Pages')
+            ->discoverPages(in: app_path('Modules/Subscriptions/Filament/Pages'), for: 'App\\Modules\\Subscriptions\\Filament\\Pages')
             ->pages([
                 Pages\Dashboard::class,
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->discoverWidgets(in: app_path('Modules/Booking/Filament/Widgets'), for: 'App\\Modules\\Booking\\Filament\\Widgets')
             ->discoverWidgets(in: app_path('Modules/Subscriptions/Filament/Widgets'), for: 'App\\Modules\\Subscriptions\\Filament\\Widgets')
+            ->discoverWidgets(in: app_path('Modules/Shared/Filament/Widgets'), for: 'App\\Modules\\Shared\\Filament\\Widgets')
+            ->discoverWidgets(in: app_path('Modules/Reporting/Filament/Widgets'), for: 'App\\Modules\\Reporting\\Filament\\Widgets')
+            ->discoverWidgets(in: app_path('Modules/Advertising/Filament/Widgets'), for: 'App\\Modules\\Advertising\\Filament\\Widgets')
+            ->discoverWidgets(in: app_path('Modules/Settlement/Filament/Widgets'), for: 'App\\Modules\\Settlement\\Filament\\Widgets')
+            ->discoverWidgets(in: app_path('Modules/Identity/Filament/Widgets'), for: 'App\\Modules\\Identity\\Filament\\Widgets')
+            ->discoverWidgets(in: app_path('Modules/Catalog/Filament/Widgets'), for: 'App\\Modules\\Catalog\\Filament\\Widgets')
+            ->discoverWidgets(in: app_path('Modules/Payments/Filament/Widgets'), for: 'App\\Modules\\Payments\\Filament\\Widgets')
+            ->discoverWidgets(in: app_path('Modules/Communication/Filament/Widgets'), for: 'App\\Modules\\Communication\\Filament\\Widgets')
             ->widgets([
                 Widgets\AccountWidget::class,
                 Widgets\FilamentInfoWidget::class,
@@ -106,8 +121,14 @@ class AdminPanelProvider extends PanelProvider
                     ->label(fn (): string => __('admin.nav.groups.payments')),
                 NavigationGroup::make(__('admin.nav.groups.settlement'))
                     ->label(fn (): string => __('admin.nav.groups.settlement')),
-                NavigationGroup::make('subscriptions')
-                    ->label(fn (): string => __('subscription.nav_group')),
+                NavigationGroup::make(__('admin.nav.groups.subscriptions'))
+                    ->label(fn (): string => __('admin.nav.groups.subscriptions')),
+                NavigationGroup::make(__('admin.nav.groups.inbox'))
+                    ->label(fn (): string => __('admin.nav.groups.inbox')),
+                NavigationGroup::make(__('admin.nav.groups.tax'))
+                    ->label(fn (): string => __('admin.nav.groups.tax')),
+                NavigationGroup::make(__('admin.nav.groups.advertising'))
+                    ->label(fn (): string => __('admin.nav.groups.advertising')),
                 NavigationGroup::make(__('admin.nav.groups.loyalty'))
                     ->label(fn (): string => __('admin.nav.groups.loyalty')),
                 NavigationGroup::make(__('admin.nav.groups.discovery'))

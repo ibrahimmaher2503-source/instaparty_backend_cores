@@ -52,6 +52,7 @@ class PaymobGateway implements PaymentGateway
             failureCode: $success ? null : 'declined_by_issuer',
             capturedAmount: Money::ofMinor($amountCents, 'EGP'),
             rawPayload: RedactPciFields::redact($payload),
+            transactionType: strtoupper((string) ($obj['transaction_type'] ?? 'PURCHASE')),
         );
     }
 

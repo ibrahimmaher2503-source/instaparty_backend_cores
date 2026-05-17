@@ -6,7 +6,9 @@ namespace App\Modules\Catalog\Domain\Models;
 
 use App\Modules\Catalog\Database\Factories\ServiceFactory;
 use App\Modules\Catalog\Domain\Enums\ProductType;
-use App\Modules\Catalog\Domain\Enums\ServiceStatus;
+use App\Modules\Catalog\Domain\States\ServiceStatus\PendingReviewState;
+use App\Modules\Catalog\Domain\States\ServiceStatus\PublishedState;
+use App\Modules\Catalog\Domain\States\ServiceStatus\ServiceState;
 use App\Modules\Identity\Domain\Models\User;
 use App\Modules\Identity\Domain\Models\VendorProfile;
 use App\Modules\Shared\Domain\Casts\MoneyCast;
@@ -14,22 +16,26 @@ use App\Modules\Shared\Domain\Concerns\HasPublicId;
 use App\Modules\Shared\Domain\Contracts\ChangeRequestSubject;
 use App\Modules\Shared\Domain\Enums\ChangeRequestSubjectType;
 use App\Modules\Shared\Domain\Models\ChangeRequest;
+use App\Modules\Catalog\Domain\Models\ServiceChangeRequest;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Laravel\Scout\Searchable;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\ModelStates\HasStates;
 use Spatie\Translatable\HasTranslations;
 
 class Service extends Model implements ChangeRequestSubject, HasMedia
 {
     use HasFactory;
     use HasPublicId;
+    use HasStates;
     use HasTranslations;
     use InteractsWithMedia;
     use Searchable;
@@ -49,7 +55,6 @@ class Service extends Model implements ChangeRequestSubject, HasMedia
         'short_description',
         'long_description',
         'slug',
-        'status',
         'moderation_notes',
         'moderated_at',
         'moderated_by',
@@ -63,7 +68,7 @@ class Service extends Model implements ChangeRequestSubject, HasMedia
 
     protected $casts = [
         'product_type' => ProductType::class,
-        'status' => ServiceStatus::class,
+        'status' => ServiceState::class,
         'moderated_at' => 'datetime',
         'is_featured' => 'boolean',
         'base_price' => MoneyCast::class.':base_price',
@@ -128,6 +133,16 @@ class Service extends Model implements ChangeRequestSubject, HasMedia
         return $this->hasMany(ServiceInventoryReservation::class);
     }
 
+    public function themes(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            ServiceTheme::class,
+            'service_themes_pivot',
+            'service_id',
+            'service_theme_id',
+        )->withPivot('sort_order')->orderBy('sort_order');
+    }
+
     public function availabilityBlocks(): HasMany
     {
         return $this->hasMany(ServiceAvailabilityBlock::class);
@@ -139,18 +154,30 @@ class Service extends Model implements ChangeRequestSubject, HasMedia
             ->where('subject_type', 'service');
     }
 
+    public function serviceChangeRequests(): HasMany
+    {
+        return $this->hasMany(ServiceChangeRequest::class);
+    }
+
+    public function hasOpenChangeRequest(): bool
+    {
+        return $this->serviceChangeRequests()
+            ->whereIn('status', ['pending', 'awaiting_clarification'])
+            ->exists();
+    }
+
     // -------------------------------------------------------------------------
     // Scopes
     // -------------------------------------------------------------------------
 
     public function scopePublished(Builder $query): Builder
     {
-        return $query->where('status', ServiceStatus::Published);
+        return $query->whereState('status', PublishedState::class);
     }
 
     public function scopePendingReview(Builder $query): Builder
     {
-        return $query->where('status', ServiceStatus::PendingReview);
+        return $query->whereState('status', PendingReviewState::class);
     }
 
     public function scopeForType(Builder $query, ProductType $type): Builder
@@ -172,7 +199,7 @@ class Service extends Model implements ChangeRequestSubject, HasMedia
      */
     public function shouldBeSearchable(): bool
     {
-        return $this->status === ServiceStatus::Published;
+        return $this->status instanceof PublishedState;
     }
 
     /**
@@ -205,8 +232,8 @@ class Service extends Model implements ChangeRequestSubject, HasMedia
             'occasion_ids' => $this->category?->occasions->pluck('id')->toArray() ?? [],
             'price_minor' => $this->base_price_minor,
             'currency' => $this->base_price_currency,
-            'status' => $this->status->value,
-            'is_active' => $this->status === ServiceStatus::Published,
+            'status' => $this->status->getValue(),
+            'is_active' => $this->status instanceof PublishedState,
             'rating_avg' => (float) ($this->rating_avg ?? 0),
             'vendor_rating' => (float) (optional($this->vendor)->rating_avg ?? 0.0),
             'requires_electricity' => optional($this->rentalDetail)->requires_electricity,

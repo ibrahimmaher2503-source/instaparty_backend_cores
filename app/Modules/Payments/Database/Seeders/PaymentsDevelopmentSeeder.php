@@ -130,7 +130,7 @@ final class PaymentsDevelopmentSeeder extends Seeder
                 'amount_minor' => $amountMinor,
                 'amount_currency' => 'EGP',
                 'method' => $method,
-                'status' => $status,
+                'status' => $status->value,
                 'captured_at' => $capturedAt,
                 'failure_code' => $failureCode,
                 'failure_message' => $failureMessage,

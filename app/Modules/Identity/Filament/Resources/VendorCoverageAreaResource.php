@@ -9,6 +9,7 @@ use App\Modules\Identity\Filament\Resources\VendorCoverageAreaResource\Pages;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class VendorCoverageAreaResource extends Resource
 {
@@ -53,16 +54,25 @@ class VendorCoverageAreaResource extends Resource
         return false;
     }
 
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()->with(['vendorProfile', 'city']);
+    }
+
     public static function table(Table $table): Table
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('vendor_profile_id')
+                Tables\Columns\TextColumn::make('vendorProfile.business_name')
                     ->label(__('identity.columns.vendor'))
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('city_id')
+                    ->formatStateUsing(fn ($state): string => is_array($state) ? ($state[app()->getLocale()] ?? $state['en'] ?? '—') : ($state ?? '—'))
+                    ->searchable(query: fn (Builder $query, string $search) => $query->whereHas(
+                        'vendorProfile',
+                        fn ($q) => $q->whereRaw("JSON_UNQUOTE(JSON_EXTRACT(business_name, '$.en')) LIKE ?", ["%{$search}%"])
+                    )),
+                Tables\Columns\TextColumn::make('city.name')
                     ->label(__('identity.columns.city_id'))
-                    ->sortable(),
+                    ->formatStateUsing(fn ($state): string => is_array($state) ? ($state[app()->getLocale()] ?? $state['en'] ?? '—') : ($state ?? '—')),
                 Tables\Columns\TextColumn::make('delivery_fee_minor')
                     ->label(__('identity.columns.delivery_fee'))
                     ->money('EGP', divideBy: 100),

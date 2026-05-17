@@ -68,7 +68,7 @@ class WriteNegotiationSnapshotListener
         return [
             'booking' => [
                 'public_id' => $booking->public_id,
-                'lifecycle_status' => $booking->lifecycle_status->value,
+                'lifecycle_status' => $booking->getRawOriginal('lifecycle_status'),
                 'total_minor' => $booking->total_minor,
                 'currency' => $booking->total_currency,
             ],

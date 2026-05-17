@@ -14,6 +14,7 @@ use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class LoyaltyLedgerResource extends Resource
 {
@@ -55,6 +56,11 @@ class LoyaltyLedgerResource extends Resource
         return false;
     }
 
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()->with(['user', 'vendorProfile']);
+    }
+
     public static function table(Table $table): Table
     {
         return $table
@@ -64,14 +70,12 @@ class LoyaltyLedgerResource extends Resource
                     ->copyable()
                     ->searchable()
                     ->limit(10),
-                Tables\Columns\TextColumn::make('user_id')
+                Tables\Columns\TextColumn::make('user.name')
                     ->label(__('loyalty.columns.user'))
-                    ->searchable()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('vendor_profile_id')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('vendorProfile.business_name')
                     ->label(__('loyalty.columns.vendor'))
-                    ->searchable()
-                    ->sortable(),
+                    ->formatStateUsing(fn ($state): string => is_array($state) ? ($state[app()->getLocale()] ?? $state['en'] ?? '—') : ($state ?? '—')),
                 Tables\Columns\TextColumn::make('direction')
                     ->label(__('loyalty.columns.direction'))
                     ->badge()
@@ -131,28 +135,21 @@ class LoyaltyLedgerResource extends Resource
                     ->options(collect(LedgerDirection::cases())
                         ->mapWithKeys(fn (LedgerDirection $d) => [$d->value => $d->label()])
                         ->all()),
-                Tables\Filters\Filter::make('user_id')
+                Tables\Filters\SelectFilter::make('user_id')
                     ->label(__('loyalty.columns.user'))
-                    ->form([
-                        Forms\Components\TextInput::make('user_id')
-                            ->label(__('loyalty.columns.user'))
-                            ->numeric(),
-                    ])
-                    ->query(fn ($query, array $data) => $query->when(
-                        $data['user_id'] ?? null,
-                        fn ($q, $value) => $q->where('user_id', (int) $value),
-                    )),
-                Tables\Filters\Filter::make('vendor_profile_id')
+                    ->relationship('user', 'name')
+                    ->searchable()
+                    ->preload(false),
+                Tables\Filters\SelectFilter::make('vendor_profile_id')
                     ->label(__('loyalty.columns.vendor'))
-                    ->form([
-                        Forms\Components\TextInput::make('vendor_profile_id')
-                            ->label(__('loyalty.columns.vendor'))
-                            ->numeric(),
-                    ])
-                    ->query(fn ($query, array $data) => $query->when(
-                        $data['vendor_profile_id'] ?? null,
-                        fn ($q, $value) => $q->where('vendor_profile_id', (int) $value),
-                    )),
+                    ->relationship('vendorProfile', 'business_name')
+                    ->getOptionLabelFromRecordUsing(fn ($record): string =>
+                        is_array($record->business_name)
+                            ? ($record->business_name['en'] ?? $record->public_id)
+                            : ($record->business_name ?? $record->public_id)
+                    )
+                    ->searchable()
+                    ->preload(false),
             ])
             ->headerActions([
                 Tables\Actions\Action::make('adjustBalance')

@@ -3,11 +3,11 @@
 declare(strict_types=1);
 
 use App\Modules\Booking\Domain\Enums\FulfillmentStatus;
-use App\Modules\Booking\Domain\Enums\LifecycleStatus;
-use App\Modules\Booking\Domain\Enums\PaymentStatus;
 use App\Modules\Booking\Domain\Models\Booking;
+use App\Modules\Booking\Domain\States\BookingLifecycleStatus\DraftState;
+use App\Modules\Booking\Domain\States\BookingPaymentStatus\UnpaidState;
 use App\Modules\Catalog\Domain\Enums\ProductType;
-use App\Modules\Catalog\Domain\Enums\ServiceStatus;
+use App\Modules\Catalog\Domain\States\ServiceStatus\PublishedState;
 use App\Modules\Catalog\Domain\Models\Category;
 use App\Modules\Catalog\Domain\Models\Occasion;
 use App\Modules\Catalog\Domain\Models\Service;
@@ -37,8 +37,8 @@ function totalsDraftBooking(User $customer): Booking
         'reference_no' => 'IP-2026-TOT01',
         'customer_id' => $customer->id,
         'occasion_id' => $occasion->id,
-        'lifecycle_status' => LifecycleStatus::Draft,
-        'payment_status' => PaymentStatus::Unpaid,
+        'lifecycle_status' => DraftState::class,
+        'payment_status' => UnpaidState::class,
         'fulfillment_status' => FulfillmentStatus::NotStarted,
         'event_starts_at' => now()->addDays(30),
         'event_ends_at' => now()->addDays(30)->addHours(5),
@@ -58,7 +58,7 @@ it('line_total_minor equals unit_price_minor times quantity', function (): void 
     $vendor = VendorProfile::factory()->create();
     $service = Service::factory()->create([
         'product_type' => ProductType::Digital,
-        'status' => ServiceStatus::Published,
+        'status' => PublishedState::class,
         'vendor_profile_id' => $vendor->id,
         'category_id' => $category->id,
         'base_price_minor' => 30000,
@@ -83,14 +83,14 @@ it('booking GET returns per-vendor breakdown', function (): void {
 
     $service1 = Service::factory()->create([
         'product_type' => ProductType::Digital,
-        'status' => ServiceStatus::Published,
+        'status' => PublishedState::class,
         'vendor_profile_id' => $vendor1->id,
         'category_id' => $category->id,
         'base_price_minor' => 50000,
     ]);
     $service2 = Service::factory()->create([
         'product_type' => ProductType::Digital,
-        'status' => ServiceStatus::Published,
+        'status' => PublishedState::class,
         'vendor_profile_id' => $vendor2->id,
         'category_id' => $category->id,
         'base_price_minor' => 70000,
@@ -123,7 +123,7 @@ it('locale AR response returns Arabic names', function (): void {
     $vendor = VendorProfile::factory()->create();
     $service = Service::factory()->create([
         'product_type' => ProductType::Digital,
-        'status' => ServiceStatus::Published,
+        'status' => PublishedState::class,
         'vendor_profile_id' => $vendor->id,
         'category_id' => $category->id,
     ]);
@@ -148,7 +148,7 @@ it('locale EN response returns English names', function (): void {
     $vendor = VendorProfile::factory()->create();
     $service = Service::factory()->create([
         'product_type' => ProductType::Digital,
-        'status' => ServiceStatus::Published,
+        'status' => PublishedState::class,
         'vendor_profile_id' => $vendor->id,
         'category_id' => $category->id,
     ]);

@@ -45,7 +45,12 @@ All significant architectural decisions are documented in `/docs/adr`.
 Current ADRs:
 - ADR-001: Geography Module Introduction and Ownership (`docs/adr/ADR-001-geography-module.md`)
 - ADR-0013: Subscription Tiers Module — Phase 1.7 (`docs/adr/ADR-0013-subscription-tiers-module.md`)
+- ADR-0014: Chat Compliance & Admin Oversight — Phase 8.2 (`docs/adr/ADR-0014-chat-compliance-admin-oversight.md`)
 - ADR-0021: Vendor Document Expiry and Compliance Lifecycle — Phase 6.9 (`docs/adr/ADR-0021-vendor-doc-expiry.md`)
+- ADR-0028: Financial Ledger Hardening — Phase 4.9 (`docs/adr/ADR-0028-financial-ledger-hardening.md`)
+- ADR-0032: Withdrawal Two-Step Approve → Mark Paid + Finance Audit Columns — Phase 4.11 (`docs/adr/0032-withdrawal-two-step-approve-mark-paid.md`)
+- ADR-0030: Advertising Module — Phase 5.5 (`docs/adr/ADR-0030-advertising-module.md`) — **PROPOSED, ratification required (built ahead of plan)**
+- ADR-0031: Tax / VAT Module — Phase 4.10 (`docs/adr/ADR-0031-tax-vat-module.md`) — **PROPOSED, ratification required (built ahead of plan)**
 
 ## Stack & Architecture (LOCKED — Tech Decisions §1)
 

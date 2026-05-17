@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace App\Modules\Booking\Infrastructure\Loyalty;
 
-use App\Modules\Booking\Domain\Enums\LifecycleStatus;
 use App\Modules\Booking\Domain\Models\Booking;
+use App\Modules\Booking\Domain\States\BookingLifecycleStatus\CustomerReviewState;
+use App\Modules\Booking\Domain\States\BookingLifecycleStatus\DraftState;
+use App\Modules\Booking\Domain\States\BookingLifecycleStatus\SubmittedState;
+use App\Modules\Booking\Domain\States\BookingLifecycleStatus\VendorReviewState;
 use App\Modules\Loyalty\Domain\Contracts\BookingDraftData;
 use App\Modules\Loyalty\Domain\Contracts\BookingDraftReader;
 use DomainException;
@@ -13,11 +16,11 @@ use RuntimeException;
 
 final class EloquentBookingDraftReader implements BookingDraftReader
 {
-    private const DRAFT_STATES = [
-        LifecycleStatus::Draft,
-        LifecycleStatus::Submitted,
-        LifecycleStatus::VendorReview,
-        LifecycleStatus::CustomerReview,
+    private const DRAFT_STATE_CLASSES = [
+        DraftState::class,
+        SubmittedState::class,
+        VendorReviewState::class,
+        CustomerReviewState::class,
     ];
 
     public function draftFor(int $bookingId): BookingDraftData
@@ -47,7 +50,7 @@ final class EloquentBookingDraftReader implements BookingDraftReader
 
     private function toDraftData(Booking $booking): BookingDraftData
     {
-        if (! in_array($booking->lifecycle_status, self::DRAFT_STATES, true)) {
+        if (! in_array($booking->lifecycle_status::class, self::DRAFT_STATE_CLASSES, true)) {
             throw new DomainException('booking.not_draft');
         }
 

@@ -1,0 +1,73 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "'C:\\instaparty_backend_cores\\.codex\\hooks\\pre-bash-firewall.sh'"
+          }
+        ]
+      },
+      {
+        "matcher": "Edit|MultiEdit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "'C:\\instaparty_backend_cores\\.codex\\hooks\\pre-edit-protect-paths.sh'"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|MultiEdit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "'C:\\instaparty_backend_cores\\.codex\\hooks\\post-edit-pint.sh'"
+          }
+        ]
+      },
+      {
+        "matcher": "Edit|MultiEdit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "'C:\\instaparty_backend_cores\\.codex\\hooks\\post-edit-spec-guard.sh'"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "'C:\\instaparty_backend_cores\\.codex\\hooks\\post-bash-log.sh'"
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "'C:\\instaparty_backend_cores\\.codex\\hooks\\session-start-context.sh'"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "'C:\\instaparty_backend_cores\\.codex\\hooks\\stop-summary.sh'"
+          }
+        ]
+      }
+    ]
+  }
+}

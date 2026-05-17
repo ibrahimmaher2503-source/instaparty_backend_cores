@@ -9,6 +9,7 @@ use App\Modules\Identity\Filament\Resources\CustomerAddressResource\Pages;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class CustomerAddressResource extends Resource
 {
@@ -53,6 +54,11 @@ class CustomerAddressResource extends Resource
         return false;
     }
 
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()->with(['user', 'city']);
+    }
+
     public static function table(Table $table): Table
     {
         return $table
@@ -61,12 +67,12 @@ class CustomerAddressResource extends Resource
                     ->label(__('identity.columns.id'))
                     ->copyable()
                     ->searchable(),
-                Tables\Columns\TextColumn::make('user_id')
+                Tables\Columns\TextColumn::make('user.name')
                     ->label(__('identity.columns.user_id'))
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('city_id')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('city.name')
                     ->label(__('identity.columns.city_id'))
-                    ->sortable(),
+                    ->formatStateUsing(fn ($state): string => is_array($state) ? ($state[app()->getLocale()] ?? $state['en'] ?? '—') : ($state ?? '—')),
                 Tables\Columns\TextColumn::make('label')
                     ->label(__('identity.columns.label'))
                     ->searchable(),

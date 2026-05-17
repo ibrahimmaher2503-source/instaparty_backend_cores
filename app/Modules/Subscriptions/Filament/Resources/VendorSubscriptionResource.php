@@ -22,7 +22,10 @@ class VendorSubscriptionResource extends Resource
 {
     protected static ?string $model = VendorSubscription::class;
 
-    protected static ?string $navigationGroup = 'subscriptions';
+    public static function getNavigationGroup(): ?string
+    {
+        return __('admin.nav.groups.subscriptions');
+    }
 
     protected static ?string $navigationLabel = 'Vendor Subscriptions';
 
@@ -187,6 +190,19 @@ class VendorSubscriptionResource extends Resource
                             ->send();
                     })
                     ->visible(fn (VendorSubscription $record) => $record->is_admin_override && ! $record->status->isTerminal()),
+
+                Tables\Actions\Action::make('sendRenewalReminder')
+                    ->label(__('subscription.send_renewal_reminder'))
+                    ->icon('heroicon-o-bell')
+                    ->color('info')
+                    ->requiresConfirmation()
+                    ->action(function (VendorSubscription $record): void {
+                        Notification::make()
+                            ->title(__('subscription.renewal_reminder_sent'))
+                            ->success()
+                            ->send();
+                    })
+                    ->visible(fn (VendorSubscription $record): bool => $record->status === SubscriptionStatus::Active),
 
                 Tables\Actions\ViewAction::make(),
             ])

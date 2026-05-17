@@ -9,9 +9,11 @@ use App\Modules\Booking\Domain\Enums\LifecycleStatus;
 use App\Modules\Booking\Domain\Enums\VendorSubStatus;
 use App\Modules\Booking\Domain\Events\BookingConfirmed;
 use App\Modules\Booking\Domain\Events\VendorAccepted;
+use App\Modules\Booking\Domain\Exceptions\ResponseDeadlineExpiredException;
 use App\Modules\Booking\Domain\Models\Booking;
-use App\Modules\Booking\Domain\Models\BookingStateTransition;
 use App\Modules\Booking\Domain\Models\BookingVendor;
+use App\Modules\Booking\Domain\States\BookingLifecycleStatus\ConfirmedState;
+use App\Modules\Shared\Domain\Models\StateTransition;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 
@@ -41,12 +43,17 @@ class VendorAcceptBookingAction
                 'Booking vendor is not in pending status'
             );
 
+            if ($bookingVendor->response_deadline !== null
+                && $bookingVendor->response_deadline->isPast()) {
+                throw new ResponseDeadlineExpiredException($bookingVendor->id);
+            }
+
             $bookingVendor->update([
                 'sub_status' => VendorSubStatus::Accepted,
                 'responded_at' => now(),
             ]);
 
-            BookingStateTransition::create([
+            StateTransition::create([
                 'transitionable_type' => BookingVendor::class,
                 'transitionable_id' => $bookingVendor->id,
                 'from_state' => VendorSubStatus::Pending->value,
@@ -65,11 +72,11 @@ class VendorAcceptBookingAction
             $bookingConfirmed = false;
             if ($allAccepted) {
                 $booking->update([
-                    'lifecycle_status' => LifecycleStatus::Confirmed,
+                    'lifecycle_status' => ConfirmedState::class,
                     'confirmed_at' => now(),
                 ]);
 
-                BookingStateTransition::create([
+                StateTransition::create([
                     'transitionable_type' => Booking::class,
                     'transitionable_id' => $booking->id,
                     'from_state' => LifecycleStatus::VendorReview->value,

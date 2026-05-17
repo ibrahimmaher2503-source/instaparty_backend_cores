@@ -8,11 +8,13 @@ use App\Modules\Catalog\Domain\Enums\ProductType;
 use App\Modules\Payments\Application\DTOs\InitiateRefundDto;
 use App\Modules\Payments\Application\Services\RefundPolicyService;
 use App\Modules\Payments\Domain\Contracts\PaymentsBookingReader;
+use App\Modules\Payments\Domain\Enums\RefundStatus;
 use App\Modules\Payments\Domain\Exceptions\PartialRefundUnsupportedException;
 use App\Modules\Payments\Domain\Exceptions\RefundPolicyViolationException;
 use App\Modules\Payments\Domain\Models\Refund;
 use App\Modules\Payments\Infrastructure\Repositories\EloquentPaymentRepository;
 use App\Modules\Payments\Infrastructure\Repositories\EloquentRefundRepository;
+use App\Modules\Settlement\Domain\Exceptions\OverRefundAttemptedException;
 use Illuminate\Support\Facades\DB;
 
 class InitiateRefundAction
@@ -30,8 +32,27 @@ class InitiateRefundAction
         $payment = $this->payments->findById($dto->paymentId)
             ?? abort(404, 'Payment not found');
 
+        $requestedAmount = $dto->requestedAmountMinor ?? (int) $payment->amount_minor;
+
         if ($dto->requestedAmountMinor !== null && $dto->requestedAmountMinor !== (int) $payment->amount_minor) {
             throw new PartialRefundUnsupportedException;
+        }
+
+        // Over-refund guard: sum all non-failed prior refunds + requested must not exceed captured total
+        $priorRefundedMinor = (int) Refund::query()
+            ->where('payment_id', $payment->id)
+            ->whereNotIn('status', [RefundStatus::Failed->value, RefundStatus::Pending->value])
+            ->sum('amount_minor');
+
+        $capturedTotal = (int) $payment->amount_minor;
+
+        if (($priorRefundedMinor + $requestedAmount) > $capturedTotal) {
+            throw new OverRefundAttemptedException(
+                paymentId: $payment->id,
+                capturedTotal: $capturedTotal,
+                alreadyRefunded: $priorRefundedMinor,
+                requested: $requestedAmount,
+            );
         }
 
         $items = $this->bookingReader->itemsFor($dto->bookingId);
@@ -48,8 +69,8 @@ class InitiateRefundAction
             }
         }
 
-        return DB::transaction(function () use ($dto, $payment): Refund {
-            $refund = $this->refunds->create($dto, (int) $payment->amount_minor, (string) $payment->amount_currency);
+        return DB::transaction(function () use ($dto, $payment, $requestedAmount): Refund {
+            $refund = $this->refunds->create($dto, $requestedAmount, (string) $payment->amount_currency);
             $this->processRefund->execute($refund->id);
 
             return $refund->fresh() ?? $refund;

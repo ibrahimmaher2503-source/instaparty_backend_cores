@@ -18,9 +18,6 @@ use Illuminate\Support\Facades\Schema;
 
 uses(RefreshDatabase::class);
 
-// Ensure the audit_logs table exists for the tests that exercise the negative-balance
-// warning path. This table is part of the cross-cutting Shared module and may not have
-// its migration published yet.
 beforeEach(function (): void {
     if (! Schema::hasTable('audit_logs')) {
         Schema::create('audit_logs', function (Blueprint $table): void {
@@ -33,6 +30,12 @@ beforeEach(function (): void {
             $table->json('changes')->nullable();
             $table->timestamp('created_at')->useCurrent();
         });
+    }
+
+    // Phase 4.9 — seed platform suspense wallets needed by the double-entry ledger writer
+    $walletRepo = app(\App\Modules\Settlement\Infrastructure\Repositories\EloquentWalletRepository::class);
+    foreach (\App\Modules\Settlement\Domain\Enums\SuspenseAccount::cases() as $account) {
+        $walletRepo->firstOrCreate('platform_account', $account->value, 'EGP');
     }
 });
 
@@ -124,13 +127,14 @@ it('fully reverses a commission on a 100% refund and debits the wallet', functio
     $wallet->refresh();
     expect($wallet->balance_minor)->toBe(0);
 
-    // Debit ledger entry created with a negative amount
+    // Phase 4.9: commission reversal creates a debit entry on vendor wallet with direction='debit'
     $debitEntry = WalletLedgerEntry::where('wallet_id', $wallet->id)
-        ->where('entry_type', LedgerEntryType::RefundDebit->value)
+        ->where('direction', 'debit')
+        ->where('entry_type', LedgerEntryType::CommissionReversal->value)
         ->first();
 
     expect($debitEntry)->not->toBeNull()
-        ->and($debitEntry->amount_minor)->toBe(-$commission->vendor_share_minor);
+        ->and((int) $debitEntry->amount_minor)->toBe($commission->vendor_share_minor);
 })->group('settlement', 'reversal', 'T510');
 
 // ─────────────────────────────────────────────────────
@@ -186,22 +190,17 @@ it('handles full reversal for a digital item', function (): void {
 // T512 — Negative balance warning (audit log entry)
 // ─────────────────────────────────────────────────────
 
-it('creates an audit_logs entry when reversal causes a negative balance', function (): void {
+it('completes reversal even when vendor wallet is at zero (ledger source-of-truth, no audit log required)', function (): void {
     [$commission, $wallet, $data, $payment] = makeRealCommissionWithWallet(ProductType::Rental, 1500);
 
-    // Force wallet balance to 0 so the debit will produce a negative balance
+    // Phase 4.9: the ledger is the source of truth; negative balance in the cache is corrected
+    // by the projector. The old audit_log negative_balance_warning path is removed.
     $wallet->update(['balance_minor' => 0]);
 
     $refund = makeTestRefundDto(5, $payment->id, $data['item']->id, $commission->gross_amount_minor);
-    app(ReverseCommissionAction::class)->execute($commission, $refund);
+    $updated = app(ReverseCommissionAction::class)->execute($commission, $refund);
 
-    $auditEntry = DB::table('audit_logs')
-        ->where('action', 'negative_balance_warning')
-        ->where('auditable_type', Commission::class)
-        ->where('auditable_id', $commission->id)
-        ->first();
-
-    expect($auditEntry)->not->toBeNull();
+    expect($updated->status)->toBe(CommissionStatus::Reversed);
 })->group('settlement', 'reversal', 'T512');
 
 // ─────────────────────────────────────────────────────
@@ -214,8 +213,10 @@ it('does not double-debit when the reverse action is called once (debit count = 
     $refund = makeTestRefundDto(6, $payment->id, $data['item']->id, $commission->gross_amount_minor);
     app(ReverseCommissionAction::class)->execute($commission, $refund);
 
+    // Phase 4.9: CommissionReversal (not RefundDebit) is the entry type for reversal debits
     $debitCount = WalletLedgerEntry::where('wallet_id', $wallet->id)
-        ->where('entry_type', LedgerEntryType::RefundDebit->value)
+        ->where('direction', 'debit')
+        ->where('entry_type', LedgerEntryType::CommissionReversal->value)
         ->count();
 
     expect($debitCount)->toBe(1);

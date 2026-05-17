@@ -4,13 +4,17 @@ declare(strict_types=1);
 
 namespace App\Modules\Settlement\Filament\Resources;
 
-use App\Modules\Settlement\Application\Actions\ApproveAndMarkWithdrawalPaidAction;
+use App\Modules\Settlement\Application\Actions\ApproveWithdrawalAction;
+use App\Modules\Settlement\Application\Actions\MarkWithdrawalPaidAction;
 use App\Modules\Settlement\Application\Actions\RejectWithdrawalAction;
+use App\Modules\Settlement\Application\DTOs\MarkWithdrawalPaidInput;
 use App\Modules\Settlement\Domain\Enums\WithdrawalStatus;
 use App\Modules\Settlement\Domain\Models\Withdrawal;
 use App\Modules\Settlement\Filament\Resources\WithdrawalsQueueResource\Pages\ListWithdrawalsQueue;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Tabs;
 use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -54,7 +58,7 @@ class WithdrawalsQueueResource extends Resource
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()
-            ->where('status', WithdrawalStatus::Pending->value);
+            ->whereIn('status', [WithdrawalStatus::Pending->value, WithdrawalStatus::Approved->value]);
     }
 
     public static function table(Table $table): Table
@@ -70,7 +74,7 @@ class WithdrawalsQueueResource extends Resource
                 Tables\Columns\TextColumn::make('vendorProfile.business_name')
                     ->label('Vendor')
                     ->searchable()
-                    ->default('â€”'),
+                    ->default('—'),
 
                 Tables\Columns\TextColumn::make('requested_amount_minor')
                     ->money('EGP', divideBy: 100)
@@ -80,9 +84,9 @@ class WithdrawalsQueueResource extends Resource
                 Tables\Columns\TextColumn::make('status')
                     ->badge()
                     ->color(fn (WithdrawalStatus $state): string => match ($state) {
-                        WithdrawalStatus::Pending => 'warning',
+                        WithdrawalStatus::Pending  => 'warning',
                         WithdrawalStatus::Approved => 'info',
-                        WithdrawalStatus::Paid => 'success',
+                        WithdrawalStatus::Paid     => 'success',
                         WithdrawalStatus::Rejected => 'danger',
                     })
                     ->formatStateUsing(fn (WithdrawalStatus $state): string => ucfirst($state->value)),
@@ -91,36 +95,91 @@ class WithdrawalsQueueResource extends Resource
                     ->dateTime()
                     ->label('Requested At')
                     ->sortable(),
+
+                Tables\Columns\TextColumn::make('approved_at')
+                    ->dateTime()
+                    ->label('Approved At')
+                    ->sortable()
+                    ->placeholder('—'),
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('status')
                     ->options([
-                        WithdrawalStatus::Pending->value => 'Pending',
+                        WithdrawalStatus::Pending->value  => 'Pending',
                         WithdrawalStatus::Approved->value => 'Approved',
-                        WithdrawalStatus::Paid->value => 'Paid',
+                        WithdrawalStatus::Paid->value     => 'Paid',
                         WithdrawalStatus::Rejected->value => 'Rejected',
                     ])
                     ->label('Status'),
             ])
             ->actions([
+                // ─── Step 1: Approve (only on Pending withdrawals) ─────────────────
                 Action::make('approve')
-                    ->label('Approve & Mark Paid')
+                    ->label(__('settlement.actions.approve'))
                     ->icon('heroicon-o-check-badge')
-                    ->color('success')
+                    ->color('info')
                     ->requiresConfirmation()
+                    ->modalHeading(__('settlement.actions.approve'))
+                    ->modalDescription(__('settlement.actions.approve_description'))
+                    ->action(function (Withdrawal $record): void {
+                        try {
+                            app(ApproveWithdrawalAction::class)->execute($record, auth()->user());
+
+                            Notification::make()
+                                ->title(__('settlement.notifications.withdrawal_approved'))
+                                ->success()
+                                ->send();
+                        } catch (\Throwable $e) {
+                            Notification::make()
+                                ->title(__('settlement.errors.withdrawal_state'))
+                                ->danger()
+                                ->body($e->getMessage())
+                                ->send();
+                        }
+                    })
+                    ->visible(fn (Withdrawal $record): bool => $record->getRawOriginal('status') === WithdrawalStatus::Pending->value
+                        && auth()->user()?->can('withdrawal.approve')
+                    ),
+
+                // ─── Step 2: Mark Paid (only on Approved withdrawals) ───────────────
+                Action::make('markPaid')
+                    ->label(__('settlement.actions.mark_paid'))
+                    ->icon('heroicon-o-banknotes')
+                    ->color('success')
                     ->form([
-                        FileUpload::make('bank_proof')
-                            ->label('Bank Transfer Proof')
+                        TextInput::make('bank_transfer_reference')
+                            ->label(__('settlement.fields.bank_transfer_reference'))
+                            ->required()
+                            ->maxLength(120),
+
+                        FileUpload::make('proof_file')
+                            ->label(__('settlement.fields.transfer_proof'))
                             ->required()
                             ->acceptedFileTypes(['application/pdf', 'image/jpeg', 'image/png'])
                             ->maxSize(10240)
                             ->disk('local')
                             ->directory('withdrawal-proofs'),
+
+                        Tabs::make('payment_note')
+                            ->tabs([
+                                Tabs\Tab::make('English')
+                                    ->schema([
+                                        Textarea::make('admin_payment_note_en')
+                                            ->label(__('settlement.fields.payment_note_en'))
+                                            ->maxLength(1000)
+                                            ->rows(3),
+                                    ]),
+                                Tabs\Tab::make('العربية')
+                                    ->schema([
+                                        Textarea::make('admin_payment_note_ar')
+                                            ->label(__('settlement.fields.payment_note_ar'))
+                                            ->maxLength(1000)
+                                            ->rows(3),
+                                    ]),
+                            ]),
                     ])
                     ->action(function (Withdrawal $record, array $data): void {
-                        $path = $data['bank_proof'];
-
-                        // Filament FileUpload returns a path string; wrap into UploadedFile for the Action
+                        $path = $data['proof_file'];
                         $storagePath = storage_path('app/'.$path);
                         $uploadedFile = new UploadedFile(
                             path: $storagePath,
@@ -130,17 +189,37 @@ class WithdrawalsQueueResource extends Resource
                             test: false,
                         );
 
-                        app(ApproveAndMarkWithdrawalPaidAction::class)->execute($record, $uploadedFile, auth()->user());
+                        $paymentNote = array_filter([
+                            'en' => $data['admin_payment_note_en'] ?? null,
+                            'ar' => $data['admin_payment_note_ar'] ?? null,
+                        ]);
 
-                        Notification::make()
-                            ->title('Withdrawal approved and marked paid')
-                            ->success()
-                            ->send();
+                        try {
+                            $input = new MarkWithdrawalPaidInput(
+                                bankTransferReference: $data['bank_transfer_reference'],
+                                proofFile: $uploadedFile,
+                                paymentNote: $paymentNote,
+                            );
+
+                            app(MarkWithdrawalPaidAction::class)->execute($record, $input, auth()->user());
+
+                            Notification::make()
+                                ->title(__('settlement.notifications.withdrawal_paid'))
+                                ->success()
+                                ->send();
+                        } catch (\Throwable $e) {
+                            Notification::make()
+                                ->title(__('settlement.errors.mark_paid_failed'))
+                                ->danger()
+                                ->body($e->getMessage())
+                                ->send();
+                        }
                     })
-                    ->visible(fn (Withdrawal $record): bool => $record->status === WithdrawalStatus::Pending
-                        && auth()->user()?->can('approve_withdrawal')
+                    ->visible(fn (Withdrawal $record): bool => $record->getRawOriginal('status') === WithdrawalStatus::Approved->value
+                        && auth()->user()?->can('withdrawal.mark_paid')
                     ),
 
+                // ─── Reject (only on Pending) ────────────────────────────────────
                 Action::make('reject')
                     ->label('Reject')
                     ->icon('heroicon-o-x-circle')
@@ -172,7 +251,7 @@ class WithdrawalsQueueResource extends Resource
                             ->warning()
                             ->send();
                     })
-                    ->visible(fn (Withdrawal $record): bool => $record->status === WithdrawalStatus::Pending
+                    ->visible(fn (Withdrawal $record): bool => $record->getRawOriginal('status') === WithdrawalStatus::Pending->value
                         && auth()->user()?->can('reject_withdrawal')
                     ),
 

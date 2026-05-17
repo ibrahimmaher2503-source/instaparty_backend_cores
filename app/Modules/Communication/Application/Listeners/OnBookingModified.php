@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Modules\Communication\Application\Listeners;
 
+use App\Modules\Booking\Domain\Events\CustomerModificationDecided;
 use App\Modules\Communication\Application\Actions\DispatchNotificationAction;
 use App\Modules\Communication\Application\DTOs\DispatchNotificationDTO;
 use App\Modules\Communication\Domain\Enums\EventCategory;
@@ -17,10 +18,16 @@ class OnBookingModified implements ShouldQueue
         private readonly DispatchNotificationAction $dispatcher,
     ) {}
 
-    public function handle(object $event): void
+    public function handle(CustomerModificationDecided $event): void
     {
+        $booking = $event->modification->bookingVendor?->booking;
+        if ($booking === null || $booking->customer_id === null) {
+            return;
+        }
+
         $context = [
-            'booking_id' => $event->bookingPublicId ?? '',
+            'booking_id' => $booking->public_id,
+            'decision'   => $event->decision,
         ];
 
         foreach ([NotificationChannel::Push, NotificationChannel::Email] as $channel) {
@@ -29,10 +36,10 @@ class OnBookingModified implements ShouldQueue
                 channel: $channel,
                 audience: NotificationAudience::Customer,
                 eventCategory: EventCategory::Booking,
-                userId: $event->customerId,
+                userId: $booking->customer_id,
                 context: $context,
                 referenceType: 'booking',
-                referenceId: $event->bookingId ?? null,
+                referenceId: $booking->id,
             ));
         }
     }

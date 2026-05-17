@@ -7,6 +7,14 @@ parameters:
         - app
         - database
 
+    # Direct wallet balance-write guard:
+    # PHPStan has no custom rule for this yet (out of scope for Phase 1).
+    # The architectural enforcement gate lives in:
+    #   tests/Architecture/NoDirectWalletBalanceWritesTest.php
+    # Any code outside EloquentWalletRepository::applyProjection() that calls
+    # DB::table('wallets')->update/increment/decrement with balance_minor or
+    # pending_withdrawal_minor will fail the CI architecture step.
+
     # Tests are validated by Pest, not PHPStan — Pest's $this magic is hostile to static analysis at level 8
     excludePaths:
         - app/Filament (?)

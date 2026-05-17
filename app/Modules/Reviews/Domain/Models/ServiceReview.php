@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Modules\Reviews\Domain\Models;
 
-use App\Modules\Identity\Domain\Models\User;
 use App\Modules\Reviews\Database\Factories\ServiceReviewFactory;
 use App\Modules\Reviews\Domain\Enums\ModerationStatus;
 use App\Modules\Reviews\Domain\Enums\ReviewLocale;
@@ -54,14 +53,24 @@ class ServiceReview extends Model
         return ServiceReviewFactory::new();
     }
 
+    public function service(): BelongsTo
+    {
+        return $this->belongsTo('App\Modules\Catalog\Domain\Models\Service');
+    }
+
+    public function bookingItem(): BelongsTo
+    {
+        return $this->belongsTo('App\Modules\Booking\Domain\Models\BookingItem');
+    }
+
     public function reviewer(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo('App\Modules\Identity\Domain\Models\User', 'user_id');
     }
 
     public function moderator(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'moderated_by');
+        return $this->belongsTo('App\Modules\Identity\Domain\Models\User', 'moderated_by');
     }
 
     public function scopeApproved($query)

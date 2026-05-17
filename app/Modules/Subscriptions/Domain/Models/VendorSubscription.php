@@ -6,7 +6,8 @@ namespace App\Modules\Subscriptions\Domain\Models;
 
 use App\Modules\Subscriptions\Database\Factories\VendorSubscriptionFactory;
 use App\Modules\Subscriptions\Domain\Enums\BillingCycle;
-use App\Modules\Subscriptions\Domain\Enums\SubscriptionStatus;
+use App\Modules\Subscriptions\Domain\States\ActiveState;
+use App\Modules\Subscriptions\Domain\States\PastDueState;
 use App\Modules\Subscriptions\Domain\States\SubscriptionState;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -26,7 +27,6 @@ class VendorSubscription extends Model
         'public_id',
         'vendor_profile_id',
         'subscription_plan_id',
-        'status',
         'billing_cycle',
         'current_period_start',
         'current_period_end',
@@ -75,15 +75,12 @@ class VendorSubscription extends Model
 
     public function scopeActive(Builder $query): Builder
     {
-        return $query->where('status', SubscriptionStatus::Active->value);
+        return $query->whereState('status', ActiveState::class);
     }
 
     public function scopeActiveOrOverride(Builder $query): Builder
     {
-        return $query->whereIn('status', [
-            SubscriptionStatus::Active->value,
-            SubscriptionStatus::PastDue->value,
-        ]);
+        return $query->whereStateIn('status', [ActiveState::class, PastDueState::class]);
     }
 
     public function scopeAdminOverride(Builder $query): Builder
@@ -93,7 +90,7 @@ class VendorSubscription extends Model
 
     public function scopeDueForRenewal(Builder $query, \DateTimeInterface $at): Builder
     {
-        return $query->where('status', SubscriptionStatus::Active->value)
+        return $query->whereState('status', ActiveState::class)
             ->where('cancel_at_period_end', false)
             ->where('is_admin_override', false)
             ->where('current_period_end', '<=', $at);
@@ -101,14 +98,14 @@ class VendorSubscription extends Model
 
     public function scopeInGrace(Builder $query, \DateTimeInterface $at): Builder
     {
-        return $query->where('status', SubscriptionStatus::PastDue->value)
+        return $query->whereState('status', PastDueState::class)
             ->where('grace_period_ends_at', '<=', $at);
     }
 
     public function scopeOverridesExpiredAt(Builder $query, \DateTimeInterface $at): Builder
     {
         return $query->where('is_admin_override', true)
-            ->where('status', SubscriptionStatus::Active->value)
+            ->whereState('status', ActiveState::class)
             ->whereNotNull('override_expires_at')
             ->where('override_expires_at', '<=', $at);
     }

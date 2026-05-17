@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Modules\Identity\Domain\Models;
 
+use App\Modules\Geography\Domain\Models\City;
 use App\Modules\Shared\Domain\Concerns\HasPublicId;
 use Database\Factories\CustomerAddressFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -67,6 +68,11 @@ class CustomerAddress extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function city(): BelongsTo
+    {
+        return $this->belongsTo(City::class);
     }
 
     protected function casts(): array

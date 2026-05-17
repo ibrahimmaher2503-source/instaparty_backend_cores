@@ -24,7 +24,7 @@ beforeEach(function (): void {
 // Helpers
 // ─────────────────────────────────────────────────────────────────────────────
 
-function makeVendorWithType(ProductType $type): VendorProfile
+function makeListVendorWithType(ProductType $type): VendorProfile
 {
     $user = User::factory()->phoneVerified()->asVendor()->create();
     $vendor = VendorProfile::factory()->approved()->create(['user_id' => $user->id]);
@@ -68,7 +68,7 @@ it('returns services across all three product types for a vendor', function (): 
 // ─────────────────────────────────────────────────────────────────────────────
 
 it('filters services by rental type', function (): void {
-    $vendor = makeVendorWithType(ProductType::Rental);
+    $vendor = makeListVendorWithType(ProductType::Rental);
 
     Service::factory()->rental()->count(2)->create(['vendor_profile_id' => $vendor->id]);
     Service::factory()->sale()->create(['vendor_profile_id' => $vendor->id]);
@@ -80,7 +80,7 @@ it('filters services by rental type', function (): void {
 })->group('catalog', 'services-list', 'rental');
 
 it('filters services by sale type', function (): void {
-    $vendor = makeVendorWithType(ProductType::Sale);
+    $vendor = makeListVendorWithType(ProductType::Sale);
 
     Service::factory()->sale()->count(2)->create(['vendor_profile_id' => $vendor->id]);
     Service::factory()->rental()->create(['vendor_profile_id' => $vendor->id]);
@@ -92,7 +92,7 @@ it('filters services by sale type', function (): void {
 })->group('catalog', 'services-list', 'sale');
 
 it('filters services by digital type', function (): void {
-    $vendor = makeVendorWithType(ProductType::Digital);
+    $vendor = makeListVendorWithType(ProductType::Digital);
 
     Service::factory()->digital()->count(3)->create(['vendor_profile_id' => $vendor->id]);
     Service::factory()->rental()->create(['vendor_profile_id' => $vendor->id]);
@@ -108,7 +108,7 @@ it('filters services by digital type', function (): void {
 // ─────────────────────────────────────────────────────────────────────────────
 
 it('filters services by status', function (): void {
-    $vendor = makeVendorWithType(ProductType::Rental);
+    $vendor = makeListVendorWithType(ProductType::Rental);
 
     Service::factory()->rental()->count(2)->create([
         'vendor_profile_id' => $vendor->id,
@@ -131,8 +131,8 @@ it('filters services by status', function (): void {
 // ─────────────────────────────────────────────────────────────────────────────
 
 it('does not return services belonging to another vendor', function (): void {
-    $vendorA = makeVendorWithType(ProductType::Rental);
-    $vendorB = makeVendorWithType(ProductType::Rental);
+    $vendorA = makeListVendorWithType(ProductType::Rental);
+    $vendorB = makeListVendorWithType(ProductType::Rental);
 
     Service::factory()->rental()->count(3)->create(['vendor_profile_id' => $vendorA->id]);
     Service::factory()->rental()->count(2)->create(['vendor_profile_id' => $vendorB->id]);
@@ -148,7 +148,7 @@ it('does not return services belonging to another vendor', function (): void {
 })->group('catalog', 'services-list', 'auth');
 
 it('returns empty paginator when vendor has no services', function (): void {
-    $vendor = makeVendorWithType(ProductType::Rental);
+    $vendor = makeListVendorWithType(ProductType::Rental);
 
     $result = app(ListVendorServicesAction::class)->execute($vendor);
 
@@ -161,7 +161,7 @@ it('returns empty paginator when vendor has no services', function (): void {
 // ─────────────────────────────────────────────────────────────────────────────
 
 it('submits multiple draft services for review', function (): void {
-    $vendor = makeVendorWithType(ProductType::Rental);
+    $vendor = makeListVendorWithType(ProductType::Rental);
 
     $services = Service::factory()->rental()->count(3)->create([
         'vendor_profile_id' => $vendor->id,
@@ -178,7 +178,7 @@ it('submits multiple draft services for review', function (): void {
 })->group('catalog', 'services-list', 'submit-review');
 
 it('throws ValidationException when submitting a published service for review', function (): void {
-    $vendor = makeVendorWithType(ProductType::Rental);
+    $vendor = makeListVendorWithType(ProductType::Rental);
 
     $service = Service::factory()->rental()->create([
         'vendor_profile_id' => $vendor->id,
@@ -190,8 +190,8 @@ it('throws ValidationException when submitting a published service for review', 
 })->group('catalog', 'services-list', 'submit-review');
 
 it('throws ValidationException when another vendor tries to submit for review', function (): void {
-    $vendorA = makeVendorWithType(ProductType::Rental);
-    $vendorB = makeVendorWithType(ProductType::Rental);
+    $vendorA = makeListVendorWithType(ProductType::Rental);
+    $vendorB = makeListVendorWithType(ProductType::Rental);
 
     $service = Service::factory()->rental()->create([
         'vendor_profile_id' => $vendorA->id,
@@ -203,7 +203,7 @@ it('throws ValidationException when another vendor tries to submit for review', 
 })->group('catalog', 'services-list', 'submit-review', 'auth');
 
 it('allows submitting a changes_requested service for review', function (): void {
-    $vendor = makeVendorWithType(ProductType::Rental);
+    $vendor = makeListVendorWithType(ProductType::Rental);
 
     $service = Service::factory()->rental()->create([
         'vendor_profile_id' => $vendor->id,

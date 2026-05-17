@@ -9,6 +9,7 @@ use App\Modules\Payments\Filament\Resources\PaymentAttemptResource\Pages;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class PaymentAttemptResource extends Resource
 {
@@ -53,18 +54,31 @@ class PaymentAttemptResource extends Resource
         return false;
     }
 
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()->with(['payment']);
+    }
+
     public static function table(Table $table): Table
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('payment_id')
+                Tables\Columns\TextColumn::make('payment.public_id')
                     ->label(__('payments.columns.payment'))
-                    ->sortable(),
+                    ->copyable()
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('attempt_no')
                     ->label(__('payments.columns.attempt_no'))
                     ->sortable(),
                 Tables\Columns\TextColumn::make('http_status')
                     ->label(__('payments.columns.http_status'))
+                    ->badge()
+                    ->color(fn ($state): string => match (true) {
+                        $state >= 200 && $state < 300 => 'success',
+                        $state >= 400 && $state < 500 => 'warning',
+                        $state >= 500 => 'danger',
+                        default => 'gray',
+                    })
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->label(__('admin.common.created_at'))

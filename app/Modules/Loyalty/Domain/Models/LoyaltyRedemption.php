@@ -53,6 +53,21 @@ class LoyaltyRedemption extends Model
         return LoyaltyRedemptionFactory::new();
     }
 
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo('App\Modules\Identity\Domain\Models\User');
+    }
+
+    public function vendorProfile(): BelongsTo
+    {
+        return $this->belongsTo('App\Modules\Identity\Domain\Models\VendorProfile');
+    }
+
+    public function booking(): BelongsTo
+    {
+        return $this->belongsTo('App\Modules\Booking\Domain\Models\Booking');
+    }
+
     public function program(): BelongsTo
     {
         return $this->belongsTo(LoyaltyProgram::class, 'loyalty_program_id');

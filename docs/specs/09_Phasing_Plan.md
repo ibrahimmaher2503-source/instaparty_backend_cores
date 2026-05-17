@@ -319,7 +319,7 @@ Same risks as v1, but now mitigated by smaller scope per phase:
 
 **TABLES TOUCHED:** vendor_profiles (status updates), vendor_approved_product_types, vendor_documents
 
-**DELIVERABLE:** Admin uses Filament "Vendor Approval Queue" to approve a vendor for `rental` only. Vendor's API shows `approval_status=approved` for rental, no rights for sale/digital.
+**DELIVERABLE:** Admin uses Filament "Vendor Approval Queue" to approve a vendor for `rental` only. Vendor's API shows `approval_status=approved` for rental, no rights for sale/digital. Vendor sees `VendorOnboardingChecklistWidget` on `/vendor` dashboard — 10-row checklist with status icons, progress bar, next-recommended-action CTA, and rejection/suspension banners (FR-EXT-001 through FR-EXT-018 from specs/034-vendor-onboarding-checklist).
 
 **DAYS:**
 
@@ -780,6 +780,290 @@ Same risks as v1, but now mitigated by smaller scope per phase:
 - ✅ Pest covers all 3 types' commission flows
 
 **BLOCKS:** Phase 7.1 (smoke test needs full money cycle)
+
+---
+
+## PHASE 4.9 — Financial Ledger Hardening (5 days, Week 7–8)
+
+**GOAL:** Wallet balances become a projection cache derived from an append-only double-entry ledger. All money-mutating actions are idempotent, concurrency-safe, and auditable end-to-end via correlation + causation IDs.
+
+**PRD COVERAGE:** FR-EXT-101–FR-EXT-130 (§7 Financial Integrity & Reconciliation)
+
+**ADR REQUIRED:** `ADR-0028-financial-ledger-hardening.md` ✅ (Accepted 2026-05-15)
+
+**TABLES TOUCHED:**
+- MODIFIED: `wallets`, `wallet_ledger`, `withdrawals`, `commissions`, `payments`, `refunds`, `idempotency_keys`
+- CREATED: `ledger_transaction_groups`, `financial_snapshots`, `reconciliation_runs`, `reconciliation_findings`
+
+**DELIVERABLE:**
+- `php artisan ledger:diff` reports zero drift on staging.
+- 50 concurrent withdrawal requests on a 1× funded wallet → exactly 1 succeeds.
+- 100 duplicate webhooks → exactly 1 capture group.
+- Scheduled hourly + daily reconciliation detects and auto-repairs cache drift.
+- Admin can view reconciliation run history and findings in Filament.
+
+**DAYS:**
+
+### Day 1 — Foundation (Phase 1 + 2 tasks T001–T058)
+- [ ] ADR-0028 authored and accepted
+- [ ] 12 Settlement migrations + 3 Payments migrations (T008–T019)
+- [ ] Enums, contracts, DTOs, exceptions (T020–T034)
+- [ ] Domain models + repository refactor (T035–T049)
+- [ ] Redis locker, causal-chain trait + middleware, suspense seeder (T049–T051)
+- [ ] Service provider bindings (T052)
+- [ ] Artisan commands: backfill, diff, inventory (T053–T055)
+- [ ] Architecture tests (T056–T058)
+- [ ] `php artisan migrate:fresh --seed && ledger:diff` → zero drift on fresh DB
+
+### Day 2 — US1 + US2: Ledger sole truth + Duplicate webhook (T059–T086)
+- [ ] PostLedgerTransactionAction, ProjectWalletBalanceAction (T068–T069)
+- [ ] CreditWalletAction + DebitWalletAction refactor (T070–T071)
+- [ ] CalculateCommissionAction + ReverseCommissionAction refactor (T073–T074)
+- [ ] US1 Pest tests green (T059–T067)
+- [ ] IdempotencyService refactor (T081)
+- [ ] CapturePaymentAction + ProcessPaymobWebhookAction refactor (T082–T084)
+- [ ] Correlation-id propagation (T085)
+- [ ] US2 Pest tests green (T076–T080)
+
+### Day 3 — US3 + US4: Concurrency + Partial refunds (T087–T105)
+- [ ] RequestWithdrawalAction refactor (T093)
+- [ ] ApproveAndMarkWithdrawalPaidAction + RejectWithdrawalAction refactor (T094–T095)
+- [ ] US3 Pest tests green (T087–T092)
+- [ ] InitiateRefundAction + ProcessRefundAction refactor (T102–T103)
+- [ ] Refund webhook callback handler (T104)
+- [ ] US4 Pest tests green (T097–T101)
+
+### Day 4 — US5 + US6: Forensic trace + Reconciliation (T106–T137)
+- [ ] LedgerTransactionGroupResource + WalletLedgerResource Filament views (T108–T109)
+- [ ] EloquentReconciliationDetector (T115)
+- [ ] ReconcileWalletAction + RunReconciliationAction (T116–T117)
+- [ ] Reconciliation events + notification listener (T118–T120)
+- [ ] ReconcileRunCommand + scheduler (T122–T123)
+- [ ] ReconciliationRunResource + ReconciliationFindingResource Filament (T124–T125)
+- [ ] Admin controller + routes + Bruno collection (T127–T136)
+- [ ] US5 + US6 Pest tests green (T106–T107, T113–T114)
+
+### Day 5 — US7 + US8 + Polish (T138–T163)
+- [ ] SettlementRunAction crash-resume (T139–T141)
+- [ ] Architecture tests all green (T144–T149)
+- [ ] Financial snapshots (T150–T151)
+- [ ] Full Pest suite: `--group=ledger,reconciliation,concurrency,idempotency` (T152)
+- [ ] `ledger:diff` zero drift on staging
+- [ ] Schema cheatsheet + Tech Decisions updated
+- [ ] All 12 success criteria verified (quickstart.md)
+
+**CUT-LIST:**
+- `ledger:snapshot` daily job → defer (reconciliation still works without snapshots, just slower)
+- `ConcurrentSettlementResumeTest` (US7) → defer if US1–US4 are MVP
+- Arabic translations for reconciliation screens → 48h after English
+- `ReconciliationFindingResource` detail Filament page → defer; list + run summary covers ops needs
+
+**EXIT CRITERIA:**
+- ✅ `php artisan ledger:diff` reports zero drift on staging
+- ✅ SC-001 architecture test green in CI
+- ✅ `ConcurrentRequestsBlockOverdrawTest` green on Linux CI
+- ✅ `DuplicateWebhookProducesOneLedgerGroupTest` green
+- ✅ `PartialRefundsExhaustCapturedTest` green
+- ✅ `ReconcileRunCommand` completes in < 5 min against dev DB
+- ✅ All FR-EXT-101–FR-EXT-130 verified via quickstart.md
+
+**BLOCKS:** Phase 7.1 (hardening must precede staging deploy)
+
+---
+
+## PHASE 4.10 — Tax / VAT Computation (4 days, Week 8) — PROPOSED, ratification pending
+
+**STATUS:** Proposed — built ahead of plan in working tree of branch `030-vendor-booking-decision-page`. Requires ratification per `docs/adr/ADR-0031-tax-vat-module.md`. **Defer by default** until §5.1 of the ADR is answered Yes.
+
+**GOAL:** Per-booking VAT resolution and computation, with refund reversal and ledger posting that satisfies Egyptian Tax Authority accounting requirements.
+
+**PRD COVERAGE:** Amendment to §5.2 required — narrow the "Advanced tax invoicing" exclusion before this phase can be marked in scope.
+
+**ADR REQUIRED:** `docs/adr/ADR-0031-tax-vat-module.md` (Proposed)
+
+**TABLES TOUCHED:**
+- CREATED: `tax_rates`
+- ALTERED: `bookings` (+`total_vat_minor`), `booking_items` (+`vat_rate_bps`, +`vat_amount_minor`, +`vat_currency`)
+- DEPENDS ON: `wallet_ledger` chart of accounts (ADR-0028 addendum needed for `platform_vat_payable` suspense account)
+
+**DELIVERABLE:**
+- Canonical Egyptian VAT seeded; admin can deactivate but not historical-edit.
+- Booking submission computes VAT per item, sums to `bookings.total_vat_minor`.
+- Refund reverses VAT proportionally and posts to `wallet_ledger` via Phase 4.9 transaction group.
+- Tax report page exports a CSV of VAT collected per period.
+
+**DAYS:**
+
+### Day 1 — Foundations + ratification
+- [ ] ADR-0031 §5.1 ratified (Yes/No on scope expansion)
+- [ ] If Yes: PRD §5.2 amendment merged, this phase becomes Accepted
+- [ ] If No: revert `app/Modules/Tax/` and 3 Tax migrations; STOP
+- [ ] Canonical Egyptian VAT seeder (`CanonicalTaxRatesSeeder`) shipped
+- [ ] Money columns paired correctly (merge migration 006 into 002 or document the split)
+- [ ] `TaxRateResolver` binding in `TaxServiceProvider::register()` verified by arch test
+
+### Day 2 — Computation + rounding
+- [ ] `ResolveTaxRateForBookingAction` covered: most-specific match, effective-date edges, customer-vs-vendor incidence
+- [ ] Rounding mode chosen (HALF_UP at line level) and applied via `Brick\Money`
+- [ ] `is_tax_inclusive` semantics documented + tested both directions
+- [ ] `SubmitBookingAction` integrates VAT computation into `booking_items.vat_amount_minor` and `bookings.total_vat_minor`
+- [ ] Pest: rental + sale + digital VAT computation tests green
+
+### Day 3 — Refund reversal + ledger
+- [ ] ADR-0028 addendum: `platform_vat_payable` suspense account added
+- [ ] `ProcessRefundAction` reverses proportional VAT in the same ledger transaction group
+- [ ] Pest: partial-refund VAT proportionality test
+- [ ] Architecture test: every VAT-bearing money flow posts a ledger entry
+
+### Day 4 — Admin + reporting
+- [ ] `TaxRateResource` historical-row Edit lockdown (`->disabled()` after first usage)
+- [ ] `TaxReportPage` exports CSV of VAT collected per period × product type
+- [ ] `php artisan shield:generate --all` run; permissions seeded
+- [ ] Schema cheat sheet updated (60 → 61 tables, new columns documented)
+- [ ] EN + AR translations complete
+
+**CUT-LIST:**
+- Tax authority API integration → defer to Phase 2 (not in scope here regardless).
+- Withholding tax → defer.
+- Multi-jurisdiction → defer.
+- Tax report Excel export (CSV-only at first) → defer if time-pressed.
+
+**EXIT CRITERIA:**
+- ✅ ADR-0031 ratified
+- ✅ PRD §5.2 exclusion narrowed
+- ✅ All `tests/Feature/Modules/Tax/` and `tests/Feature/Modules/Booking/Tax/` pass
+- ✅ Refund VAT reversal architecturally enforced
+- ✅ Schema cheat sheet re-locked at 61 tables
+
+**BLOCKS:** None directly — but historical booking data created before this phase will have `total_vat_minor=0`, requiring a backfill plan.
+
+---
+
+## PHASE 4.11 — Withdrawal Proof & Finance Audit (1–2 days, Week 8)
+
+**GOAL:** Split the combined Approve-and-MarkPaid withdrawal action into two discrete admin steps (Approve → MarkPaid), make proof upload and bank-transfer reference mandatory before paying, and expose the full status timeline + proof download to vendors in their wallet view.
+
+**PRD COVERAGE:** FR-EXT-205, FR-EXT-206, FR-EXT-207, FR-EXT-208, FR-EXT-209 (PRD §7.7)
+
+**ADR REQUIRED:** `docs/adr/ADR-0032-withdrawal-proof-audit.md`
+
+**SPEC:** `specs/033-withdrawal-proof-audit/`
+
+**TABLES TOUCHED:**
+- ALTERED: `withdrawals` (+`approved_by_admin_id`, +`paid_by_admin_id`, +`bank_transfer_reference`, +`admin_payment_note`)
+- NOTE: `approved_at` and `paid_at` already exist; no schema change needed for those columns
+- NEW INDEX: `withdrawals_vendor_transfer_ref_unique` on `(vendor_profile_id, bank_transfer_reference)`
+- DEPENDS ON: Phase 4.2 (`withdrawals` exists), Phase 4.9 (ledger groups + idempotency + reserve/settle flow)
+
+**DELIVERABLE:**
+- Admin can Approve a pending withdrawal (records `approved_at` + `approved_by_admin_id`).
+- Admin can MarkPaid an approved withdrawal with a mandatory proof file (PDF/JPEG/PNG) and a mandatory bank-transfer reference (records `paid_at` + `paid_by_admin_id` + reference + optional EN/AR note).
+- Vendor detail endpoint returns full status timeline, reference, note (in request locale), and a signed proof download URL.
+- A different vendor requesting another vendor's withdrawal receives 404.
+
+**DAYS:**
+
+### Day 1 — Schema + Action split + vendor endpoint
+- [ ] Additive migration: add `approved_by_admin_id`, `paid_by_admin_id`, `bank_transfer_reference`, `admin_payment_note` + UNIQUE index
+- [ ] `ApproveWithdrawalAction` — records `approved_at`, `approved_by_admin_id`, writes `audit_logs` row
+- [ ] `MarkWithdrawalPaidAction` — validates proof + reference, records paid fields, fires settle ledger group, writes `audit_logs` row, idempotent via existing key scope
+- [ ] Vendor `WithdrawalResource` (API) extended with new fields + signed proof URL
+- [ ] 404 policy enforced on vendor detail endpoint
+- [ ] Schema cheat sheet updated
+
+### Day 2 — Filament + permissions + tests
+- [ ] `WithdrawalsQueueResource` row actions: replace single combined action with `Approve` + `MarkPaid` (form: reference required, proof required, note optional EN/AR)
+- [ ] `WithdrawalResource` admin detail/view page renders full audit fields + proof preview
+- [ ] Permissions seeded: `withdrawal.approve`, `withdrawal.mark_paid`, `withdrawal.view_audit`
+- [ ] `php artisan shield:generate --all`
+- [ ] Pest suite green (`tests/Feature/Modules/Settlement/`) — all FR-018 scenarios covered
+- [ ] EN + AR translations complete
+
+**CUT-LIST:**
+- Reject-after-approve state transition → out of scope (raise separate spec).
+- Bulk Approve / bulk MarkPaid → Phase 2.
+- Vendor-facing notification dispatch on transition → Phase 5.0 Communications handles templates.
+
+**EXIT CRITERIA:**
+- ✅ Two-step Approve → MarkPaid flow enforced end-to-end
+- ✅ MarkPaid refuses when proof or reference is missing
+- ✅ 404 returned for cross-vendor access
+- ✅ wallet_ledger append-only invariant verified by Pest assertion
+- ✅ MarkPaid idempotent (same Idempotency-Key replays cached response)
+- ✅ ADR-0032 written and ratified
+
+**BLOCKS:** None — this hardens an existing flow and does not gate any other phase.
+
+---
+
+## PHASE 5.5 — Vendor Promotion & Paid Placements (5 days, Week 7) — PROPOSED, ratification pending
+
+**STATUS:** Proposed — built ahead of plan in working tree of branch `030-vendor-booking-decision-page`. Requires ratification per `docs/adr/ADR-0030-advertising-module.md`. **Defer by default** until §3 of the ADR is answered (keep vs revert).
+
+**GOAL:** Vendors purchase paid placement packages (homepage banner, category banner, sponsored search, featured listing). Subscriptions lifecycle from `pending_payment → active → expired → cancelled` with impression/click tracking.
+
+**PRD COVERAGE:** Amendment to §5.2 required — remove "Vendor page slider" and "Vendor subscription tiers" from the Phase 2 out-of-scope enumeration, or scope them tighter to exclude this surface.
+
+**ADR REQUIRED:** `docs/adr/ADR-0030-advertising-module.md` (Proposed)
+
+**TABLES TOUCHED:**
+- CREATED: `advertisement_packages`, `vendor_ad_subscriptions`
+- DEPENDS ON: Subscriptions module (Phase 1.7) for billing, Payments (Phase 4.x) for Paymob, Communications (Phase 5.0) for expiry notifications, Discovery (Phase 3) for sponsored search injection.
+
+**DELIVERABLE:**
+- Admin can create packages with EN+AR descriptions and per-placement pricing.
+- Vendor purchases via Paymob (through Subscriptions module integration).
+- Active subscriptions inject into Discovery search results and Catalog category pages.
+- Impression endpoint rate-limited and deduplicated.
+
+**DAYS:**
+
+### Day 1 — Ratification + payment integration
+- [ ] ADR-0030 §3 ratified (keep vs revert)
+- [ ] If revert: `git checkout -- app/Modules/Advertising bootstrap/providers.php`; STOP
+- [ ] If keep: PRD §5.2 amendment merged
+- [ ] Payment integration decision (§5.1 of ADR): Subscriptions reuse vs stand-alone
+- [ ] `AdvertisementPackage.price_minor` cast via `MoneyCast` (constitution §6 fix)
+- [ ] Soft-delete review on both tables (default = hard delete, OK)
+
+### Day 2 — Placement enforcement contract
+- [ ] `Discovery/Domain/Contracts/SponsoredResultsProvider` interface drafted
+- [ ] `Catalog/Domain/Contracts/FeaturedListingProvider` interface drafted
+- [ ] `Advertising` implements both; Discovery and Catalog consume via DI
+- [ ] Stub implementations land so backend can serve `?include=sponsored` for frontend integration
+
+### Day 3 — Impression dedup + fraud guard
+- [ ] `TrackAdImpressionAction` adds session×subscription dedup (15-min window)
+- [ ] Bot user-agent filter
+- [ ] Rate-limit per IP per subscription per minute (Laravel rate limiter)
+- [ ] Pest: replay attack does not double-count
+
+### Day 4 — Tests + Filament + Shield
+- [ ] Pest under `tests/Feature/Modules/Advertising/`: happy path, auth (401), authz (vendor can purchase, cannot CRUD packages), validation, EN+AR locale
+- [ ] `php artisan shield:generate --all`; permissions in `IdentityRolesSeeder`
+- [ ] `AdvertisingAnalyticsPage` polished — admin sees revenue, impressions, top vendors
+
+### Day 5 — Revenue ledger posting
+- [ ] ADR-0028 addendum: `platform_advertising_revenue` suspense account
+- [ ] Active-subscription start posts to ledger via Phase 4.9 transaction group
+- [ ] Reconciliation engine includes ad revenue in its drift checks
+- [ ] Schema cheat sheet updated (60 → 62 if Tax ships too, else 60 → 61)
+
+**CUT-LIST:**
+- `AdvertisingAnalyticsPage` — list view of subscriptions is enough; defer the charts page.
+- `AdRevenueChartWidget` — defer; the dashboard stats widget is enough for Phase 1.
+- Click tracking (`click_count`) — defer; impression-only for Phase 1.
+- Multi-currency package pricing — Phase 2.
+
+**EXIT CRITERIA:**
+- ✅ ADR-0030 ratified
+- ✅ PRD §5.2 exclusion narrowed
+- ✅ Placement enforcement actually injects into Discovery and Catalog (not just collects data)
+- ✅ Impression dedup proven by test
+- ✅ Ad revenue posts to ledger as a balanced double-entry
+- ✅ Schema cheat sheet re-locked
+
+**BLOCKS:** None.
 
 ---
 

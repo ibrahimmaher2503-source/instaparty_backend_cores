@@ -40,7 +40,7 @@ for (const { label, url } of CREATE_PAGES) {
 
             // Page must remain on the form (other required fields still missing) without crashing
             await expect(page).not.toHaveURL(/error|exception/);
-            await expect(page.locator('form')).toBeVisible();
+            await expect(page.locator('#form')).toBeVisible();
         });
     });
 }

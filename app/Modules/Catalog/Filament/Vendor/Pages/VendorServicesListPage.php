@@ -10,6 +10,7 @@ use App\Modules\Catalog\Application\Actions\VendorArchiveServiceAction;
 use App\Modules\Catalog\Domain\Enums\ProductType;
 use App\Modules\Catalog\Domain\Enums\ServiceStatus;
 use App\Modules\Catalog\Domain\Models\Service;
+use App\Modules\Catalog\Domain\States\ServiceStatus\ServiceState;
 use App\Modules\Identity\Domain\Models\VendorProfile;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
@@ -72,14 +73,22 @@ class VendorServicesListPage extends Page implements HasTable
                 TextColumn::make('status')
                     ->label(__('vendor-portal.services.status'))
                     ->badge()
-                    ->color(fn (ServiceStatus $state) => $state->color())
-                    ->formatStateUsing(fn (ServiceStatus $state) => match ($state) {
-                        ServiceStatus::Draft => __('vendor-portal.services.draft'),
-                        ServiceStatus::PendingReview => __('vendor-portal.services.pending_review'),
-                        ServiceStatus::Published => __('vendor-portal.services.published'),
-                        ServiceStatus::Rejected => __('vendor-portal.services.rejected'),
-                        ServiceStatus::ChangesRequested => 'Changes Requested',
-                        ServiceStatus::Archived => 'Archived',
+                    ->color(fn (mixed $state): string => $state instanceof ServiceState
+                        ? (ServiceStatus::tryFrom($state->getValue())?->color() ?? 'gray')
+                        : 'gray')
+                    ->formatStateUsing(function (mixed $state): string {
+                        if (! ($state instanceof ServiceState)) {
+                            return (string) $state;
+                        }
+                        return match (ServiceStatus::tryFrom($state->getValue())) {
+                            ServiceStatus::Draft => __('vendor-portal.services.draft'),
+                            ServiceStatus::PendingReview => __('vendor-portal.services.pending_review'),
+                            ServiceStatus::Published => __('vendor-portal.services.published'),
+                            ServiceStatus::Rejected => __('vendor-portal.services.rejected'),
+                            ServiceStatus::ChangesRequested => 'Changes Requested',
+                            ServiceStatus::Archived => 'Archived',
+                            default => $state->getValue(),
+                        };
                     }),
                 TextColumn::make('base_price_minor')
                     ->label('Price')

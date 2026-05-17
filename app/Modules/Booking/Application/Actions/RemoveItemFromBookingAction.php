@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Modules\Booking\Application\Actions;
 
-use App\Modules\Booking\Domain\Enums\LifecycleStatus;
 use App\Modules\Booking\Domain\Events\BookingItemRemoved;
 use App\Modules\Booking\Domain\Models\Booking;
 use App\Modules\Booking\Domain\Models\BookingItem;
 use App\Modules\Booking\Domain\Models\BookingVendor;
+use App\Modules\Booking\Domain\States\BookingLifecycleStatus\DraftState;
 use App\Modules\Catalog\Domain\Enums\ReservationStatus;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Support\Facades\DB;
@@ -28,7 +28,7 @@ class RemoveItemFromBookingAction
             if ($booking->customer_id !== $customerId) {
                 $this->abortWith(Response::HTTP_FORBIDDEN, 'Forbidden');
             }
-            if ($booking->lifecycle_status !== LifecycleStatus::Draft) {
+            if (! ($booking->lifecycle_status instanceof DraftState)) {
                 $this->abortWith(Response::HTTP_CONFLICT, 'Booking is not in draft status');
             }
 

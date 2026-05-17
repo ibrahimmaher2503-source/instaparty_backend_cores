@@ -29,8 +29,8 @@ return new class extends Migration
             $table->string('tax_id', 50)->nullable();
             $table->string('national_id', 50)->nullable();
 
-            $table->foreignId('primary_governorate_id')->constrained('governorates')->restrictOnDelete();
-            $table->foreignId('primary_city_id')->constrained('cities')->restrictOnDelete();
+            $table->foreignId('primary_governorate_id')->nullable()->constrained('governorates')->nullOnDelete();
+            $table->foreignId('primary_city_id')->nullable()->constrained('cities')->nullOnDelete();
             $table->json('address_line')->nullable();
             $table->decimal('latitude', 10, 7)->nullable();
             $table->decimal('longitude', 10, 7)->nullable();

@@ -12,6 +12,8 @@ use App\Modules\Reviews\Providers\ReviewsServiceProvider;
 use App\Modules\Settlement\Providers\SettlementServiceProvider;
 use App\Modules\Shared\Providers\SharedServiceProvider;
 use App\Modules\Subscriptions\Providers\SubscriptionsServiceProvider;
+use App\Modules\Tax\Providers\TaxServiceProvider;
+use App\Modules\Advertising\Providers\AdvertisingServiceProvider;
 use App\Providers\AppServiceProvider;
 use App\Providers\Filament\AdminPanelProvider;
 use App\Providers\Filament\VendorPanelProvider;
@@ -30,6 +32,8 @@ return [
     ReviewsServiceProvider::class,
     LoyaltyServiceProvider::class,
     SubscriptionsServiceProvider::class,
+    TaxServiceProvider::class,
+    AdvertisingServiceProvider::class,
     AdminPanelProvider::class,
     VendorPanelProvider::class,
 ];

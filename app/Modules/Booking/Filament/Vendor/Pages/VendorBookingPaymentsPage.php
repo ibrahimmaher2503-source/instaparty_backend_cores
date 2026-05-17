@@ -6,8 +6,13 @@ namespace App\Modules\Booking\Filament\Vendor\Pages;
 
 use App\Modules\Booking\Domain\Models\BookingVendor;
 use App\Modules\Identity\Domain\Models\VendorProfile;
-use App\Modules\Payments\Domain\Enums\PaymentStatus;
 use App\Modules\Payments\Domain\Models\Payment;
+use App\Modules\Payments\Domain\States\PaymentStatus\AuthorizedState;
+use App\Modules\Payments\Domain\States\PaymentStatus\CapturedState;
+use App\Modules\Payments\Domain\States\PaymentStatus\PartiallyRefundedState;
+use App\Modules\Payments\Domain\States\PaymentStatus\PaymentState;
+use App\Modules\Payments\Domain\States\PaymentStatus\PendingState;
+use App\Modules\Payments\Domain\States\PaymentStatus\RefundedState;
 use Filament\Actions\Action;
 use Filament\Pages\Page;
 use Filament\Tables\Columns\TextColumn;
@@ -81,21 +86,27 @@ class VendorBookingPaymentsPage extends Page implements HasTable
 
                         return $formatted;
                     })
-                    ->color(fn (Payment $record) => match ($record->status) {
-                        PaymentStatus::Refunded, PaymentStatus::PartiallyRefunded => 'danger',
-                        PaymentStatus::Captured => 'success',
+                    ->color(fn (Payment $record): string => match (true) {
+                        $record->status instanceof RefundedState,
+                        $record->status instanceof PartiallyRefundedState => 'danger',
+                        $record->status instanceof CapturedState => 'success',
                         default => 'gray',
                     }),
 
                 TextColumn::make('status')
                     ->label(__('vendor-portal.bookings.payment_status'))
                     ->badge()
-                    ->color(fn (PaymentStatus $state) => match ($state) {
-                        PaymentStatus::Captured => 'success',
-                        PaymentStatus::Refunded, PaymentStatus::PartiallyRefunded => 'danger',
-                        PaymentStatus::Pending, PaymentStatus::Authorized => 'warning',
+                    ->color(fn (mixed $state): string => match (true) {
+                        $state instanceof CapturedState => 'success',
+                        $state instanceof RefundedState,
+                        $state instanceof PartiallyRefundedState => 'danger',
+                        $state instanceof PendingState,
+                        $state instanceof AuthorizedState => 'warning',
                         default => 'gray',
-                    }),
+                    })
+                    ->formatStateUsing(fn (mixed $state): string => $state instanceof PaymentState
+                        ? $state->getValue()
+                        : (string) $state),
 
                 TextColumn::make('gateway_ref')
                     ->label(__('vendor-portal.bookings.gateway_ref'))

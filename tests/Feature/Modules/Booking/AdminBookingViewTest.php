@@ -10,7 +10,7 @@ use App\Modules\Booking\Domain\Models\Booking;
 use App\Modules\Booking\Domain\Models\BookingAddress;
 use App\Modules\Booking\Domain\Models\BookingItem;
 use App\Modules\Booking\Domain\Models\BookingSnapshot;
-use App\Modules\Booking\Domain\Models\BookingStateTransition;
+use App\Modules\Shared\Domain\Models\StateTransition;
 use App\Modules\Booking\Domain\Models\BookingVendor;
 use App\Modules\Booking\Filament\Resources\BookingResource;
 use App\Modules\Booking\Filament\Resources\BookingResource\Pages\ViewBooking;
@@ -194,7 +194,7 @@ function makeBookingViewFixture(User $admin): array
         'created_at' => now(),
     ]);
 
-    $transition = BookingStateTransition::create([
+    $transition = StateTransition::create([
         'transitionable_type' => Booking::class,
         'transitionable_id' => $booking->id,
         'from_state' => LifecycleStatus::Draft->value,

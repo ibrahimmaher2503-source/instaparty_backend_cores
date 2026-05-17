@@ -15,5 +15,6 @@ class PaymobWebhookDto extends Data
         public ?string $failureCode,
         public ?Money $capturedAmount,
         public array $rawPayload,
+        public string $transactionType = 'PURCHASE',
     ) {}
 }

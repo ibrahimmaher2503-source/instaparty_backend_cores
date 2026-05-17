@@ -3,12 +3,13 @@
 declare(strict_types=1);
 
 use App\Modules\Booking\Domain\Enums\FulfillmentStatus;
-use App\Modules\Booking\Domain\Enums\LifecycleStatus;
-use App\Modules\Booking\Domain\Enums\PaymentStatus;
 use App\Modules\Booking\Domain\Models\Booking;
 use App\Modules\Booking\Domain\Models\BookingVendor;
+use App\Modules\Booking\Domain\States\BookingLifecycleStatus\DraftState;
+use App\Modules\Booking\Domain\States\BookingLifecycleStatus\SubmittedState;
+use App\Modules\Booking\Domain\States\BookingPaymentStatus\UnpaidState;
 use App\Modules\Catalog\Domain\Enums\ProductType;
-use App\Modules\Catalog\Domain\Enums\ServiceStatus;
+use App\Modules\Catalog\Domain\States\ServiceStatus\PublishedState;
 use App\Modules\Catalog\Domain\Models\Category;
 use App\Modules\Catalog\Domain\Models\Occasion;
 use App\Modules\Catalog\Domain\Models\Service;
@@ -42,8 +43,8 @@ function makeDraftBooking(User $customer): Booking
         'reference_no' => 'IP-2026-TEST01',
         'customer_id' => $customer->id,
         'occasion_id' => $occasion->id,
-        'lifecycle_status' => LifecycleStatus::Draft,
-        'payment_status' => PaymentStatus::Unpaid,
+        'lifecycle_status' => DraftState::class,
+        'payment_status' => UnpaidState::class,
         'fulfillment_status' => FulfillmentStatus::NotStarted,
         'event_starts_at' => now()->addDays(30),
         'event_ends_at' => now()->addDays(30)->addHours(5),
@@ -63,7 +64,7 @@ function makePublishedService(ProductType $type, array $overrides = []): Service
 
     return Service::factory()->create(array_merge([
         'product_type' => $type,
-        'status' => ServiceStatus::Published,
+        'status' => PublishedState::class,
         'vendor_profile_id' => $vendor->id,
         'category_id' => $category->id,
     ], $overrides));
@@ -134,13 +135,13 @@ it('adds two items from same vendor into one booking_vendor row', function (): v
 
     $service1 = Service::factory()->create([
         'product_type' => ProductType::Digital,
-        'status' => ServiceStatus::Published,
+        'status' => PublishedState::class,
         'vendor_profile_id' => $vendor->id,
         'category_id' => $category->id,
     ]);
     $service2 = Service::factory()->create([
         'product_type' => ProductType::Digital,
-        'status' => ServiceStatus::Published,
+        'status' => PublishedState::class,
         'vendor_profile_id' => $vendor->id,
         'category_id' => $category->id,
     ]);
@@ -180,7 +181,7 @@ it('adds items from two vendors creating two booking_vendor rows', function (): 
 it('returns 409 when adding to a non-draft booking', function (): void {
     $customer = makeBookingCustomer();
     $booking = makeDraftBooking($customer);
-    $booking->update(['lifecycle_status' => LifecycleStatus::Submitted]);
+    $booking->update(['lifecycle_status' => SubmittedState::class]);
     $service = makePublishedService(ProductType::Digital);
 
     $this->actingAs($customer)->postJson(

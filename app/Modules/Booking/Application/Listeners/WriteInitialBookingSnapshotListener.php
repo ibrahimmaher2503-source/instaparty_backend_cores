@@ -22,7 +22,7 @@ class WriteInitialBookingSnapshotListener
             'snapshot' => [
                 'booking' => [
                     'public_id' => $booking->public_id,
-                    'lifecycle_status' => $booking->lifecycle_status->value,
+                    'lifecycle_status' => $booking->lifecycle_status->getValue(),
                     'event_starts_at' => $booking->event_starts_at?->toIso8601String(),
                     'total_minor' => 0,
                 ],

@@ -10,7 +10,9 @@ use App\Modules\Booking\Domain\Enums\LifecycleStatus;
 use App\Modules\Booking\Domain\Events\BookingForceCancelled;
 use App\Modules\Booking\Domain\Models\Booking;
 use App\Modules\Booking\Domain\Models\BookingAdminIntervention;
-use App\Modules\Booking\Domain\Models\BookingStateTransition;
+use App\Modules\Booking\Domain\States\BookingLifecycleStatus\CancelledState;
+use App\Modules\Booking\Domain\States\BookingLifecycleStatus\CompletedState;
+use App\Modules\Shared\Domain\Models\StateTransition;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
@@ -18,25 +20,25 @@ class ForceCancelBookingAction
 {
     public function execute(Booking $booking, AdminInterventionDTO $dto): BookingAdminIntervention
     {
-        if ($booking->lifecycle_status === LifecycleStatus::Completed) {
+        if ($booking->lifecycle_status instanceof CompletedState) {
             throw new \DomainException('Cannot force-cancel a completed booking.');
         }
 
         return DB::transaction(function () use ($booking, $dto): BookingAdminIntervention {
             $beforeState = [
-                'lifecycle_status' => $booking->lifecycle_status->value,
-                'payment_status' => $booking->payment_status->value,
+                'lifecycle_status' => $booking->lifecycle_status->getValue(),
+                'payment_status' => $booking->payment_status->getValue(),
                 'fulfillment_status' => $booking->fulfillment_status->value,
             ];
 
-            $booking->lifecycle_status = LifecycleStatus::Cancelled;
+            $booking->lifecycle_status = CancelledState::class;
             $booking->cancelled_by = $dto->adminId;
             $booking->cancelled_at = now();
             $booking->save();
 
             $afterState = [
                 'lifecycle_status' => LifecycleStatus::Cancelled->value,
-                'payment_status' => $booking->payment_status->value,
+                'payment_status' => $booking->payment_status->getValue(),
                 'fulfillment_status' => $booking->fulfillment_status->value,
             ];
 
@@ -50,7 +52,7 @@ class ForceCancelBookingAction
                 'after_state' => $afterState,
             ]);
 
-            BookingStateTransition::create([
+            StateTransition::create([
                 'transitionable_type' => Booking::class,
                 'transitionable_id' => $booking->id,
                 'from_state' => $beforeState['lifecycle_status'],

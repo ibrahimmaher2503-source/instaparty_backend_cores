@@ -11,6 +11,7 @@ use App\Modules\Catalog\Http\Controllers\Vendor\ImportRentalServicesController;
 use App\Modules\Catalog\Http\Controllers\Vendor\ImportSaleServicesController;
 use App\Modules\Catalog\Http\Controllers\Vendor\RentalServiceController;
 use App\Modules\Catalog\Http\Controllers\Vendor\SaleServiceController;
+use App\Modules\Catalog\Http\Controllers\Vendor\VendorServiceChangeRequestController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth:sanctum'])->prefix('api/v1/vendor')->group(function (): void {
@@ -36,4 +37,8 @@ Route::middleware(['auth:sanctum'])->prefix('api/v1/vendor')->group(function ():
 
     // Service change request resubmission
     Route::post('services/{service:public_id}/resubmit', [ServiceResubmitController::class, 'store'])->name('vendor.services.resubmit');
+
+    // Service change request — vendor clarification reply
+    Route::post('service-change-requests/{publicId}/reply', [VendorServiceChangeRequestController::class, 'reply'])
+        ->name('vendor.service-change-requests.reply');
 });

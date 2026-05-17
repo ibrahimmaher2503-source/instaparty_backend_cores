@@ -5,7 +5,7 @@ declare(strict_types=1);
 use App\Modules\Booking\Application\Actions\MarkBookingItemStateAction;
 use App\Modules\Booking\Domain\Enums\VendorSubStatus;
 use App\Modules\Booking\Domain\Models\BookingItem;
-use App\Modules\Booking\Domain\Models\BookingStateTransition;
+use App\Modules\Shared\Domain\Models\StateTransition;
 use App\Modules\Booking\Domain\States\DigitalItemStatus\PendingState as DigitalPending;
 use App\Modules\Booking\Domain\States\DigitalItemStatus\RedeemedState;
 use App\Modules\Booking\Domain\States\DigitalItemStatus\SentState;
@@ -162,7 +162,7 @@ it('logs a BookingStateTransition entry after transition', function (): void {
 
     app(MarkBookingItemStateAction::class)->execute($item, $vendor, InPreparationState::class);
 
-    $log = BookingStateTransition::where('transitionable_id', $item->id)
+    $log = StateTransition::where('transitionable_id', $item->id)
         ->where('transitionable_type', BookingItem::class)
         ->first();
 

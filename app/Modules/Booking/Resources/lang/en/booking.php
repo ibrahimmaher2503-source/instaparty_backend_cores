@@ -161,4 +161,83 @@ return [
     'placeholders' => [
         'none' => '—',
     ],
+
+    'intervention' => [
+        'nav_label' => 'Booking Intervention',
+        'page_title' => 'Troubled Bookings',
+
+        // Table columns
+        'columns' => [
+            'reference' => 'Reference',
+            'customer' => 'Customer',
+            'product_type' => 'Product Type',
+            'lifecycle_status' => 'Lifecycle',
+            'payment_status' => 'Payment',
+            'fulfillment_status' => 'Fulfillment',
+            'trouble_type' => 'Trouble',
+            'nearest_deadline' => 'Deadline',
+            'total' => 'Total',
+        ],
+
+        // Trouble badges
+        'trouble' => [
+            'late_vendor_response' => 'Late Vendor',
+            'all_vendors_rejected' => 'All Rejected',
+            'customer_review_pending' => 'Review Pending',
+            'stalled' => 'Stalled',
+        ],
+
+        // Action labels
+        'actions' => [
+            'send_vendor_reminder' => 'Send Reminder',
+            'escalate_vendor_timeout' => 'Escalate Timeout',
+            'suggest_alternative_vendors' => 'Suggest Alternatives',
+            'resume_customer_review' => 'Resume Review',
+            'create_note' => 'Add Note',
+            'freeze_chat' => 'Freeze Chat',
+            'resume_chat' => 'Resume Chat',
+            'view' => 'View',
+        ],
+
+        // Confirmation modals
+        'confirm' => [
+            'send_vendor_reminder' => 'Send vendor reminder?',
+            'escalate_vendor_timeout' => 'Escalate vendor timeout? This will mark the vendor as timed out.',
+            'suggest_alternative_vendors' => 'Suggest these vendors to the customer?',
+            'resume_customer_review' => 'Send review reminder to the customer?',
+            'create_note' => 'Save this note?',
+            'freeze_chat' => 'Freeze the booking chat? All parties will be notified.',
+            'resume_chat' => 'Resume the booking chat? All parties will be notified.',
+        ],
+
+        // Success/error toasts
+        'success' => [
+            'send_vendor_reminder' => 'Vendor reminder sent successfully.',
+            'escalate_vendor_timeout' => 'Vendor escalated to timed out.',
+            'suggest_alternative_vendors' => 'Alternative vendors suggested to customer.',
+            'resume_customer_review' => 'Customer review reminder sent.',
+            'create_note' => 'Note saved.',
+            'freeze_chat' => 'Booking chat frozen successfully.',
+            'resume_chat' => 'Booking chat resumed successfully.',
+        ],
+        'error' => [
+            'throttled' => 'This action was performed recently. Please wait before trying again.',
+            'vendor_not_pending' => 'Vendor is no longer in pending status.',
+            'deadline_not_passed' => 'Response deadline has not yet passed.',
+            'no_open_modification' => 'No open modification found for this booking.',
+            'chat_thread_not_found' => 'No chat thread found for this booking.',
+            'chat_already_frozen' => 'The booking chat is already frozen.',
+            'chat_not_frozen' => 'The booking chat is not currently frozen.',
+        ],
+    ],
+
+    'errors' => [
+        'response_deadline_expired' => 'Response deadline has expired. Contact admin to re-open the response window.',
+        'payment_already_captured'  => 'Payment has been captured. Modification requires admin intervention.',
+        'booking_locked'            => 'This booking is currently locked. Try again once the active operation releases it.',
+        'booking_cancelled'         => 'This booking has been cancelled and cannot be modified.',
+        'booking_completed'         => 'This booking is completed and cannot be modified.',
+        'fulfillment_in_progress'   => 'Fulfillment is in progress and the booking can no longer be modified.',
+        'booking_not_modifiable'    => 'This booking is no longer modifiable.',
+    ],
 ];

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Modules\Catalog\Filament\Resources;
 
+use App\Modules\Catalog\Application\Actions\DeleteCategoryFieldSchemaAction;
 use App\Modules\Catalog\Domain\Enums\ProductType;
 use App\Modules\Catalog\Domain\Models\CategoryFieldSchema;
 use App\Modules\Catalog\Filament\Resources\CategoryFieldSchemaResource\Pages;
@@ -156,7 +157,12 @@ class CategoryFieldSchemaResource extends Resource
             ->defaultSort('sort_order')
             ->actions([
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\DeleteAction::make()
+                    ->using(function (CategoryFieldSchema $record): bool {
+                        app(DeleteCategoryFieldSchemaAction::class)->execute($record, auth()->user());
+
+                        return true;
+                    }),
             ]);
     }
 

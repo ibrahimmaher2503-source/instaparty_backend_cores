@@ -110,14 +110,16 @@ it('rejecting a withdrawal does NOT create a ledger debit entry', function (): v
     $admin = User::factory()->create();
     $admin->assignRole('admin');
 
+    $ledgerCountBefore = WalletLedgerEntry::count();
+
     app(RejectWithdrawalAction::class)->execute(
         $withdrawal,
         ['en' => 'Rejected.', 'ar' => 'مرفوض.'],
         $admin,
     );
 
-    // No ledger entry — balance is untouched
-    expect(WalletLedgerEntry::count())->toBe(0);
+    // No new ledger entry — balance is untouched
+    expect(WalletLedgerEntry::count())->toBe($ledgerCountBefore);
 })->group('settlement', 'admin', 'filament', 'T411');
 
 it('rejecting a withdrawal appends an audit_log row', function (): void {

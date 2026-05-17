@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Modules\Catalog\Filament\Resources;
 
+use App\Modules\Catalog\Application\Actions\DeleteOccasionAction;
 use App\Modules\Catalog\Domain\Models\Occasion;
 use App\Modules\Catalog\Filament\Resources\OccasionResource\Pages\CreateOccasion;
 use App\Modules\Catalog\Filament\Resources\OccasionResource\Pages\EditOccasion;
@@ -136,7 +137,12 @@ class OccasionResource extends Resource
             ->defaultSort('sort_order')
             ->actions([
                 EditAction::make(),
-                DeleteAction::make(),
+                DeleteAction::make()
+                    ->using(function (Occasion $record): bool {
+                        app(DeleteOccasionAction::class)->execute($record, auth()->user());
+
+                        return true;
+                    }),
             ]);
     }
 

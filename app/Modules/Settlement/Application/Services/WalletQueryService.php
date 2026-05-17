@@ -44,14 +44,13 @@ class WalletQueryService
         if ($wallet !== null) {
             $credits = (int) DB::table('wallet_ledger')
                 ->where('wallet_id', $wallet->id)
-                ->where('amount_minor', '>', 0)
+                ->where('direction', 'credit')
                 ->sum('amount_minor');
 
-            $rawDebits = (int) DB::table('wallet_ledger')
+            $debits = (int) DB::table('wallet_ledger')
                 ->where('wallet_id', $wallet->id)
-                ->where('amount_minor', '<', 0)
+                ->where('direction', 'debit')
                 ->sum('amount_minor');
-            $debits = abs($rawDebits);
         }
 
         return [

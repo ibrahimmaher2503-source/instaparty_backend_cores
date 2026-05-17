@@ -49,6 +49,10 @@ class IdentityRolesSeeder extends Seeder
             'request_service_edits',
             'archive_service',
             'moderate_service',
+            // Phase 8.0.1: staged-edit approval gates (one per product type)
+            'service.moderate.rental',
+            'service.moderate.sale',
+            'service.moderate.digital',
         ];
 
         $adminPermissions = [
@@ -82,6 +86,11 @@ class IdentityRolesSeeder extends Seeder
             'view_payment',
         ];
 
+        $interventionPermissions = [
+            'booking.intervene.access',
+            'force_cancel_booking',
+        ];
+
         return array_merge(
             $perTypePermissions,
             $serviceModerationPermissions,
@@ -89,6 +98,7 @@ class IdentityRolesSeeder extends Seeder
             $vendorOwnPermissions,
             $bookingMonitorPermissions,
             $paymentViewPermissions,
+            $interventionPermissions,
         );
     }
 }

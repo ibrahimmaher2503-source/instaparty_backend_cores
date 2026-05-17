@@ -20,10 +20,36 @@ headers {
 
 docs {
   Returns details of a specific withdrawal request.
-  - Phase 4.2 Settlement module.
+  - Phase 4.2 Settlement module; extended in Phase 4.11 (2026-05-16).
   - Requires settlement.view_withdrawals.own permission.
   - Vendor can only view their own withdrawals (403 otherwise).
   - Path parameter is the withdrawal public_id (ULID).
+  - Phase 4.11 audit fields: response includes `timeline`, `bank_transfer_reference`,
+    `admin_payment_note`, `proof_download_url`, `proof_download_url_expires_at`.
+  - `proof_download_url` is a pre-signed S3 URL valid for 15 minutes (null when no proof uploaded).
+  - `timeline` is an array of state-transition events with `event`, `at`, `by_type`, `by_public_id`.
+}
+
+body:json {
+  {
+    "data": {
+      "public_id": "01HXY7VWNQTQX5ZP3ZK1NE5K2C",
+      "amount": {"minor": 50000, "currency": "EGP", "formatted": "500.00 EGP"},
+      "status": "paid",
+      "timeline": [
+        {"event": "requested", "at": "2026-05-12T08:00:00Z", "by_type": "vendor", "by_public_id": "01H8M…"},
+        {"event": "approved",  "at": "2026-05-14T10:30:00Z", "by_type": "admin",  "by_public_id": "01H9A…"},
+        {"event": "paid",      "at": "2026-05-16T11:00:00Z", "by_type": "admin",  "by_public_id": "01H9A…"}
+      ],
+      "bank_transfer_reference": "EGTBNK-2026-05-16-00041",
+      "admin_payment_note": "Transfer confirmed by branch.",
+      "proof_download_url": "https://s3-private.example.com/…?X-Amz-Expires=900",
+      "proof_download_url_expires_at": "2026-05-16T11:15:00Z",
+      "rejected_reason": null
+    },
+    "meta": null,
+    "errors": null
+  }
 }
 
 tests {

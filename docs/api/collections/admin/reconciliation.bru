@@ -1,0 +1,109 @@
+meta {
+  name: Admin — Reconciliation
+  type: collection
+  seq: 1
+}
+
+# Phase 4.9 — Financial Ledger Hardening
+# Admin reconciliation endpoints: trigger a run and check the latest status.
+
+## GET Latest Reconciliation Status (English)
+
+get {
+  url: {{base_url}}/api/v1/admin/settlement/reconciliation/status
+  body: none
+  auth: bearer
+}
+
+headers {
+  Authorization: Bearer {{admin_token}}
+  Accept: application/json
+  Accept-Language: en
+}
+
+# ---
+
+## GET Latest Reconciliation Status (Arabic)
+
+get {
+  url: {{base_url}}/api/v1/admin/settlement/reconciliation/status
+  body: none
+  auth: bearer
+}
+
+headers {
+  Authorization: Bearer {{admin_token}}
+  Accept: application/json
+  Accept-Language: ar
+}
+
+# ---
+
+## POST Trigger Reconciliation Run (scope=all)
+
+post {
+  url: {{base_url}}/api/v1/admin/settlement/reconciliation/trigger
+  body: json
+  auth: bearer
+}
+
+headers {
+  Authorization: Bearer {{admin_token}}
+  Accept: application/json
+  Content-Type: application/json
+  Idempotency-Key: {{$guid}}
+}
+
+body:json {
+  {
+    "scope": "all"
+  }
+}
+
+# ---
+
+## POST Trigger Reconciliation Run (scope=wallet)
+
+post {
+  url: {{base_url}}/api/v1/admin/settlement/reconciliation/trigger
+  body: json
+  auth: bearer
+}
+
+headers {
+  Authorization: Bearer {{admin_token}}
+  Accept: application/json
+  Content-Type: application/json
+  Idempotency-Key: {{$guid}}
+}
+
+body:json {
+  {
+    "scope": "wallet",
+    "wallet_id": 1
+  }
+}
+
+# ---
+
+## POST Trigger Reconciliation Run — replay (same Idempotency-Key)
+# Second call with the same key returns 200 + was_replay=true instead of 202.
+
+post {
+  url: {{base_url}}/api/v1/admin/settlement/reconciliation/trigger
+  body: json
+  auth: bearer
+}
+
+headers {
+  Authorization: Bearer {{admin_token}}
+  Accept: application/json
+  Content-Type: application/json
+  Idempotency-Key: SAME-KEY-AS-PREVIOUS-CALL
+}
+
+body:json {
+  {
+    "scope": "all"
+  }
+}

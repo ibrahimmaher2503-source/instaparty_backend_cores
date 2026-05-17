@@ -9,13 +9,20 @@ use App\Modules\Booking\Domain\Enums\LifecycleStatus;
 use App\Modules\Booking\Domain\Enums\VendorSubStatus;
 use App\Modules\Booking\Domain\Events\BookingSubmittedToVendor;
 use App\Modules\Booking\Domain\Models\Booking;
-use App\Modules\Booking\Domain\Models\BookingStateTransition;
+use App\Modules\Booking\Domain\States\BookingLifecycleStatus\DraftState;
+use App\Modules\Booking\Domain\States\BookingLifecycleStatus\VendorReviewState;
+use App\Modules\Shared\Domain\Models\StateTransition;
 use App\Modules\Booking\Domain\Models\BookingVendor;
+use App\Modules\Booking\Domain\Contracts\TaxRateResolver;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 
 class SubmitBookingAction
 {
+    public function __construct(
+        private readonly TaxRateResolver $taxRateResolver,
+    ) {}
+
     public function execute(SubmitBookingDTO $dto): Booking
     {
         $cached = $this->getCachedIdempotencyResponse($dto);
@@ -34,7 +41,7 @@ class SubmitBookingAction
             );
 
             abort_if(
-                $booking->lifecycle_status !== LifecycleStatus::Draft,
+                ! ($booking->lifecycle_status instanceof DraftState),
                 Response::HTTP_CONFLICT,
                 'Booking is not in draft status'
             );
@@ -46,12 +53,32 @@ class SubmitBookingAction
 
             abort_if(! $hasItems, Response::HTTP_UNPROCESSABLE_ENTITY, 'Booking has no items');
 
+            // Resolve and snapshot VAT per booking item
+            $totalVatMinor = 0;
+            $items = DB::table('booking_items')
+                ->join('booking_vendors', 'booking_vendors.id', '=', 'booking_items.booking_vendor_id')
+                ->where('booking_vendors.booking_id', $booking->id)
+                ->select('booking_items.id', 'booking_items.product_type', 'booking_items.unit_price_minor', 'booking_items.quantity')
+                ->get();
+
+            foreach ($items as $item) {
+                $rateBps  = $this->taxRateResolver->resolveRateBpsForProductType($item->product_type);
+                $lineTotal = $item->unit_price_minor * $item->quantity;
+                $vatAmount = (int) round($lineTotal * $rateBps / 10000);
+                DB::table('booking_items')->where('id', $item->id)->update([
+                    'vat_rate_bps'    => $rateBps,
+                    'vat_amount_minor' => $vatAmount,
+                ]);
+                $totalVatMinor += $vatAmount;
+            }
+
             $booking->update([
-                'lifecycle_status' => LifecycleStatus::VendorReview,
-                'submitted_at' => now(),
+                'lifecycle_status' => VendorReviewState::class,
+                'submitted_at'     => now(),
+                'total_vat_minor'  => $totalVatMinor,
             ]);
 
-            BookingStateTransition::create([
+            StateTransition::create([
                 'transitionable_type' => Booking::class,
                 'transitionable_id' => $booking->id,
                 'from_state' => LifecycleStatus::Draft->value,

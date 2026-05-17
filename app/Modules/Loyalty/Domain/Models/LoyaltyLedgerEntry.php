@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Modules\Loyalty\Domain\Models;
 
+use App\Modules\Identity\Domain\Models\User;
+use App\Modules\Identity\Domain\Models\VendorProfile;
 use App\Modules\Loyalty\Database\Factories\LoyaltyLedgerEntryFactory;
 use App\Modules\Loyalty\Domain\Enums\LedgerDirection;
 use Illuminate\Database\Eloquent\Builder;
@@ -74,6 +76,16 @@ class LoyaltyLedgerEntry extends Model
         static::deleting(function (): never {
             throw new RuntimeException('LoyaltyLedgerEntry is append-only and cannot be deleted.');
         });
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function vendorProfile(): BelongsTo
+    {
+        return $this->belongsTo(VendorProfile::class);
     }
 
     public function program(): BelongsTo

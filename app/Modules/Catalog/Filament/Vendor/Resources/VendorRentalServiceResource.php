@@ -9,6 +9,7 @@ use App\Modules\Catalog\Domain\Enums\ProductType;
 use App\Modules\Catalog\Domain\Enums\ServiceStatus;
 use App\Modules\Catalog\Domain\Models\Category;
 use App\Modules\Catalog\Domain\Models\Service;
+use App\Modules\Catalog\Domain\States\ServiceStatus\ServiceState;
 use App\Modules\Catalog\Filament\Vendor\Resources\VendorRentalServiceResource\Pages;
 use App\Modules\Identity\Domain\Models\VendorProfile;
 use Filament\Forms\Components\Grid;
@@ -199,8 +200,12 @@ class VendorRentalServiceResource extends Resource
                 TextColumn::make('status')
                     ->label(__('catalog.status_label'))
                     ->badge()
-                    ->color(fn (ServiceStatus $state) => $state->color())
-                    ->formatStateUsing(fn (ServiceStatus $state) => $state->label()),
+                    ->color(fn (mixed $state): string => $state instanceof ServiceState
+                        ? (ServiceStatus::tryFrom($state->getValue())?->color() ?? 'gray')
+                        : 'gray')
+                    ->formatStateUsing(fn (mixed $state): string => $state instanceof ServiceState
+                        ? (ServiceStatus::tryFrom($state->getValue())?->label() ?? $state->getValue())
+                        : (string) $state),
                 TextColumn::make('base_price_minor')
                     ->label(__('catalog.base_price'))
                     ->money('EGP', divideBy: 100),

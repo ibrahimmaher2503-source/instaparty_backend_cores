@@ -7,9 +7,8 @@ namespace App\Modules\Settlement\Filament\Vendor\Pages;
 use App\Modules\Identity\Domain\Models\VendorProfile;
 use App\Modules\Settlement\Application\Actions\RequestWithdrawalAction;
 use App\Modules\Settlement\Application\DTOs\RequestWithdrawalDto;
-use App\Modules\Settlement\Domain\Enums\LedgerEntryType;
 use App\Modules\Settlement\Domain\Models\Wallet;
-use App\Modules\Settlement\Domain\Models\WalletLedgerEntry;
+use App\Modules\Settlement\Domain\Models\Withdrawal;
 use App\Modules\Settlement\Domain\ValueObjects\BankAccountSnapshot;
 use Filament\Actions\Action;
 use Filament\Forms\Components\TextInput;
@@ -19,6 +18,8 @@ use Filament\Infolists\Contracts\HasInfolists;
 use Filament\Infolists\Infolist;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
+use Filament\Tables\Actions\Action as TableAction;
+use Filament\Tables\Columns\Layout\Stack;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
@@ -72,37 +73,80 @@ class VendorWalletPage extends Page implements HasInfolists, HasTable
 
     public function table(Table $table): Table
     {
-        $wallet = $this->getWallet();
+        $vendor = $this->getVendorProfile();
 
         return $table
             ->query(
-                WalletLedgerEntry::query()
-                    ->where('wallet_id', $wallet?->id ?? 0)
-                    ->orderByDesc('created_at')
+                Withdrawal::query()
+                    ->where('vendor_profile_id', $vendor->id)
+                    ->orderByDesc('requested_at')
             )
             ->columns([
-                TextColumn::make('created_at')
-                    ->label(__('catalog.created_at'))
-                    ->dateTime('d M Y H:i')
-                    ->sortable(),
-                TextColumn::make('entry_type')
-                    ->label('Type')
+                TextColumn::make('public_id')
+                    ->label(__('vendor-portal.withdrawals.reference'))
+                    ->copyable()
+                    ->searchable(),
+                TextColumn::make('status')
+                    ->label(__('vendor-portal.withdrawals.status'))
                     ->badge()
-                    ->color(fn (LedgerEntryType $state) => match ($state) {
-                        LedgerEntryType::CommissionCredit, LedgerEntryType::ManualAdjustment => 'success',
-                        LedgerEntryType::RefundDebit, LedgerEntryType::WithdrawalDebit => 'danger',
-                    })
-                    ->formatStateUsing(fn (LedgerEntryType $state) => match ($state) {
-                        LedgerEntryType::CommissionCredit => __('vendor-portal.wallet.direction_credit'),
-                        LedgerEntryType::RefundDebit, LedgerEntryType::WithdrawalDebit => __('vendor-portal.wallet.direction_debit'),
-                        LedgerEntryType::ManualAdjustment => 'Adjustment',
+                    ->color(fn (string $state): string => match ($state) {
+                        'pending'  => 'warning',
+                        'approved' => 'info',
+                        'paid'     => 'success',
+                        'rejected' => 'danger',
+                        default    => 'gray',
                     }),
-                TextColumn::make('amount_minor')
-                    ->label(__('booking.total'))
+                TextColumn::make('requested_amount_minor')
+                    ->label(__('vendor-portal.withdrawals.amount'))
                     ->money('EGP', divideBy: 100),
-                TextColumn::make('description_key')
-                    ->label(__('vendor-portal.wallet.description'))
-                    ->limit(40),
+                // Status timeline stacked column
+                Stack::make([
+                    TextColumn::make('requested_at')
+                        ->label(__('vendor-portal.withdrawals.requested_at'))
+                        ->dateTime('d M Y H:i')
+                        ->icon('heroicon-m-arrow-up-circle')
+                        ->placeholder('—'),
+                    TextColumn::make('approved_at')
+                        ->label(__('vendor-portal.withdrawals.approved_at'))
+                        ->dateTime('d M Y H:i')
+                        ->icon('heroicon-m-check-badge')
+                        ->placeholder('—'),
+                    TextColumn::make('paid_at')
+                        ->label(__('vendor-portal.withdrawals.paid_at'))
+                        ->dateTime('d M Y H:i')
+                        ->icon('heroicon-m-banknotes')
+                        ->placeholder('—'),
+                ])->label(__('vendor-portal.withdrawals.timeline')),
+                TextColumn::make('bank_transfer_reference')
+                    ->label(__('vendor-portal.withdrawals.bank_reference'))
+                    ->placeholder('—')
+                    ->visible(fn (?Withdrawal $record): bool =>
+                        $record !== null && $record->getRawOriginal('status') === 'paid'
+                    ),
+            ])
+            ->actions([
+                TableAction::make('downloadProof')
+                    ->label(__('vendor-portal.withdrawals.download_proof'))
+                    ->icon('heroicon-o-arrow-down-tray')
+                    ->color('gray')
+                    ->url(function (Withdrawal $record): ?string {
+                        $media = $record->getFirstMedia('bank_proof');
+
+                        if ($media === null) {
+                            return null;
+                        }
+
+                        try {
+                            return $media->getTemporaryUrl(now()->addMinutes(15));
+                        } catch (\Exception) {
+                            return null;
+                        }
+                    })
+                    ->openUrlInNewTab()
+                    ->visible(fn (Withdrawal $record): bool =>
+                        $record->getRawOriginal('status') === 'paid'
+                        && $record->getFirstMedia('bank_proof') !== null
+                    ),
             ]);
     }
 

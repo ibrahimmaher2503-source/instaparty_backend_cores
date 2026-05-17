@@ -41,4 +41,13 @@ return [
         'cannot_subscribe_free' => 'The Free plan is assigned automatically and cannot be subscribed to directly.',
         'subscription_not_cancellable' => 'Your subscription cannot be cancelled in its current state.',
     ],
+    'analytics'               => 'Subscription Analytics',
+    'send_renewal_reminder'   => 'Send Renewal Reminder',
+    'renewal_reminder_sent'   => 'Renewal reminder sent',
+    'expiring_soon'           => 'Expiring in 30 Days',
+    'active'                  => 'Active Subscriptions',
+    'mrr'                     => 'Monthly Recurring Revenue',
+    'expiring_30_days'        => 'Expiring in 30 Days',
+    'admin_overrides'         => 'Admin Overrides',
+    'revenue_by_month'        => 'Subscription Revenue by Month',
 ];

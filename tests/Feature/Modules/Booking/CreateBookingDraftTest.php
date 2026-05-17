@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use App\Modules\Booking\Domain\Models\Booking;
 use App\Modules\Booking\Domain\Models\BookingSnapshot;
-use App\Modules\Booking\Domain\Models\BookingStateTransition;
+use App\Modules\Shared\Domain\Models\StateTransition;
 use App\Modules\Catalog\Domain\Models\Occasion;
 use App\Modules\Geography\Domain\Models\City;
 use App\Modules\Identity\Domain\Models\User;
@@ -136,7 +136,7 @@ it('creates a booking_state_transitions row with to_state=draft', function (): v
     $booking = Booking::where('public_id', $publicId)->first();
 
     expect(
-        BookingStateTransition::where('transitionable_id', $booking->id)
+        StateTransition::where('transitionable_id', $booking->id)
             ->where('to_state', 'draft')
             ->exists()
     )->toBeTrue();

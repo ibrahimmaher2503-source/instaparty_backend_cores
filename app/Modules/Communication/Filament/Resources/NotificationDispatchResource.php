@@ -11,6 +11,7 @@ use App\Modules\Communication\Filament\Resources\NotificationDispatchResource\Pa
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class NotificationDispatchResource extends Resource
 {
@@ -55,6 +56,11 @@ class NotificationDispatchResource extends Resource
         return false;
     }
 
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()->with(['template']);
+    }
+
     public static function table(Table $table): Table
     {
         return $table
@@ -63,9 +69,10 @@ class NotificationDispatchResource extends Resource
                     ->label(__('communication.columns.public_id'))
                     ->copyable()
                     ->searchable(),
-                Tables\Columns\TextColumn::make('notification_template_id')
+                Tables\Columns\TextColumn::make('template.event_key')
                     ->label(__('communication.columns.template'))
-                    ->sortable(),
+                    ->badge()
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('channel')
                     ->label(__('communication.columns.channel'))
                     ->badge()

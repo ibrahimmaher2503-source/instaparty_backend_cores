@@ -2,10 +2,11 @@
 
 declare(strict_types=1);
 
-use App\Modules\Booking\Domain\Enums\LifecycleStatus;
 use App\Modules\Booking\Domain\Enums\ModificationStatus;
 use App\Modules\Booking\Domain\Enums\VendorSubStatus;
 use App\Modules\Booking\Domain\Models\Booking;
+use App\Modules\Booking\Domain\States\BookingLifecycleStatus\ConfirmedState;
+use App\Modules\Booking\Domain\States\BookingLifecycleStatus\VendorReviewState;
 use App\Modules\Identity\Domain\Models\User;
 use Database\Seeders\IdentityRolesSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -41,7 +42,7 @@ it('customer accepts modification → booking becomes confirmed (single vendor)'
     )->assertOk();
 
     $booking->refresh();
-    expect($booking->lifecycle_status)->toBe(LifecycleStatus::Confirmed);
+    expect($booking->lifecycle_status)->toBeInstanceOf(ConfirmedState::class);
 })->group('booking', 'negotiation');
 
 it('customer accepts modification → unit_price_minor updated on booking_item', function (): void {
@@ -94,7 +95,7 @@ it('customer rejects modification → booking returns to vendor_review', functio
     )->assertOk();
 
     $booking->refresh();
-    expect($booking->lifecycle_status)->toBe(LifecycleStatus::VendorReview);
+    expect($booking->lifecycle_status)->toBeInstanceOf(VendorReviewState::class);
 })->group('booking', 'negotiation');
 
 it('customer rejects modification → modification status becomes customer_rejected', function (): void {
@@ -119,7 +120,7 @@ it('booking_state_transitions has row to confirmed after customer accepts', func
         ['Idempotency-Key' => (string) Str::uuid()]
     );
 
-    expect(DB::table('booking_state_transitions')
+    expect(DB::table('state_transitions')
         ->where('transitionable_type', Booking::class)
         ->where('transitionable_id', $booking->id)
         ->where('to_state', 'confirmed')
@@ -137,7 +138,7 @@ it('idempotency: duplicate decision key returns same response', function (): voi
         ['Idempotency-Key' => $idempotencyKey]
     )->assertOk();
 
-    $transitionCount = DB::table('booking_state_transitions')
+    $transitionCount = DB::table('state_transitions')
         ->where('transitionable_type', Booking::class)
         ->where('transitionable_id', $booking->id)
         ->where('to_state', 'confirmed')
@@ -149,7 +150,7 @@ it('idempotency: duplicate decision key returns same response', function (): voi
         ['Idempotency-Key' => $idempotencyKey]
     )->assertOk();
 
-    $transitionCountAfter = DB::table('booking_state_transitions')
+    $transitionCountAfter = DB::table('state_transitions')
         ->where('transitionable_type', Booking::class)
         ->where('transitionable_id', $booking->id)
         ->where('to_state', 'confirmed')

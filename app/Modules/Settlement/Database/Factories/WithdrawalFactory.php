@@ -6,8 +6,11 @@ namespace App\Modules\Settlement\Database\Factories;
 
 use App\Modules\Identity\Domain\Models\User;
 use App\Modules\Identity\Domain\Models\VendorProfile;
-use App\Modules\Settlement\Domain\Enums\WithdrawalStatus;
 use App\Modules\Settlement\Domain\Models\Withdrawal;
+use App\Modules\Settlement\Domain\States\WithdrawalStatus\ApprovedState;
+use App\Modules\Settlement\Domain\States\WithdrawalStatus\PaidState;
+use App\Modules\Settlement\Domain\States\WithdrawalStatus\PendingState;
+use App\Modules\Settlement\Domain\States\WithdrawalStatus\RejectedState;
 use App\Modules\Settlement\Domain\ValueObjects\BankAccountSnapshot;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
@@ -34,7 +37,7 @@ class WithdrawalFactory extends Factory
                 bank_name: 'Test Bank',
                 swift_bic: 'TESTEGCX',
             ),
-            'status' => WithdrawalStatus::Pending,
+            'status' => PendingState::class,
             'rejected_reason' => null,
             'requested_by_user_id' => User::factory()->asVendor(),
             'processed_by_user_id' => null,
@@ -49,34 +52,41 @@ class WithdrawalFactory extends Factory
     public function pending(): static
     {
         return $this->state(fn (array $attributes): array => [
-            'status' => WithdrawalStatus::Pending,
+            'status' => PendingState::class,
             'pending_lock' => $attributes['vendor_profile_id'],
         ]);
     }
 
     public function approved(): static
     {
-        return $this->state([
-            'status' => WithdrawalStatus::Approved,
-            'pending_lock' => null,
+        return $this->state(fn (array $attributes): array => [
+            'status'               => ApprovedState::class,
+            'pending_lock'         => null,
+            'approved_at'          => now(),
+            'approved_by_admin_id' => User::factory()->create()->id,
         ]);
     }
 
     public function paid(): static
     {
         return $this->state(fn (array $attributes): array => [
-            'status' => WithdrawalStatus::Paid,
-            'pending_lock' => null,
-            'paid_amount_minor' => $attributes['requested_amount_minor'],
-            'paid_amount_currency' => $attributes['requested_amount_currency'],
-            'paid_at' => now(),
+            'status'                  => PaidState::class,
+            'pending_lock'            => null,
+            'paid_amount_minor'       => $attributes['requested_amount_minor'],
+            'paid_amount_currency'    => $attributes['requested_amount_currency'],
+            'approved_at'             => now()->subHour(),
+            'approved_by_admin_id'    => User::factory()->create()->id,
+            'paid_at'                 => now(),
+            'paid_by_admin_id'        => User::factory()->create()->id,
+            'processed_at'            => now(),
+            'bank_transfer_reference' => 'EGTBNK-FACTORY-'.mt_rand(10000, 99999),
         ]);
     }
 
     public function rejected(): static
     {
         return $this->state([
-            'status' => WithdrawalStatus::Rejected,
+            'status' => RejectedState::class,
             'pending_lock' => null,
             'rejected_reason' => ['en' => 'Rejected by admin.', 'ar' => 'رُفض بواسطة المشرف.'],
             'processed_at' => now(),

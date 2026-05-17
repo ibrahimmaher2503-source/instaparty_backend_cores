@@ -49,15 +49,23 @@ globs:
 → `booking_locks` (pessimistic locks with UNIQUE on `(resource_type, resource_id, released_at)`)
 → `booking_vendors` (one per vendor per booking)
 → `booking_items` (with `product_type` denorm, `type_snapshot` JSON, `fulfillment_data` JSON)
-→ `booking_modifications` + `booking_modification_items`
+→ `booking_modifications` (status ENUM includes `draft`; generated `draft_slot` column + UNIQUE `(booking_vendor_id, draft_slot)` enforces one open draft per booking_vendor) + `booking_modification_items`
 → `booking_state_transitions` (append-only, polymorphic)
 → `booking_customer_notes`
 
 ### Payments (5)
-`payments` (UNIQUE `(gateway, gateway_ref)`), `payment_attempts`, `refunds`, `idempotency_keys` (24h TTL), `gateway_webhook_logs`
+`payments` (UNIQUE `(gateway, gateway_ref)`) — ADDED: `correlation_id`, `capture_ledger_group_id`; `payment_attempts`, `refunds` — ADDED: `ledger_group_id`, `idempotency_key`; `idempotency_keys` (per-scope TTL) — ADDED: `scope`, `ttl_seconds`, `payload_hash`; `gateway_webhook_logs`
 
-### Settlement (6)
-`wallets` (UNIQUE `(owner_type, owner_id, currency)`), `wallet_ledger` (append-only), `commissions`, `commission_rates` (most-specific match wins), `withdrawals`, `settlement_runs`
+### Settlement (10 — Phase 4.9 expanded from 6)
+`wallets` (UNIQUE `(owner_type, owner_id, currency)`) — ADDED: `last_ledger_entry_id`, `last_projected_at`; balance columns are now projection cache only
+`wallet_ledger` (append-only, DB trigger enforced) — ADDED: `direction` ENUM, `running_balance_minor`, `transaction_group_id`, `counter_account_*`, `correlation_id`, `causation_id`, `idempotency_key`, `posted_at`; `amount_minor` is UNSIGNED magnitude
+`ledger_transaction_groups` (NEW, append-only) — groups balanced debit+credit entries; CHECK `total_debits_minor = total_credits_minor`
+`commissions` — ADDED: `accrual_ledger_entry_id`, `reversal_ledger_entry_id`, `idempotency_key`
+`commission_rates` (most-specific match wins), `withdrawals` — ADDED: `idempotency_key`, `reserved_ledger_entry_id`, `settled_ledger_entry_id`, `rejected_ledger_entry_id`
+`settlement_runs`
+`financial_snapshots` (NEW, append-only) — daily per-wallet balance: `wallet_id`, `snapshot_at`, `as_of_ledger_entry_id` (FK high-water mark), `available_minor`, `pending_minor`, `currency`, `checksum` (SHA-256 of ledger replay sequence). Idempotent per (wallet, calendar day).
+`reconciliation_runs` (NEW) — orchestrator runs with status lifecycle (`pending→running→clean|repaired|requires_manual_review|failed`); `wallets_scanned`, `findings_count`, `auto_repaired_count`, `manual_review_count`
+`reconciliation_findings` (NEW) — per-wallet findings: `severity` ENUM(`info`,`warning`,`high`), `finding_type`, `resolution` (null=unresolved, `auto_repaired`, `ignored`)
 
 ### Reviews (4)
 `service_reviews` (UNIQUE per `booking_item_id`), `vendor_reviews` (UNIQUE per `booking_vendor_id`), `review_responses`, `review_moderation_log`
@@ -80,7 +88,9 @@ globs:
 
 ## Append-only tables (NEVER use softDeletes, NEVER UPDATE except status fields)
 
-`wallet_ledger`, `audit_logs`, `payments` (status-only updates), `commissions`, `booking_state_transitions`, `event_outbox`, `analytics_events`, `loyalty_ledger`, `booking_snapshots`, `chat_message_log`, `search_logs`, `payment_attempts`
+`wallet_ledger`, `ledger_transaction_groups`, `financial_snapshots`, `audit_logs`, `payments` (status-only updates), `commissions`, `booking_state_transitions`, `event_outbox`, `analytics_events`, `loyalty_ledger`, `booking_snapshots`, `chat_message_log`, `search_logs`, `payment_attempts`
+
+Note: `reconciliation_runs` and `reconciliation_findings` allow status/resolution updates but no deletes.
 
 ## Soft-deleted tables (have `deleted_at`)
 

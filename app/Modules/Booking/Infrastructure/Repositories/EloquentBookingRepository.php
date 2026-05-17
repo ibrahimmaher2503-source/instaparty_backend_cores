@@ -7,10 +7,10 @@ namespace App\Modules\Booking\Infrastructure\Repositories;
 use App\Modules\Booking\Application\DTOs\CreateBookingDraftDTO;
 use App\Modules\Booking\Domain\Contracts\BookingRepository;
 use App\Modules\Booking\Domain\Enums\FulfillmentStatus;
-use App\Modules\Booking\Domain\Enums\LifecycleStatus;
-use App\Modules\Booking\Domain\Enums\PaymentStatus;
 use App\Modules\Booking\Domain\Models\Booking;
 use App\Modules\Booking\Domain\Models\BookingAddress;
+use App\Modules\Booking\Domain\States\BookingLifecycleStatus\DraftState;
+use App\Modules\Booking\Domain\States\BookingPaymentStatus\UnpaidState;
 use Illuminate\Support\Str;
 
 class EloquentBookingRepository implements BookingRepository
@@ -21,8 +21,8 @@ class EloquentBookingRepository implements BookingRepository
             'public_id' => (string) Str::ulid(),
             'customer_id' => $dto->customerId,
             'occasion_id' => $dto->occasionId,
-            'lifecycle_status' => LifecycleStatus::Draft,
-            'payment_status' => PaymentStatus::Unpaid,
+            'lifecycle_status' => DraftState::class,
+            'payment_status' => UnpaidState::class,
             'fulfillment_status' => FulfillmentStatus::NotStarted,
             'event_starts_at' => $dto->eventStartsAt,
             'event_ends_at' => $dto->eventEndsAt,
@@ -63,7 +63,7 @@ class EloquentBookingRepository implements BookingRepository
     {
         return Booking::where('id', $bookingId)
             ->where('customer_id', $customerId)
-            ->where('lifecycle_status', LifecycleStatus::Draft)
+            ->whereState('lifecycle_status', DraftState::class)
             ->first();
     }
 

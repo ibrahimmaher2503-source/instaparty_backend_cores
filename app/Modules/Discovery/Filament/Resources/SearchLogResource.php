@@ -9,6 +9,7 @@ use App\Modules\Discovery\Filament\Resources\SearchLogResource\Pages;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class SearchLogResource extends Resource
 {
@@ -53,13 +54,19 @@ class SearchLogResource extends Resource
         return false;
     }
 
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()->with(['user', 'clickedService']);
+    }
+
     public static function table(Table $table): Table
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('user_id')
+                Tables\Columns\TextColumn::make('user.name')
                     ->label(__('discovery.columns.user_id'))
-                    ->sortable(),
+                    ->searchable()
+                    ->default('Guest'),
                 Tables\Columns\TextColumn::make('query')
                     ->label(__('discovery.columns.query'))
                     ->searchable()
@@ -70,9 +77,10 @@ class SearchLogResource extends Resource
                 Tables\Columns\TextColumn::make('results_count')
                     ->label(__('discovery.columns.results_count'))
                     ->sortable(),
-                Tables\Columns\TextColumn::make('clicked_service_id')
+                Tables\Columns\TextColumn::make('clickedService.name')
                     ->label(__('discovery.columns.clicked_service_id'))
-                    ->sortable(),
+                    ->formatStateUsing(fn ($state): string => is_array($state) ? ($state[app()->getLocale()] ?? $state['en'] ?? '—') : ($state ?? '—'))
+                    ->default('—'),
                 Tables\Columns\TextColumn::make('created_at')
                     ->label(__('admin.common.created_at'))
                     ->dateTime()

@@ -21,6 +21,14 @@ Before generating any artifact, you MUST silently read these files in order:
 
 ---
 
+## Clarifications
+
+### Session 2026-05-15
+
+- Q: Should widget status queries use raw string comparisons or spatie/laravel-model-states `->whereState()` API? → A: Use `->whereState('status', StateClass::class)` throughout all widgets — state-machine-aware queries, no raw string comparisons.
+
+---
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 — Admin sees live operational state at a glance (Priority: P1)
@@ -165,6 +173,7 @@ When the admin switches the Filament locale to Arabic, all nine widget headings 
   - Subscription widgets → `app/Modules/Subscriptions/Filament/Widgets/`
 - Translation files are placed in each owning module's `Resources/lang/{en,ar}/widgets.php`.
 - No new packages are required — Filament's built-in `StatsOverviewWidget` and `ChartWidget` (Chart.js, already in stack via Filament v3) cover all widget types.
+- **All widget queries MUST use `->whereState('status', StateClass::class)` (spatie/laravel-model-states API) instead of raw string comparisons.** Raw comparisons (`WHERE status = 'pending'`) are forbidden — they bypass transition guards and break when state class names diverge from string values. Each queried state field (e.g., `approval_status`, `sub_status`, `status`) must reference the corresponding `AbstractState` subclass.
 
 ---
 
