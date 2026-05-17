@@ -1,11 +1,22 @@
 import axios, { type AxiosRequestConfig } from 'axios';
 import type {
+  AddBookingItemPayload,
+  Booking,
+  BookingItem,
+  BookingModification,
   Branding,
+  Category,
+  City,
   CmsPagePayload,
+  CreateBookingDraftPayload,
   Envelope,
   FeatureFlag,
+  Governorate,
   HomepageBlock,
   Menu,
+  Occasion,
+  Payment,
+  PaymentInitiation,
   ServiceDetail,
   ServiceSummary,
   ThemeTokens,
@@ -74,3 +85,69 @@ export async function clientApi<T>(path: string, locale: string, init?: AxiosReq
   });
   return res.data.data;
 }
+
+export const geographyApi = {
+  governorates: (locale: string) => clientApi<Governorate[]>('/customer/governorates', locale),
+  cities: (locale: string, governoratePublicId?: string) =>
+    clientApi<City[]>(
+      `/customer/cities${governoratePublicId ? `?governorate=${encodeURIComponent(governoratePublicId)}` : ''}`,
+      locale,
+    ),
+};
+
+export const catalogApi = {
+  occasions: (locale: string) => clientApi<Occasion[]>('/customer/occasions', locale),
+  categories: (locale: string) => clientApi<Category[]>('/customer/categories', locale),
+};
+
+export const bookingApi = {
+  create: (locale: string, payload: CreateBookingDraftPayload) =>
+    clientApi<Booking>('/customer/bookings', locale, { method: 'POST', data: payload }),
+  show: (locale: string, publicId: string) =>
+    clientApi<Booking>(`/customer/bookings/${publicId}`, locale),
+  addItem: (locale: string, bookingPublicId: string, payload: AddBookingItemPayload) =>
+    clientApi<BookingItem>(`/customer/bookings/${bookingPublicId}/items`, locale, {
+      method: 'POST',
+      data: payload,
+    }),
+  removeItem: (locale: string, bookingPublicId: string, itemPublicId: string) =>
+    clientApi<{ removed: boolean }>(
+      `/customer/bookings/${bookingPublicId}/items/${itemPublicId}`,
+      locale,
+      { method: 'DELETE' },
+    ),
+  submit: (locale: string, bookingPublicId: string, idempotencyKey: string) =>
+    clientApi<Booking>(`/customer/bookings/${bookingPublicId}/submit`, locale, {
+      method: 'POST',
+      headers: { 'Idempotency-Key': idempotencyKey },
+    }),
+  listModifications: (locale: string, bookingPublicId: string) =>
+    clientApi<BookingModification[]>(`/customer/bookings/${bookingPublicId}/modifications`, locale),
+  decideModification: (
+    locale: string,
+    bookingPublicId: string,
+    modificationPublicId: string,
+    decision: 'accept' | 'reject',
+    idempotencyKey: string,
+  ) =>
+    clientApi<Booking>(
+      `/customer/bookings/${bookingPublicId}/modifications/${modificationPublicId}/decide`,
+      locale,
+      {
+        method: 'POST',
+        data: { decision },
+        headers: { 'Idempotency-Key': idempotencyKey },
+      },
+    ),
+};
+
+export const paymentApi = {
+  initiate: (locale: string, bookingPublicId: string, method: string, idempotencyKey: string) =>
+    clientApi<PaymentInitiation>(`/customer/bookings/${bookingPublicId}/payments`, locale, {
+      method: 'POST',
+      data: { method },
+      headers: { 'Idempotency-Key': idempotencyKey },
+    }),
+  show: (locale: string, paymentPublicId: string) =>
+    clientApi<Payment>(`/customer/payments/${paymentPublicId}`, locale),
+};

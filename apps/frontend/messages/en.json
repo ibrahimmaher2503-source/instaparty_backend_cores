@@ -94,5 +94,123 @@
       "otp_send_failed": "Could not send the code. Try again in a moment.",
       "verify_failed": "Code is incorrect or expired."
     }
+  },
+  "cart": {
+    "title": "Your cart",
+    "loading": "Loading your cart…",
+    "empty": "Your cart is empty. Start planning your event.",
+    "no_items": "You haven't added any items yet.",
+    "expired_notice": "Your 15-minute cart hold expired. Please start again.",
+    "start_planning": "Plan an event",
+    "add_items": "Browse services",
+    "add_more": "Add more items",
+    "continue": "Continue to summary",
+    "remove": "Remove",
+    "subtotal": "Subtotal",
+    "delivery": "Delivery",
+    "discount": "Discount",
+    "total": "Total"
+  },
+  "checkout": {
+    "steps": {
+      "event": "Event",
+      "items": "Items",
+      "summary": "Summary",
+      "negotiation": "Negotiation",
+      "pay": "Payment"
+    },
+    "hold_countdown": {
+      "label": "Cart hold expires in"
+    },
+    "event": {
+      "title": "Event details",
+      "subtitle": "Tell us about your event so vendors can prepare.",
+      "section_event": "When & what",
+      "section_address": "Delivery address",
+      "occasion": "Occasion",
+      "select_occasion": "Select an occasion",
+      "starts_at": "Starts at",
+      "ends_at": "Ends at",
+      "guest_count": "Guest count",
+      "governorate": "Governorate",
+      "select_governorate": "Select governorate",
+      "city": "City",
+      "select_city": "Select city",
+      "address_line": "Address line",
+      "building": "Building",
+      "floor": "Floor",
+      "apartment": "Apartment",
+      "landmark": "Landmark",
+      "recipient_name": "Recipient name",
+      "recipient_phone": "Recipient phone",
+      "submit": "Save & continue",
+      "submitting": "Saving…",
+      "error_generic": "Could not save your event details."
+    },
+    "items": {
+      "title": "Add items to your booking",
+      "subtitle": "Search the catalog and configure each item.",
+      "search_placeholder": "Search services…",
+      "pick_service": "Pick a service to configure it here.",
+      "loading_service": "Loading service…",
+      "no_results": "No services match your search.",
+      "starts_at": "Starts at",
+      "ends_at": "Ends at",
+      "note_optional": "Note (optional)",
+      "recipient_email": "Recipient email",
+      "recipient_phone": "Recipient phone",
+      "add_to_booking": "Add to booking",
+      "adding": "Adding…",
+      "back_to_cart": "Back to cart",
+      "continue": "Continue",
+      "error_generic": "Could not add this item."
+    },
+    "summary": {
+      "title": "Review your booking",
+      "loading": "Loading summary…",
+      "event_details": "Event details",
+      "starts_at": "Starts",
+      "ends_at": "Ends",
+      "address": "Address",
+      "items": "Items",
+      "subtotal": "Subtotal",
+      "delivery": "Delivery",
+      "discount": "Discount",
+      "total": "Total",
+      "back": "Back",
+      "submit": "Submit booking"
+    },
+    "submit": {
+      "submitting_title": "Submitting your booking…",
+      "submitting_body": "We're sending your request to the vendors.",
+      "failed_title": "Submission failed",
+      "retry": "Try again",
+      "error_generic": "We couldn't submit your booking."
+    },
+    "negotiation": {
+      "title": "Vendor negotiation",
+      "subtitle": "Vendors may propose changes. Review and decide.",
+      "waiting": "Waiting for vendor responses…",
+      "accept": "Accept",
+      "reject": "Reject",
+      "proceed_to_pay": "Proceed to payment",
+      "error_generic": "Could not load modifications."
+    },
+    "pay": {
+      "title": "Complete payment",
+      "amount_due": "Amount due",
+      "proceed": "Proceed to Paymob",
+      "initiating": "Initiating payment…",
+      "iframe_note": "Payment is processed securely by Paymob.",
+      "error_generic": "Could not start the payment."
+    },
+    "confirmed": {
+      "title": "Booking confirmed!",
+      "subtitle": "We've notified the vendors. You'll get updates by SMS and in-app.",
+      "reference": "Reference",
+      "view_booking": "View my booking",
+      "share_whatsapp": "Share on WhatsApp",
+      "back_home": "Back to home"
+    }
   }
 }

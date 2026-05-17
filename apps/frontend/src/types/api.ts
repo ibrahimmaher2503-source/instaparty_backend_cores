@@ -180,3 +180,127 @@ export type CmsPagePayload = {
 };
 
 export type FeatureFlag = { key: string; is_enabled: boolean; rollout_pct: number };
+
+export type Governorate = { public_id: string; name: string; code: string | null };
+export type City = {
+  public_id: string;
+  governorate_public_id: string | null;
+  name: string;
+  latitude: number | null;
+  longitude: number | null;
+};
+export type Occasion = { public_id: string; name: string; slug: string };
+export type Category = { public_id: string; name: string; slug: string };
+
+export type BookingAddress = {
+  city_id: string;
+  address_line: string;
+  building: string | null;
+  floor: string | null;
+  apartment: string | null;
+  landmark: string | null;
+  recipient_name: string;
+  recipient_phone_e164: string;
+};
+
+export type BookingItem = {
+  public_id: string;
+  service_public_id: string;
+  service_name: string;
+  product_type: ProductType;
+  quantity: number;
+  unit_price_minor: number;
+  total_minor: number;
+  currency: string;
+  effective_starts_at: string | null;
+  effective_ends_at: string | null;
+  item_status: string;
+  customization_data: Record<string, unknown> | null;
+};
+
+export type BookingVendor = {
+  public_id: string;
+  vendor_public_id: string;
+  vendor_name: string;
+  sub_status: string;
+  response_deadline: string | null;
+  items: BookingItem[];
+};
+
+export type Booking = {
+  public_id: string;
+  reference_no: string;
+  lifecycle_status: string;
+  payment_status: string;
+  fulfillment_status: string;
+  event_starts_at: string | null;
+  event_ends_at: string | null;
+  guest_count: number | null;
+  subtotal_minor: number;
+  delivery_total_minor: number;
+  discount_total_minor: number;
+  total_minor: number;
+  currency: string;
+  requires_customer_approval: boolean;
+  vendors?: BookingVendor[];
+  address?: BookingAddress;
+  hold_expires_at?: string | null;
+};
+
+export type BookingModification = {
+  public_id: string;
+  booking_vendor_public_id: string;
+  status: string;
+  reason: string | null;
+  vendor_explanation: string | null;
+  proposed_diff: Record<string, unknown>;
+  decided_at: string | null;
+  created_at: string;
+};
+
+export type PaymentInitiation = {
+  payment_public_id: string;
+  redirect_url: string;
+  status: string;
+};
+
+export type Payment = {
+  public_id: string;
+  booking_public_id: string;
+  gateway: string;
+  status: string;
+  amount_minor: number;
+  amount_currency: string;
+  paid_at: string | null;
+};
+
+export type CreateBookingDraftPayload = {
+  occasion_id: string;
+  event_starts_at: string;
+  event_ends_at: string;
+  guest_count?: number;
+  theme?: { en?: string; ar?: string };
+  celebrant_name?: string;
+  celebrant_dob?: string;
+  celebrant_gender?: 'male' | 'female' | 'other';
+  address: {
+    city_id: string;
+    address_line: string;
+    building?: string;
+    floor?: string;
+    apartment?: string;
+    landmark?: string;
+    recipient_name: string;
+    recipient_phone_e164: string;
+    latitude?: number;
+    longitude?: number;
+  };
+};
+
+export type AddBookingItemPayload = {
+  service_id: string;
+  quantity: number;
+  effective_starts_at?: string;
+  effective_ends_at?: string;
+  customization_data?: Record<string, unknown>;
+};

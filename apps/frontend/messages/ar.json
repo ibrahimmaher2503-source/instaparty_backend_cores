@@ -94,5 +94,123 @@
       "otp_send_failed": "تعذّر إرسال الرمز. حاول مرة أخرى بعد لحظات.",
       "verify_failed": "الرمز غير صحيح أو منتهي."
     }
+  },
+  "cart": {
+    "title": "سلة الحجز",
+    "loading": "جاري تحميل السلة…",
+    "empty": "سلتك فارغة. ابدأ بتخطيط مناسبتك.",
+    "no_items": "لم تُضِف أي عناصر بعد.",
+    "expired_notice": "انتهت مهلة الـ15 دقيقة للسلة. الرجاء البدء من جديد.",
+    "start_planning": "خطّط لمناسبة",
+    "add_items": "تصفّح الخدمات",
+    "add_more": "أضف المزيد",
+    "continue": "متابعة للمراجعة",
+    "remove": "إزالة",
+    "subtotal": "المجموع الفرعي",
+    "delivery": "التوصيل",
+    "discount": "الخصم",
+    "total": "الإجمالي"
+  },
+  "checkout": {
+    "steps": {
+      "event": "المناسبة",
+      "items": "العناصر",
+      "summary": "المراجعة",
+      "negotiation": "التفاوض",
+      "pay": "الدفع"
+    },
+    "hold_countdown": {
+      "label": "تنتهي مهلة السلة في"
+    },
+    "event": {
+      "title": "تفاصيل المناسبة",
+      "subtitle": "أخبرنا عن مناسبتك ليجهّز البائعون.",
+      "section_event": "متى وماذا",
+      "section_address": "عنوان التوصيل",
+      "occasion": "المناسبة",
+      "select_occasion": "اختر المناسبة",
+      "starts_at": "تبدأ في",
+      "ends_at": "تنتهي في",
+      "guest_count": "عدد الضيوف",
+      "governorate": "المحافظة",
+      "select_governorate": "اختر المحافظة",
+      "city": "المدينة",
+      "select_city": "اختر المدينة",
+      "address_line": "العنوان",
+      "building": "المبنى",
+      "floor": "الدور",
+      "apartment": "الشقة",
+      "landmark": "علامة مميزة",
+      "recipient_name": "اسم المستلم",
+      "recipient_phone": "هاتف المستلم",
+      "submit": "حفظ ومتابعة",
+      "submitting": "جاري الحفظ…",
+      "error_generic": "تعذّر حفظ بيانات المناسبة."
+    },
+    "items": {
+      "title": "أضِف عناصر إلى الحجز",
+      "subtitle": "ابحث في الكتالوج واضبط كل عنصر.",
+      "search_placeholder": "ابحث عن خدمة…",
+      "pick_service": "اختر خدمة لإعدادها هنا.",
+      "loading_service": "جاري تحميل الخدمة…",
+      "no_results": "لا توجد خدمات مطابقة.",
+      "starts_at": "تبدأ في",
+      "ends_at": "تنتهي في",
+      "note_optional": "ملاحظة (اختياري)",
+      "recipient_email": "بريد المستلم",
+      "recipient_phone": "هاتف المستلم",
+      "add_to_booking": "أضف إلى الحجز",
+      "adding": "جاري الإضافة…",
+      "back_to_cart": "العودة للسلة",
+      "continue": "متابعة",
+      "error_generic": "تعذّر إضافة العنصر."
+    },
+    "summary": {
+      "title": "راجِع حجزك",
+      "loading": "جاري تحميل الملخّص…",
+      "event_details": "تفاصيل المناسبة",
+      "starts_at": "تبدأ",
+      "ends_at": "تنتهي",
+      "address": "العنوان",
+      "items": "العناصر",
+      "subtotal": "المجموع الفرعي",
+      "delivery": "التوصيل",
+      "discount": "الخصم",
+      "total": "الإجمالي",
+      "back": "رجوع",
+      "submit": "إرسال الحجز"
+    },
+    "submit": {
+      "submitting_title": "جاري إرسال حجزك…",
+      "submitting_body": "نُرسل طلبك إلى البائعين.",
+      "failed_title": "فشل الإرسال",
+      "retry": "حاول مجددًا",
+      "error_generic": "تعذّر إرسال الحجز."
+    },
+    "negotiation": {
+      "title": "تفاوض البائعين",
+      "subtitle": "قد يقترح البائعون تعديلات. راجِع وقرّر.",
+      "waiting": "بانتظار رد البائعين…",
+      "accept": "قبول",
+      "reject": "رفض",
+      "proceed_to_pay": "متابعة الدفع",
+      "error_generic": "تعذّر تحميل التعديلات."
+    },
+    "pay": {
+      "title": "إتمام الدفع",
+      "amount_due": "المبلغ المستحق",
+      "proceed": "المتابعة عبر Paymob",
+      "initiating": "جاري بدء الدفع…",
+      "iframe_note": "تتم معالجة الدفع بأمان عبر Paymob.",
+      "error_generic": "تعذّر بدء الدفع."
+    },
+    "confirmed": {
+      "title": "تم تأكيد الحجز!",
+      "subtitle": "أبلغنا البائعين، وستصلك تحديثات عبر الرسائل والإشعارات.",
+      "reference": "الرقم المرجعي",
+      "view_booking": "عرض حجزي",
+      "share_whatsapp": "مشاركة عبر واتساب",
+      "back_home": "العودة للرئيسية"
+    }
   }
 }
