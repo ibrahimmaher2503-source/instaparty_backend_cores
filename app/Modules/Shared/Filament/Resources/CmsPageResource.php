@@ -8,8 +8,11 @@ use App\Modules\Shared\Application\Actions\PublishCmsPageAction;
 use App\Modules\Shared\Application\Actions\UnpublishCmsPageAction;
 use App\Modules\Shared\Domain\Models\CmsPage;
 use App\Modules\Shared\Filament\Resources\CmsPageResource\Pages;
+use Filament\Forms\Components\Builder;
+use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Tabs;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Notifications\Notification;
@@ -87,6 +90,44 @@ class CmsPageResource extends Resource
                         ->dehydrated(false),
                 ])
                 ->columns(2),
+
+            Section::make('Structured blocks (optional)')
+                ->description('Use the body editor above for prose. Add structured blocks here for FAQs, info grids, etc.')
+                ->collapsed()
+                ->schema([
+                    Builder::make('blocks')
+                        ->blocks([
+                            Builder\Block::make('faq')
+                                ->label('FAQ accordion')
+                                ->schema([
+                                    Repeater::make('items')->schema([
+                                        TextInput::make('question.en')->required()->maxLength(240),
+                                        TextInput::make('question.ar')->required()->maxLength(240),
+                                        Textarea::make('answer.en')->required()->maxLength(2000),
+                                        Textarea::make('answer.ar')->required()->maxLength(2000),
+                                    ])->columns(2)->minItems(1)->collapsible(),
+                                ]),
+                            Builder\Block::make('info_grid')
+                                ->label('Info grid')
+                                ->schema([
+                                    Repeater::make('items')->schema([
+                                        TextInput::make('icon')->maxLength(64),
+                                        TextInput::make('heading.en')->required()->maxLength(120),
+                                        TextInput::make('heading.ar')->required()->maxLength(120),
+                                        Textarea::make('body.en')->maxLength(600),
+                                        Textarea::make('body.ar')->maxLength(600),
+                                    ])->columns(2)->minItems(1)->collapsible(),
+                                ]),
+                            Builder\Block::make('contact_embed')
+                                ->label('Contact form / map embed')
+                                ->schema([
+                                    TextInput::make('iframe_url')->url()->required()->maxLength(1024),
+                                    TextInput::make('height_px')->numeric()->default(420),
+                                ]),
+                        ])
+                        ->collapsible()
+                        ->reorderable(),
+                ]),
         ]);
     }
 

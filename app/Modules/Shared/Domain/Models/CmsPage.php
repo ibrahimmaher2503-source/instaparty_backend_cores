@@ -25,6 +25,7 @@ class CmsPage extends Model
         'title',
         'body',
         'meta_description',
+        'blocks',
         'is_published',
         'published_at',
         'updated_by',
@@ -36,6 +37,7 @@ class CmsPage extends Model
             'slug' => CmsSlug::class,
             'is_published' => 'boolean',
             'published_at' => 'datetime',
+            'blocks' => 'array',
         ];
     }
 
