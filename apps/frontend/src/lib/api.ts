@@ -101,6 +101,11 @@ export const catalogApi = {
 };
 
 export const bookingApi = {
+  list: (locale: string, lifecycle?: string) =>
+    clientApi<Booking[]>(
+      `/customer/bookings${lifecycle ? `?lifecycle_status=${encodeURIComponent(lifecycle)}` : ''}`,
+      locale,
+    ),
   create: (locale: string, payload: CreateBookingDraftPayload) =>
     clientApi<Booking>('/customer/bookings', locale, { method: 'POST', data: payload }),
   show: (locale: string, publicId: string) =>
@@ -139,6 +144,95 @@ export const bookingApi = {
         headers: { 'Idempotency-Key': idempotencyKey },
       },
     ),
+};
+
+export type CustomerAddressRow = {
+  public_id: string;
+  city_id: number | string;
+  label: string;
+  address_line: string;
+  building: string | null;
+  floor: string | null;
+  apartment: string | null;
+  landmark: string | null;
+  recipient_name: string;
+  recipient_phone_e164: string;
+  is_default: boolean;
+};
+
+export type WishlistItemRow = {
+  public_id: string;
+  service: ServiceSummary;
+  added_at: string;
+};
+
+export type NotificationPreferenceRow = {
+  channel: string;
+  event_category: string;
+  is_enabled: boolean;
+  is_system: boolean;
+};
+
+export type LoyaltyBalanceRow = {
+  vendor_public_id: string;
+  vendor_name: string;
+  points_balance: number;
+  points_earned_lifetime: number;
+  expires_at: string | null;
+};
+
+export const addressApi = {
+  list: (locale: string) => clientApi<CustomerAddressRow[]>('/customer/addresses', locale),
+  create: (locale: string, payload: Record<string, unknown>) =>
+    clientApi<CustomerAddressRow>('/customer/addresses', locale, { method: 'POST', data: payload }),
+  remove: (locale: string, publicId: string) =>
+    clientApi<null>(`/customer/addresses/${publicId}`, locale, { method: 'DELETE' }),
+};
+
+export const wishlistApi = {
+  list: (locale: string) => clientApi<WishlistItemRow[]>('/customer/wishlist', locale),
+  add: (locale: string, servicePublicId: string) =>
+    clientApi<WishlistItemRow>('/customer/wishlist/items', locale, {
+      method: 'POST',
+      data: { service_id: servicePublicId },
+    }),
+  remove: (locale: string, servicePublicId: string) =>
+    clientApi<null>(`/customer/wishlist/items/${servicePublicId}`, locale, { method: 'DELETE' }),
+};
+
+export const profileApi = {
+  get: (locale: string) => clientApi<Record<string, unknown>>('/customer/profile', locale),
+  update: (locale: string, payload: Record<string, unknown>) =>
+    clientApi<Record<string, unknown>>('/customer/profile', locale, { method: 'PUT', data: payload }),
+};
+
+export const notificationApi = {
+  list: (locale: string) => clientApi<NotificationPreferenceRow[]>('/notification-preferences', locale),
+  update: (locale: string, channel: string, eventCategory: string, isEnabled: boolean) =>
+    clientApi<NotificationPreferenceRow>(
+      `/notification-preferences/${channel}/${eventCategory}`,
+      locale,
+      { method: 'PUT', data: { is_enabled: isEnabled } },
+    ),
+};
+
+export const loyaltyApi = {
+  balance: (locale: string, vendorPublicId: string) =>
+    clientApi<LoyaltyBalanceRow>(`/customer/loyalty/programs/${vendorPublicId}/balance`, locale),
+};
+
+export const reviewApi = {
+  submitService: (locale: string, bookingItemPublicId: string, payload: Record<string, unknown>) =>
+    clientApi<Record<string, unknown>>(`/customer/booking-items/${bookingItemPublicId}/review`, locale, {
+      method: 'POST',
+      data: payload,
+    }),
+  submitVendor: (locale: string, bookingVendorPublicId: string, payload: Record<string, unknown>) =>
+    clientApi<Record<string, unknown>>(`/customer/booking-vendors/${bookingVendorPublicId}/review`, locale, {
+      method: 'POST',
+      data: payload,
+    }),
+  mine: (locale: string) => clientApi<Record<string, unknown>[]>('/customer/reviews', locale),
 };
 
 export const paymentApi = {

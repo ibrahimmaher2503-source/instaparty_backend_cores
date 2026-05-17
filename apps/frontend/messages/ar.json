@@ -212,5 +212,105 @@
       "share_whatsapp": "مشاركة عبر واتساب",
       "back_home": "العودة للرئيسية"
     }
+  },
+  "me": {
+    "nav": {
+      "bookings": "الحجوزات",
+      "wishlist": "المفضلة",
+      "addresses": "العناوين",
+      "profile": "الملف الشخصي",
+      "loyalty": "الولاء",
+      "notifications": "الإشعارات"
+    },
+    "bookings": {
+      "title": "حجوزاتي",
+      "loading": "جاري تحميل الحجوزات…",
+      "empty": "لا توجد حجوزات حتى الآن.",
+      "error_load": "تعذّر تحميل الحجوزات.",
+      "total": "الإجمالي",
+      "status": {
+        "all": "الكل",
+        "draft": "مسودة",
+        "submitted": "مُرسل",
+        "customer_review": "بانتظار مراجعتك",
+        "awaiting_payment": "بانتظار الدفع",
+        "confirmed": "مؤكد",
+        "in_progress": "قيد التنفيذ",
+        "completed": "مكتمل",
+        "cancelled": "ملغي",
+        "rejected": "مرفوض"
+      }
+    },
+    "booking_detail": {
+      "loading": "جاري التحميل…",
+      "not_found": "الحجز غير موجود.",
+      "open_chat": "فتح الدردشة",
+      "leave_review": "اكتب تقييمًا",
+      "lifecycle": "الحالة",
+      "payment": "الدفع",
+      "fulfillment": "التنفيذ",
+      "items": "العناصر",
+      "subtotal": "المجموع الفرعي",
+      "delivery": "التوصيل",
+      "discount": "الخصم",
+      "total": "الإجمالي"
+    },
+    "chat": {
+      "title": "دردشة الحجز",
+      "coming_soon": "سيتم تحميل دردشة Firestore هنا.",
+      "firestore_note": "يتم حفظ نسخة من رسائل الدردشة لأغراض التدقيق."
+    },
+    "review": {
+      "title": "اكتب تقييمًا",
+      "loading": "جاري التحميل…",
+      "vendor_rating": "تقييم البائع",
+      "vendor_comment_placeholder": "كيف كانت تجربتك مع هذا البائع؟",
+      "item_rating": "تقييم الخدمة",
+      "item_comment_placeholder": "أخبرنا عن هذه الخدمة.",
+      "submit": "إرسال التقييمات",
+      "submitting": "جاري الحفظ…",
+      "error_generic": "تعذّر حفظ التقييمات."
+    },
+    "wishlist": {
+      "title": "المفضلة",
+      "loading": "جاري تحميل المفضلة…",
+      "empty": "قائمتك المفضّلة فارغة.",
+      "remove": "إزالة"
+    },
+    "addresses": {
+      "title": "العناوين المحفوظة",
+      "add": "إضافة عنوان",
+      "cancel": "إلغاء",
+      "save": "حفظ",
+      "saving": "جاري الحفظ…",
+      "remove": "إزالة",
+      "empty": "لم تحفظ أي عنوان بعد.",
+      "default": "الافتراضي",
+      "label": "التسمية",
+      "label_placeholder": "مثل: المنزل، العمل"
+    },
+    "profile": {
+      "title": "الملف الشخصي",
+      "name": "الاسم الكامل",
+      "email": "البريد الإلكتروني",
+      "preferred_locale": "اللغة المفضّلة",
+      "save": "حفظ التغييرات",
+      "saving": "جاري الحفظ…",
+      "saved": "تم الحفظ."
+    },
+    "loyalty": {
+      "title": "نقاط الولاء",
+      "loading": "جاري تحميل الأرصدة…",
+      "empty": "لا توجد برامج ولاء بعد. ابدأ بالحجز لتكسب النقاط.",
+      "lifetime": "إجمالي مدى الحياة"
+    },
+    "notifications": {
+      "title": "تفضيلات الإشعارات",
+      "loading": "جاري تحميل التفضيلات…",
+      "empty": "لا توجد تفضيلات بعد.",
+      "on": "تشغيل",
+      "off": "إيقاف",
+      "system": "إلزامي"
+    }
   }
 }

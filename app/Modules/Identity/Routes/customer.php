@@ -26,6 +26,7 @@ Route::prefix('api/v1')->middleware(['api', SetLocaleMiddleware::class])->group(
             Route::get('profile', [CustomerProfileController::class, 'show']);
             Route::put('profile', [CustomerProfileController::class, 'update']);
 
+            Route::get('addresses', [CustomerAddressController::class, 'index']);
             Route::post('addresses', [CustomerAddressController::class, 'store']);
             Route::delete('addresses/{customerAddress}', [CustomerAddressController::class, 'destroy']);
         });

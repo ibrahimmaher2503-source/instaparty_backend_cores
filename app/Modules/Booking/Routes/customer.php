@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Route;
 Route::middleware(['auth:sanctum', 'role:customer'])
     ->prefix('api/v1/customer')
     ->group(function (): void {
+        Route::get('bookings', [BookingController::class, 'index']);
         Route::post('bookings', [BookingController::class, 'store']);
         Route::get('bookings/{bookingPublicId}', [BookingController::class, 'show']);
         Route::post('bookings/{bookingPublicId}/items', [BookingItemController::class, 'store']);

@@ -212,5 +212,105 @@
       "share_whatsapp": "Share on WhatsApp",
       "back_home": "Back to home"
     }
+  },
+  "me": {
+    "nav": {
+      "bookings": "Bookings",
+      "wishlist": "Wishlist",
+      "addresses": "Addresses",
+      "profile": "Profile",
+      "loyalty": "Loyalty",
+      "notifications": "Notifications"
+    },
+    "bookings": {
+      "title": "My bookings",
+      "loading": "Loading your bookings…",
+      "empty": "You don't have any bookings yet.",
+      "error_load": "Could not load your bookings.",
+      "total": "Total",
+      "status": {
+        "all": "All",
+        "draft": "Draft",
+        "submitted": "Submitted",
+        "customer_review": "Awaiting your review",
+        "awaiting_payment": "Awaiting payment",
+        "confirmed": "Confirmed",
+        "in_progress": "In progress",
+        "completed": "Completed",
+        "cancelled": "Cancelled",
+        "rejected": "Rejected"
+      }
+    },
+    "booking_detail": {
+      "loading": "Loading…",
+      "not_found": "Booking not found.",
+      "open_chat": "Open chat",
+      "leave_review": "Leave a review",
+      "lifecycle": "Lifecycle",
+      "payment": "Payment",
+      "fulfillment": "Fulfillment",
+      "items": "Items",
+      "subtotal": "Subtotal",
+      "delivery": "Delivery",
+      "discount": "Discount",
+      "total": "Total"
+    },
+    "chat": {
+      "title": "Booking chat",
+      "coming_soon": "The Firestore chat client will load here.",
+      "firestore_note": "Chat messages are mirrored to the platform audit log."
+    },
+    "review": {
+      "title": "Leave a review",
+      "loading": "Loading…",
+      "vendor_rating": "Vendor rating",
+      "vendor_comment_placeholder": "How was working with this vendor?",
+      "item_rating": "Service rating",
+      "item_comment_placeholder": "Tell us about this service.",
+      "submit": "Submit reviews",
+      "submitting": "Saving…",
+      "error_generic": "Could not save your reviews."
+    },
+    "wishlist": {
+      "title": "Wishlist",
+      "loading": "Loading wishlist…",
+      "empty": "Your wishlist is empty.",
+      "remove": "Remove"
+    },
+    "addresses": {
+      "title": "Saved addresses",
+      "add": "Add address",
+      "cancel": "Cancel",
+      "save": "Save",
+      "saving": "Saving…",
+      "remove": "Remove",
+      "empty": "You haven't saved any addresses yet.",
+      "default": "Default",
+      "label": "Label",
+      "label_placeholder": "e.g. Home, Office"
+    },
+    "profile": {
+      "title": "Profile",
+      "name": "Full name",
+      "email": "Email",
+      "preferred_locale": "Preferred language",
+      "save": "Save changes",
+      "saving": "Saving…",
+      "saved": "Saved."
+    },
+    "loyalty": {
+      "title": "Loyalty points",
+      "loading": "Loading balances…",
+      "empty": "No loyalty programs yet. Book with a vendor to start earning.",
+      "lifetime": "Lifetime earned"
+    },
+    "notifications": {
+      "title": "Notification preferences",
+      "loading": "Loading preferences…",
+      "empty": "No preferences yet.",
+      "on": "On",
+      "off": "Off",
+      "system": "Required"
+    }
   }
 }

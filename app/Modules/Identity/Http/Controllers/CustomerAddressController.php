@@ -15,6 +15,33 @@ use Illuminate\Routing\Controller;
 
 class CustomerAddressController extends Controller
 {
+    public function index(Request $request): JsonResponse
+    {
+        $user = $request->user();
+        abort_unless($user instanceof User, 401);
+
+        $addresses = CustomerAddress::query()
+            ->where('user_id', $user->id)
+            ->orderByDesc('is_default')
+            ->orderByDesc('id')
+            ->get()
+            ->map(fn (CustomerAddress $a) => [
+                'public_id' => $a->public_id,
+                'city_id' => $a->city_id,
+                'label' => $a->label,
+                'address_line' => $a->address_line,
+                'building' => $a->building,
+                'floor' => $a->floor,
+                'apartment' => $a->apartment,
+                'landmark' => $a->landmark,
+                'recipient_name' => $a->recipient_name,
+                'recipient_phone_e164' => $a->recipient_phone_e164,
+                'is_default' => $a->is_default,
+            ]);
+
+        return ApiResponse::success($addresses);
+    }
+
     public function store(AddCustomerAddressRequest $request, AddCustomerAddressAction $action): JsonResponse
     {
         $user = $request->user();
