@@ -13,6 +13,7 @@ import type {
 
 const SERVER_BASE = process.env.API_BASE_URL ?? 'http://localhost:8000/api/v1';
 const CLIENT_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? 'http://localhost:8000/api/v1';
+const TOKEN_COOKIE = 'instaparty_token';
 
 export const apiClient = axios.create({
   baseURL: typeof window === 'undefined' ? SERVER_BASE : CLIENT_BASE,
@@ -20,6 +21,16 @@ export const apiClient = axios.create({
   headers: { Accept: 'application/json' },
   xsrfCookieName: 'XSRF-TOKEN',
   xsrfHeaderName: 'X-XSRF-TOKEN',
+});
+
+apiClient.interceptors.request.use((config) => {
+  if (typeof document !== 'undefined') {
+    const match = document.cookie.match(new RegExp(`(?:^|; )${TOKEN_COOKIE}=([^;]+)`));
+    if (match) {
+      config.headers.set('Authorization', `Bearer ${decodeURIComponent(match[1])}`);
+    }
+  }
+  return config;
 });
 
 async function serverFetch<T>(path: string, locale: string, revalidate = 60): Promise<T> {

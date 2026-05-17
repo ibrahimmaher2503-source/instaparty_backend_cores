@@ -42,5 +42,57 @@
   },
   "errors": {
     "generic": "Something went wrong. Please try again."
+  },
+  "auth": {
+    "register": {
+      "title": "Create your account",
+      "subtitle": "Plan your next event in minutes.",
+      "submit": "Create account",
+      "submitting": "Creating account…",
+      "have_account": "Already have an account?"
+    },
+    "login": {
+      "title": "Welcome back",
+      "subtitle": "Sign in to continue.",
+      "submit": "Sign in",
+      "submitting": "Signing in…",
+      "password_tab": "Password",
+      "otp_tab": "OTP",
+      "send_otp": "Send code",
+      "sending_otp": "Sending…",
+      "no_account": "New to InstaParty?",
+      "forgot": "Forgot your password?"
+    },
+    "verify": {
+      "title": "Verify your phone",
+      "subtitle": "Enter the 6-digit code we sent to {phone}.",
+      "submit": "Verify",
+      "submitting": "Verifying…",
+      "resend": "Resend code",
+      "resending": "Sending…",
+      "resent": "Code resent.",
+      "missing_phone": "Phone number is missing. Please start over."
+    },
+    "forgot": {
+      "title": "Reset password",
+      "coming_soon": "Password reset is coming soon. For now, please contact support.",
+      "back_to_login": "Back to sign in"
+    },
+    "fields": {
+      "name": "Full name",
+      "phone": "Phone number",
+      "phone_hint": "Include country code, e.g. +201234567890",
+      "email_optional": "Email (optional)",
+      "password": "Password",
+      "password_confirmation": "Confirm password",
+      "login_identifier": "Phone or email",
+      "otp_code": "Verification code"
+    },
+    "errors": {
+      "register_failed": "Could not create your account. Please check your details.",
+      "login_failed": "Sign in failed. Check your credentials.",
+      "otp_send_failed": "Could not send the code. Try again in a moment.",
+      "verify_failed": "Code is incorrect or expired."
+    }
   }
 }

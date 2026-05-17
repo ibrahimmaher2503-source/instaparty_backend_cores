@@ -2,11 +2,12 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { Menu as MenuIcon, ShoppingBag, User } from 'lucide-react';
+import { Menu as MenuIcon, ShoppingBag } from 'lucide-react';
 import type { Branding, Menu, MenuItem } from '@/types/api';
 import { useTranslations } from 'next-intl';
 import { cn } from '@/lib/utils';
 import { MobileDrawer } from './MobileDrawer';
+import { AccountMenu } from './AccountMenu';
 
 type Props = { branding: Branding; menu: Menu; mobileDrawer: Menu; locale: string };
 
@@ -78,9 +79,7 @@ export function Header({ branding, menu, mobileDrawer, locale }: Props) {
           <Link href={`/${locale}/cart`} aria-label={t('cart')} className="p-2 rounded-md hover:bg-neutral-100">
             <ShoppingBag className="h-5 w-5" />
           </Link>
-          <Link href={`/${locale}/auth/login`} aria-label={t('login')} className="p-2 rounded-md hover:bg-neutral-100">
-            <User className="h-5 w-5" />
-          </Link>
+          <AccountMenu locale={locale} />
         </div>
       </div>
 

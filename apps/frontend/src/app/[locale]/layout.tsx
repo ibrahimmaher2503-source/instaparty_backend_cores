@@ -6,6 +6,7 @@ import { tokensToCss, googleFontHref, isRtl } from '@/lib/theme';
 import { locales, type Locale } from '@/i18n';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
+import { AuthProvider } from '@/components/auth/AuthProvider';
 import '../globals.css';
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
@@ -57,14 +58,16 @@ export default async function LocaleLayout({
       </head>
       <body>
         <NextIntlClientProvider messages={messages} locale={locale}>
-          <a href="#main" className="sr-only focus:not-sr-only focus:fixed focus:start-2 focus:top-2 focus:bg-primary-600 focus:text-white focus:px-3 focus:py-2 focus:rounded">
-            {(messages as Record<string, Record<string, string>>).common?.skip_to_content ?? 'Skip'}
-          </a>
-          <Header branding={branding} menu={headerMenu} mobileDrawer={mobileDrawer} locale={locale} />
-          <main id="main" className="min-h-[60vh]">
-            {children}
-          </main>
-          <Footer branding={branding} primary={footerPrimary} secondary={footerSecondary} />
+          <AuthProvider>
+            <a href="#main" className="sr-only focus:not-sr-only focus:fixed focus:start-2 focus:top-2 focus:bg-primary-600 focus:text-white focus:px-3 focus:py-2 focus:rounded">
+              {(messages as Record<string, Record<string, string>>).common?.skip_to_content ?? 'Skip'}
+            </a>
+            <Header branding={branding} menu={headerMenu} mobileDrawer={mobileDrawer} locale={locale} />
+            <main id="main" className="min-h-[60vh]">
+              {children}
+            </main>
+            <Footer branding={branding} primary={footerPrimary} secondary={footerSecondary} />
+          </AuthProvider>
         </NextIntlClientProvider>
       </body>
     </html>
