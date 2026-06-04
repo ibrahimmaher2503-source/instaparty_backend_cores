@@ -20,6 +20,7 @@ use App\Modules\Catalog\Http\Controllers\Vendor\VendorServiceLifecycleController
 use App\Modules\Catalog\Http\Controllers\Vendor\VendorServiceListController;
 use App\Modules\Catalog\Http\Controllers\Vendor\VendorServiceMediaController;
 use App\Modules\Catalog\Http\Controllers\Vendor\VendorServiceShowController;
+use App\Modules\Catalog\Http\Controllers\Vendor\VendorServiceStatsController;
 use Illuminate\Support\Facades\Route;
 
 // Template downloads are static files, but they live on the vendor surface —
@@ -35,6 +36,11 @@ Route::middleware(['api', 'auth:sanctum', 'role:vendor'])->prefix('api/v1/vendor
 Route::middleware(['api', 'auth:sanctum', 'role:vendor'])->prefix('api/v1/vendor')->group(function (): void {
     Route::get('occasions', [OccasionController::class, 'index']);
     Route::get('categories', [VendorCategoryController::class, 'index']);
+    Route::get('categories/{categoryPublicId}/field-schemas', [VendorCategoryController::class, 'fieldSchemas']);
+
+    // Per-service performance stats (vendor-portal 4.16).
+    Route::get('services/{publicId}/stats', VendorServiceStatsController::class)
+        ->where('publicId', '[0-9A-HJKMNP-TV-Z]{26}');
 
     // Service list (M-02)
     Route::get('services', VendorServiceListController::class);
