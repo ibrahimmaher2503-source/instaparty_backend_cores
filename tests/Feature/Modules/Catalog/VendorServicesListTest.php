@@ -112,11 +112,11 @@ it('filters services by status', function (): void {
 
     Service::factory()->rental()->count(2)->create([
         'vendor_profile_id' => $vendor->id,
-        'status' => ServiceStatus::Draft,
+        'status' => ServiceStatus::Draft->value,
     ]);
     Service::factory()->rental()->create([
         'vendor_profile_id' => $vendor->id,
-        'status' => ServiceStatus::PendingReview,
+        'status' => ServiceStatus::PendingReview->value,
     ]);
 
     $drafts = app(ListVendorServicesAction::class)->execute($vendor, status: ServiceStatus::Draft);
@@ -165,7 +165,7 @@ it('submits multiple draft services for review', function (): void {
 
     $services = Service::factory()->rental()->count(3)->create([
         'vendor_profile_id' => $vendor->id,
-        'status' => ServiceStatus::Draft,
+        'status' => ServiceStatus::Draft->value,
     ]);
 
     foreach ($services as $service) {
@@ -182,7 +182,7 @@ it('throws ValidationException when submitting a published service for review', 
 
     $service = Service::factory()->rental()->create([
         'vendor_profile_id' => $vendor->id,
-        'status' => ServiceStatus::Published,
+        'status' => ServiceStatus::Published->value,
     ]);
 
     expect(fn () => app(SubmitServiceForReviewAction::class)->execute($service, $vendor))
@@ -195,7 +195,7 @@ it('throws ValidationException when another vendor tries to submit for review', 
 
     $service = Service::factory()->rental()->create([
         'vendor_profile_id' => $vendorA->id,
-        'status' => ServiceStatus::Draft,
+        'status' => ServiceStatus::Draft->value,
     ]);
 
     expect(fn () => app(SubmitServiceForReviewAction::class)->execute($service, $vendorB))
@@ -207,10 +207,73 @@ it('allows submitting a changes_requested service for review', function (): void
 
     $service = Service::factory()->rental()->create([
         'vendor_profile_id' => $vendor->id,
-        'status' => ServiceStatus::ChangesRequested,
+        'status' => ServiceStatus::ChangesRequested->value,
     ]);
 
     $updated = app(SubmitServiceForReviewAction::class)->execute($service, $vendor);
 
-    expect($updated->status)->toBe(ServiceStatus::PendingReview);
+    expect($updated->status->getMorphClass())->toBe(ServiceStatus::PendingReview->value);
 })->group('catalog', 'services-list', 'submit-review');
+
+// ─────────────────────────────────────────────────────────────────────────────
+// HTTP layer — GET /api/v1/vendor/services
+// ─────────────────────────────────────────────────────────────────────────────
+
+it('returns only the authenticated vendor services over HTTP', function (): void {
+    $vendor = makeListVendorWithType(ProductType::Rental);
+    $other = makeListVendorWithType(ProductType::Rental);
+
+    Service::factory()->rental()->count(2)->create(['vendor_profile_id' => $vendor->id]);
+    Service::factory()->rental()->create(['vendor_profile_id' => $other->id]);
+
+    $this->actingAs($vendor->user)
+        ->getJson('/api/v1/vendor/services')
+        ->assertOk()
+        ->assertJsonPath('meta.total', 2);
+})->group('catalog', 'services-list', 'auth');
+
+it('filters services by type over HTTP', function (): void {
+    $vendor = makeListVendorWithType(ProductType::Digital);
+
+    Service::factory()->digital()->count(2)->create(['vendor_profile_id' => $vendor->id]);
+    Service::factory()->rental()->create(['vendor_profile_id' => $vendor->id]);
+
+    $this->actingAs($vendor->user)
+        ->getJson('/api/v1/vendor/services?type=digital')
+        ->assertOk()
+        ->assertJsonPath('meta.total', 2);
+})->group('catalog', 'services-list', 'digital');
+
+it('returns 422 for an unknown type filter over HTTP', function (): void {
+    $vendor = makeListVendorWithType(ProductType::Rental);
+
+    $this->actingAs($vendor->user)
+        ->getJson('/api/v1/vendor/services?type=banana')
+        ->assertStatus(422)
+        ->assertJsonValidationErrors(['type']);
+})->group('catalog', 'services-list', 'validation');
+
+it('returns 401 when listing services without a token', function (): void {
+    $this->getJson('/api/v1/vendor/services')->assertStatus(401);
+})->group('catalog', 'services-list', 'auth');
+
+it('returns 403 when a customer-role user lists vendor services', function (): void {
+    // Contract changed 2026-06-05 (vendor-portal audit P0 hardening):
+    // role:vendor middleware now rejects non-vendor tokens with 403 before
+    // the profile lookup.
+    $customer = User::factory()->create();
+    $customer->assignRole('customer');
+
+    $this->actingAs($customer)
+        ->getJson('/api/v1/vendor/services')
+        ->assertStatus(403);
+})->group('catalog', 'services-list', 'auth');
+
+it('returns 404 when a vendor-role user has no vendor profile yet', function (): void {
+    $user = User::factory()->create();
+    $user->assignRole('vendor');
+
+    $this->actingAs($user)
+        ->getJson('/api/v1/vendor/services')
+        ->assertStatus(404);
+})->group('catalog', 'services-list', 'auth');
