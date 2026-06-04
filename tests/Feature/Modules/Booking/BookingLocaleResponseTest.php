@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Modules\Catalog\Domain\Models\Occasion;
 use Database\Seeders\IdentityRolesSeeder;
 
 /**
@@ -61,9 +62,19 @@ it('returns Arabic validation messages for Accept-Language ar')
     // of Accept-Language. Needs published + translated validation lang files.
     ->group('booking', 'locale');
 
-it('public catalog routes honor Accept-Language')
-    ->todo()
-    // Audit 2026-06-04 gap (MEDIUM): Catalog/Discovery/Geography public route
-    // groups carry only the api middleware — no SetLocaleMiddleware — so
-    // app()->getLocale() falls back to the config default there.
-    ->group('catalog', 'locale');
+it('public catalog routes honor Accept-Language', function (): void {
+    // Closed in Phase 3 E: locale middleware added to the public
+    // Catalog/Discovery/Geography route groups.
+    $occasion = Occasion::factory()->create([
+        'is_active' => true,
+        'name' => ['en' => 'Birthday', 'ar' => 'عيد ميلاد'],
+    ]);
+
+    $this->getJson("/api/v1/customer/occasions/{$occasion->code}", ['Accept-Language' => 'ar'])
+        ->assertStatus(200)
+        ->assertJsonPath('data.name', 'عيد ميلاد');
+
+    $this->getJson("/api/v1/customer/occasions/{$occasion->code}", ['Accept-Language' => 'en'])
+        ->assertStatus(200)
+        ->assertJsonPath('data.name', 'Birthday');
+})->group('catalog', 'locale');

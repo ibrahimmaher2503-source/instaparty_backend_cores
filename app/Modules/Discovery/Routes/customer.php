@@ -10,8 +10,9 @@ use App\Modules\Discovery\Http\Controllers\Customer\VendorProfileShowController;
 use App\Modules\Discovery\Http\Controllers\Customer\WishlistController;
 use Illuminate\Support\Facades\Route;
 
-// Public search endpoint — no auth required
-Route::prefix('api/v1/customer')->middleware('api')->group(function (): void {
+// Public search endpoint — no auth required. Locale + per-IP throttle
+// added in Phase 3 E (audit 2026-06-04).
+Route::prefix('api/v1/customer')->middleware(['api', 'locale', 'throttle:60,1'])->group(function (): void {
     Route::get('services', ServiceSearchController::class);
     Route::get('vendors', VendorProfileIndexController::class);
     Route::get('vendors/{publicId}', VendorProfileShowController::class);

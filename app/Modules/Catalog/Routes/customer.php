@@ -9,7 +9,9 @@ use App\Modules\Catalog\Http\Controllers\OccasionController;
 use App\Modules\Catalog\Http\Controllers\ServiceThemeController;
 use Illuminate\Support\Facades\Route;
 
-Route::prefix('api/v1/customer')->middleware('api')->group(function (): void {
+// Phase 3 E (audit 2026-06-04): public catalog now resolves Accept-Language
+// via the locale middleware and is rate-limited per IP.
+Route::prefix('api/v1/customer')->middleware(['api', 'locale', 'throttle:60,1'])->group(function (): void {
     Route::get('occasions', [OccasionController::class, 'index']);
     Route::get('occasions/{slug}', [OccasionController::class, 'show']);
     Route::get('categories', [CategoryController::class, 'index']);
