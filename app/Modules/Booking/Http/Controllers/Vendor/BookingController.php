@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Modules\Booking\Http\Controllers\Vendor;
 
+use App\Modules\Booking\Application\Actions\PreviewBookingModificationAction;
 use App\Modules\Booking\Application\Actions\VendorAcceptBookingAction;
 use App\Modules\Booking\Application\Actions\VendorModifyBookingAction;
 use App\Modules\Booking\Application\Actions\VendorRejectBookingAction;
@@ -96,9 +97,26 @@ class BookingController
             changes: $request->validated('changes'),
             vendorExplanation: $request->validated('vendor_explanation'),
             idempotencyKey: $this->optionalIdempotencyKey($request),
+            previewToken: $request->input('preview_token'),
         ));
 
         return ApiResponse::success(new BookingModificationResource($result), [], 201);
+    }
+
+    public function previewModification(VendorModifyRequest $request, string $bookingVendorPublicId): JsonResponse
+    {
+        $bookingVendor = BookingVendor::where('public_id', $bookingVendorPublicId)->firstOrFail();
+
+        $preview = app(PreviewBookingModificationAction::class)->execute(new VendorModifyDTO(
+            bookingVendorId: (int) $bookingVendor->id,
+            vendorProfileId: $this->vendorProfileId(),
+            proposedByUserId: (int) auth()->id(),
+            proposalKind: ModificationProposalKind::from($request->validated('proposal_kind')),
+            changes: $request->validated('changes'),
+            vendorExplanation: $request->validated('vendor_explanation'),
+        ));
+
+        return ApiResponse::success($preview);
     }
 
     public function modifications(string $bookingVendorPublicId): JsonResponse

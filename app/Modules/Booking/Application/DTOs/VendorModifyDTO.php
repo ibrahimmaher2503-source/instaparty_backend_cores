@@ -20,5 +20,6 @@ final readonly class VendorModifyDTO
         public array $changes,
         public ?array $vendorExplanation,
         public ?string $idempotencyKey = null,
+        public ?string $previewToken = null,
     ) {}
 }

@@ -15,6 +15,7 @@ Route::middleware(['auth:sanctum', 'role:vendor', SetLocaleMiddleware::class])
         Route::get('booking-vendors/{bookingVendorPublicId}', [BookingController::class, 'show']);
         Route::post('booking-vendors/{bookingVendorPublicId}/accept', [BookingController::class, 'accept']);
         Route::post('booking-vendors/{bookingVendorPublicId}/modify', [BookingController::class, 'modify']);
+        Route::post('booking-vendors/{bookingVendorPublicId}/preview-modification', [BookingController::class, 'previewModification']);
         Route::get('booking-vendors/{bookingVendorPublicId}/modifications', [BookingController::class, 'modifications']);
         Route::post('booking-vendors/{bookingVendorPublicId}/reject', [BookingController::class, 'reject']);
 
