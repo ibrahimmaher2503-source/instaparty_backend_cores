@@ -8,6 +8,7 @@ use App\Modules\Booking\Application\Actions\Fulfillment\MarkCompletedAction;
 use App\Modules\Booking\Application\Actions\Fulfillment\MarkInProgressAction;
 use App\Modules\Booking\Application\Actions\Fulfillment\MarkPreparingAction;
 use App\Modules\Booking\Application\Actions\Fulfillment\MarkReadyAction;
+use App\Modules\Booking\Application\Actions\Fulfillment\UploadConditionPhotosAction;
 use App\Modules\Booking\Application\DTOs\Fulfillment\FulfillmentEvidenceDto;
 use App\Modules\Booking\Domain\Exceptions\BookingNotEligibleForFulfillmentException;
 use App\Modules\Booking\Domain\Exceptions\LaneNotSupportedForTypeException;
@@ -15,6 +16,7 @@ use App\Modules\Booking\Domain\Exceptions\PaymentNotCapturedException;
 use App\Modules\Booking\Domain\Exceptions\RefundInProgressException;
 use App\Modules\Booking\Domain\Models\BookingItem;
 use App\Modules\Booking\Http\Requests\VendorTransitionBookingItemRequest;
+use App\Modules\Booking\Http\Requests\VendorUploadConditionPhotosRequest;
 use App\Modules\Booking\Http\Resources\BookingItemResource;
 use App\Modules\Identity\Domain\Models\VendorProfile;
 use App\Modules\Shared\Http\ApiResponse;
@@ -30,6 +32,25 @@ class BookingItemController
         $item = $this->ownedItem($request, $bookingItemPublicId);
 
         return ApiResponse::success(new BookingItemResource($item));
+    }
+
+    public function conditionPhotos(
+        VendorUploadConditionPhotosRequest $request,
+        string $bookingItemPublicId,
+    ): JsonResponse {
+        $item = $this->ownedItem($request, $bookingItemPublicId);
+
+        try {
+            $media = app(UploadConditionPhotosAction::class)
+                ->execute($item, $request->user(), $request->validated('phase'), $request->file('photos', []));
+        } catch (LaneNotSupportedForTypeException) {
+            return ApiResponse::error(__('booking::booking.errors.condition_photos_rental_only'), 422);
+        }
+
+        return ApiResponse::success([
+            'phase' => $request->validated('phase'),
+            'uploaded' => count($media),
+        ], status: 201);
     }
 
     public function transition(VendorTransitionBookingItemRequest $request, string $bookingItemPublicId): JsonResponse

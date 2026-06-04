@@ -344,6 +344,7 @@ return [
     ],
     'errors' => [
         'invalid_transition' => 'This fulfillment step is not allowed for the item in its current state.',
+        'condition_photos_rental_only' => 'Condition photos can only be uploaded for rental items.',
         'response_deadline_expired' => 'Response deadline has expired. Contact admin to re-open the response window.',
         'payment_already_captured' => 'Payment has been captured. Modification requires admin intervention.',
         'booking_locked' => 'This booking is currently locked. Try again once the active operation releases it.',

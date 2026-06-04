@@ -7,6 +7,7 @@ use App\Modules\Identity\Http\Controllers\VendorBusinessHourController;
 use App\Modules\Identity\Http\Controllers\VendorComplianceController;
 use App\Modules\Identity\Http\Controllers\VendorCoverageAreaController;
 use App\Modules\Identity\Http\Controllers\VendorDocumentController;
+use App\Modules\Identity\Http\Controllers\VendorMeController;
 use App\Modules\Identity\Http\Controllers\VendorProfileController;
 use App\Modules\Identity\Http\Controllers\VendorProfileResubmitController;
 use App\Modules\Identity\Http\Controllers\VendorRegistrationController;
@@ -19,6 +20,9 @@ Route::prefix('api/v1')->middleware(['api', SetLocaleMiddleware::class])->group(
 
     // Authenticated vendor endpoints.
     Route::middleware(['auth:sanctum', 'role:vendor'])->prefix('vendor')->group(function (): void {
+        // G2 — role-aware identity payload for the vendor app.
+        Route::get('me', VendorMeController::class);
+
         Route::get('profile', [VendorProfileController::class, 'show']);
         Route::put('profile', [VendorProfileController::class, 'update']);
 
