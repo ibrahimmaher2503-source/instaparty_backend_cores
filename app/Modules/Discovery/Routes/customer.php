@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Modules\Discovery\Http\Controllers\Customer\ServiceRecommendationController;
 use App\Modules\Discovery\Http\Controllers\Customer\ServiceSearchController;
 use App\Modules\Discovery\Http\Controllers\Customer\VendorBrowsingController;
 use App\Modules\Discovery\Http\Controllers\Customer\VendorProfileIndexController;
@@ -21,6 +22,9 @@ Route::prefix('api/v1/customer')->middleware('api')->group(function (): void {
     Route::get('vendors/{publicId}/availability', [VendorBrowsingController::class, 'availability']);
     Route::post('vendors/{publicId}/availability/check', [VendorBrowsingController::class, 'availabilityCheck']);
     Route::get('vendors/{publicId}/portfolio', [VendorBrowsingController::class, 'portfolio']);
+
+    // Wizard-context recommendations (Phase 3 ruling #1 — replaces packages).
+    Route::post('discovery/recommendations', ServiceRecommendationController::class);
 });
 
 // Authenticated wishlist endpoints — customer-role only (P0 fix, audit 2026-06-04:
