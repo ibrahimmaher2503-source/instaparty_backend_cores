@@ -104,6 +104,19 @@ class BookingNegotiationController
         return ApiResponse::success(BookingModificationResource::collection($modifications));
     }
 
+    public function showModification(string $bookingPublicId, string $modificationPublicId): JsonResponse
+    {
+        $booking = app(BookingRepository::class)->findByPublicId($bookingPublicId);
+        abort_if($booking === null || $booking->customer_id !== (int) auth()->id(), 404);
+
+        $modification = BookingModification::whereHas(
+            'bookingVendor',
+            fn ($q) => $q->where('booking_id', $booking->id)
+        )->where('public_id', $modificationPublicId)->firstOrFail();
+
+        return ApiResponse::success(new BookingModificationResource($modification));
+    }
+
     public function decideModification(
         CustomerModificationDecisionRequest $request,
         string $bookingPublicId,

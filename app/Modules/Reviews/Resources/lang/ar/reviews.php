@@ -65,6 +65,7 @@ return [
         'booking_item_not_completed' => 'يجب أن يكون عنصر الحجز مكتملاً قبل تقديم التقييم.',
         'booking_vendor_items_not_all_completed' => 'يجب إكمال جميع عناصر هذا المورد قبل تقديم التقييم.',
         'review_already_exists' => 'يوجد تقييم بالفعل لهذا الحجز.',
+        'locked_after_moderation' => 'لا يمكن تعديل هذا التقييم بعد المراجعة.',
         'forbidden_transition' => 'هذا الانتقال بين حالات الإشراف غير مسموح به.',
         'not_found' => 'لم يتم العثور على التقييم.',
         'forbidden' => 'ليس لديك صلاحية لتنفيذ هذا الإجراء.',
@@ -94,6 +95,19 @@ return [
         'moderated_at' => 'تاريخ المراجعة',
         'rejection_reason' => 'سبب الرفض',
         'review_type' => 'نوع التقييم',
+        'id' => 'المعرّف',
+        'submitted_at' => 'تاريخ التقديم',
+        'reason_en' => 'السبب (إنجليزي)',
+        'reason_ar' => 'السبب (عربي)',
+    ],
+
+    'locale_options' => [
+        'en' => 'الإنجليزية',
+        'ar' => 'العربية',
+    ],
+
+    'bulk_actions' => [
+        'approve_selected' => 'قبول المحدد',
     ],
 
     'notifications' => [

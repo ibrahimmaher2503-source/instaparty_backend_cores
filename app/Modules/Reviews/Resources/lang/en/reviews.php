@@ -67,6 +67,7 @@ return [
         'review_already_exists' => 'A review already exists for this booking.',
         'forbidden_transition' => 'This moderation status transition is not allowed.',
         'not_found' => 'Review not found.',
+        'locked_after_moderation' => 'This review can no longer be edited after moderation.',
         'forbidden' => 'You do not have permission to perform this action.',
     ],
 
@@ -94,6 +95,19 @@ return [
         'moderated_at' => 'Moderated At',
         'rejection_reason' => 'Rejection Reason',
         'review_type' => 'Review Type',
+        'id' => 'ID',
+        'submitted_at' => 'Submitted At',
+        'reason_en' => 'Reason (EN)',
+        'reason_ar' => 'Reason (AR)',
+    ],
+
+    'locale_options' => [
+        'en' => 'English',
+        'ar' => 'Arabic',
+    ],
+
+    'bulk_actions' => [
+        'approve_selected' => 'Approve Selected',
     ],
 
     'notifications' => [

@@ -16,7 +16,6 @@ use App\Modules\Shared\Domain\Casts\MoneyCast;
 use App\Modules\Shared\Domain\Concerns\HasPublicId;
 use App\Modules\Shared\Domain\Models\StateTransition;
 use Illuminate\Database\Eloquent\Builder;
-use Spatie\ModelStates\HasStates;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -26,6 +25,7 @@ use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
+use Spatie\ModelStates\HasStates;
 
 /**
  * @property string $reference_no
@@ -70,6 +70,7 @@ class Booking extends Model
         'amount_paid_minor', 'amount_paid_currency',
         'submitted_at', 'confirmed_at', 'cancelled_at', 'cancelled_by',
         'payment_hold_expires_at',
+        'requires_tax_invoice', 'invoice_name', 'invoice_tax_id',
     ];
 
     protected $casts = [
