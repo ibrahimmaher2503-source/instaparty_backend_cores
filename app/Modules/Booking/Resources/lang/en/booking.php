@@ -369,6 +369,7 @@ return [
             'already_cancelled' => 'This booking is already cancelled.',
             'booking_completed' => 'A completed booking cannot be cancelled.',
             'booking_active' => 'The booking is in progress and can no longer be cancelled.',
+            'not_a_draft' => 'Only draft bookings can be discarded.',
         ],
     ],
 ];

@@ -15,7 +15,9 @@ Route::middleware(['auth:sanctum', 'locale', 'role:customer'])
     ->group(function (): void {
         Route::get('bookings', [BookingController::class, 'index']);
         Route::post('bookings', [BookingController::class, 'store']);
+        Route::get('bookings/current-draft', [BookingController::class, 'currentDraft']);
         Route::get('bookings/{bookingPublicId}', [BookingController::class, 'show']);
+        Route::delete('bookings/{bookingPublicId}', [BookingController::class, 'discardDraft']);
         Route::post('bookings/{bookingPublicId}/items', [BookingItemController::class, 'store']);
         Route::delete('bookings/{bookingPublicId}/items/{itemPublicId}', [BookingItemController::class, 'destroy']);
         Route::post('bookings/{bookingPublicId}/submit', [BookingNegotiationController::class, 'submit']);
