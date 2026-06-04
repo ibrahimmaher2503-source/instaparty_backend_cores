@@ -33,8 +33,15 @@ Route::prefix('api/v1')->middleware(['api', SetLocaleMiddleware::class])->group(
         Route::post('documents', [VendorDocumentController::class, 'store']);
         Route::get('documents/{publicId}/signed-url', [VendorDocumentController::class, 'signedUrl']);
 
+        // Coverage areas — full CRUD (vendor-portal 9.1–9.5; only POST existed).
+        Route::get('coverage-areas', [VendorCoverageAreaController::class, 'index']);
         Route::post('coverage-areas', [VendorCoverageAreaController::class, 'store']);
+        Route::get('coverage-areas/available-cities', [VendorCoverageAreaController::class, 'availableCities']);
+        Route::patch('coverage-areas/{cityId}', [VendorCoverageAreaController::class, 'update'])->whereNumber('cityId');
+        Route::delete('coverage-areas/{cityId}', [VendorCoverageAreaController::class, 'destroy'])->whereNumber('cityId');
 
+        // Business hours — GET added (vendor-portal 8.1; PUT existed without a read).
+        Route::get('business-hours', [VendorBusinessHourController::class, 'index']);
         Route::put('business-hours', [VendorBusinessHourController::class, 'update']);
 
         Route::post('vendor-profiles/{publicId}/resubmit', [VendorProfileResubmitController::class, 'store']);

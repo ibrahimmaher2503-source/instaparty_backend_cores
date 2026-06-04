@@ -8,8 +8,11 @@ use App\Modules\Booking\Application\Actions\Fulfillment\MarkCompletedAction;
 use App\Modules\Booking\Application\Actions\Fulfillment\MarkInProgressAction;
 use App\Modules\Booking\Application\Actions\Fulfillment\MarkPreparingAction;
 use App\Modules\Booking\Application\Actions\Fulfillment\MarkReadyAction;
+use App\Modules\Booking\Application\Actions\Fulfillment\ReportFulfillmentIssueAction;
 use App\Modules\Booking\Application\Actions\Fulfillment\UploadConditionPhotosAction;
 use App\Modules\Booking\Application\DTOs\Fulfillment\FulfillmentEvidenceDto;
+use App\Modules\Booking\Application\DTOs\Fulfillment\FulfillmentIssueDto;
+use App\Modules\Booking\Domain\Enums\FulfillmentIssueReason;
 use App\Modules\Booking\Domain\Exceptions\BookingNotEligibleForFulfillmentException;
 use App\Modules\Booking\Domain\Exceptions\LaneNotSupportedForTypeException;
 use App\Modules\Booking\Domain\Exceptions\PaymentNotCapturedException;
@@ -78,6 +81,34 @@ class BookingItemController
         }
 
         return ApiResponse::success(new BookingItemResource($item));
+    }
+
+    /** Vendor-portal 6.12 — escalate a fulfillment issue to admin (REST for the existing Filament Action). */
+    public function reportIssue(Request $request, string $bookingItemPublicId): JsonResponse
+    {
+        $validated = $request->validate([
+            'reason_code' => ['required', 'string', 'in:venue_unavailable,customer_unreachable,damaged_goods,safety_concern,other'],
+            'note' => ['required', 'string', 'max:1000'],
+        ]);
+
+        $item = $this->ownedItem($request, $bookingItemPublicId);
+
+        try {
+            $issue = app(ReportFulfillmentIssueAction::class)->execute(
+                $item,
+                $this->vendorProfile($request),
+                $request->user(),
+                new FulfillmentIssueDto(
+                    reasonCode: FulfillmentIssueReason::from($validated['reason_code']),
+                    note: $validated['note'],
+                ),
+            );
+        } catch (PaymentNotCapturedException $e) {
+            // Same contract as the transition endpoint above.
+            return ApiResponse::error($e->getMessage(), 409);
+        }
+
+        return ApiResponse::success(['public_id' => $issue->public_id, 'status' => 'reported'], status: 201);
     }
 
     private function ownedItem(Request $request, string $publicId): BookingItem

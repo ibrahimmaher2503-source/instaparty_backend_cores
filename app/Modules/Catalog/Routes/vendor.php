@@ -14,7 +14,9 @@ use App\Modules\Catalog\Http\Controllers\Vendor\RentalServiceController;
 use App\Modules\Catalog\Http\Controllers\Vendor\SaleServiceController;
 use App\Modules\Catalog\Http\Controllers\Vendor\VendorArchiveServiceController;
 use App\Modules\Catalog\Http\Controllers\Vendor\VendorCategoryController;
+use App\Modules\Catalog\Http\Controllers\Vendor\VendorImportStatusController;
 use App\Modules\Catalog\Http\Controllers\Vendor\VendorServiceChangeRequestController;
+use App\Modules\Catalog\Http\Controllers\Vendor\VendorServiceLifecycleController;
 use App\Modules\Catalog\Http\Controllers\Vendor\VendorServiceListController;
 use App\Modules\Catalog\Http\Controllers\Vendor\VendorServiceMediaController;
 use App\Modules\Catalog\Http\Controllers\Vendor\VendorServiceShowController;
@@ -69,6 +71,16 @@ Route::middleware(['api', 'auth:sanctum', 'role:vendor'])->prefix('api/v1/vendor
     // Failed rows export
     Route::get('catalog/import/{importPublicId}/failed-rows', DownloadFailedRowsController::class)
         ->name('vendor.catalog.import.failed-rows');
+
+    // Import status polling (vendor-portal 5.3).
+    Route::get('catalog/import/{importPublicId}', VendorImportStatusController::class)
+        ->name('vendor.catalog.import.status');
+
+    // Service lifecycle as REST (vendor-portal 4.10 + 4.12 — spec 12 §12 parity).
+    Route::post('services/{publicId}/submit-review', [VendorServiceLifecycleController::class, 'submitReview'])
+        ->name('vendor.services.submit-review');
+    Route::post('services/{publicId}/clone', [VendorServiceLifecycleController::class, 'clone'])
+        ->name('vendor.services.clone');
 
     // Service.gallery media (spec 048-media-collections-phase1 US1).
     Route::prefix('services/{service:public_id}/media')->group(function (): void {

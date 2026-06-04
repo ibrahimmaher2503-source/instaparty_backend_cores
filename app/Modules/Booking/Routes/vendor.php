@@ -24,4 +24,5 @@ Route::middleware(['auth:sanctum', 'role:vendor', SetLocaleMiddleware::class])
         Route::get('booking-items/{bookingItemPublicId}', [BookingItemController::class, 'show']);
         Route::post('booking-items/{bookingItemPublicId}/transition', [BookingItemController::class, 'transition']);
         Route::post('booking-items/{bookingItemPublicId}/condition-photos', [BookingItemController::class, 'conditionPhotos']);
+        Route::post('booking-items/{bookingItemPublicId}/report-issue', [BookingItemController::class, 'reportIssue']);
     });
