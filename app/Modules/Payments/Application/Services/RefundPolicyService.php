@@ -6,10 +6,11 @@ namespace App\Modules\Payments\Application\Services;
 
 use App\Modules\Catalog\Domain\Enums\ProductType;
 use App\Modules\Payments\Domain\Contracts\PaymentsCatalogReader;
+use App\Modules\Payments\Domain\Contracts\RefundPolicyResolver;
 use App\Modules\Payments\Domain\ValueObjects\RefundPolicy;
 use Carbon\Carbon;
 
-class RefundPolicyService
+class RefundPolicyService implements RefundPolicyResolver
 {
     public function __construct(private readonly PaymentsCatalogReader $catalogReader) {}
 

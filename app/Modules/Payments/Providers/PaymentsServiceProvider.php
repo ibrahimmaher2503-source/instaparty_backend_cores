@@ -7,10 +7,16 @@ namespace App\Modules\Payments\Providers;
 use App\Modules\Booking\Application\Listeners\HandlePaymentFailedListener;
 use App\Modules\Booking\Application\Listeners\ReleaseInventoryOnPaymentVoidedListener;
 use App\Modules\Booking\Application\Listeners\UpdateBookingPaymentStatusListener;
+use App\Modules\Booking\Domain\Events\BookingCancelled;
 use App\Modules\Booking\Domain\Events\BookingForceCancelled;
+use App\Modules\Payments\Application\Listeners\OnBookingCancelledInitiateRefundListener;
 use App\Modules\Payments\Application\Listeners\OnBookingForceCancelledInitiateRefundListener;
+use App\Modules\Payments\Application\Services\RefundPolicyService;
+use App\Modules\Payments\Application\Timeline\PaymentTimelineDescriptors;
+use App\Modules\Payments\Application\Timeline\RefundTimelineDescriptors;
 use App\Modules\Payments\Console\Commands\PingGatewayHealthCommand;
 use App\Modules\Payments\Domain\Contracts\PaymentGateway;
+use App\Modules\Payments\Domain\Contracts\RefundPolicyResolver;
 use App\Modules\Payments\Domain\Events\ChargebackOpened;
 use App\Modules\Payments\Domain\Events\ChargebackResolved;
 use App\Modules\Payments\Domain\Events\PaymentAbandoned;
@@ -24,6 +30,7 @@ use App\Modules\Payments\Infrastructure\Repositories\EloquentSettlementPaymentRe
 use App\Modules\Settlement\Application\Listeners\HandleChargebackResolvedListener;
 use App\Modules\Settlement\Application\Listeners\ReverseWalletCreditOnChargebackOpenedListener;
 use App\Modules\Settlement\Domain\Contracts\SettlementPaymentReader;
+use App\Modules\Shared\Application\Timeline\TimelineSourceRegistry;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Route;
@@ -35,6 +42,8 @@ class PaymentsServiceProvider extends ServiceProvider
     {
         $this->app->bind(PaymentGateway::class, PaymobGateway::class);
         $this->app->bind(SettlementPaymentReader::class, EloquentSettlementPaymentReader::class);
+        $this->app->bind(RefundTimelineReader::class, EloquentRefundTimelineReader::class);
+        $this->app->bind(RefundPolicyResolver::class, RefundPolicyService::class);
     }
 
     public function boot(): void
@@ -56,6 +65,7 @@ class PaymentsServiceProvider extends ServiceProvider
         Event::listen(RefundCompleted::class, [UpdateBookingPaymentStatusListener::class, 'handleRefund']);
         Event::listen(PaymentFailed::class, [HandlePaymentFailedListener::class, 'handle']);
         Event::listen(BookingForceCancelled::class, OnBookingForceCancelledInitiateRefundListener::class);
+        Event::listen(BookingCancelled::class, OnBookingCancelledInitiateRefundListener::class);
 
         // Phase 4.3 — Payments Ops Console
         Event::listen(PaymentVoided::class, [ReleaseInventoryOnPaymentVoidedListener::class, 'handle']);
@@ -68,6 +78,11 @@ class PaymentsServiceProvider extends ServiceProvider
                 ->everyFiveMinutes()
                 ->withoutOverlapping()
                 ->runInBackground();
+        });
+
+        $this->callAfterResolving(TimelineSourceRegistry::class, function (TimelineSourceRegistry $registry): void {
+            PaymentTimelineDescriptors::register($registry);
+            RefundTimelineDescriptors::register($registry);
         });
     }
 }
