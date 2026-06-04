@@ -18,6 +18,7 @@ use App\Modules\Booking\Http\Requests\VendorModifyRequest;
 use App\Modules\Booking\Http\Requests\VendorRejectRequest;
 use App\Modules\Booking\Http\Resources\BookingModificationResource;
 use App\Modules\Booking\Http\Resources\BookingVendorResource;
+use App\Modules\Booking\Http\Resources\VendorBookingVendorDetailResource;
 use App\Modules\Identity\Domain\Models\User;
 use App\Modules\Identity\Domain\Models\VendorProfile;
 use App\Modules\Shared\Http\ApiResponse;
@@ -57,6 +58,16 @@ class BookingController
             ->get();
 
         return ApiResponse::success(BookingVendorResource::collection($bookingVendors));
+    }
+
+    public function show(string $bookingVendorPublicId): JsonResponse
+    {
+        $bookingVendor = BookingVendor::with(['items', 'booking.address.city', 'booking.occasion', 'booking.customer'])
+            ->where('public_id', $bookingVendorPublicId)
+            ->where('vendor_profile_id', $this->vendorProfileId())
+            ->firstOrFail();
+
+        return ApiResponse::success(new VendorBookingVendorDetailResource($bookingVendor));
     }
 
     public function accept(Request $request, string $bookingVendorPublicId): JsonResponse

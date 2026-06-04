@@ -7,10 +7,12 @@ namespace App\Modules\Reviews\Domain\Models;
 use App\Modules\Reviews\Database\Factories\VendorReviewFactory;
 use App\Modules\Reviews\Domain\Enums\ModerationStatus;
 use App\Modules\Reviews\Domain\Enums\ReviewLocale;
+use App\Modules\Reviews\Domain\Enums\ReviewType;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class VendorReview extends Model
@@ -71,6 +73,13 @@ class VendorReview extends Model
     public function moderator(): BelongsTo
     {
         return $this->belongsTo('App\Modules\Identity\Domain\Models\User', 'moderated_by');
+    }
+
+    public function vendorResponse(): HasOne
+    {
+        return $this->hasOne(ReviewResponse::class, 'review_id')
+            ->where('review_type', ReviewType::Vendor->value)
+            ->latest('id');
     }
 
     public function scopeApproved($query)
