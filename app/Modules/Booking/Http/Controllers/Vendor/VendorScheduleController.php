@@ -1,0 +1,67 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Modules\Booking\Http\Controllers\Vendor;
+
+use App\Modules\Booking\Domain\Enums\VendorSubStatus;
+use App\Modules\Booking\Domain\Models\BookingItem;
+use App\Modules\Booking\Http\Resources\BookingItemResource;
+use App\Modules\Shared\Http\ApiResponse;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+
+/**
+ * GET /api/v1/vendor/schedule (G7) — the vendor's operational view:
+ * booking items of accepted/in-progress bookings whose event falls in the
+ * requested window (today | tomorrow | week).
+ */
+class VendorScheduleController
+{
+    public function __invoke(Request $request): JsonResponse
+    {
+        $request->validate([
+            'window' => ['nullable', Rule::in(['today', 'tomorrow', 'week'])],
+        ]);
+
+        $vendor = $request->user()?->vendorProfile;
+
+        if ($vendor === null) {
+            throw new NotFoundHttpException('Vendor profile not found.');
+        }
+
+        $tz = $request->user()->timezone ?? 'Africa/Cairo';
+        $window = (string) $request->query('window', 'today');
+
+        [$from, $to] = match ($window) {
+            'tomorrow' => [now($tz)->addDay()->startOfDay(), now($tz)->addDay()->endOfDay()],
+            'week' => [now($tz)->startOfDay(), now($tz)->addDays(7)->endOfDay()],
+            default => [now($tz)->startOfDay(), now($tz)->endOfDay()],
+        };
+
+        $items = BookingItem::query()
+            ->whereHas('bookingVendor', fn ($q) => $q
+                ->where('vendor_profile_id', $vendor->id)
+                ->whereIn('sub_status', [VendorSubStatus::Accepted->value, VendorSubStatus::InProgress->value])
+                ->whereHas('booking', fn ($b) => $b->whereBetween('event_starts_at', [$from->utc(), $to->utc()])))
+            ->with(['bookingVendor.booking'])
+            ->get()
+            ->sortBy(fn (BookingItem $item) => $item->bookingVendor->booking->event_starts_at)
+            ->values();
+
+        return ApiResponse::success(
+            $items
+                ->groupBy(fn (BookingItem $item) => $item->bookingVendor->booking->event_starts_at
+                    ->setTimezone($tz)
+                    ->toDateString())
+                ->map(fn ($group, string $date): array => [
+                    'date' => $date,
+                    'items' => BookingItemResource::collection($group->values()),
+                ])
+                ->values(),
+            ['window' => $window],
+        );
+    }
+}

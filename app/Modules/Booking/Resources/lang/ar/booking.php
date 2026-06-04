@@ -326,7 +326,12 @@ return [
         'withdrawn_success' => 'تم سحب التعديل.',
         'action_failed' => 'فشل الإجراء.',
     ],
+    'validation' => [
+        'lane_required' => 'خطوة التنفيذ مطلوبة.',
+        'lane_invalid' => 'يجب أن تكون خطوة التنفيذ preparing أو ready أو in_progress أو completed.',
+    ],
     'errors' => [
+        'invalid_transition' => 'خطوة التنفيذ هذه غير مسموح بها للعنصر في حالته الحالية.',
         'response_deadline_expired' => 'انتهت مهلة الرد. تواصل مع الإدارة لإعادة فتح نافذة الرد.',
         'payment_already_captured' => 'تم تحصيل الدفع. التعديل يتطلب تدخل المسؤول.',
         'booking_locked' => 'هذا الحجز مغلق حاليًا. حاول مرة أخرى بعد انتهاء العملية الجارية.',

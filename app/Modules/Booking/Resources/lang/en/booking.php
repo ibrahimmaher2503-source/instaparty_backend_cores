@@ -338,7 +338,12 @@ return [
         'withdrawn_success' => 'Modification withdrawn.',
         'action_failed' => 'Action failed.',
     ],
+    'validation' => [
+        'lane_required' => 'The fulfillment step is required.',
+        'lane_invalid' => 'The fulfillment step must be preparing, ready, in_progress, or completed.',
+    ],
     'errors' => [
+        'invalid_transition' => 'This fulfillment step is not allowed for the item in its current state.',
         'response_deadline_expired' => 'Response deadline has expired. Contact admin to re-open the response window.',
         'payment_already_captured' => 'Payment has been captured. Modification requires admin intervention.',
         'booking_locked' => 'This booking is currently locked. Try again once the active operation releases it.',
