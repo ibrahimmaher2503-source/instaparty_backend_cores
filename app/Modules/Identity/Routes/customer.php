@@ -41,6 +41,8 @@ Route::prefix('api/v1')->middleware(['api', SetLocaleMiddleware::class])->group(
 
             Route::get('addresses', [CustomerAddressController::class, 'index']);
             Route::post('addresses', [CustomerAddressController::class, 'store']);
+            Route::patch('addresses/{customerAddress}', [CustomerAddressController::class, 'update']);
+            Route::post('addresses/{customerAddress}/set-default', [CustomerAddressController::class, 'setDefault']);
             Route::delete('addresses/{customerAddress}', [CustomerAddressController::class, 'destroy']);
 
             // Vendor Wishlist (C5, C6, C7)
