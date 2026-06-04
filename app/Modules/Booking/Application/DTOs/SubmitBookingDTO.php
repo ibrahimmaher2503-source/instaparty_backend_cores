@@ -10,5 +10,6 @@ final readonly class SubmitBookingDTO
         public int $bookingId,
         public int $customerId,
         public string $idempotencyKey,
+        public string $requestContent = '',
     ) {}
 }

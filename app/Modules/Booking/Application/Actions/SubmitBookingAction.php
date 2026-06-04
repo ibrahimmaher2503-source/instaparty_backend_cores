@@ -5,15 +5,15 @@ declare(strict_types=1);
 namespace App\Modules\Booking\Application\Actions;
 
 use App\Modules\Booking\Application\DTOs\SubmitBookingDTO;
+use App\Modules\Booking\Domain\Contracts\TaxRateResolver;
 use App\Modules\Booking\Domain\Enums\LifecycleStatus;
 use App\Modules\Booking\Domain\Enums\VendorSubStatus;
 use App\Modules\Booking\Domain\Events\BookingSubmittedToVendor;
 use App\Modules\Booking\Domain\Models\Booking;
+use App\Modules\Booking\Domain\Models\BookingVendor;
 use App\Modules\Booking\Domain\States\BookingLifecycleStatus\DraftState;
 use App\Modules\Booking\Domain\States\BookingLifecycleStatus\VendorReviewState;
 use App\Modules\Shared\Domain\Models\StateTransition;
-use App\Modules\Booking\Domain\Models\BookingVendor;
-use App\Modules\Booking\Domain\Contracts\TaxRateResolver;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 
@@ -21,6 +21,7 @@ class SubmitBookingAction
 {
     public function __construct(
         private readonly TaxRateResolver $taxRateResolver,
+        private readonly EnforceCoverageAreaMinimumOrderAction $enforceMinimumOrder,
     ) {}
 
     public function execute(SubmitBookingDTO $dto): Booking
@@ -53,6 +54,8 @@ class SubmitBookingAction
 
             abort_if(! $hasItems, Response::HTTP_UNPROCESSABLE_ENTITY, 'Booking has no items');
 
+            $this->enforceMinimumOrder->execute($booking->id);
+
             // Resolve and snapshot VAT per booking item
             $totalVatMinor = 0;
             $items = DB::table('booking_items')
@@ -62,11 +65,11 @@ class SubmitBookingAction
                 ->get();
 
             foreach ($items as $item) {
-                $rateBps  = $this->taxRateResolver->resolveRateBpsForProductType($item->product_type);
+                $rateBps = $this->taxRateResolver->resolveRateBpsForProductType($item->product_type);
                 $lineTotal = $item->unit_price_minor * $item->quantity;
                 $vatAmount = (int) round($lineTotal * $rateBps / 10000);
                 DB::table('booking_items')->where('id', $item->id)->update([
-                    'vat_rate_bps'    => $rateBps,
+                    'vat_rate_bps' => $rateBps,
                     'vat_amount_minor' => $vatAmount,
                 ]);
                 $totalVatMinor += $vatAmount;
@@ -74,8 +77,8 @@ class SubmitBookingAction
 
             $booking->update([
                 'lifecycle_status' => VendorReviewState::class,
-                'submitted_at'     => now(),
-                'total_vat_minor'  => $totalVatMinor,
+                'submitted_at' => now(),
+                'total_vat_minor' => $totalVatMinor,
             ]);
 
             StateTransition::create([
@@ -114,7 +117,9 @@ class SubmitBookingAction
 
     private function requestHash(SubmitBookingDTO $dto): string
     {
-        return hash('sha256', 'bookings.submit|'.$dto->customerId.'|'.$dto->bookingId);
+        // Canonical pattern (Shared\IdempotencyService:30): route|content —
+        // plus customerId/bookingId, which here stand in for the route params.
+        return hash('sha256', 'bookings.submit|'.$dto->customerId.'|'.$dto->bookingId.'|'.$dto->requestContent);
     }
 
     private function getCachedIdempotencyResponse(SubmitBookingDTO $dto): ?Booking
