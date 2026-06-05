@@ -1,0 +1,389 @@
+name: 'Vendor - Services (Digital)'
+description: ''
+endpoints:
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/v1/vendor/services/digital
+    metadata:
+      custom: []
+      groupName: 'Vendor - Services (Digital)'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      name:
+        custom: []
+        name: name
+        description: ''
+        required: true
+        example: []
+        type: object
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      name.en:
+        custom: []
+        name: name.en
+        description: 'Service name in English.'
+        required: true
+        example: '"Digital Birthday Invitation"'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      name.ar:
+        custom: []
+        name: name.ar
+        description: 'Service name in Arabic.'
+        required: true
+        example: '"دعوة عيد ميلاد رقمية"'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      short_description:
+        custom: []
+        name: short_description
+        description: ''
+        required: true
+        example: []
+        type: object
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      short_description.en:
+        custom: []
+        name: short_description.en
+        description: 'Short description in English.'
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      short_description.ar:
+        custom: []
+        name: short_description.ar
+        description: 'Short description in Arabic.'
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      category_id:
+        custom: []
+        name: category_id
+        description: 'ID of the category.'
+        required: true
+        example: 3
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      base_price_minor:
+        custom: []
+        name: base_price_minor
+        description: 'Price in EGP piastres (100 = 1 EGP).'
+        required: true
+        example: 5000
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      delivery_method:
+        custom: []
+        name: delivery_method
+        description: 'Delivery channel. Must be one of: email, sms, whatsapp, link.'
+        required: true
+        example: '"email"'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      has_expiry:
+        custom: []
+        name: has_expiry
+        description: 'Whether the digital product expires.'
+        required: false
+        example: true
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      expiry_days_after_purchase:
+        custom: []
+        name: expiry_days_after_purchase
+        description: 'if has_expiry is true. Days until expiry.'
+        required: true
+        example: 30
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: true
+        deprecated: false
+      is_refundable_after_delivery:
+        custom: []
+        name: is_refundable_after_delivery
+        description: 'Whether refundable after delivery.'
+        required: false
+        example: false
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      redemption_url_template:
+        custom: []
+        name: redemption_url_template
+        description: 'nullable URL template for redemption.'
+        required: false
+        example: '"https://example.com/redeem/{code}"'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: true
+        deprecated: false
+    cleanBodyParameters:
+      name:
+        en: '"Digital Birthday Invitation"'
+        ar: '"دعوة عيد ميلاد رقمية"'
+      short_description:
+        en: architecto
+        ar: architecto
+      category_id: 3
+      base_price_minor: 5000
+      delivery_method: '"email"'
+      has_expiry: true
+      expiry_days_after_purchase: 30
+      is_refundable_after_delivery: false
+      redemption_url_template: '"https://example.com/redeem/{code}"'
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - PATCH
+    uri: 'api/v1/vendor/services/digital/{publicId}'
+    metadata:
+      custom: []
+      groupName: 'Vendor - Services (Digital)'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      publicId:
+        custom: []
+        name: publicId
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      publicId: architecto
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      name:
+        custom: []
+        name: name
+        description: ''
+        required: false
+        example: null
+        type: object
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      name.en:
+        custom: []
+        name: name.en
+        description: 'optional (partial update) Service name in English.'
+        required: false
+        example: '"Digital Birthday Invitation"'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      name.ar:
+        custom: []
+        name: name.ar
+        description: 'optional (partial update) Service name in Arabic.'
+        required: false
+        example: '"دعوة عيد ميلاد رقمية"'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      short_description:
+        custom: []
+        name: short_description
+        description: ''
+        required: false
+        example: null
+        type: object
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      short_description.en:
+        custom: []
+        name: short_description.en
+        description: 'optional (partial update) Short description in English.'
+        required: false
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      short_description.ar:
+        custom: []
+        name: short_description.ar
+        description: 'optional (partial update) Short description in Arabic.'
+        required: false
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      category_id:
+        custom: []
+        name: category_id
+        description: 'optional (partial update) ID of the category.'
+        required: false
+        example: 3
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      base_price_minor:
+        custom: []
+        name: base_price_minor
+        description: 'optional (partial update) Price in EGP piastres (100 = 1 EGP).'
+        required: false
+        example: 5000
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      delivery_method:
+        custom: []
+        name: delivery_method
+        description: 'optional (partial update) Delivery channel. Must be one of: email, sms, whatsapp, link.'
+        required: false
+        example: '"email"'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      has_expiry:
+        custom: []
+        name: has_expiry
+        description: 'optional (partial update) Whether the digital product expires.'
+        required: false
+        example: true
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      expiry_days_after_purchase:
+        custom: []
+        name: expiry_days_after_purchase
+        description: 'optional (partial update) required if has_expiry is true. Days until expiry.'
+        required: false
+        example: 30
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      is_refundable_after_delivery:
+        custom: []
+        name: is_refundable_after_delivery
+        description: 'optional (partial update) Whether refundable after delivery.'
+        required: false
+        example: false
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      redemption_url_template:
+        custom: []
+        name: redemption_url_template
+        description: 'optional (partial update) URL template for redemption.'
+        required: false
+        example: '"https://example.com/redeem/{code}"'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: true
+        deprecated: false
+    cleanBodyParameters:
+      name:
+        en: '"Digital Birthday Invitation"'
+        ar: '"دعوة عيد ميلاد رقمية"'
+      short_description:
+        en: architecto
+        ar: architecto
+      category_id: 3
+      base_price_minor: 5000
+      delivery_method: '"email"'
+      has_expiry: true
+      expiry_days_after_purchase: 30
+      is_refundable_after_delivery: false
+      redemption_url_template: '"https://example.com/redeem/{code}"'
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null

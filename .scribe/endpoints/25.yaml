@@ -1,0 +1,1078 @@
+name: 'Customer - Bookings'
+description: ''
+endpoints:
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/customer/bookings
+    metadata:
+      custom: []
+      groupName: 'Customer - Bookings'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      status:
+        custom: []
+        name: status
+        description: ''
+        required: false
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      cursor:
+        custom: []
+        name: cursor
+        description: 'Must not be greater than 512 characters.'
+        required: false
+        example: 'n'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+    cleanBodyParameters:
+      status: architecto
+      cursor: 'n'
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"data":null,"meta":null,"errors":[{"code":"unauthenticated","message":"Unauthenticated."}]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-correlation-id: 01KTBQ4RM6E3ZEZBM87K3Z2AWR
+          vary: Origin
+          x-trace-id: 095dbdc4-ca76-4add-bb4a-dbe060d965a1
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/v1/customer/bookings
+    metadata:
+      custom: []
+      groupName: 'Customer - Bookings'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      occasion_id:
+        custom: []
+        name: occasion_id
+        description: 'The <code>public_id</code> of an existing record in the occasions table.'
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      event_starts_at:
+        custom: []
+        name: event_starts_at
+        description: 'Must be a valid date. Must be a date after <code>now</code>.'
+        required: true
+        example: '2052-06-28'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      event_ends_at:
+        custom: []
+        name: event_ends_at
+        description: 'Must be a valid date. Must be a date after <code>event_starts_at</code>.'
+        required: true
+        example: '2052-06-28'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      guest_count:
+        custom: []
+        name: guest_count
+        description: 'Must be at least 1.'
+        required: false
+        example: 22
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      theme:
+        custom: []
+        name: theme
+        description: ''
+        required: false
+        example: null
+        type: object
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      theme.en:
+        custom: []
+        name: theme.en
+        description: 'Must not be greater than 120 characters.'
+        required: false
+        example: g
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      theme.ar:
+        custom: []
+        name: theme.ar
+        description: 'Must not be greater than 120 characters.'
+        required: false
+        example: z
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      celebrant_name:
+        custom: []
+        name: celebrant_name
+        description: 'Must not be greater than 120 characters.'
+        required: false
+        example: m
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      celebrant_dob:
+        custom: []
+        name: celebrant_dob
+        description: 'Must be a valid date.'
+        required: false
+        example: '2026-06-05T11:01:56'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      celebrant_gender:
+        custom: []
+        name: celebrant_gender
+        description: ''
+        required: false
+        example: female
+        type: string
+        enumValues:
+          - male
+          - female
+          - other
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      address:
+        custom: []
+        name: address
+        description: ''
+        required: true
+        example: []
+        type: object
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      address.city_id:
+        custom: []
+        name: address.city_id
+        description: 'The <code>public_id</code> of an existing record in the cities table.'
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      address.address_line:
+        custom: []
+        name: address.address_line
+        description: 'Must not be greater than 255 characters.'
+        required: true
+        example: 'n'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      address.building:
+        custom: []
+        name: address.building
+        description: 'Must not be greater than 80 characters.'
+        required: false
+        example: g
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      address.floor:
+        custom: []
+        name: address.floor
+        description: 'Must not be greater than 20 characters.'
+        required: false
+        example: zmiyvdljnikhwayk
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      address.apartment:
+        custom: []
+        name: address.apartment
+        description: 'Must not be greater than 20 characters.'
+        required: false
+        example: cmyuwpwlvqwrsitc
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      address.landmark:
+        custom: []
+        name: address.landmark
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: p
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      address.recipient_name:
+        custom: []
+        name: address.recipient_name
+        description: 'Must not be greater than 120 characters.'
+        required: true
+        example: s
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      address.recipient_phone_e164:
+        custom: []
+        name: address.recipient_phone_e164
+        description: 'Must match the regex /^\+[1-9]\d{7,14}$/.'
+        required: true
+        example: '+36425593142326'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      occasion_id: architecto
+      event_starts_at: '2052-06-28'
+      event_ends_at: '2052-06-28'
+      guest_count: 22
+      theme:
+        en: g
+        ar: z
+      celebrant_name: m
+      celebrant_dob: '2026-06-05T11:01:56'
+      celebrant_gender: female
+      address:
+        city_id: architecto
+        address_line: 'n'
+        building: g
+        floor: zmiyvdljnikhwayk
+        apartment: cmyuwpwlvqwrsitc
+        landmark: p
+        recipient_name: s
+        recipient_phone_e164: '+36425593142326'
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/customer/bookings/current-draft
+    metadata:
+      custom: []
+      groupName: 'Customer - Bookings'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: '10.1 — the customer''s latest open draft ("current cart"), 404 if none.'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"data":null,"meta":null,"errors":[{"code":"unauthenticated","message":"Unauthenticated."}]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-correlation-id: 01KTBQ4RMQTERFYJQ7HBQMJAYP
+          vary: Origin
+          x-trace-id: 934010b4-62e1-4ded-9740-ba3c093094d8
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/v1/customer/bookings/{bookingPublicId}'
+    metadata:
+      custom: []
+      groupName: 'Customer - Bookings'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      bookingPublicId:
+        custom: []
+        name: bookingPublicId
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      bookingPublicId: architecto
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"data":null,"meta":null,"errors":[{"code":"unauthenticated","message":"Unauthenticated."}]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-correlation-id: 01KTBQ4RMX9059F2TWBP18CB89
+          vary: Origin
+          x-trace-id: beff2553-5f1e-4029-9bfd-9e501d8054c9
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - DELETE
+    uri: 'api/v1/customer/bookings/{bookingPublicId}'
+    metadata:
+      custom: []
+      groupName: 'Customer - Bookings'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: '10.8 — discard the draft entirely ("clear cart").'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      bookingPublicId:
+        custom: []
+        name: bookingPublicId
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      bookingPublicId: architecto
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/v1/customer/bookings/{bookingPublicId}/items'
+    metadata:
+      custom: []
+      groupName: 'Customer - Bookings'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      bookingPublicId:
+        custom: []
+        name: bookingPublicId
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      bookingPublicId: architecto
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      service_id:
+        custom: []
+        name: service_id
+        description: 'The <code>public_id</code> of an existing record in the services table.'
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      quantity:
+        custom: []
+        name: quantity
+        description: 'Must be at least 1.'
+        required: true
+        example: 22
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      effective_starts_at:
+        custom: []
+        name: effective_starts_at
+        description: 'Must be a valid date.'
+        required: false
+        example: '2026-06-05T11:01:56'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      effective_ends_at:
+        custom: []
+        name: effective_ends_at
+        description: 'Must be a valid date. Must be a date after <code>effective_starts_at</code>.'
+        required: false
+        example: '2052-06-28'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      customization_data:
+        custom: []
+        name: customization_data
+        description: ''
+        required: false
+        example: null
+        type: object
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+    cleanBodyParameters:
+      service_id: architecto
+      quantity: 22
+      effective_starts_at: '2026-06-05T11:01:56'
+      effective_ends_at: '2052-06-28'
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - DELETE
+    uri: 'api/v1/customer/bookings/{bookingPublicId}/items/{itemPublicId}'
+    metadata:
+      custom: []
+      groupName: 'Customer - Bookings'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      bookingPublicId:
+        custom: []
+        name: bookingPublicId
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      itemPublicId:
+        custom: []
+        name: itemPublicId
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      bookingPublicId: architecto
+      itemPublicId: architecto
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/v1/customer/bookings/{bookingPublicId}/submit'
+    metadata:
+      custom: []
+      groupName: 'Customer - Bookings'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      bookingPublicId:
+        custom: []
+        name: bookingPublicId
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      bookingPublicId: architecto
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/v1/customer/bookings/{bookingPublicId}/checkout-review'
+    metadata:
+      custom: []
+      groupName: 'Customer - Bookings'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      bookingPublicId:
+        custom: []
+        name: bookingPublicId
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      bookingPublicId: architecto
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/v1/customer/bookings/{bookingPublicId}/cancellation-preview'
+    metadata:
+      custom: []
+      groupName: 'Customer - Bookings'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      bookingPublicId:
+        custom: []
+        name: bookingPublicId
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      bookingPublicId: architecto
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"data":null,"meta":null,"errors":[{"code":"unauthenticated","message":"Unauthenticated."}]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-correlation-id: 01KTBQ4RNZXSKQF42274YWXCE3
+          vary: Origin
+          x-trace-id: 9aabf187-2a9e-4ca5-8a82-b0ab02c9fc9b
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/v1/customer/bookings/{bookingPublicId}/cancel'
+    metadata:
+      custom: []
+      groupName: 'Customer - Bookings'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      bookingPublicId:
+        custom: []
+        name: bookingPublicId
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      bookingPublicId: architecto
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      reason:
+        custom: []
+        name: reason
+        description: 'Must not be greater than 500 characters.'
+        required: false
+        example: b
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+    cleanBodyParameters:
+      reason: b
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/v1/customer/bookings/{bookingPublicId}/modifications'
+    metadata:
+      custom: []
+      groupName: 'Customer - Bookings'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      bookingPublicId:
+        custom: []
+        name: bookingPublicId
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      bookingPublicId: architecto
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"data":null,"meta":null,"errors":[{"code":"unauthenticated","message":"Unauthenticated."}]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-correlation-id: 01KTBQ4RP74DR6CRHDNV4Z2MSH
+          vary: Origin
+          x-trace-id: d4ab0250-72b4-46c1-8b71-d41072b76394
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/v1/customer/bookings/{bookingPublicId}/modifications/{modificationPublicId}'
+    metadata:
+      custom: []
+      groupName: 'Customer - Bookings'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      bookingPublicId:
+        custom: []
+        name: bookingPublicId
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      modificationPublicId:
+        custom: []
+        name: modificationPublicId
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      bookingPublicId: architecto
+      modificationPublicId: architecto
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"data":null,"meta":null,"errors":[{"code":"unauthenticated","message":"Unauthenticated."}]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-correlation-id: 01KTBQ4RPD7CCFFFCRG6QVNE5W
+          vary: Origin
+          x-trace-id: c4aaf7b9-44e0-4678-ada6-3e3d9bc215ec
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/v1/customer/bookings/{bookingPublicId}/modifications/{modificationPublicId}/decide'
+    metadata:
+      custom: []
+      groupName: 'Customer - Bookings'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      bookingPublicId:
+        custom: []
+        name: bookingPublicId
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      modificationPublicId:
+        custom: []
+        name: modificationPublicId
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      bookingPublicId: architecto
+      modificationPublicId: architecto
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      decision:
+        custom: []
+        name: decision
+        description: ''
+        required: true
+        example: accepted
+        type: string
+        enumValues:
+          - accepted
+          - rejected
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      decision: accepted
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/v1/customer/bookings/{bookingPublicId}/request-tax-invoice'
+    metadata:
+      custom: []
+      groupName: 'Customer - Bookings'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      bookingPublicId:
+        custom: []
+        name: bookingPublicId
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      bookingPublicId: architecto
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      invoice_name:
+        custom: []
+        name: invoice_name
+        description: 'Must not be greater than 255 characters.'
+        required: true
+        example: b
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      invoice_tax_id:
+        custom: []
+        name: invoice_tax_id
+        description: 'Must not be greater than 100 characters.'
+        required: true
+        example: 'n'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      invoice_name: b
+      invoice_tax_id: 'n'
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null

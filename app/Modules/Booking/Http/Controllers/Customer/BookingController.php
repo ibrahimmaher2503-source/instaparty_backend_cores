@@ -17,6 +17,9 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
+/**
+ * @group Customer - Bookings
+ */
 class BookingController
 {
     private const PAGE_SIZE = 20;

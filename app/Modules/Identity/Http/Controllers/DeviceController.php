@@ -13,6 +13,9 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
+/**
+ * @group Devices (Push)
+ */
 class DeviceController extends Controller
 {
     public function store(RegisterDeviceRequest $request, RegisterDeviceAction $action): JsonResponse

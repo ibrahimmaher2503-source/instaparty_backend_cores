@@ -1,0 +1,289 @@
+name: 'Customer - Discovery'
+description: ''
+endpoints:
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/customer/services
+    metadata:
+      custom: []
+      groupName: 'Customer - Discovery'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      q:
+        custom: []
+        name: q
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: b
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      product_type:
+        custom: []
+        name: product_type
+        description: ''
+        required: false
+        example: sale
+        type: string
+        enumValues:
+          - rental
+          - sale
+          - digital
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      category_slug:
+        custom: []
+        name: category_slug
+        description: ''
+        required: false
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      occasion_slug:
+        custom: []
+        name: occasion_slug
+        description: ''
+        required: false
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      vendor_public_id:
+        custom: []
+        name: vendor_public_id
+        description: ''
+        required: false
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      city_public_id:
+        custom: []
+        name: city_public_id
+        description: ''
+        required: false
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      price_min:
+        custom: []
+        name: price_min
+        description: 'Must be at least 0.'
+        required: false
+        example: 39
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      price_max:
+        custom: []
+        name: price_max
+        description: 'Must be at least 0.'
+        required: false
+        example: 84
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      min_rating:
+        custom: []
+        name: min_rating
+        description: 'Must be at least 1. Must not be greater than 5.'
+        required: false
+        example: 1
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      sort:
+        custom: []
+        name: sort
+        description: ''
+        required: false
+        example: price_asc
+        type: string
+        enumValues:
+          - price_asc
+          - price_desc
+          - rating_desc
+          - newest
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      page:
+        custom: []
+        name: page
+        description: 'Must be at least 1.'
+        required: false
+        example: 27
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      per_page:
+        custom: []
+        name: per_page
+        description: 'Must be at least 1. Must not be greater than 50.'
+        required: false
+        example: 15
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+    cleanBodyParameters:
+      q: b
+      product_type: sale
+      category_slug: architecto
+      occasion_slug: architecto
+      vendor_public_id: architecto
+      city_public_id: architecto
+      price_min: 39
+      price_max: 84
+      min_rating: 1
+      sort: price_asc
+      page: 27
+      per_page: 15
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"data":[],"meta":{"total":0,"current_page":27,"per_page":15,"last_page":1,"query":"b","filters_applied":{"type":"sale","occasion":"architecto"}},"errors":null}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-ratelimit-limit: '60'
+          x-ratelimit-remaining: '59'
+          x-correlation-id: 01KTBQ4RCYNZFHT147A9QY3GDH
+          vary: Origin
+          x-trace-id: 5a229367-c758-4791-bdf4-635ae1f20a49
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/v1/customer/discovery/recommendations
+    metadata:
+      custom: []
+      groupName: 'Customer - Discovery'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      occasion_public_id:
+        custom: []
+        name: occasion_public_id
+        description: 'Must not be greater than 26 characters.'
+        required: false
+        example: b
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      city_public_id:
+        custom: []
+        name: city_public_id
+        description: 'Must not be greater than 26 characters.'
+        required: false
+        example: 'n'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      child_age:
+        custom: []
+        name: child_age
+        description: 'Must be at least 0. Must not be greater than 18.'
+        required: false
+        example: 13
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      budget_minor:
+        custom: []
+        name: budget_minor
+        description: 'Must be at least 0.'
+        required: false
+        example: 12
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      limit:
+        custom: []
+        name: limit
+        description: 'Must be at least 1. Must not be greater than 24.'
+        required: false
+        example: 21
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+    cleanBodyParameters:
+      occasion_public_id: b
+      city_public_id: 'n'
+      child_age: 13
+      budget_minor: 12
+      limit: 21
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null

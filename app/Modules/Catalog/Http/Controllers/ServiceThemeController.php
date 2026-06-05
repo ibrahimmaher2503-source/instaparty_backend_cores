@@ -10,6 +10,8 @@ use Illuminate\Http\JsonResponse;
 
 /**
  * 5.6 — public service themes for the customer theme filter.
+ *
+ * @group Customer - Catalog
  */
 class ServiceThemeController
 {

@@ -13,6 +13,9 @@ use App\Modules\Shared\Http\ApiResponse;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
+/**
+ * @group Vendor - Services
+ */
 class VendorServiceShowController
 {
     public function __invoke(Request $request, string $publicId): JsonResponse

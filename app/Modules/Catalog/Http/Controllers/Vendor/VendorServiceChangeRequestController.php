@@ -10,6 +10,9 @@ use App\Modules\Catalog\Http\Requests\Vendor\ReplyServiceChangeClarificationRequ
 use App\Modules\Catalog\Http\Resources\ServiceChangeRequestResource;
 use Illuminate\Http\JsonResponse;
 
+/**
+ * @group Vendor - Services
+ */
 class VendorServiceChangeRequestController
 {
     public function reply(

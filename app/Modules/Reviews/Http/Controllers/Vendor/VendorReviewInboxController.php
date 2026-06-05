@@ -16,6 +16,9 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
+/**
+ * @group Vendor - Reviews
+ */
 class VendorReviewInboxController
 {
     public function index(Request $request): JsonResponse

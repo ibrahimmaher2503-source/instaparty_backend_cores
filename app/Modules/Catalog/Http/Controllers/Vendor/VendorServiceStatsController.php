@@ -14,6 +14,8 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 /**
  * Vendor-portal 4.16 — per-service performance: views (analytics_events
  * service_view sink), booked counts, and conversion. Own services only.
+ *
+ * @group Vendor - Services
  */
 class VendorServiceStatsController
 {

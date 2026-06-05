@@ -1,0 +1,1845 @@
+name: Admin
+description: ''
+endpoints:
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/admin/vendor-profiles
+    metadata:
+      custom: []
+      groupName: Admin
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"data":null,"meta":null,"errors":[{"code":"unauthenticated","message":"Unauthenticated."}]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-correlation-id: 01KTBQ4QXMDVA4FFD6632943XE
+          vary: Origin
+          x-trace-id: 899bf7c2-4339-4f6e-870b-a355e7005b77
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/v1/admin/vendor-profiles/{vendorProfile_public_id}/approve'
+    metadata:
+      custom: []
+      groupName: Admin
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      vendorProfile_public_id:
+        custom: []
+        name: vendorProfile_public_id
+        description: 'The ID of the vendorProfile public.'
+        required: true
+        example: 0V5RYP5FEXRKXRZTFPKXFE499F
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      vendorProfile_public_id: 0V5RYP5FEXRKXRZTFPKXFE499F
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/v1/admin/vendor-profiles/{vendorProfile_public_id}/reject'
+    metadata:
+      custom: []
+      groupName: Admin
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      vendorProfile_public_id:
+        custom: []
+        name: vendorProfile_public_id
+        description: 'The ID of the vendorProfile public.'
+        required: true
+        example: 0V5RYP5FEXRKXRZTFPKXFE499F
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      vendorProfile_public_id: 0V5RYP5FEXRKXRZTFPKXFE499F
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      rejection_reason:
+        custom: []
+        name: rejection_reason
+        description: ''
+        required: false
+        example: null
+        type: object
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      rejection_reason.en:
+        custom: []
+        name: rejection_reason.en
+        description: 'This field is required when <code>rejection_reason</code> is present. Must not be greater than 1000 characters.'
+        required: false
+        example: b
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      rejection_reason.ar:
+        custom: []
+        name: rejection_reason.ar
+        description: 'Must not be greater than 1000 characters.'
+        required: false
+        example: 'n'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+    cleanBodyParameters:
+      rejection_reason:
+        en: b
+        ar: 'n'
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/v1/admin/vendor-profiles/{vendorProfile_public_id}/approve-for-type'
+    metadata:
+      custom: []
+      groupName: Admin
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      vendorProfile_public_id:
+        custom: []
+        name: vendorProfile_public_id
+        description: 'The ID of the vendorProfile public.'
+        required: true
+        example: 0V5RYP5FEXRKXRZTFPKXFE499F
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      vendorProfile_public_id: 0V5RYP5FEXRKXRZTFPKXFE499F
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      product_type:
+        custom: []
+        name: product_type
+        description: ''
+        required: true
+        example: sale
+        type: string
+        enumValues:
+          - rental
+          - sale
+          - digital
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      product_type: sale
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/v1/admin/vendor-profiles/{vendorProfile_public_id}/revoke-type'
+    metadata:
+      custom: []
+      groupName: Admin
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      vendorProfile_public_id:
+        custom: []
+        name: vendorProfile_public_id
+        description: 'The ID of the vendorProfile public.'
+        required: true
+        example: 0V5RYP5FEXRKXRZTFPKXFE499F
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      vendorProfile_public_id: 0V5RYP5FEXRKXRZTFPKXFE499F
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      product_type:
+        custom: []
+        name: product_type
+        description: ''
+        required: true
+        example: sale
+        type: string
+        enumValues:
+          - rental
+          - sale
+          - digital
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      revoke_reason:
+        custom: []
+        name: revoke_reason
+        description: ''
+        required: false
+        example: null
+        type: object
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      revoke_reason.en:
+        custom: []
+        name: revoke_reason.en
+        description: 'Must not be greater than 1000 characters.'
+        required: false
+        example: b
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      revoke_reason.ar:
+        custom: []
+        name: revoke_reason.ar
+        description: 'Must not be greater than 1000 characters.'
+        required: false
+        example: 'n'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+    cleanBodyParameters:
+      product_type: sale
+      revoke_reason:
+        en: b
+        ar: 'n'
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/v1/admin/vendor-profiles/{vendorProfile_public_id}/suspend'
+    metadata:
+      custom: []
+      groupName: Admin
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      vendorProfile_public_id:
+        custom: []
+        name: vendorProfile_public_id
+        description: 'The ID of the vendorProfile public.'
+        required: true
+        example: 0V5RYP5FEXRKXRZTFPKXFE499F
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      vendorProfile_public_id: 0V5RYP5FEXRKXRZTFPKXFE499F
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/v1/admin/vendor-profiles/{publicId}/change-requests'
+    metadata:
+      custom: []
+      groupName: Admin
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      publicId:
+        custom: []
+        name: publicId
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      publicId: architecto
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      items:
+        custom: []
+        name: items
+        description: 'Must have at least 1 items.'
+        required: true
+        example:
+          - []
+        type: 'object[]'
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      'items[].field_path':
+        custom: []
+        name: 'items[].field_path'
+        description: 'Must not be greater than 255 characters.'
+        required: true
+        example: b
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      'items[].requested_change_en':
+        custom: []
+        name: 'items[].requested_change_en'
+        description: 'Must be at least 5 characters.'
+        required: true
+        example: ngzmiyvdljnikhwaykcmyuwpwlvqwrsitcpscqldzsnrwtujwvlxjklqppwqbewtnnoqitpxntlt
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      'items[].requested_change_ar':
+        custom: []
+        name: 'items[].requested_change_ar'
+        description: 'Must be at least 5 characters.'
+        required: true
+        example: cvipojsausgioglrbchgsrzyhcttwbkmkftmgosgtvnbobmzezcrcvalexqztppihrtgkkrerexh
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      items:
+        -
+          field_path: b
+          requested_change_en: ngzmiyvdljnikhwaykcmyuwpwlvqwrsitcpscqldzsnrwtujwvlxjklqppwqbewtnnoqitpxntlt
+          requested_change_ar: cvipojsausgioglrbchgsrzyhcttwbkmkftmgosgtvnbobmzezcrcvalexqztppihrtgkkrerexh
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/v1/admin/services/{service_public_id}/request-changes'
+    metadata:
+      custom: []
+      groupName: Admin
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      service_public_id:
+        custom: []
+        name: service_public_id
+        description: 'The ID of the service public.'
+        required: true
+        example: 0EBMP4KARF79HC9BGWY74CDW6Q
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      service_public_id: 0EBMP4KARF79HC9BGWY74CDW6Q
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      items:
+        custom: []
+        name: items
+        description: 'Must have at least 1 items.'
+        required: true
+        example:
+          - []
+        type: 'object[]'
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      'items[].field_path':
+        custom: []
+        name: 'items[].field_path'
+        description: 'Must not be greater than 255 characters.'
+        required: true
+        example: b
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      'items[].requested_change_en':
+        custom: []
+        name: 'items[].requested_change_en'
+        description: 'Must not be greater than 1000 characters.'
+        required: true
+        example: 'n'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      'items[].requested_change_ar':
+        custom: []
+        name: 'items[].requested_change_ar'
+        description: 'Must not be greater than 1000 characters.'
+        required: true
+        example: g
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      items:
+        -
+          field_path: b
+          requested_change_en: 'n'
+          requested_change_ar: g
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/v1/admin/service-change-requests/{serviceChangeRequest_public_id}/approve'
+    metadata:
+      custom: []
+      groupName: Admin
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      serviceChangeRequest_public_id:
+        custom: []
+        name: serviceChangeRequest_public_id
+        description: 'The ID of the serviceChangeRequest public.'
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      serviceChangeRequest_public_id: architecto
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      admin_note:
+        custom: []
+        name: admin_note
+        description: ''
+        required: false
+        example: null
+        type: object
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      admin_note.en:
+        custom: []
+        name: admin_note.en
+        description: 'This field is required when <code>admin_note</code> is present. Must not be greater than 4000 characters.'
+        required: false
+        example: b
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      admin_note.ar:
+        custom: []
+        name: admin_note.ar
+        description: 'This field is required when <code>admin_note</code> is present. Must not be greater than 4000 characters.'
+        required: false
+        example: 'n'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      version:
+        custom: []
+        name: version
+        description: 'Must be at least 1.'
+        required: true
+        example: 67
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      admin_note:
+        en: b
+        ar: 'n'
+      version: 67
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/v1/admin/service-change-requests/{serviceChangeRequest_public_id}/reject'
+    metadata:
+      custom: []
+      groupName: Admin
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      serviceChangeRequest_public_id:
+        custom: []
+        name: serviceChangeRequest_public_id
+        description: 'The ID of the serviceChangeRequest public.'
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      serviceChangeRequest_public_id: architecto
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      admin_note:
+        custom: []
+        name: admin_note
+        description: ''
+        required: true
+        example: []
+        type: object
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      admin_note.en:
+        custom: []
+        name: admin_note.en
+        description: 'Must not be greater than 4000 characters.'
+        required: true
+        example: b
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      admin_note.ar:
+        custom: []
+        name: admin_note.ar
+        description: 'Must not be greater than 4000 characters.'
+        required: true
+        example: 'n'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      version:
+        custom: []
+        name: version
+        description: 'Must be at least 1.'
+        required: true
+        example: 67
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      admin_note:
+        en: b
+        ar: 'n'
+      version: 67
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/v1/admin/service-change-requests/{serviceChangeRequest_public_id}/request-clarification'
+    metadata:
+      custom: []
+      groupName: Admin
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      serviceChangeRequest_public_id:
+        custom: []
+        name: serviceChangeRequest_public_id
+        description: 'The ID of the serviceChangeRequest public.'
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      serviceChangeRequest_public_id: architecto
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      admin_note:
+        custom: []
+        name: admin_note
+        description: ''
+        required: true
+        example: []
+        type: object
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      admin_note.en:
+        custom: []
+        name: admin_note.en
+        description: 'Must not be greater than 4000 characters.'
+        required: true
+        example: b
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      admin_note.ar:
+        custom: []
+        name: admin_note.ar
+        description: 'Must not be greater than 4000 characters.'
+        required: true
+        example: 'n'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      version:
+        custom: []
+        name: version
+        description: 'Must be at least 1.'
+        required: true
+        example: 67
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      admin_note:
+        en: b
+        ar: 'n'
+      version: 67
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/v1/admin/services/{service_public_id}/media'
+    metadata:
+      custom: []
+      groupName: Admin
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: multipart/form-data
+      Accept: application/json
+    urlParameters:
+      service_public_id:
+        custom: []
+        name: service_public_id
+        description: 'The ID of the service public.'
+        required: true
+        example: 0EBMP4KARF79HC9BGWY74CDW6Q
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      service_public_id: 0EBMP4KARF79HC9BGWY74CDW6Q
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      collection:
+        custom: []
+        name: collection
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      files:
+        custom: []
+        name: files
+        description: 'Must be a file.'
+        required: false
+        example:
+          - null
+        type: 'file[]'
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      collection: architecto
+    fileParameters:
+      files:
+        - null
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/v1/admin/services/{service_public_id}/media'
+    metadata:
+      custom: []
+      groupName: Admin
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      service_public_id:
+        custom: []
+        name: service_public_id
+        description: 'The ID of the service public.'
+        required: true
+        example: 0EBMP4KARF79HC9BGWY74CDW6Q
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      service_public_id: 0EBMP4KARF79HC9BGWY74CDW6Q
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"data":null,"meta":null,"errors":[{"code":"unauthenticated","message":"Unauthenticated."}]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-correlation-id: 01KTBQ4RC7R23BGDN7S829V76E
+          vary: Origin
+          x-trace-id: 88cc3fb6-fd2b-4840-83b2-78cd904c5c20
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - PATCH
+    uri: 'api/v1/admin/services/{service_public_id}/media/order'
+    metadata:
+      custom: []
+      groupName: Admin
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      service_public_id:
+        custom: []
+        name: service_public_id
+        description: 'The ID of the service public.'
+        required: true
+        example: 0EBMP4KARF79HC9BGWY74CDW6Q
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      service_public_id: 0EBMP4KARF79HC9BGWY74CDW6Q
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      collection:
+        custom: []
+        name: collection
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      order:
+        custom: []
+        name: order
+        description: ''
+        required: true
+        example:
+          - architecto
+        type: 'string[]'
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      expected_version:
+        custom: []
+        name: expected_version
+        description: 'Must be at least 0.'
+        required: true
+        example: 39
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      collection: architecto
+      order:
+        - architecto
+      expected_version: 39
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - DELETE
+    uri: 'api/v1/admin/services/{service_public_id}/media/{mediaPublicId}'
+    metadata:
+      custom: []
+      groupName: Admin
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      service_public_id:
+        custom: []
+        name: service_public_id
+        description: 'The ID of the service public.'
+        required: true
+        example: 0EBMP4KARF79HC9BGWY74CDW6Q
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      mediaPublicId:
+        custom: []
+        name: mediaPublicId
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      service_public_id: 0EBMP4KARF79HC9BGWY74CDW6Q
+      mediaPublicId: architecto
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/v1/admin/bookings/{bookingPublicId}/force-cancel'
+    metadata:
+      custom: []
+      groupName: Admin
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      bookingPublicId:
+        custom: []
+        name: bookingPublicId
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      bookingPublicId: architecto
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      reason:
+        custom: []
+        name: reason
+        description: 'Must be at least 10 characters. Must not be greater than 1000 characters.'
+        required: true
+        example: b
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      reason: b
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/v1/admin/bookings/{bookingPublicId}/refunds'
+    metadata:
+      custom: []
+      groupName: Admin
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      bookingPublicId:
+        custom: []
+        name: bookingPublicId
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      bookingPublicId: architecto
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      reason_code:
+        custom: []
+        name: reason_code
+        description: ''
+        required: true
+        example: customer_request
+        type: string
+        enumValues:
+          - customer_request
+          - vendor_cancellation
+          - service_unavailable
+          - duplicate_charge
+          - admin_discretion
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      reason_notes:
+        custom: []
+        name: reason_notes
+        description: ''
+        required: true
+        example: []
+        type: object
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      reason_notes.en:
+        custom: []
+        name: reason_notes.en
+        description: 'Must be at least 1 character.'
+        required: true
+        example: bngzmiyvdljnikhw
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      reason_notes.ar:
+        custom: []
+        name: reason_notes.ar
+        description: 'Must be at least 1 character.'
+        required: true
+        example: aykcmyuwpwlvqwrs
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      amount_minor:
+        custom: []
+        name: amount_minor
+        description: 'Must be at least 1.'
+        required: false
+        example: 75
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      reason_code: customer_request
+      reason_notes:
+        en: bngzmiyvdljnikhw
+        ar: aykcmyuwpwlvqwrs
+      amount_minor: 75
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/v1/admin/refunds/{refundPublicId}'
+    metadata:
+      custom: []
+      groupName: Admin
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      refundPublicId:
+        custom: []
+        name: refundPublicId
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      refundPublicId: architecto
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"data":null,"meta":null,"errors":[{"code":"unauthenticated","message":"Unauthenticated."}]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-correlation-id: 01KTBQ4RTN0ZVH7M7VKWFT8R53
+          vary: Origin
+          x-trace-id: 2aea82d8-9068-4d49-821a-79254ac437d9
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/admin/settlement/reconciliation/status
+    metadata:
+      custom: []
+      groupName: Admin
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"data":null,"meta":null,"errors":[{"code":"unauthenticated","message":"Unauthenticated."}]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-correlation-id: 01KTBQ4RYD3VQGQNRYXRAXNX7Q
+          vary: Origin
+          x-trace-id: 05dcd015-de03-49e0-95aa-1e4e384e9e75
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/v1/admin/settlement/reconciliation/trigger
+    metadata:
+      custom: []
+      groupName: Admin
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      scope:
+        custom: []
+        name: scope
+        description: ''
+        required: true
+        example: date_range
+        type: string
+        enumValues:
+          - all
+          - wallet
+          - vendor
+          - date_range
+          - recent_touch
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      wallet_id:
+        custom: []
+        name: wallet_id
+        description: 'Must be at least 1.'
+        required: false
+        example: 16
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      vendor_id:
+        custom: []
+        name: vendor_id
+        description: 'Must be at least 1.'
+        required: false
+        example: 22
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      date_from:
+        custom: []
+        name: date_from
+        description: 'Must be a valid date in the format <code>Y-m-d</code>.'
+        required: false
+        example: '2026-06-05'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      date_to:
+        custom: []
+        name: date_to
+        description: 'Must be a valid date in the format <code>Y-m-d</code>. Must be a date after or equal to <code>date_from</code>.'
+        required: false
+        example: '2052-06-28'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      window:
+        custom: []
+        name: window
+        description: 'Must not be greater than 20 characters.'
+        required: false
+        example: ngzmiyvdljnikhwa
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      scope: date_range
+      wallet_id: 16
+      vendor_id: 22
+      date_from: '2026-06-05'
+      date_to: '2052-06-28'
+      window: ngzmiyvdljnikhwa
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/v1/admin/chat-threads/{thread_id}/freeze'
+    metadata:
+      custom: []
+      groupName: Admin
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      thread_id:
+        custom: []
+        name: thread_id
+        description: 'The ID of the thread.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      thread_id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      reason_en:
+        custom: []
+        name: reason_en
+        description: 'Must be at least 5 characters. Must not be greater than 500 characters.'
+        required: true
+        example: b
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      reason_ar:
+        custom: []
+        name: reason_ar
+        description: 'Must be at least 5 characters. Must not be greater than 500 characters.'
+        required: true
+        example: 'n'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      category:
+        custom: []
+        name: category
+        description: ''
+        required: true
+        example: other
+        type: string
+        enumValues:
+          - off_platform_contact
+          - policy_violation
+          - harassment
+          - other
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      reason_en: b
+      reason_ar: 'n'
+      category: other
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/v1/admin/chat-threads/{thread_id}/unfreeze'
+    metadata:
+      custom: []
+      groupName: Admin
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      thread_id:
+        custom: []
+        name: thread_id
+        description: 'The ID of the thread.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      thread_id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      reason_en:
+        custom: []
+        name: reason_en
+        description: 'Must be at least 5 characters. Must not be greater than 500 characters.'
+        required: true
+        example: b
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      reason_ar:
+        custom: []
+        name: reason_ar
+        description: 'Must be at least 5 characters. Must not be greater than 500 characters.'
+        required: true
+        example: 'n'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      reason_en: b
+      reason_ar: 'n'
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/v1/admin/chat-moderation-flags/{flag_id}/resolve'
+    metadata:
+      custom: []
+      groupName: Admin
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      flag_id:
+        custom: []
+        name: flag_id
+        description: 'The ID of the flag.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      flag_id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      decision:
+        custom: []
+        name: decision
+        description: ''
+        required: true
+        example: upheld_redact
+        type: string
+        enumValues:
+          - upheld_redact
+          - upheld_warn
+          - upheld_block
+          - dismissed_false_positive
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      note_en:
+        custom: []
+        name: note_en
+        description: 'Must be at least 5 characters. Must not be greater than 500 characters.'
+        required: true
+        example: b
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      note_ar:
+        custom: []
+        name: note_ar
+        description: 'Must be at least 5 characters. Must not be greater than 500 characters.'
+        required: true
+        example: 'n'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      decision: upheld_redact
+      note_en: b
+      note_ar: 'n'
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/v1/admin/chat-message-logs/{log_id}/mark-off-platform'
+    metadata:
+      custom: []
+      groupName: Admin
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      log_id:
+        custom: []
+        name: log_id
+        description: 'The ID of the log.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      log_id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      flag_type:
+        custom: []
+        name: flag_type
+        description: ''
+        required: true
+        example: other
+        type: string
+        enumValues:
+          - phone
+          - email
+          - external_link
+          - other
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      reason_en:
+        custom: []
+        name: reason_en
+        description: 'Must be at least 5 characters. Must not be greater than 500 characters.'
+        required: true
+        example: b
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      reason_ar:
+        custom: []
+        name: reason_ar
+        description: 'Must be at least 5 characters. Must not be greater than 500 characters.'
+        required: true
+        example: 'n'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      flag_type: other
+      reason_en: b
+      reason_ar: 'n'
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/v1/admin/chat-moderation-flags/{flag_id}/escalate'
+    metadata:
+      custom: []
+      groupName: Admin
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      flag_id:
+        custom: []
+        name: flag_id
+        description: 'The ID of the flag.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      flag_id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      severity:
+        custom: []
+        name: severity
+        description: ''
+        required: true
+        example: warning
+        type: string
+        enumValues:
+          - info
+          - warning
+          - critical
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      summary_en:
+        custom: []
+        name: summary_en
+        description: 'Must be at least 5 characters. Must not be greater than 280 characters.'
+        required: true
+        example: b
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      summary_ar:
+        custom: []
+        name: summary_ar
+        description: 'Must be at least 5 characters. Must not be greater than 280 characters.'
+        required: true
+        example: 'n'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      severity: warning
+      summary_en: b
+      summary_ar: 'n'
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null

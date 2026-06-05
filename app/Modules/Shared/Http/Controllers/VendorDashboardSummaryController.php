@@ -10,6 +10,9 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
+/**
+ * @group Vendor - Reports
+ */
 class VendorDashboardSummaryController
 {
     public function __invoke(Request $request, VendorDashboardSummaryService $service): JsonResponse

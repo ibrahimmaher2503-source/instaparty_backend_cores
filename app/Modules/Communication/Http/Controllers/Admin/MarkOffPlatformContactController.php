@@ -11,6 +11,9 @@ use App\Modules\Communication\Http\Resources\ChatModerationFlagResource;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Controller;
 
+/**
+ * @group Admin
+ */
 class MarkOffPlatformContactController extends Controller
 {
     public function __invoke(

@@ -13,6 +13,9 @@ use App\Modules\Identity\Http\Requests\UpdateVendorPhoneRequest;
 use App\Modules\Shared\Http\ApiResponse;
 use Illuminate\Http\JsonResponse;
 
+/**
+ * @group Vendor - Account
+ */
 class VendorAccountController
 {
     public function changePassword(ChangeVendorPasswordRequest $request, ChangeVendorPasswordAction $action): JsonResponse

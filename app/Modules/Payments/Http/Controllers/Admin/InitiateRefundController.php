@@ -14,6 +14,9 @@ use App\Modules\Payments\Infrastructure\Repositories\EloquentPaymentRepository;
 use App\Modules\Shared\Http\ApiResponse;
 use Illuminate\Http\JsonResponse;
 
+/**
+ * @group Admin
+ */
 class InitiateRefundController
 {
     public function __invoke(

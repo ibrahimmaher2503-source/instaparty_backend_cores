@@ -11,6 +11,9 @@ use App\Modules\Discovery\Http\Resources\ServiceSearchResultResource;
 use App\Modules\Shared\Http\ApiResponse;
 use Illuminate\Http\JsonResponse;
 
+/**
+ * @group Customer - Discovery
+ */
 class ServiceSearchController
 {
     public function __invoke(SearchServicesRequest $request): JsonResponse

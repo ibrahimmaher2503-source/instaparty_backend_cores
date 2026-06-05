@@ -1,0 +1,171 @@
+name: 'Vendor - Reports'
+description: ''
+endpoints:
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/vendor/dashboard/summary
+    metadata:
+      custom: []
+      groupName: 'Vendor - Reports'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"data":null,"meta":null,"errors":[{"code":"unauthenticated","message":"Unauthenticated."}]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-correlation-id: 01KTBQ4QHGEC31NQEEBDG0K51N
+          vary: Origin
+          x-trace-id: 6aedf458-1e59-43c7-96b6-361bdfb6a6c3
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/vendor/reports/bookings
+    metadata:
+      custom: []
+      groupName: 'Vendor - Reports'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"data":null,"meta":null,"errors":[{"code":"unauthenticated","message":"Unauthenticated."}]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-correlation-id: 01KTBQ4RSBJ3ARP74GNXF0YGYW
+          vary: Origin
+          x-trace-id: b08e8337-c19a-4316-8b58-a45b360d06f8
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/vendor/reports/revenue
+    metadata:
+      custom: []
+      groupName: 'Vendor - Reports'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"data":null,"meta":null,"errors":[{"code":"unauthenticated","message":"Unauthenticated."}]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-correlation-id: 01KTBQ4RSH1GTMG6RNJ5M9Z0ZK
+          vary: Origin
+          x-trace-id: fbef80a2-5852-4129-bbb2-97bab8e0010e
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/vendor/reports/services-performance
+    metadata:
+      custom: []
+      groupName: 'Vendor - Reports'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"data":null,"meta":null,"errors":[{"code":"unauthenticated","message":"Unauthenticated."}]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-correlation-id: 01KTBQ4RSPCBPVNEAZ2RSCEV1J
+          vary: Origin
+          x-trace-id: 59e6f293-2187-4a9a-855c-bda2b6e486a4
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null

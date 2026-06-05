@@ -20,6 +20,8 @@ use Illuminate\Support\Facades\Cache;
  * plus stats, coverage summary, today's hours, featured review, top
  * services, and a portfolio preview — one round-trip for the vendor page
  * header. Cached 5 minutes per (vendor, locale); TTL-based bust in Phase 1.
+ *
+ * @group Customer - Vendor Browsing
  */
 class VendorProfileShowController
 {

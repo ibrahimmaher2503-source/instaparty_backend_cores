@@ -10,6 +10,9 @@ use App\Modules\Catalog\Http\Resources\OccasionResource;
 use App\Modules\Shared\Http\ApiResponse;
 use Illuminate\Http\JsonResponse;
 
+/**
+ * @group Customer - Catalog
+ */
 class OccasionController
 {
     public function index(ListPublicOccasionsAction $action): JsonResponse

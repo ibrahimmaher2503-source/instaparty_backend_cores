@@ -10,6 +10,9 @@ use App\Modules\Reviews\Http\Requests\SubmitServiceReviewRequest;
 use App\Modules\Reviews\Http\Resources\ServiceReviewResource;
 use Illuminate\Http\JsonResponse;
 
+/**
+ * @group Customer - Reviews
+ */
 class SubmitServiceReviewController
 {
     public function __construct(private readonly SubmitServiceReviewAction $action) {}

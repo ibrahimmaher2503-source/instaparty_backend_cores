@@ -1,0 +1,218 @@
+name: 'Customer - Geography'
+description: ''
+endpoints:
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/customer/governorates
+    metadata:
+      custom: []
+      groupName: 'Customer - Geography'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"data":[{"public_id":"1Z5J93E7HNKMFYQHWHKRQWQPSF","name":"Cairo","code":"EG-CAI"},{"public_id":"4JW6QFSJJ8F46AK75XED5KAZSK","name":"Giza","code":"EG-GIZ"},{"public_id":"75TJ3H79GTDCC87R4D7DMCM2G4","name":"Alexandria","code":"EG-ALX"},{"public_id":"3DGR0E93PSYMV1VS9J8VYBK3TM","name":"Sharqia","code":"EG-SHR"},{"public_id":"3KAKF1FZ91KM6E56NW98JV46M4","name":"Qalyubia","code":"EG-QLY"},{"public_id":"6BD4PK2PMP6ZAVDJENJW6EBR3D","name":"Dakahlia","code":"EG-DKH"},{"public_id":"632B3SSJAT04W766W58Z6QG4NN","name":"Gharbia","code":"EG-GHB"},{"public_id":"28K32PHMG0CC894A7RVHRYJPZG","name":"Monufia","code":"EG-MNF"},{"public_id":"4WJ6THBAZPKH9E2QZ40R86YV0G","name":"Kafr El Sheikh","code":"EG-KFS"},{"public_id":"1WYSFEDW9WYS5NXW1Y2QP3MEVP","name":"Beheira","code":"EG-BHR"},{"public_id":"04NPPW9M9T9Y8TQKYZVF07HTEC","name":"Damietta","code":"EG-DMT"},{"public_id":"0TRWX5N0Y3H3D7AWTK5FY2RYCE","name":"Port Said","code":"EG-PTS"},{"public_id":"4GSWPHEE6HA4WG4TBYYXVNQZ3J","name":"Ismailia","code":"EG-ISM"},{"public_id":"51CA8FJD0ZT809SP36D7FXX4ZV","name":"Suez","code":"EG-SUZ"},{"public_id":"52Y3M3W9SS8PT6E5WRCV3MCWHN","name":"North Sinai","code":"EG-NSI"},{"public_id":"3J5D1M58XZ26M477KD24XGR9SQ","name":"South Sinai","code":"EG-SSI"},{"public_id":"7FPFE5GEH4P6QRA0248JY1MKPG","name":"Red Sea","code":"EG-RS"},{"public_id":"75H0053TB84PXK719RK440WDAX","name":"Fayoum","code":"EG-FYM"},{"public_id":"5N6SPR3JNCJBSPVEJEWPW01WMC","name":"Beni Suef","code":"EG-BNS"},{"public_id":"71FSE0A4Q9ZNDNSR3F5PKQ4EWX","name":"Minya","code":"EG-MIN"},{"public_id":"1TS8NH7HTCSKM14MRJ2563F6HN","name":"Asyut","code":"EG-AST"},{"public_id":"4H3R385CR133ZDX1AQW7FBCVYR","name":"Sohag","code":"EG-SHG"},{"public_id":"2XZ6C1T230AZSK82AYBGPD7GBX","name":"Qena","code":"EG-QNA"},{"public_id":"4YRYJT6KAETNKDEJ6F7PGXDRX3","name":"Luxor","code":"EG-LXR"},{"public_id":"18Y8WYE5HTTDGXPQKV04D0S3ES","name":"Aswan","code":"EG-ASN"},{"public_id":"3BPY5JG1XMF98T7Q2G2YZZWTTH","name":"New Valley","code":"EG-WAD"},{"public_id":"0QS529H7MKEPZJSBK3H88AXNPP","name":"Matrouh","code":"EG-MTR"}],"meta":{},"errors":null}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-ratelimit-limit: '60'
+          x-ratelimit-remaining: '59'
+          x-correlation-id: 01KTBQ4QHSQ0JJ5SHA644Q0D5H
+          vary: Origin
+          x-trace-id: 89f4511e-7394-4571-9d50-0fb9032fd598
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/v1/customer/governorates/{governoratePublicId}/regions'
+    metadata:
+      custom: []
+      groupName: 'Customer - Geography'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: |-
+        Regions ("areas") inside a governorate. Audit 18.6 asked for
+        cities/{id}/areas — reshaped to the LOCKED Geography hierarchy
+        (governorates → regions → cities).
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      governoratePublicId:
+        custom: []
+        name: governoratePublicId
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      governoratePublicId: architecto
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 404
+        content: '{"data":null,"meta":null,"errors":[{"code":"http_error","message":"No query results for model [App\\Modules\\Geography\\Domain\\Models\\Governorate]."}]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-ratelimit-limit: '60'
+          x-ratelimit-remaining: '59'
+          x-correlation-id: 01KTBQ4QJH0032YCY2JKTM9XC5
+          vary: Origin
+          x-trace-id: 20f8a944-1b99-4873-8766-14d0c494b084
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/v1/customer/regions/{regionPublicId}/cities'
+    metadata:
+      custom: []
+      groupName: 'Customer - Geography'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Cities inside one region (drill-down for address pickers).'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      regionPublicId:
+        custom: []
+        name: regionPublicId
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      regionPublicId: architecto
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 404
+        content: '{"data":null,"meta":null,"errors":[{"code":"http_error","message":"No query results for model [App\\Modules\\Geography\\Domain\\Models\\Region]."}]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-ratelimit-limit: '60'
+          x-ratelimit-remaining: '59'
+          x-correlation-id: 01KTBQ4QK3DTYSY76F41S8ASYF
+          vary: Origin
+          x-trace-id: cfddeaa6-96b4-4f6d-837c-dc465ccda757
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/customer/cities
+    metadata:
+      custom: []
+      groupName: 'Customer - Geography'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      governorate:
+        custom: []
+        name: governorate
+        description: 'The <code>public_id</code> of an existing record in the governorates table.'
+        required: false
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+    cleanBodyParameters:
+      governorate: architecto
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 422
+        content: '{"message":"The selected governorate is invalid.","errors":{"governorate":["The selected governorate is invalid."]}}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-ratelimit-limit: '60'
+          x-ratelimit-remaining: '59'
+          x-correlation-id: 01KTBQ4QKM0BXA3QYTQNN58RH2
+          vary: Origin
+          x-trace-id: 6e74baad-468e-4850-a34a-be456c4fb5a1
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null

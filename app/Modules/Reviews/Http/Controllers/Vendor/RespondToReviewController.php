@@ -18,6 +18,8 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  * @response 404 {"data":null,"meta":{},"errors":{"message":"review_not_found"}}
  * @response 403 {"data":null,"meta":{},"errors":{"message":"This action is unauthorized."}}
  * @response 401 {"message":"Unauthenticated."}
+ *
+ * @group Vendor - Reviews
  */
 class RespondToReviewController
 {

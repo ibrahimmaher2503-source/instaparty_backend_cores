@@ -12,6 +12,9 @@ use App\Modules\Catalog\Domain\Models\Service;
 use App\Modules\Catalog\Http\Requests\RequestServiceChangesFormRequest;
 use Illuminate\Http\JsonResponse;
 
+/**
+ * @group Admin
+ */
 class ServiceChangeRequestController
 {
     public function store(

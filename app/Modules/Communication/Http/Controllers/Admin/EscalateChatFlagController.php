@@ -11,6 +11,9 @@ use App\Modules\Shared\Http\ApiResponse;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Controller;
 
+/**
+ * @group Admin
+ */
 class EscalateChatFlagController extends Controller
 {
     public function __invoke(
@@ -21,12 +24,12 @@ class EscalateChatFlagController extends Controller
         $item = $action->execute($flag, $request->toDTO($flag->id), $request->user());
 
         return ApiResponse::success([
-            'public_id'   => $item->public_id,
-            'admin_id'    => $item->admin_id,
-            'severity'    => $item->severity instanceof \BackedEnum ? $item->severity->value : (string) $item->severity,
-            'status'      => $item->status instanceof \BackedEnum ? $item->status->value : (string) $item->status,
+            'public_id' => $item->public_id,
+            'admin_id' => $item->admin_id,
+            'severity' => $item->severity instanceof \BackedEnum ? $item->severity->value : (string) $item->severity,
+            'status' => $item->status instanceof \BackedEnum ? $item->status->value : (string) $item->status,
             'source_type' => $item->source_type,
-            'source_id'   => $item->source_id,
+            'source_id' => $item->source_id,
         ]);
     }
 }

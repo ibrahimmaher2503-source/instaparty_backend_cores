@@ -18,6 +18,8 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  * (per approved type × offered category, most-specific-wins) and a payout
  * calculator preview. Never exposes other vendors' anything: rates are
  * resolved through the same CommissionRateResolver that prices bookings.
+ *
+ * @group Vendor - Pricing
  */
 class VendorCommissionRateController
 {

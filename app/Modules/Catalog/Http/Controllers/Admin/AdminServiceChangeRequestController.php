@@ -15,6 +15,9 @@ use App\Modules\Catalog\Http\Requests\Admin\RequestServiceChangeClarificationReq
 use App\Modules\Catalog\Http\Resources\ServiceChangeRequestResource;
 use Illuminate\Http\JsonResponse;
 
+/**
+ * @group Admin
+ */
 class AdminServiceChangeRequestController
 {
     public function approve(

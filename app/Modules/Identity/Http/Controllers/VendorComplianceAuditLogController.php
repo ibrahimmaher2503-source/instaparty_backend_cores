@@ -16,6 +16,8 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  * append-only audit log. Deliberately narrow projection: action + status
  * movement + timestamp. Raw `changes` payloads are NOT exposed (they can
  * carry admin-internal context).
+ *
+ * @group Vendor - Compliance
  */
 class VendorComplianceAuditLogController
 {

@@ -18,6 +18,8 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  * GET /api/v1/vendor/schedule (G7) — the vendor's operational view:
  * booking items of accepted/in-progress bookings whose event falls in the
  * requested window (today | tomorrow | week).
+ *
+ * @group Vendor - Schedule
  */
 class VendorScheduleController
 {

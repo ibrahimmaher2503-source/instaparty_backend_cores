@@ -11,6 +11,9 @@ use App\Modules\Reviews\Http\Resources\MyReviewResource;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
+/**
+ * @group Customer - Reviews
+ */
 class UpdateOwnReviewController
 {
     public function __construct(

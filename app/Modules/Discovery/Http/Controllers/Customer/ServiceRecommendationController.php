@@ -16,6 +16,8 @@ use Illuminate\Support\Facades\DB;
  * (occasion 40 / city 30 / age 20 / price 10). Public: guests get
  * recommendations too; the client passes wizard state directly (ruling:
  * 9.1 wizard-session dropped — state lives in Hive/localStorage).
+ *
+ * @group Customer - Discovery
  */
 class ServiceRecommendationController
 {

@@ -19,6 +19,9 @@ use App\Modules\Shared\Http\ApiResponse;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
+/**
+ * @group Admin
+ */
 class AdminVendorApprovalController
 {
     public function index(Request $request): JsonResponse

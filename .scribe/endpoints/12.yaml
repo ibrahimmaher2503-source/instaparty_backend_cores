@@ -1,0 +1,45 @@
+name: 'Vendor - Onboarding'
+description: ''
+endpoints:
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/vendor/onboarding-status
+    metadata:
+      custom: []
+      groupName: 'Vendor - Onboarding'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"data":null,"meta":null,"errors":[{"code":"unauthenticated","message":"Unauthenticated."}]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-correlation-id: 01KTBQ4QQYTY14ZZBY576ZK5JR
+          vary: Origin
+          x-trace-id: 5461ee34-d868-40cc-97cb-ee0c92ff9a16
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null

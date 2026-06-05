@@ -15,6 +15,8 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  * performance, own data only. Mobile parity ruling (C): mobile passes
  * ?granularity=summary for headline cards; web omits it for daily series.
  * Money stays integer minor units.
+ *
+ * @group Vendor - Reports
  */
 class VendorReportsController
 {

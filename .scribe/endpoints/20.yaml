@@ -1,0 +1,437 @@
+name: 'Vendor - Services (Rental)'
+description: ''
+endpoints:
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/v1/vendor/services/rental
+    metadata:
+      custom: []
+      groupName: 'Vendor - Services (Rental)'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      name:
+        custom: []
+        name: name
+        description: ''
+        required: true
+        example: []
+        type: object
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      name.en:
+        custom: []
+        name: name.en
+        description: 'Service name in English.'
+        required: true
+        example: '"Birthday Bounce House"'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      name.ar:
+        custom: []
+        name: name.ar
+        description: 'Service name in Arabic.'
+        required: true
+        example: '"بيت الارتداد"'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      short_description:
+        custom: []
+        name: short_description
+        description: ''
+        required: true
+        example: []
+        type: object
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      short_description.en:
+        custom: []
+        name: short_description.en
+        description: 'Short description in English.'
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      short_description.ar:
+        custom: []
+        name: short_description.ar
+        description: 'Short description in Arabic.'
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      category_id:
+        custom: []
+        name: category_id
+        description: 'ID of the category.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      base_price_minor:
+        custom: []
+        name: base_price_minor
+        description: 'Price in EGP piastres (100 = 1 EGP).'
+        required: true
+        example: 150000
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      requires_electricity:
+        custom: []
+        name: requires_electricity
+        description: 'Whether requires electricity.'
+        required: false
+        example: true
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      requires_outdoor_space:
+        custom: []
+        name: requires_outdoor_space
+        description: 'Whether requires outdoor space.'
+        required: false
+        example: false
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      default_rental_duration_hours:
+        custom: []
+        name: default_rental_duration_hours
+        description: 'Default rental window in hours.'
+        required: true
+        example: 6
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      setup_time_minutes:
+        custom: []
+        name: setup_time_minutes
+        description: 'Setup time in minutes.'
+        required: false
+        example: 60
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      teardown_time_minutes:
+        custom: []
+        name: teardown_time_minutes
+        description: 'Teardown time in minutes.'
+        required: false
+        example: 30
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      security_deposit_minor:
+        custom: []
+        name: security_deposit_minor
+        description: 'Refundable security deposit in piastres.'
+        required: false
+        example: 50000
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      minimum_space_sqm:
+        custom: []
+        name: minimum_space_sqm
+        description: 'Minimum floor space required in square metres.'
+        required: false
+        example: 25
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: true
+        deprecated: false
+    cleanBodyParameters:
+      name:
+        en: '"Birthday Bounce House"'
+        ar: '"بيت الارتداد"'
+      short_description:
+        en: architecto
+        ar: architecto
+      category_id: 1
+      base_price_minor: 150000
+      requires_electricity: true
+      requires_outdoor_space: false
+      default_rental_duration_hours: 6
+      setup_time_minutes: 60
+      teardown_time_minutes: 30
+      security_deposit_minor: 50000
+      minimum_space_sqm: 25
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - PATCH
+    uri: 'api/v1/vendor/services/rental/{publicId}'
+    metadata:
+      custom: []
+      groupName: 'Vendor - Services (Rental)'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      publicId:
+        custom: []
+        name: publicId
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      publicId: architecto
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      name:
+        custom: []
+        name: name
+        description: ''
+        required: false
+        example: null
+        type: object
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      name.en:
+        custom: []
+        name: name.en
+        description: 'optional (partial update) Service name in English.'
+        required: false
+        example: '"Birthday Bounce House"'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      name.ar:
+        custom: []
+        name: name.ar
+        description: 'optional (partial update) Service name in Arabic.'
+        required: false
+        example: '"بيت الارتداد"'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      short_description:
+        custom: []
+        name: short_description
+        description: ''
+        required: false
+        example: null
+        type: object
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      short_description.en:
+        custom: []
+        name: short_description.en
+        description: 'optional (partial update) Short description in English.'
+        required: false
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      short_description.ar:
+        custom: []
+        name: short_description.ar
+        description: 'optional (partial update) Short description in Arabic.'
+        required: false
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      category_id:
+        custom: []
+        name: category_id
+        description: 'optional (partial update) ID of the category.'
+        required: false
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      base_price_minor:
+        custom: []
+        name: base_price_minor
+        description: 'optional (partial update) Price in EGP piastres (100 = 1 EGP).'
+        required: false
+        example: 150000
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      requires_electricity:
+        custom: []
+        name: requires_electricity
+        description: 'optional (partial update) Whether requires electricity.'
+        required: false
+        example: true
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      requires_outdoor_space:
+        custom: []
+        name: requires_outdoor_space
+        description: 'optional (partial update) Whether requires outdoor space.'
+        required: false
+        example: false
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      default_rental_duration_hours:
+        custom: []
+        name: default_rental_duration_hours
+        description: 'optional (partial update) Default rental window in hours.'
+        required: false
+        example: 6
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      setup_time_minutes:
+        custom: []
+        name: setup_time_minutes
+        description: 'optional (partial update) Setup time in minutes.'
+        required: false
+        example: 60
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      teardown_time_minutes:
+        custom: []
+        name: teardown_time_minutes
+        description: 'optional (partial update) Teardown time in minutes.'
+        required: false
+        example: 30
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      security_deposit_minor:
+        custom: []
+        name: security_deposit_minor
+        description: 'optional (partial update) Refundable security deposit in piastres.'
+        required: false
+        example: 50000
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      minimum_space_sqm:
+        custom: []
+        name: minimum_space_sqm
+        description: 'optional (partial update) Minimum floor space required in square metres.'
+        required: false
+        example: 25
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: true
+        deprecated: false
+    cleanBodyParameters:
+      name:
+        en: '"Birthday Bounce House"'
+        ar: '"بيت الارتداد"'
+      short_description:
+        en: architecto
+        ar: architecto
+      category_id: 1
+      base_price_minor: 150000
+      requires_electricity: true
+      requires_outdoor_space: false
+      default_rental_duration_hours: 6
+      setup_time_minutes: 60
+      teardown_time_minutes: 30
+      security_deposit_minor: 50000
+      minimum_space_sqm: 25
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null

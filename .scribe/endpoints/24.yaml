@@ -1,0 +1,451 @@
+name: 'Customer - Vendor Browsing'
+description: ''
+endpoints:
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/customer/vendors
+    metadata:
+      custom: []
+      groupName: 'Customer - Vendor Browsing'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"data":[{"public_id":"0V5RYP5FEXRKXRZTFPKXFE499F","business_name":"Joy Rentals Cairo","bio":"QA test bio update \u2014 verified by automated QA run 2026.","is_verified":true,"city":{"name":"Nasr City"},"rating_avg":null,"rating_count":0,"logo_url":"\/storage\/vendor-logos\/01KSGPFV1TQPM1DJJ423YHKDGB.png","cover_image_url":null,"avg_response_hours":null,"product_types":["rental"],"services_count":5,"member_since":"2026-05-23T18:41:55+00:00"},{"public_id":"26SG6XFXV2AMZ4PY938TA3YWDR","business_name":"Sweet Table Studio","bio":"Custom cakes and dessert tables.","is_verified":true,"city":{"name":"Giza City"},"rating_avg":null,"rating_count":0,"logo_url":null,"cover_image_url":null,"avg_response_hours":null,"product_types":["sale"],"services_count":2,"member_since":"2026-05-23T18:41:55+00:00"},{"public_id":"5DRGABNQ9QKFRS605JNQCDF883","business_name":"Pixel Party Cards","bio":"Digital invitations, games, and printable party assets.","is_verified":true,"city":{"name":"Nasr City"},"rating_avg":null,"rating_count":0,"logo_url":null,"cover_image_url":null,"avg_response_hours":null,"product_types":["digital"],"services_count":2,"member_since":"2026-05-23T18:41:55+00:00"},{"public_id":"01KSGYV3CEMV1HYHA3BE7GB5JJ","business_name":"Cairo Kids Events","bio":"Premium kids entertainment provider in Cairo. We specialize in magic shows, games, and balloon twisting for birthday parties and events.","is_verified":true,"city":{"name":"Nasr City"},"rating_avg":null,"rating_count":0,"logo_url":null,"cover_image_url":null,"avg_response_hours":null,"product_types":["rental","sale","digital"],"services_count":1,"member_since":"2026-05-26T01:36:58+00:00"}],"meta":{},"errors":null}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-ratelimit-limit: '60'
+          x-ratelimit-remaining: '59'
+          x-correlation-id: 01KTBQ4REB2JX1FH40JZ57HATP
+          vary: Origin
+          x-trace-id: 5635134e-adea-4822-8118-4befed8078c2
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/v1/customer/vendors/{publicId}'
+    metadata:
+      custom: []
+      groupName: 'Customer - Vendor Browsing'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      publicId:
+        custom: []
+        name: publicId
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      publicId: architecto
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 404
+        content: '{"data":null,"meta":{},"errors":{"message":"Vendor not found."}}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-ratelimit-limit: '60'
+          x-ratelimit-remaining: '59'
+          x-correlation-id: 01KTBQ4RFPYKVAK4JTANW1P12J
+          vary: Origin
+          x-trace-id: 35fbb3a5-d792-467a-b4bc-adf7903d9ad6
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/v1/customer/vendors/{publicId}/services'
+    metadata:
+      custom: []
+      groupName: 'Customer - Vendor Browsing'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      publicId:
+        custom: []
+        name: publicId
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      publicId: architecto
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      type:
+        custom: []
+        name: type
+        description: ''
+        required: false
+        example: sale
+        type: string
+        enumValues:
+          - rental
+          - sale
+          - digital
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+    cleanBodyParameters:
+      type: sale
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 404
+        content: '{"data":null,"meta":null,"errors":[{"code":"http_error","message":"Vendor not found."}]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-ratelimit-limit: '60'
+          x-ratelimit-remaining: '59'
+          x-correlation-id: 01KTBQ4RGB6Q5JC5ENWRVH7X13
+          vary: Origin
+          x-trace-id: f5655755-3107-4bde-bab5-228bfcc8af4b
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/v1/customer/vendors/{publicId}/coverage'
+    metadata:
+      custom: []
+      groupName: 'Customer - Vendor Browsing'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      publicId:
+        custom: []
+        name: publicId
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      publicId: architecto
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 404
+        content: '{"data":null,"meta":null,"errors":[{"code":"http_error","message":"Vendor not found."}]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-ratelimit-limit: '60'
+          x-ratelimit-remaining: '59'
+          x-correlation-id: 01KTBQ4RGXGDDM78D19NJG3YY8
+          vary: Origin
+          x-trace-id: 8b62cbb3-b192-47f2-b11e-d2494faca4b6
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/v1/customer/vendors/{publicId}/availability'
+    metadata:
+      custom: []
+      groupName: 'Customer - Vendor Browsing'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      publicId:
+        custom: []
+        name: publicId
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      publicId: architecto
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 404
+        content: '{"data":null,"meta":null,"errors":[{"code":"http_error","message":"Vendor not found."}]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-ratelimit-limit: '60'
+          x-ratelimit-remaining: '59'
+          x-correlation-id: 01KTBQ4RHGHEN0TD25PA2E575Z
+          vary: Origin
+          x-trace-id: 875bf5d1-7cab-4ad2-a2d8-c207878174bf
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/v1/customer/vendors/{publicId}/availability/check'
+    metadata:
+      custom: []
+      groupName: 'Customer - Vendor Browsing'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      publicId:
+        custom: []
+        name: publicId
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      publicId: architecto
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      date:
+        custom: []
+        name: date
+        description: 'Must be a valid date in the format <code>Y-m-d</code>. Must be a date after or equal to <code>today</code>.'
+        required: true
+        example: '2052-06-28'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      date: '2052-06-28'
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/v1/customer/vendors/{publicId}/portfolio'
+    metadata:
+      custom: []
+      groupName: 'Customer - Vendor Browsing'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      publicId:
+        custom: []
+        name: publicId
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      publicId: architecto
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 404
+        content: '{"data":null,"meta":null,"errors":[{"code":"http_error","message":"Vendor not found."}]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-ratelimit-limit: '60'
+          x-ratelimit-remaining: '59'
+          x-correlation-id: 01KTBQ4RJC48V0CWEV0N3RGH73
+          vary: Origin
+          x-trace-id: 1c668e9c-c856-4308-ad5c-6a7210624075
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/v1/customer/vendors/{vendorPublicId}/reviews'
+    metadata:
+      custom: []
+      groupName: 'Customer - Vendor Browsing'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      vendorPublicId:
+        custom: []
+        name: vendorPublicId
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      vendorPublicId: architecto
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 404
+        content: '{"data":null,"meta":{},"errors":[{"code":"not_found"}]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-correlation-id: 01KTBQ4S2ZC32CYB8T6FDGE7ES
+          vary: Origin
+          x-trace-id: 3c920c21-2035-4b72-ba79-ba2881f33824
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null

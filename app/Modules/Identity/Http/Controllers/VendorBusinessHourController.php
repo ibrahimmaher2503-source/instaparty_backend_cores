@@ -14,6 +14,9 @@ use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
+/**
+ * @group Vendor - Availability
+ */
 class VendorBusinessHourController extends Controller
 {
     /** 8.1 — read the weekly schedule (the PUT existed without a GET). */

@@ -78,9 +78,9 @@ endpoints:
         headers:
           cache-control: 'max-age=300, must-revalidate, public'
           content-type: application/json
-          x-correlation-id: 01KTBPJMNY4K9FQZHCW50230BQ
+          x-correlation-id: 01KTBQ4QF6XDK0CNKQ14DZK2CY
           vary: Origin
-          x-trace-id: 4533a5fe-89f5-41ad-b1fd-f21ec2309c44
+          x-trace-id: 2e469ae0-a11d-4002-b072-c8f6e24e150b
         description: null
     responseFields: []
     auth: []
@@ -132,9 +132,9 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-correlation-id: 01KTBPJMQFSBE5PAJ9Q5JC6GRB
+          x-correlation-id: 01KTBQ4QGFJSG19RD06BGWD7HF
           vary: Origin
-          x-trace-id: fc414cbc-35df-4c7c-97a1-8bb08d388cd5
+          x-trace-id: b18cbd09-d1dc-4b4c-b566-7a79214bb4d3
         description: null
     responseFields: []
     auth: []

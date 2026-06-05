@@ -15,6 +15,8 @@ use Illuminate\Http\Request;
 /**
  * 15.2 / 15.3 — per-vendor loyalty ledger history + earning/redemption
  * rules for the customer loyalty screen.
+ *
+ * @group Customer - Loyalty
  */
 class LoyaltyProgramInfoController
 {

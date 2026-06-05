@@ -11,6 +11,9 @@ use App\Modules\Shared\Http\ApiResponse;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Controller;
 
+/**
+ * @group Auth
+ */
 class VendorRegistrationController extends Controller
 {
     public function register(RegisterVendorRequest $request, RegisterVendorAction $action): JsonResponse

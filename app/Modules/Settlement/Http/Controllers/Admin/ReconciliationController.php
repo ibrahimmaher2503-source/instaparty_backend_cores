@@ -12,6 +12,9 @@ use App\Modules\Shared\Http\ApiResponse;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Controller;
 
+/**
+ * @group Admin
+ */
 class ReconciliationController extends Controller
 {
     public function __construct(private RunReconciliationAction $runReconciliation) {}

@@ -7,6 +7,7 @@ namespace App\Modules\Catalog\Http\Controllers\Vendor;
 use App\Modules\Catalog\Application\Actions\CreateRentalServiceAction;
 use App\Modules\Catalog\Application\Actions\DetectMaterialServiceChangesAction;
 use App\Modules\Catalog\Application\Actions\SubmitServiceChangeRequestAction;
+use App\Modules\Catalog\Application\Actions\UpdateRentalServiceAction;
 use App\Modules\Catalog\Application\DTOs\CreateRentalServiceDTO;
 use App\Modules\Catalog\Application\DTOs\SubmitServiceChangeRequestDTO;
 use App\Modules\Catalog\Domain\Models\Service;
@@ -18,6 +19,9 @@ use App\Modules\Catalog\Http\Resources\ServiceChangeRequestResource;
 use App\Modules\Shared\Http\ApiResponse;
 use Illuminate\Http\JsonResponse;
 
+/**
+ * @group Vendor - Services (Rental)
+ */
 class RentalServiceController
 {
     public function store(CreateRentalServiceRequest $request, CreateRentalServiceAction $action): JsonResponse
@@ -64,7 +68,8 @@ class RentalServiceController
             }
         }
 
-        // Non-published or non-material: direct apply (not yet implemented)
-        return ApiResponse::error('Direct update not implemented yet', 501);
+        $updated = app(UpdateRentalServiceAction::class)->execute($service, $vendor, $request->validated());
+
+        return ApiResponse::success(new RentalServiceResource($updated));
     }
 }

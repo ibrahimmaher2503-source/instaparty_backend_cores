@@ -19,6 +19,9 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
+/**
+ * @group Vendor - Coverage
+ */
 class VendorCoverageAreaController extends Controller
 {
     /** 9.1 — covered cities + fees. */

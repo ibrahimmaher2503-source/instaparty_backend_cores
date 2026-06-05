@@ -8,6 +8,9 @@ use App\Modules\Payments\Domain\Models\Refund;
 use App\Modules\Payments\Http\Resources\RefundResource;
 use App\Modules\Shared\Http\ApiResponse;
 
+/**
+ * @group Admin
+ */
 class ShowRefundController
 {
     public function __invoke(string $refundPublicId)

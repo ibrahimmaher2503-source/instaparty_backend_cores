@@ -7,6 +7,7 @@ namespace App\Modules\Catalog\Http\Controllers\Vendor;
 use App\Modules\Catalog\Application\Actions\CreateSaleServiceAction;
 use App\Modules\Catalog\Application\Actions\DetectMaterialServiceChangesAction;
 use App\Modules\Catalog\Application\Actions\SubmitServiceChangeRequestAction;
+use App\Modules\Catalog\Application\Actions\UpdateSaleServiceAction;
 use App\Modules\Catalog\Application\DTOs\CreateSaleServiceDTO;
 use App\Modules\Catalog\Application\DTOs\SubmitServiceChangeRequestDTO;
 use App\Modules\Catalog\Domain\Models\Service;
@@ -18,6 +19,9 @@ use App\Modules\Catalog\Http\Resources\ServiceChangeRequestResource;
 use App\Modules\Shared\Http\ApiResponse;
 use Illuminate\Http\JsonResponse;
 
+/**
+ * @group Vendor - Services (Sale)
+ */
 class SaleServiceController
 {
     public function store(CreateSaleServiceRequest $request, CreateSaleServiceAction $action): JsonResponse
@@ -63,6 +67,8 @@ class SaleServiceController
             }
         }
 
-        return ApiResponse::error('Direct update not implemented yet', 501);
+        $updated = app(UpdateSaleServiceAction::class)->execute($service, $vendor, $request->validated());
+
+        return ApiResponse::success(new SaleServiceResource($updated));
     }
 }

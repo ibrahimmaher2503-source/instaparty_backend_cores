@@ -14,6 +14,9 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
+/**
+ * @group Vendor - Wallet & Settlements
+ */
 class WalletController extends Controller
 {
     public function __construct(

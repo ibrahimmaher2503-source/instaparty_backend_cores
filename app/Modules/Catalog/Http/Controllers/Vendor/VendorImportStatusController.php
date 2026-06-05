@@ -12,6 +12,8 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Vendor-portal 5.3 — import status polling for web + mobile progress UI.
+ *
+ * @group Vendor - Excel Import
  */
 class VendorImportStatusController
 {

@@ -8,6 +8,9 @@ use App\Modules\Payments\Domain\Models\Payment;
 use App\Modules\Payments\Http\Resources\PaymentResource;
 use App\Modules\Shared\Http\ApiResponse;
 
+/**
+ * @group Customer - Payments
+ */
 class ShowPaymentController
 {
     public function __invoke(string $paymentPublicId)

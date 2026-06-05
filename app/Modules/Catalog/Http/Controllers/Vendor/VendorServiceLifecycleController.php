@@ -17,6 +17,8 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  * routes (spec 12 §12 parity table). "Publish" for a vendor means submitting
  * for admin moderation; taking a service offline is the archive (DELETE)
  * flow — there is no separate unpublish state in the locked state machine.
+ *
+ * @group Vendor - Services
  */
 class VendorServiceLifecycleController
 {

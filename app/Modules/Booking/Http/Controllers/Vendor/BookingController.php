@@ -29,6 +29,9 @@ use App\Modules\Shared\Http\ApiResponse;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
+/**
+ * @group Vendor - Bookings
+ */
 class BookingController
 {
     private function vendorProfileId(): int

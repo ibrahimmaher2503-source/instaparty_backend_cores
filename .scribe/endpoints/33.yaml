@@ -1,0 +1,126 @@
+name: 'Vendor - Pricing'
+description: ''
+endpoints:
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/vendor/pricing/commission-rates
+    metadata:
+      custom: []
+      groupName: 'Vendor - Pricing'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: '10.3 — resolved bps per (approved type × offered category).'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"data":null,"meta":null,"errors":[{"code":"unauthenticated","message":"Unauthenticated."}]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-correlation-id: 01KTBQ4RWYERSTWKPZKTE1M7NK
+          vary: Origin
+          x-trace-id: 848bdb1c-889f-418f-8b49-d77d7b624fbf
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/vendor/pricing/calculator
+    metadata:
+      custom: []
+      groupName: 'Vendor - Pricing'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: '10.4 — preview the commission/payout split for a hypothetical price.'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      amount_minor:
+        custom: []
+        name: amount_minor
+        description: 'Must be at least 1.'
+        required: true
+        example: 16
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      product_type:
+        custom: []
+        name: product_type
+        description: ''
+        required: true
+        example: digital
+        type: string
+        enumValues:
+          - rental
+          - sale
+          - digital
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      category_public_id:
+        custom: []
+        name: category_public_id
+        description: 'Must not be greater than 26 characters.'
+        required: false
+        example: 'n'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+    cleanBodyParameters:
+      amount_minor: 16
+      product_type: digital
+      category_public_id: 'n'
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"data":null,"meta":null,"errors":[{"code":"unauthenticated","message":"Unauthenticated."}]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-correlation-id: 01KTBQ4RX4TF636ZT9QVHV17R0
+          vary: Origin
+          x-trace-id: 778ad021-0f1d-42ae-8ddf-558ca85558a4
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null

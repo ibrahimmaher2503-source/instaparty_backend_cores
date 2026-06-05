@@ -17,6 +17,8 @@ use Illuminate\Support\Facades\DB;
  *
  * Suggestions are DB-backed (JSON-name LIKE) in Phase 1 — a Meilisearch
  * query-suggestions index is a Phase 2 performance optimization.
+ *
+ * @group Customer - Catalog
  */
 class ServiceDiscoveryExtrasController
 {

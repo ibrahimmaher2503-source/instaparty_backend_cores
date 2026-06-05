@@ -10,6 +10,9 @@ use App\Modules\Identity\Http\Requests\RequestVendorChangesFormRequest;
 use App\Modules\Shared\Http\Resources\ChangeRequestResource;
 use Illuminate\Http\JsonResponse;
 
+/**
+ * @group Admin
+ */
 class VendorChangeRequestController
 {
     public function __construct(private RequestVendorChangesAction $action) {}

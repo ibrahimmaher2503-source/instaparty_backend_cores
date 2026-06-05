@@ -1,0 +1,631 @@
+name: 'Vendor - Bookings'
+description: ''
+endpoints:
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/vendor/booking-vendors
+    metadata:
+      custom: []
+      groupName: 'Vendor - Bookings'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"data":null,"meta":null,"errors":[{"code":"unauthenticated","message":"Unauthenticated."}]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-correlation-id: 01KTBQ4RPX7M9V3SD5MFHXZRSG
+          vary: Origin
+          x-trace-id: d7c40767-7f19-4c11-bbbf-b036f8344d30
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/v1/vendor/booking-vendors/{bookingVendorPublicId}'
+    metadata:
+      custom: []
+      groupName: 'Vendor - Bookings'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      bookingVendorPublicId:
+        custom: []
+        name: bookingVendorPublicId
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      bookingVendorPublicId: architecto
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"data":null,"meta":null,"errors":[{"code":"unauthenticated","message":"Unauthenticated."}]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-correlation-id: 01KTBQ4RQ2ZWW4YM9668YAZRRH
+          vary: Origin
+          x-trace-id: d56759dc-a59a-4c39-b291-65f37c7b23e9
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/v1/vendor/booking-vendors/{bookingVendorPublicId}/accept'
+    metadata:
+      custom: []
+      groupName: 'Vendor - Bookings'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      bookingVendorPublicId:
+        custom: []
+        name: bookingVendorPublicId
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      bookingVendorPublicId: architecto
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/v1/vendor/booking-vendors/{bookingVendorPublicId}/modify'
+    metadata:
+      custom: []
+      groupName: 'Vendor - Bookings'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      bookingVendorPublicId:
+        custom: []
+        name: bookingVendorPublicId
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      bookingVendorPublicId: architecto
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      proposal_kind:
+        custom: []
+        name: proposal_kind
+        description: ''
+        required: true
+        example: change_quantity
+        type: string
+        enumValues:
+          - add_item
+          - remove_item
+          - change_quantity
+          - change_price
+          - change_slot
+          - add_surcharge
+          - add_note
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      vendor_explanation:
+        custom: []
+        name: vendor_explanation
+        description: ''
+        required: false
+        example: null
+        type: object
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      vendor_explanation.en:
+        custom: []
+        name: vendor_explanation.en
+        description: 'Must not be greater than 500 characters.'
+        required: false
+        example: b
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      vendor_explanation.ar:
+        custom: []
+        name: vendor_explanation.ar
+        description: 'Must not be greater than 500 characters.'
+        required: false
+        example: 'n'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      changes:
+        custom: []
+        name: changes
+        description: 'Must have at least 1 items.'
+        required: true
+        example:
+          - []
+        type: 'object[]'
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      'changes[].change_kind':
+        custom: []
+        name: 'changes[].change_kind'
+        description: ''
+        required: true
+        example: update
+        type: string
+        enumValues:
+          - add
+          - remove
+          - update
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      'changes[].target_item_public_id':
+        custom: []
+        name: 'changes[].target_item_public_id'
+        description: ''
+        required: false
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      'changes[].payload':
+        custom: []
+        name: 'changes[].payload'
+        description: ''
+        required: false
+        example: null
+        type: object
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+    cleanBodyParameters:
+      proposal_kind: change_quantity
+      vendor_explanation:
+        en: b
+        ar: 'n'
+      changes:
+        -
+          change_kind: update
+          target_item_public_id: architecto
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/v1/vendor/booking-vendors/{bookingVendorPublicId}/preview-modification'
+    metadata:
+      custom: []
+      groupName: 'Vendor - Bookings'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      bookingVendorPublicId:
+        custom: []
+        name: bookingVendorPublicId
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      bookingVendorPublicId: architecto
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      proposal_kind:
+        custom: []
+        name: proposal_kind
+        description: ''
+        required: true
+        example: add_surcharge
+        type: string
+        enumValues:
+          - add_item
+          - remove_item
+          - change_quantity
+          - change_price
+          - change_slot
+          - add_surcharge
+          - add_note
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      vendor_explanation:
+        custom: []
+        name: vendor_explanation
+        description: ''
+        required: false
+        example: null
+        type: object
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      vendor_explanation.en:
+        custom: []
+        name: vendor_explanation.en
+        description: 'Must not be greater than 500 characters.'
+        required: false
+        example: b
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      vendor_explanation.ar:
+        custom: []
+        name: vendor_explanation.ar
+        description: 'Must not be greater than 500 characters.'
+        required: false
+        example: 'n'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      changes:
+        custom: []
+        name: changes
+        description: 'Must have at least 1 items.'
+        required: true
+        example:
+          - []
+        type: 'object[]'
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      'changes[].change_kind':
+        custom: []
+        name: 'changes[].change_kind'
+        description: ''
+        required: true
+        example: add
+        type: string
+        enumValues:
+          - add
+          - remove
+          - update
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      'changes[].target_item_public_id':
+        custom: []
+        name: 'changes[].target_item_public_id'
+        description: ''
+        required: false
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      'changes[].payload':
+        custom: []
+        name: 'changes[].payload'
+        description: ''
+        required: false
+        example: null
+        type: object
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+    cleanBodyParameters:
+      proposal_kind: add_surcharge
+      vendor_explanation:
+        en: b
+        ar: 'n'
+      changes:
+        -
+          change_kind: add
+          target_item_public_id: architecto
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/v1/vendor/booking-vendors/{bookingVendorPublicId}/modifications'
+    metadata:
+      custom: []
+      groupName: 'Vendor - Bookings'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      bookingVendorPublicId:
+        custom: []
+        name: bookingVendorPublicId
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      bookingVendorPublicId: architecto
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"data":null,"meta":null,"errors":[{"code":"unauthenticated","message":"Unauthenticated."}]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-correlation-id: 01KTBQ4RQKDDVH4K8JGDKAVDES
+          vary: Origin
+          x-trace-id: e89b2dcb-ec5d-46da-b292-6e1b5cb30520
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/v1/vendor/booking-vendors/{bookingVendorPublicId}/timeline'
+    metadata:
+      custom: []
+      groupName: 'Vendor - Bookings'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: |-
+        Vendor-portal 6.11 — lifecycle timeline: booking-level transitions plus
+        this vendor's own item transitions. Other vendors' items are excluded.
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      bookingVendorPublicId:
+        custom: []
+        name: bookingVendorPublicId
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      bookingVendorPublicId: architecto
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"data":null,"meta":null,"errors":[{"code":"unauthenticated","message":"Unauthenticated."}]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-correlation-id: 01KTBQ4RQRRXJ9RY1JXC3SXGQS
+          vary: Origin
+          x-trace-id: d2391cb0-2f97-4f40-800d-9c05eb0e8418
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/v1/vendor/booking-vendors/{bookingVendorPublicId}/reject'
+    metadata:
+      custom: []
+      groupName: 'Vendor - Bookings'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      bookingVendorPublicId:
+        custom: []
+        name: bookingVendorPublicId
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      bookingVendorPublicId: architecto
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      rejection_reason:
+        custom: []
+        name: rejection_reason
+        description: ''
+        required: false
+        example: null
+        type: object
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      rejection_reason.en:
+        custom: []
+        name: rejection_reason.en
+        description: 'Must not be greater than 500 characters.'
+        required: false
+        example: b
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      rejection_reason.ar:
+        custom: []
+        name: rejection_reason.ar
+        description: 'Must not be greater than 500 characters.'
+        required: false
+        example: 'n'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+    cleanBodyParameters:
+      rejection_reason:
+        en: b
+        ar: 'n'
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null

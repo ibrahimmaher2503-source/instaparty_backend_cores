@@ -16,6 +16,8 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 /**
  * GET /api/v1/vendor/compliance (G3) — per-product-type approval status,
  * document statuses, and expiry alerts (ADR-0021 lifecycle).
+ *
+ * @group Vendor - Compliance
  */
 class VendorComplianceController extends Controller
 {

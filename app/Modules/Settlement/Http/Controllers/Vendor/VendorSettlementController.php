@@ -15,6 +15,8 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  * platform-wide reconciliation periods (no vendor dimension), so the
  * vendor-facing settlement view is their own append-only commissions
  * records: per booking item gross → commission → vendor share.
+ *
+ * @group Vendor - Wallet & Settlements
  */
 class VendorSettlementController
 {

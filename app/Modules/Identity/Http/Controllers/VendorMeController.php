@@ -15,6 +15,8 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  * GET /api/v1/vendor/me (G2) — role-aware identity payload for the vendor
  * app. POST /api/v1/login responds with CustomerResource, which carries no
  * vendor context; this endpoint is what the vendor app calls after login.
+ *
+ * @group Vendor - Profile
  */
 class VendorMeController extends Controller
 {

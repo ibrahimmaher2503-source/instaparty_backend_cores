@@ -10,6 +10,9 @@ use App\Modules\Shared\Http\ApiResponse;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
+/**
+ * @group Customer - Bookings
+ */
 class TaxInvoiceRequestController
 {
     public function __invoke(Request $request, string $bookingPublicId, RequestTaxInvoiceAction $action): JsonResponse

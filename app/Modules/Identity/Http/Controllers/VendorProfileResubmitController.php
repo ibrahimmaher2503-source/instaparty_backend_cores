@@ -10,6 +10,9 @@ use App\Modules\Identity\Http\Requests\VendorResubmitFormRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 
+/**
+ * @group Vendor - Compliance
+ */
 class VendorProfileResubmitController
 {
     public function __construct(private VendorResubmitAfterChangesAction $action) {}

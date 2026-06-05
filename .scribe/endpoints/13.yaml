@@ -1,0 +1,288 @@
+name: 'Vendor - Coverage'
+description: ''
+endpoints:
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/vendor/coverage-areas
+    metadata:
+      custom: []
+      groupName: 'Vendor - Coverage'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: '9.1 — covered cities + fees.'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"data":null,"meta":null,"errors":[{"code":"unauthenticated","message":"Unauthenticated."}]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-correlation-id: 01KTBQ4QVBHFS55GQJSQQMSJGB
+          vary: Origin
+          x-trace-id: 3f648c57-1267-4ae2-9013-14768be5e062
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/v1/vendor/coverage-areas
+    metadata:
+      custom: []
+      groupName: 'Vendor - Coverage'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      city_id:
+        custom: []
+        name: city_id
+        description: 'The <code>id</code> of an existing record in the cities table.'
+        required: true
+        example: 16
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      delivery_fee_minor:
+        custom: []
+        name: delivery_fee_minor
+        description: 'Must be at least 0.'
+        required: false
+        example: 39
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      delivery_fee_currency:
+        custom: []
+        name: delivery_fee_currency
+        description: 'Must be 3 characters.'
+        required: false
+        example: gzm
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      min_order_minor:
+        custom: []
+        name: min_order_minor
+        description: 'Must be at least 0.'
+        required: false
+        example: 8
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      min_order_currency:
+        custom: []
+        name: min_order_currency
+        description: 'Must be 3 characters.'
+        required: false
+        example: yvd
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+    cleanBodyParameters:
+      city_id: 16
+      delivery_fee_minor: 39
+      delivery_fee_currency: gzm
+      min_order_minor: 8
+      min_order_currency: yvd
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/vendor/coverage-areas/available-cities
+    metadata:
+      custom: []
+      groupName: 'Vendor - Coverage'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: '9.5 — cities not yet covered by this vendor.'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"data":null,"meta":null,"errors":[{"code":"unauthenticated","message":"Unauthenticated."}]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-correlation-id: 01KTBQ4QVMYR9PNPYMWEWKHRZS
+          vary: Origin
+          x-trace-id: e037caeb-2b6d-431d-8f74-407851818edb
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - PATCH
+    uri: 'api/v1/vendor/coverage-areas/{cityId}'
+    metadata:
+      custom: []
+      groupName: 'Vendor - Coverage'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: '9.3 — update delivery fee / minimum for one covered city.'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      cityId:
+        custom: []
+        name: cityId
+        description: ''
+        required: true
+        example: '564'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      cityId: '564'
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      delivery_fee_minor:
+        custom: []
+        name: delivery_fee_minor
+        description: 'Must be at least 0.'
+        required: false
+        example: 27
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      min_order_minor:
+        custom: []
+        name: min_order_minor
+        description: 'Must be at least 0.'
+        required: false
+        example: 39
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+    cleanBodyParameters:
+      delivery_fee_minor: 27
+      min_order_minor: 39
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - DELETE
+    uri: 'api/v1/vendor/coverage-areas/{cityId}'
+    metadata:
+      custom: []
+      groupName: 'Vendor - Coverage'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: '9.4 — stop serving a city.'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      cityId:
+        custom: []
+        name: cityId
+        description: ''
+        required: true
+        example: '564'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      cityId: '564'
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null

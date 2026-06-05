@@ -1,0 +1,573 @@
+name: 'Customer - Catalog'
+description: ''
+endpoints:
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/customer/occasions
+    metadata:
+      custom: []
+      groupName: 'Customer - Catalog'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"data":[{"public_id":"6R2PK6HENGHKXEZGPB61T0ZMA8","name":"Birthday","slug":"birthday","icon_url":null},{"public_id":"3N611FM7RVG9S279JJBKWF2BSR","name":"Baby Shower","slug":"baby-shower","icon_url":null},{"public_id":"1528DX00V9NF5CRCM9WEAY0GK4","name":"Graduation","slug":"graduation","icon_url":null},{"public_id":"1MKSV076S81N2K6CMK5S6EEKZ1","name":"Family Gathering","slug":"family-gathering","icon_url":null},{"public_id":"1021GFZVB7Z02XG7VE4SAZVSKQ","name":"Corporate Event","slug":"corporate","icon_url":null},{"public_id":"1P4PBSRTSFYXJ6T4A4ZFKP7GA0","name":"Wedding","slug":"wedding","icon_url":null},{"public_id":"6R3652574MMZKN1X2YAVM3J3B1","name":"Engagement","slug":"engagement","icon_url":null}],"meta":{},"errors":null}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-ratelimit-limit: '60'
+          x-ratelimit-remaining: '59'
+          x-correlation-id: 01KTBQ4QZ6ZZAANWSNSHBP2YAA
+          vary: Origin
+          x-trace-id: 36740362-aad1-4ecb-b319-f1d59bc1cb13
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/v1/customer/occasions/{slug}'
+    metadata:
+      custom: []
+      groupName: 'Customer - Catalog'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      slug:
+        custom: []
+        name: slug
+        description: 'The slug of the occasion.'
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      slug: architecto
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 404
+        content: '{"data":null,"meta":null,"errors":[{"code":"http_error","message":"No query results for model [App\\Modules\\Catalog\\Domain\\Models\\Occasion]."}]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-ratelimit-limit: '60'
+          x-ratelimit-remaining: '59'
+          x-correlation-id: 01KTBQ4R01JQFHHSJAJ2G61GBX
+          vary: Origin
+          x-trace-id: c3fa033e-6b83-47e8-b039-68e836d13397
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/customer/categories
+    metadata:
+      custom: []
+      groupName: 'Customer - Catalog'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"data":[{"public_id":"1S4QRHW7K8SWPRV0YAAXYR95HH","name":"General Birthday","slug":"birthday-general","icon_url":null},{"public_id":"6AEX20XGH2DS2NN5HDY7M7QK7T","name":"General Wedding","slug":"wedding-general","icon_url":null},{"public_id":"3HD1Z3ZRQXFX14EDMKY1XW4MM0","name":"General Engagement","slug":"engagement-general","icon_url":null},{"public_id":"4H398G8AEGZY44WKNWET72WZ2X","name":"Cakes & Sweets","slug":"cakes","icon_url":null},{"public_id":"6J3KMMD2X1GXVSHF1F1V8T75NJ","name":"Venues & Halls","slug":"venues","icon_url":null},{"public_id":"7ZHWJCMWNBHTX0ZHX8ZMNR177D","name":"Balloons & Decoration","slug":"balloons-decoration","icon_url":null},{"public_id":"1MY063R3C0T54PTHCJHZQWDK5V","name":"Catering & Food","slug":"catering","icon_url":null},{"public_id":"0PZEDE9SYSJV67X2ENVDE19PDB","name":"Photography & Video","slug":"photography","icon_url":null},{"public_id":"5CB0RGP9VSDS7D9PG89E0WR3SH","name":"Entertainment","slug":"entertainment","icon_url":null},{"public_id":"5KQQ7KW8E2D4H2W2YZYTZZJDHR","name":"Gifts & Favors","slug":"gifts","icon_url":null},{"public_id":"4H5R1S975G1Z5VFK8CQ302DPZ4","name":"Party Rentals","slug":"rentals","icon_url":null},{"public_id":"225WFXEVDR8WD6E5EJSWP44D59","name":"Bouncy Castles","slug":"rental-bouncy-castles","icon_url":null},{"public_id":"3CJ3R3R35CBG81P4J604PWTQ2R","name":"Party Equipment","slug":"rental-party-equipment","icon_url":null},{"public_id":"22J7AYH20AWWS6BKQSRW5V3KCR","name":"Cakes","slug":"sale-cakes","icon_url":null},{"public_id":"7W27E03MQPRDNFG5Q6G9ED6FZ8","name":"Digital Invitations","slug":"digital-invitations","icon_url":null}],"meta":{},"errors":null}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-ratelimit-limit: '60'
+          x-ratelimit-remaining: '59'
+          x-correlation-id: 01KTBQ4R0MT9CPN2KB4673V7GD
+          vary: Origin
+          x-trace-id: 67fe7393-98c5-447e-95dc-1cc67aab6832
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/v1/customer/categories/{publicId}'
+    metadata:
+      custom: []
+      groupName: 'Customer - Catalog'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      publicId:
+        custom: []
+        name: publicId
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      publicId: architecto
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 404
+        content: '{"data":null,"meta":null,"errors":[{"code":"http_error","message":"No query results for model [App\\Modules\\Catalog\\Domain\\Models\\Category]."}]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-ratelimit-limit: '60'
+          x-ratelimit-remaining: '59'
+          x-correlation-id: 01KTBQ4R16FJWZJFVDGE88RQS7
+          vary: Origin
+          x-trace-id: e8468ea3-1989-465f-90a6-891d8d2d11db
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/v1/customer/categories/{publicId}/field-schemas'
+    metadata:
+      custom: []
+      groupName: 'Customer - Catalog'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: |-
+        FR-20 — dynamic filter schemas per (category × product_type) for the
+        customer filter sheet. Only filterable fields are exposed.
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      publicId:
+        custom: []
+        name: publicId
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      publicId: architecto
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      type:
+        custom: []
+        name: type
+        description: ''
+        required: false
+        example: rental
+        type: string
+        enumValues:
+          - rental
+          - sale
+          - digital
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+    cleanBodyParameters:
+      type: rental
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 404
+        content: '{"data":null,"meta":null,"errors":[{"code":"http_error","message":"No query results for model [App\\Modules\\Catalog\\Domain\\Models\\Category]."}]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-ratelimit-limit: '60'
+          x-ratelimit-remaining: '59'
+          x-correlation-id: 01KTBQ4R1PRKQPNQRE7F5H79T5
+          vary: Origin
+          x-trace-id: 16aab7c9-a116-43c9-ae90-dbbee7269962
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/customer/service-themes
+    metadata:
+      custom: []
+      groupName: 'Customer - Catalog'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"data":[{"public_id":"7H2PA7S2W8A4Q3JRXHXY26P4CG","code":"classic-party","name":"Classic Party","icon_url":null},{"public_id":"65VCWBPR07PXKJPAQ0P0548NFW","code":"luxury-gold","name":"Luxury Gold","icon_url":null},{"public_id":"2HTE3Z8HXG310447WCVSAB6AW8","code":"playful-kids","name":"Playful Kids","icon_url":null}],"meta":{},"errors":null}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-ratelimit-limit: '60'
+          x-ratelimit-remaining: '59'
+          x-correlation-id: 01KTBQ4R27AW5FGC52ET4RT7WD
+          vary: Origin
+          x-trace-id: d5409c24-3be0-4532-9f82-befac3596564
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/customer/services/suggestions
+    metadata:
+      custom: []
+      groupName: 'Customer - Catalog'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      q:
+        custom: []
+        name: q
+        description: 'Must be at least 2 characters. Must not be greater than 80 characters.'
+        required: true
+        example: b
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      q: b
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 422
+        content: '{"message":"The q field must be at least 2 characters.","errors":{"q":["The q field must be at least 2 characters."]}}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-ratelimit-limit: '60'
+          x-ratelimit-remaining: '59'
+          x-correlation-id: 01KTBQ4R2VS33R0F994942HHS6
+          vary: Origin
+          x-trace-id: 20edfe33-d98b-4aa1-9fac-3f76885d3293
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/v1/customer/services/{servicePublicId}'
+    metadata:
+      custom: []
+      groupName: 'Customer - Catalog'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Show a published customer-facing service detail by public ULID.'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      servicePublicId:
+        custom: []
+        name: servicePublicId
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      servicePublicId: architecto
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 404
+        content: '{"data":null,"meta":null,"errors":[{"code":"http_error","message":"No query results for model [App\\Modules\\Catalog\\Domain\\Models\\Service]."}]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-ratelimit-limit: '60'
+          x-ratelimit-remaining: '59'
+          x-correlation-id: 01KTBQ4R3DWXVY2Z5FEHHTBDSR
+          vary: Origin
+          x-trace-id: 5ae3bd74-96ce-48e3-aa7b-06b2969e105b
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/v1/customer/services/{servicePublicId}/similar'
+    metadata:
+      custom: []
+      groupName: 'Customer - Catalog'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      servicePublicId:
+        custom: []
+        name: servicePublicId
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      servicePublicId: architecto
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 404
+        content: '{"data":null,"meta":null,"errors":[{"code":"http_error","message":"No query results for model [App\\Modules\\Catalog\\Domain\\Models\\Service]."}]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-ratelimit-limit: '60'
+          x-ratelimit-remaining: '59'
+          x-correlation-id: 01KTBQ4R4696NC60149WVCPANM
+          vary: Origin
+          x-trace-id: 06e1f58b-d0e3-491a-9ca4-4f283af169d7
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/v1/customer/services/{servicePublicId}/views'
+    metadata:
+      custom: []
+      groupName: 'Customer - Catalog'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      servicePublicId:
+        custom: []
+        name: servicePublicId
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      servicePublicId: architecto
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/vendor/occasions
+    metadata:
+      custom: []
+      groupName: 'Customer - Catalog'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"data":null,"meta":null,"errors":[{"code":"unauthenticated","message":"Unauthenticated."}]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-correlation-id: 01KTBQ4R4Y6Q03MWEJFB88HAK6
+          vary: Origin
+          x-trace-id: c57ba720-a8d8-415a-a601-22dd6407bd04
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null

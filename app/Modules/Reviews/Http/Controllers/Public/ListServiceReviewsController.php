@@ -10,6 +10,9 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * @group Public - Reviews
+ */
 class ListServiceReviewsController
 {
     public function __construct(private readonly ServiceReviewRepository $repo) {}

@@ -16,6 +16,8 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  * Vendor-portal 16.3–16.5 — the vendor's loyalty members. Privacy: customer
  * identity is masked (first name + last initial, no email/phone) — same
  * convention as public reviews.
+ *
+ * @group Vendor - Loyalty
  */
 class VendorLoyaltyCustomersController
 {

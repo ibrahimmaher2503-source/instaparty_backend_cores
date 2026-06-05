@@ -10,6 +10,9 @@ use App\Modules\Reviews\Http\Resources\MyReviewResource;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
+/**
+ * @group Customer - Reviews
+ */
 class ListMyReviewsController
 {
     public function index(Request $request): JsonResponse

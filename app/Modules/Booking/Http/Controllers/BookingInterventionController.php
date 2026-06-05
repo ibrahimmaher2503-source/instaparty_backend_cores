@@ -15,6 +15,9 @@ use App\Modules\Shared\Http\ApiResponse;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Gate;
 
+/**
+ * @group Admin
+ */
 class BookingInterventionController
 {
     public function __construct(
@@ -26,6 +29,7 @@ class BookingInterventionController
     {
         Gate::authorize('force_cancel_booking');
         $booking = Booking::where('public_id', $bookingPublicId)->firstOrFail();
+
         return $this->idempotency->wrap($request, 'admin.bookings.force-cancel', fn () => $this->doForceCancel($booking, $request));
     }
 

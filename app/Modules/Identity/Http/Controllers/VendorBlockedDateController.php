@@ -15,6 +15,8 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Vendor-portal 8.3–8.5 — blocked dates (holidays).
+ *
+ * @group Vendor - Availability
  */
 class VendorBlockedDateController
 {

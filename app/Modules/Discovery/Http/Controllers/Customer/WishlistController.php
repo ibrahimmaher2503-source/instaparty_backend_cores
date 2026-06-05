@@ -13,6 +13,9 @@ use App\Modules\Discovery\Http\Resources\WishlistItemResource;
 use App\Modules\Shared\Http\ApiResponse;
 use Illuminate\Http\JsonResponse;
 
+/**
+ * @group Customer - Wishlist
+ */
 class WishlistController
 {
     public function index(): JsonResponse

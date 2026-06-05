@@ -8,6 +8,9 @@ use App\Modules\Shared\Domain\Models\ChangeRequest;
 use App\Modules\Shared\Http\Resources\ChangeRequestResource;
 use Illuminate\Http\Request;
 
+/**
+ * @group Vendor - Compliance
+ */
 class VendorChangeRequestListController
 {
     public function index(Request $request)

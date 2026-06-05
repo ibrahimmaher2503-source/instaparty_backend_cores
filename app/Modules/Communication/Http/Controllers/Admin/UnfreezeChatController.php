@@ -11,6 +11,9 @@ use App\Modules\Communication\Http\Resources\ChatThreadResource;
 use App\Modules\Shared\Http\ApiResponse;
 use Illuminate\Http\JsonResponse;
 
+/**
+ * @group Admin
+ */
 class UnfreezeChatController
 {
     public function __invoke(UnfreezeChatRequest $request, ChatThread $thread, UnfreezeChatAction $action): JsonResponse

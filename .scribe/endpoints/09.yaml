@@ -1,0 +1,595 @@
+name: 'Customer - Profile & Addresses'
+description: ''
+endpoints:
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/customer/profile
+    metadata:
+      custom: []
+      groupName: 'Customer - Profile & Addresses'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"data":null,"meta":null,"errors":[{"code":"unauthenticated","message":"Unauthenticated."}]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-correlation-id: 01KTBQ4QNMREEFM4R8AQX40X3W
+          vary: Origin
+          x-trace-id: 84f467f4-51d2-4f1a-99db-199cf9ecf048
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - PUT
+    uri: api/v1/customer/profile
+    metadata:
+      custom: []
+      groupName: 'Customer - Profile & Addresses'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      name:
+        custom: []
+        name: name
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: b
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      preferred_locale:
+        custom: []
+        name: preferred_locale
+        description: ''
+        required: false
+        example: ar
+        type: string
+        enumValues:
+          - en
+          - ar
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      date_of_birth:
+        custom: []
+        name: date_of_birth
+        description: 'Must be a valid date. Must be a date before <code>today</code>.'
+        required: false
+        example: '2022-06-29'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      gender:
+        custom: []
+        name: gender
+        description: ''
+        required: false
+        example: prefer_not_to_say
+        type: string
+        enumValues:
+          - male
+          - female
+          - prefer_not_to_say
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      accepts_marketing:
+        custom: []
+        name: accepts_marketing
+        description: ''
+        required: false
+        example: true
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      name: b
+      preferred_locale: ar
+      date_of_birth: '2022-06-29'
+      gender: prefer_not_to_say
+      accepts_marketing: true
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/customer/addresses
+    metadata:
+      custom: []
+      groupName: 'Customer - Profile & Addresses'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"data":null,"meta":null,"errors":[{"code":"unauthenticated","message":"Unauthenticated."}]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-correlation-id: 01KTBQ4QP2TEN81H8MB76X76WX
+          vary: Origin
+          x-trace-id: 3187e6d0-668e-4760-8d68-90b9283de514
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/v1/customer/addresses
+    metadata:
+      custom: []
+      groupName: 'Customer - Profile & Addresses'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      city_id:
+        custom: []
+        name: city_id
+        description: 'The <code>public_id</code> of an existing record in the cities table.'
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      label:
+        custom: []
+        name: label
+        description: 'Must not be greater than 60 characters.'
+        required: true
+        example: 'n'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      address_line:
+        custom: []
+        name: address_line
+        description: 'Must not be greater than 255 characters.'
+        required: true
+        example: g
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      building:
+        custom: []
+        name: building
+        description: 'Must not be greater than 50 characters.'
+        required: false
+        example: z
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      floor:
+        custom: []
+        name: floor
+        description: 'Must not be greater than 20 characters.'
+        required: false
+        example: miyvdljnikhwaykc
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      apartment:
+        custom: []
+        name: apartment
+        description: 'Must not be greater than 20 characters.'
+        required: false
+        example: myuwpwlvqwrsitcp
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      landmark:
+        custom: []
+        name: landmark
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: s
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      latitude:
+        custom: []
+        name: latitude
+        description: 'Must be between -90 and 90.'
+        required: false
+        example: -90
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      longitude:
+        custom: []
+        name: longitude
+        description: 'Must be between -180 and 180.'
+        required: false
+        example: -180
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      recipient_name:
+        custom: []
+        name: recipient_name
+        description: 'Must not be greater than 120 characters.'
+        required: true
+        example: l
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      recipient_phone_e164:
+        custom: []
+        name: recipient_phone_e164
+        description: 'Must match the regex /^\+[1-9]\d{1,14}$/. Must not be greater than 20 characters.'
+        required: true
+        example: dzsnrwtujwvlxjkl
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      is_default:
+        custom: []
+        name: is_default
+        description: ''
+        required: false
+        example: false
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      city_id: architecto
+      label: 'n'
+      address_line: g
+      building: z
+      floor: miyvdljnikhwaykc
+      apartment: myuwpwlvqwrsitcp
+      landmark: s
+      latitude: -90
+      longitude: -180
+      recipient_name: l
+      recipient_phone_e164: dzsnrwtujwvlxjkl
+      is_default: false
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - PATCH
+    uri: 'api/v1/customer/addresses/{customerAddress_public_id}'
+    metadata:
+      custom: []
+      groupName: 'Customer - Profile & Addresses'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      customerAddress_public_id:
+        custom: []
+        name: customerAddress_public_id
+        description: 'The ID of the customerAddress public.'
+        required: true
+        example: 5Z839H3WVWGETWRRWBV88T3Z3D
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      customerAddress_public_id: 5Z839H3WVWGETWRRWBV88T3Z3D
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      city_id:
+        custom: []
+        name: city_id
+        description: 'The <code>id</code> of an existing record in the cities table.'
+        required: false
+        example: 16
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      label:
+        custom: []
+        name: label
+        description: 'Must not be greater than 50 characters.'
+        required: false
+        example: 'n'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      address_line:
+        custom: []
+        name: address_line
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: g
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      building:
+        custom: []
+        name: building
+        description: 'Must not be greater than 50 characters.'
+        required: false
+        example: z
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      floor:
+        custom: []
+        name: floor
+        description: 'Must not be greater than 20 characters.'
+        required: false
+        example: miyvdljnikhwaykc
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      apartment:
+        custom: []
+        name: apartment
+        description: 'Must not be greater than 20 characters.'
+        required: false
+        example: myuwpwlvqwrsitcp
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      landmark:
+        custom: []
+        name: landmark
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: s
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      recipient_name:
+        custom: []
+        name: recipient_name
+        description: 'Must not be greater than 120 characters.'
+        required: false
+        example: c
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      recipient_phone_e164:
+        custom: []
+        name: recipient_phone_e164
+        description: 'Must not be greater than 20 characters.'
+        required: false
+        example: qldzsnrwtujwvlxj
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      city_id: 16
+      label: 'n'
+      address_line: g
+      building: z
+      floor: miyvdljnikhwaykc
+      apartment: myuwpwlvqwrsitcp
+      landmark: s
+      recipient_name: c
+      recipient_phone_e164: qldzsnrwtujwvlxj
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/v1/customer/addresses/{customerAddress_public_id}/set-default'
+    metadata:
+      custom: []
+      groupName: 'Customer - Profile & Addresses'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      customerAddress_public_id:
+        custom: []
+        name: customerAddress_public_id
+        description: 'The ID of the customerAddress public.'
+        required: true
+        example: 5Z839H3WVWGETWRRWBV88T3Z3D
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      customerAddress_public_id: 5Z839H3WVWGETWRRWBV88T3Z3D
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - DELETE
+    uri: 'api/v1/customer/addresses/{customerAddress_public_id}'
+    metadata:
+      custom: []
+      groupName: 'Customer - Profile & Addresses'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      customerAddress_public_id:
+        custom: []
+        name: customerAddress_public_id
+        description: 'The ID of the customerAddress public.'
+        required: true
+        example: 5Z839H3WVWGETWRRWBV88T3Z3D
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      customerAddress_public_id: 5Z839H3WVWGETWRRWBV88T3Z3D
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null

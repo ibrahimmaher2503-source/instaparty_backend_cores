@@ -1,18 +1,246 @@
-name: 'Customer Catalog'
+name: 'Vendor - Compliance'
 description: ''
 endpoints:
   -
     custom: []
     httpMethods:
       - GET
-    uri: 'api/v1/customer/services/{servicePublicId}'
+    uri: api/v1/vendor/change-requests
     metadata:
       custom: []
-      groupName: 'Customer Catalog'
+      groupName: 'Vendor - Compliance'
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
-      title: 'Show a published customer-facing service detail by public ULID.'
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"data":null,"meta":null,"errors":[{"code":"unauthenticated","message":"Unauthenticated."}]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-correlation-id: 01KTBQ4QH8SC5SEBG2SDGTY74X
+          vary: Origin
+          x-trace-id: ae279d36-95d2-459e-bd85-18c0261abb2c
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/vendor/compliance
+    metadata:
+      custom: []
+      groupName: 'Vendor - Compliance'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"data":null,"meta":null,"errors":[{"code":"unauthenticated","message":"Unauthenticated."}]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-correlation-id: 01KTBQ4QSZNG14XGFX1H9C0DKW
+          vary: Origin
+          x-trace-id: fbb461f5-8aaf-4237-8550-7c55bd21839f
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/vendor/compliance/audit-log
+    metadata:
+      custom: []
+      groupName: 'Vendor - Compliance'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"data":null,"meta":null,"errors":[{"code":"unauthenticated","message":"Unauthenticated."}]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-correlation-id: 01KTBQ4QT64MGH13DJTBZNPX56
+          vary: Origin
+          x-trace-id: e5560c83-1bf8-4a6e-a3ed-50289e888863
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/vendor/documents
+    metadata:
+      custom: []
+      groupName: 'Vendor - Compliance'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"data":null,"meta":null,"errors":[{"code":"unauthenticated","message":"Unauthenticated."}]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-correlation-id: 01KTBQ4QTM7QFSZ4DVQCKRCBCK
+          vary: Origin
+          x-trace-id: 96388e64-48fe-4f5c-86c4-abbf80184e6f
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/v1/vendor/documents
+    metadata:
+      custom: []
+      groupName: 'Vendor - Compliance'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: multipart/form-data
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      doc_type:
+        custom: []
+        name: doc_type
+        description: ''
+        required: true
+        example: cr
+        type: string
+        enumValues:
+          - cr
+          - tax_card
+          - national_id
+          - iban_proof
+          - other
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      file:
+        custom: []
+        name: file
+        description: 'Must be a file. Must not be greater than 10240 kilobytes.'
+        required: true
+        example: null
+        type: file
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      doc_type: cr
+    fileParameters:
+      file: null
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - DELETE
+    uri: 'api/v1/vendor/documents/{publicId}'
+    metadata:
+      custom: []
+      groupName: 'Vendor - Compliance'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Vendor-portal 3.4 — delete a document (rejected-only per ADR-0021; existing action).'
       description: ''
       authenticated: false
       deprecated: false
@@ -20,9 +248,9 @@ endpoints:
       Content-Type: application/json
       Accept: application/json
     urlParameters:
-      servicePublicId:
+      publicId:
         custom: []
-        name: servicePublicId
+        name: publicId
         description: ''
         required: true
         example: architecto
@@ -32,7 +260,50 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      servicePublicId: architecto
+      publicId: architecto
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/v1/vendor/documents/{publicId}/signed-url'
+    metadata:
+      custom: []
+      groupName: 'Vendor - Compliance'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      publicId:
+        custom: []
+        name: publicId
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      publicId: architecto
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -41,17 +312,98 @@ endpoints:
     responses:
       -
         custom: []
-        status: 404
-        content: '{"data":null,"meta":null,"errors":[{"code":"http_error","message":"No query results for model [App\\Modules\\Catalog\\Domain\\Models\\Service]."}]}'
+        status: 401
+        content: '{"data":null,"meta":null,"errors":[{"code":"unauthenticated","message":"Unauthenticated."}]}'
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-ratelimit-limit: '60'
-          x-ratelimit-remaining: '59'
-          x-correlation-id: 01KTBPJNEVETS9ZTAT6ZCAT2V7
+          x-correlation-id: 01KTBQ4QV2X7Q5W21BG0892E17
           vary: Origin
-          x-trace-id: e7cb60b4-11a5-4621-9666-3ff5be314a36
+          x-trace-id: 54b7942e-c558-4c6e-a6a2-896422816bbb
         description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/v1/vendor/vendor-profiles/{publicId}/resubmit'
+    metadata:
+      custom: []
+      groupName: 'Vendor - Compliance'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      publicId:
+        custom: []
+        name: publicId
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      publicId: architecto
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      addressed_item_ids:
+        custom: []
+        name: addressed_item_ids
+        description: 'The <code>public_id</code> of an existing record in the change_request_items table.'
+        required: false
+        example:
+          - architecto
+        type: 'string[]'
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      waived_item_ids:
+        custom: []
+        name: waived_item_ids
+        description: 'The <code>public_id</code> of an existing record in the change_request_items table.'
+        required: false
+        example:
+          - architecto
+        type: 'string[]'
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      resubmit_notes:
+        custom: []
+        name: resubmit_notes
+        description: 'Must not be greater than 1000 characters.'
+        required: false
+        example: 'n'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+    cleanBodyParameters:
+      addressed_item_ids:
+        - architecto
+      waived_item_ids:
+        - architecto
+      resubmit_notes: 'n'
+    fileParameters: []
+    responses: []
     responseFields: []
     auth: []
     controller: null

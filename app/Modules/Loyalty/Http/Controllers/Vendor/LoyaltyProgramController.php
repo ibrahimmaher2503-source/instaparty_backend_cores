@@ -13,7 +13,11 @@ use App\Modules\Loyalty\Http\Requests\Vendor\UpdateLoyaltyProgramRequest;
 use App\Modules\Loyalty\Http\Resources\LoyaltyProgramResource;
 use App\Modules\Shared\Http\ApiResponse;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
+/**
+ * @group Vendor - Loyalty
+ */
 class LoyaltyProgramController
 {
     public function __construct(
@@ -58,7 +62,7 @@ class LoyaltyProgramController
         );
     }
 
-    private function vendorProfileId(\Illuminate\Http\Request $request): int
+    private function vendorProfileId(Request $request): int
     {
         $user = $request->user();
         abort_if($user === null || $user->vendorProfile === null, 403);

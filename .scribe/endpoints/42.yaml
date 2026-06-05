@@ -1,0 +1,1102 @@
+name: 'Vendor - Loyalty'
+description: ''
+endpoints:
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/v1/vendor/loyalty/program
+    metadata:
+      custom: []
+      groupName: 'Vendor - Loyalty'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      name:
+        custom: []
+        name: name
+        description: ''
+        required: true
+        example: []
+        type: object
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      name.en:
+        custom: []
+        name: name.en
+        description: 'Program name in English.'
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      name.ar:
+        custom: []
+        name: name.ar
+        description: 'Program name in Arabic.'
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      terms:
+        custom: []
+        name: terms
+        description: ''
+        required: false
+        example: null
+        type: object
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      terms.en:
+        custom: []
+        name: terms.en
+        description: 'nullable Terms in English.'
+        required: false
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      terms.ar:
+        custom: []
+        name: terms.ar
+        description: 'nullable Terms in Arabic.'
+        required: false
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      is_active:
+        custom: []
+        name: is_active
+        description: 'Active flag.'
+        required: false
+        example: false
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      points_per_currency_unit:
+        custom: []
+        name: points_per_currency_unit
+        description: 'Points per 1 currency unit (e.g. 1 point per EGP).'
+        required: false
+        example: 4326.41688
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      points_value_minor:
+        custom: []
+        name: points_value_minor
+        description: 'Value of 1 point in minor units.'
+        required: false
+        example: 16
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      points_value_currency:
+        custom: []
+        name: points_value_currency
+        description: '3-letter currency code.'
+        required: false
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      min_points_to_redeem:
+        custom: []
+        name: min_points_to_redeem
+        description: 'Minimum points the customer must hold to redeem.'
+        required: false
+        example: 16
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      max_redeem_pct:
+        custom: []
+        name: max_redeem_pct
+        description: '0..100 cap on % of order eligible for redemption.'
+        required: false
+        example: 16
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      points_expire_after_days:
+        custom: []
+        name: points_expire_after_days
+        description: 'nullable Days before earned points expire (null = never).'
+        required: false
+        example: 16
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      rules:
+        custom: []
+        name: rules
+        description: 'nullable Optional array of rule drafts.'
+        required: false
+        example:
+          - architecto
+        type: 'string[]'
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      'rules[].rule_kind':
+        custom: []
+        name: 'rules[].rule_kind'
+        description: 'This field is required when <code>rules</code> is present.'
+        required: false
+        example: threshold_bonus
+        type: string
+        enumValues:
+          - first_booking
+          - category_bonus
+          - threshold_bonus
+          - referral
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      'rules[].multiplier':
+        custom: []
+        name: 'rules[].multiplier'
+        description: 'This field is required when <code>rules</code> is present. Must be at least 0.0001. Must not be greater than 1000.'
+        required: false
+        example: 5
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      'rules[].label':
+        custom: []
+        name: 'rules[].label'
+        description: 'This field is required when <code>rules</code> is present.'
+        required: false
+        example: null
+        type: object
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      'rules[].label.en':
+        custom: []
+        name: 'rules[].label.en'
+        description: 'This field is required when <code>rules</code> is present. Must not be greater than 150 characters.'
+        required: false
+        example: k
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      'rules[].label.ar':
+        custom: []
+        name: 'rules[].label.ar'
+        description: 'This field is required when <code>rules</code> is present. Must not be greater than 150 characters.'
+        required: false
+        example: h
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      'rules[].conditions':
+        custom: []
+        name: 'rules[].conditions'
+        description: ''
+        required: false
+        example: null
+        type: object
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      'rules[].is_active':
+        custom: []
+        name: 'rules[].is_active'
+        description: ''
+        required: false
+        example: true
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      'rules[].starts_at':
+        custom: []
+        name: 'rules[].starts_at'
+        description: 'Must be a valid date.'
+        required: false
+        example: '2026-06-05T11:01:57'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      'rules[].ends_at':
+        custom: []
+        name: 'rules[].ends_at'
+        description: 'Must be a valid date. Must be a date after or equal to <code>rules.*.starts_at</code>.'
+        required: false
+        example: '2052-06-28'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+    cleanBodyParameters:
+      name:
+        en: architecto
+        ar: architecto
+      terms:
+        en: architecto
+        ar: architecto
+      is_active: false
+      points_per_currency_unit: 4326.41688
+      points_value_minor: 16
+      points_value_currency: architecto
+      min_points_to_redeem: 16
+      max_redeem_pct: 16
+      points_expire_after_days: 16
+      rules:
+        -
+          label:
+            en: k
+            ar: h
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/vendor/loyalty/program
+    metadata:
+      custom: []
+      groupName: 'Vendor - Loyalty'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      name:
+        custom: []
+        name: name
+        description: ''
+        required: true
+        example: []
+        type: object
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      name.en:
+        custom: []
+        name: name.en
+        description: 'Program name in English.'
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      name.ar:
+        custom: []
+        name: name.ar
+        description: 'Program name in Arabic.'
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      terms:
+        custom: []
+        name: terms
+        description: ''
+        required: false
+        example: null
+        type: object
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      terms.en:
+        custom: []
+        name: terms.en
+        description: 'nullable Terms in English.'
+        required: false
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      terms.ar:
+        custom: []
+        name: terms.ar
+        description: 'nullable Terms in Arabic.'
+        required: false
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      is_active:
+        custom: []
+        name: is_active
+        description: 'Active flag.'
+        required: false
+        example: false
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      points_per_currency_unit:
+        custom: []
+        name: points_per_currency_unit
+        description: 'Points per 1 currency unit (e.g. 1 point per EGP).'
+        required: false
+        example: 4326.41688
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      points_value_minor:
+        custom: []
+        name: points_value_minor
+        description: 'Value of 1 point in minor units.'
+        required: false
+        example: 16
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      points_value_currency:
+        custom: []
+        name: points_value_currency
+        description: '3-letter currency code.'
+        required: false
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      min_points_to_redeem:
+        custom: []
+        name: min_points_to_redeem
+        description: 'Minimum points the customer must hold to redeem.'
+        required: false
+        example: 16
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      max_redeem_pct:
+        custom: []
+        name: max_redeem_pct
+        description: '0..100 cap on % of order eligible for redemption.'
+        required: false
+        example: 16
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      points_expire_after_days:
+        custom: []
+        name: points_expire_after_days
+        description: 'nullable Days before earned points expire (null = never).'
+        required: false
+        example: 16
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      rules:
+        custom: []
+        name: rules
+        description: 'nullable Optional array of rule drafts.'
+        required: false
+        example:
+          - architecto
+        type: 'string[]'
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      'rules[].rule_kind':
+        custom: []
+        name: 'rules[].rule_kind'
+        description: 'This field is required when <code>rules</code> is present.'
+        required: false
+        example: referral
+        type: string
+        enumValues:
+          - first_booking
+          - category_bonus
+          - threshold_bonus
+          - referral
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      'rules[].multiplier':
+        custom: []
+        name: 'rules[].multiplier'
+        description: 'This field is required when <code>rules</code> is present. Must be at least 0.0001. Must not be greater than 1000.'
+        required: false
+        example: 5
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      'rules[].label':
+        custom: []
+        name: 'rules[].label'
+        description: 'This field is required when <code>rules</code> is present.'
+        required: false
+        example: null
+        type: object
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      'rules[].label.en':
+        custom: []
+        name: 'rules[].label.en'
+        description: 'This field is required when <code>rules</code> is present. Must not be greater than 150 characters.'
+        required: false
+        example: k
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      'rules[].label.ar':
+        custom: []
+        name: 'rules[].label.ar'
+        description: 'This field is required when <code>rules</code> is present. Must not be greater than 150 characters.'
+        required: false
+        example: h
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      'rules[].conditions':
+        custom: []
+        name: 'rules[].conditions'
+        description: ''
+        required: false
+        example: null
+        type: object
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      'rules[].is_active':
+        custom: []
+        name: 'rules[].is_active'
+        description: ''
+        required: false
+        example: false
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      'rules[].starts_at':
+        custom: []
+        name: 'rules[].starts_at'
+        description: 'Must be a valid date.'
+        required: false
+        example: '2026-06-05T11:01:57'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      'rules[].ends_at':
+        custom: []
+        name: 'rules[].ends_at'
+        description: 'Must be a valid date. Must be a date after or equal to <code>rules.*.starts_at</code>.'
+        required: false
+        example: '2052-06-28'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+    cleanBodyParameters:
+      name:
+        en: architecto
+        ar: architecto
+      terms:
+        en: architecto
+        ar: architecto
+      is_active: false
+      points_per_currency_unit: 4326.41688
+      points_value_minor: 16
+      points_value_currency: architecto
+      min_points_to_redeem: 16
+      max_redeem_pct: 16
+      points_expire_after_days: 16
+      rules:
+        -
+          label:
+            en: k
+            ar: h
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"data":null,"meta":null,"errors":[{"code":"unauthenticated","message":"Unauthenticated."}]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-correlation-id: 01KTBQ4S7QS9S16F2EKH7099QK
+          vary: Origin
+          x-trace-id: c3d147b0-ea52-4b08-8a59-f433338d5c95
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - PUT
+    uri: api/v1/vendor/loyalty/program
+    metadata:
+      custom: []
+      groupName: 'Vendor - Loyalty'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      name:
+        custom: []
+        name: name
+        description: ''
+        required: false
+        example: null
+        type: object
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      name.en:
+        custom: []
+        name: name.en
+        description: 'Must not be greater than 150 characters.'
+        required: false
+        example: b
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      name.ar:
+        custom: []
+        name: name.ar
+        description: 'Must not be greater than 150 characters.'
+        required: false
+        example: 'n'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      terms:
+        custom: []
+        name: terms
+        description: ''
+        required: false
+        example: null
+        type: object
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      terms.en:
+        custom: []
+        name: terms.en
+        description: 'Must not be greater than 2000 characters.'
+        required: false
+        example: g
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      terms.ar:
+        custom: []
+        name: terms.ar
+        description: 'Must not be greater than 2000 characters.'
+        required: false
+        example: z
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      is_active:
+        custom: []
+        name: is_active
+        description: ''
+        required: false
+        example: true
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      points_per_currency_unit:
+        custom: []
+        name: points_per_currency_unit
+        description: 'Must be at least 0.0001. Must not be greater than 1000.'
+        required: false
+        example: 17
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      points_value_minor:
+        custom: []
+        name: points_value_minor
+        description: 'Must be at least 1.'
+        required: false
+        example: 35
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      points_value_currency:
+        custom: []
+        name: points_value_currency
+        description: 'Must be 3 characters.'
+        required: false
+        example: yvd
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      min_points_to_redeem:
+        custom: []
+        name: min_points_to_redeem
+        description: 'Must be at least 1.'
+        required: false
+        example: 40
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      max_redeem_pct:
+        custom: []
+        name: max_redeem_pct
+        description: 'Must be at least 0. Must not be greater than 100.'
+        required: false
+        example: 19
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      points_expire_after_days:
+        custom: []
+        name: points_expire_after_days
+        description: 'Must be at least 1. Must not be greater than 3650.'
+        required: false
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      rules:
+        custom: []
+        name: rules
+        description: ''
+        required: false
+        example: null
+        type: 'object[]'
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      'rules[].rule_kind':
+        custom: []
+        name: 'rules[].rule_kind'
+        description: 'This field is required when <code>rules</code> is present.'
+        required: false
+        example: category_bonus
+        type: string
+        enumValues:
+          - first_booking
+          - category_bonus
+          - threshold_bonus
+          - referral
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      'rules[].multiplier':
+        custom: []
+        name: 'rules[].multiplier'
+        description: 'This field is required when <code>rules</code> is present. Must be at least 0.0001. Must not be greater than 1000.'
+        required: false
+        example: 5
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      'rules[].label':
+        custom: []
+        name: 'rules[].label'
+        description: 'This field is required when <code>rules</code> is present.'
+        required: false
+        example: null
+        type: object
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      'rules[].label.en':
+        custom: []
+        name: 'rules[].label.en'
+        description: 'This field is required when <code>rules</code> is present. Must not be greater than 150 characters.'
+        required: false
+        example: k
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      'rules[].label.ar':
+        custom: []
+        name: 'rules[].label.ar'
+        description: 'This field is required when <code>rules</code> is present. Must not be greater than 150 characters.'
+        required: false
+        example: h
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      'rules[].conditions':
+        custom: []
+        name: 'rules[].conditions'
+        description: ''
+        required: false
+        example: null
+        type: object
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      'rules[].is_active':
+        custom: []
+        name: 'rules[].is_active'
+        description: ''
+        required: false
+        example: false
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      'rules[].starts_at':
+        custom: []
+        name: 'rules[].starts_at'
+        description: 'Must be a valid date.'
+        required: false
+        example: '2026-06-05T11:01:57'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      'rules[].ends_at':
+        custom: []
+        name: 'rules[].ends_at'
+        description: 'Must be a valid date. Must be a date after or equal to <code>rules.*.starts_at</code>.'
+        required: false
+        example: '2052-06-28'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+    cleanBodyParameters:
+      name:
+        en: b
+        ar: 'n'
+      terms:
+        en: g
+        ar: z
+      is_active: true
+      points_per_currency_unit: 17
+      points_value_minor: 35
+      points_value_currency: yvd
+      min_points_to_redeem: 40
+      max_redeem_pct: 19
+      points_expire_after_days: 17
+      rules:
+        -
+          rule_kind: category_bonus
+          multiplier: 5
+          label:
+            en: k
+            ar: h
+          is_active: false
+          starts_at: '2026-06-05T11:01:57'
+          ends_at: '2052-06-28'
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/vendor/loyalty/customers
+    metadata:
+      custom: []
+      groupName: 'Vendor - Loyalty'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: "16.3 — per-customer balances on this vendor's program."
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"data":null,"meta":null,"errors":[{"code":"unauthenticated","message":"Unauthenticated."}]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-correlation-id: 01KTBQ4S8F4ADEGVVMZM5ZKKZD
+          vary: Origin
+          x-trace-id: 7b2a8b64-0d47-43a6-91bf-2ff3e6371258
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/vendor/loyalty/transactions
+    metadata:
+      custom: []
+      groupName: 'Vendor - Loyalty'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: "16.4 — the vendor's loyalty ledger (masked identities)."
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"data":null,"meta":null,"errors":[{"code":"unauthenticated","message":"Unauthenticated."}]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-correlation-id: 01KTBQ4S8M5KTDN2AEWES2EKR3
+          vary: Origin
+          x-trace-id: 198f4a0b-4287-4c21-b725-7a73b040fea0
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/v1/vendor/loyalty/customers/{customerId}/adjust'
+    metadata:
+      custom: []
+      groupName: 'Vendor - Loyalty'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: '16.5 — manual point adjustment with mandatory bilingual reason.'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      customerId:
+        custom: []
+        name: customerId
+        description: ''
+        required: true
+        example: '564'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      customerId: '564'
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      points_delta:
+        custom: []
+        name: points_delta
+        description: 'Must not be one of <code>0</code> Must be at least -100000. Must not be greater than 100000.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      reason_en:
+        custom: []
+        name: reason_en
+        description: 'Must not be greater than 255 characters.'
+        required: true
+        example: 'n'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      reason_ar:
+        custom: []
+        name: reason_ar
+        description: 'Must not be greater than 255 characters.'
+        required: true
+        example: g
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      points_delta: 1
+      reason_en: 'n'
+      reason_ar: g
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null

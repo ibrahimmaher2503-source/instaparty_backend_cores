@@ -22,6 +22,9 @@ use App\Modules\Shared\Http\ApiResponse;
 use Brick\Money\Money;
 use Illuminate\Http\JsonResponse;
 
+/**
+ * @group Customer - Bookings
+ */
 class BookingNegotiationController
 {
     public function submit(SubmitBookingRequest $request, string $bookingPublicId): JsonResponse

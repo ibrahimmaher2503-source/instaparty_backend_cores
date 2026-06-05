@@ -13,6 +13,9 @@ use App\Modules\Shared\Http\ApiResponse;
 use Brick\Money\Money;
 use Illuminate\Http\JsonResponse;
 
+/**
+ * @group Customer - Payments
+ */
 class InitiatePaymentController
 {
     public function __invoke(

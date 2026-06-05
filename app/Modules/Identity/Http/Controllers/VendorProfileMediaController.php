@@ -17,6 +17,8 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  * Vendor-portal 2.3–2.6 (logo/cover — path-based, the columns customer
  * resources already consume) + 2.9/2.10 (portfolio — ADR-0047 public
  * media collection).
+ *
+ * @group Vendor - Profile
  */
 class VendorProfileMediaController
 {

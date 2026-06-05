@@ -10,5 +10,7 @@ namespace App\Modules\Communication\Http\Controllers;
  * auth()->id() + channel=in_app. This subclass exists so vendor routes
  * don't reference a Customer-named class (G11, unblocked by the read_at
  * column shipped with the customer F17 work).
+ *
+ * @group Vendor - Notifications
  */
 class VendorNotificationController extends CustomerNotificationController {}

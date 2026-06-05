@@ -12,6 +12,9 @@ use App\Modules\Shared\Http\ApiResponse;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
+/**
+ * @group Customer - Loyalty
+ */
 class LoyaltyBalanceController
 {
     public function __construct(

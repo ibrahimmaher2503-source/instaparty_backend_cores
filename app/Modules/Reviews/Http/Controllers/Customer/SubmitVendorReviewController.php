@@ -10,6 +10,9 @@ use App\Modules\Reviews\Http\Requests\SubmitVendorReviewRequest;
 use App\Modules\Reviews\Http\Resources\VendorReviewResource;
 use Illuminate\Http\JsonResponse;
 
+/**
+ * @group Customer - Reviews
+ */
 class SubmitVendorReviewController
 {
     public function __construct(private readonly SubmitVendorReviewAction $action) {}

@@ -12,6 +12,9 @@ use App\Modules\Booking\Http\Resources\BookingItemResource;
 use App\Modules\Shared\Http\ApiResponse;
 use Illuminate\Http\JsonResponse;
 
+/**
+ * @group Customer - Bookings
+ */
 class BookingItemController
 {
     public function store(AddBookingItemRequest $request, string $bookingPublicId): JsonResponse

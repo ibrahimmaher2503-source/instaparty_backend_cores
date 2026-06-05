@@ -15,6 +15,8 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  * "complete" step becomes resumable: the existing onboarding checklist
  * (spec 034) tells mobile exactly which step to resume at. No multi-step
  * registration redesign needed.
+ *
+ * @group Vendor - Onboarding
  */
 class VendorOnboardingStatusController
 {

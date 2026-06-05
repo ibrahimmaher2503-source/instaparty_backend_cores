@@ -10,6 +10,9 @@ use App\Modules\Subscriptions\Http\Resources\SubscriptionResource;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
+/**
+ * @group Vendor - Account
+ */
 class ShowSubscriptionController
 {
     public function __construct(

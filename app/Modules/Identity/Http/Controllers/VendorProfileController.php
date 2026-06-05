@@ -15,6 +15,9 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
+/**
+ * @group Vendor - Profile
+ */
 class VendorProfileController extends Controller
 {
     public function show(Request $request): JsonResponse

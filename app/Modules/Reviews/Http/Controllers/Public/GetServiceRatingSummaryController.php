@@ -9,6 +9,9 @@ use App\Modules\Reviews\Http\Resources\RatingSummaryResource;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * @group Public - Reviews
+ */
 class GetServiceRatingSummaryController
 {
     public function __construct(private readonly ServiceReviewRepository $repo) {}

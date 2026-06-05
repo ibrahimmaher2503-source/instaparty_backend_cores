@@ -16,6 +16,8 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  * Vendor-portal 13.1–13.5 / G13 — bank accounts. IBAN is masked in every
  * response (first 4 + last 4). Mobile parity ruling (A)+re-auth: the
  * client is expected to re-authenticate before calling the mutations.
+ *
+ * @group Vendor - Withdrawals & Bank
  */
 class VendorBankAccountController
 {

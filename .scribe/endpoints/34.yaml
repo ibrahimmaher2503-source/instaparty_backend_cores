@@ -1,0 +1,293 @@
+name: 'Notification Preferences'
+description: ''
+endpoints:
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/customer/notification-preferences
+    metadata:
+      custom: []
+      groupName: 'Notification Preferences'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"data":null,"meta":null,"errors":[{"code":"unauthenticated","message":"Unauthenticated."}]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-correlation-id: 01KTBQ4RYX985QV30SNP7QJBDJ
+          vary: Origin
+          x-trace-id: d77d170a-3414-4f14-9d5f-421a09c3b909
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - PUT
+    uri: 'api/v1/customer/notification-preferences/{channel}/{event_category}'
+    metadata:
+      custom: []
+      groupName: 'Notification Preferences'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      channel:
+        custom: []
+        name: channel
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      event_category:
+        custom: []
+        name: event_category
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      channel: architecto
+      event_category: architecto
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      is_enabled:
+        custom: []
+        name: is_enabled
+        description: ''
+        required: true
+        example: true
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      quiet_hours_start:
+        custom: []
+        name: quiet_hours_start
+        description: 'Must match the regex /^\d{2}:\d{2}$/.'
+        required: false
+        example: '64:25'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      quiet_hours_end:
+        custom: []
+        name: quiet_hours_end
+        description: 'This field is required when <code>quiet_hours_start</code> is present. Must match the regex /^\d{2}:\d{2}$/.'
+        required: false
+        example: '64:25'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      timezone:
+        custom: []
+        name: timezone
+        description: 'Must not be greater than 60 characters.'
+        required: false
+        example: Asia/Anadyr
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+    cleanBodyParameters:
+      is_enabled: true
+      quiet_hours_start: '64:25'
+      quiet_hours_end: '64:25'
+      timezone: Asia/Anadyr
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/vendor/notification-preferences
+    metadata:
+      custom: []
+      groupName: 'Notification Preferences'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"data":null,"meta":null,"errors":[{"code":"unauthenticated","message":"Unauthenticated."}]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-correlation-id: 01KTBQ4S04ZG7K8YV7Q3ZCC3QJ
+          vary: Origin
+          x-trace-id: 29f7658d-560d-4e31-86f0-2c7947c0500b
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - PUT
+    uri: 'api/v1/vendor/notification-preferences/{channel}/{event_category}'
+    metadata:
+      custom: []
+      groupName: 'Notification Preferences'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      channel:
+        custom: []
+        name: channel
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      event_category:
+        custom: []
+        name: event_category
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      channel: architecto
+      event_category: architecto
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      is_enabled:
+        custom: []
+        name: is_enabled
+        description: ''
+        required: true
+        example: true
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      quiet_hours_start:
+        custom: []
+        name: quiet_hours_start
+        description: 'Must match the regex /^\d{2}:\d{2}$/.'
+        required: false
+        example: '64:25'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      quiet_hours_end:
+        custom: []
+        name: quiet_hours_end
+        description: 'This field is required when <code>quiet_hours_start</code> is present. Must match the regex /^\d{2}:\d{2}$/.'
+        required: false
+        example: '64:25'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      timezone:
+        custom: []
+        name: timezone
+        description: 'Must not be greater than 60 characters.'
+        required: false
+        example: Asia/Anadyr
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+    cleanBodyParameters:
+      is_enabled: true
+      quiet_hours_start: '64:25'
+      quiet_hours_end: '64:25'
+      timezone: Asia/Anadyr
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null

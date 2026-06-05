@@ -14,6 +14,8 @@ use Illuminate\Http\JsonResponse;
  * @response 422 {"data":{"status":"failed","imported_rows":0,"total_rows":2,"errors":[{"row":3,"field":"name_en","message":{"en":"The name en field is required.","ar":"حقل الاسم بالإنجليزية مطلوب."}}]},"meta":{},"errors":null}
  * @response 403 {"data":null,"meta":{},"errors":{"message":"store_not_owned"}}
  * @response 401 {"message":"Unauthenticated."}
+ *
+ * @group Vendor - Excel Import
  */
 class ImportRentalServicesController
 {

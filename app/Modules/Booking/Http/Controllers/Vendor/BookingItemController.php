@@ -28,6 +28,9 @@ use Illuminate\Http\Request;
 use Spatie\ModelStates\Exceptions\CouldNotPerformTransition;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
+/**
+ * @group Vendor - Fulfillment
+ */
 class BookingItemController
 {
     public function show(Request $request, string $bookingItemPublicId): JsonResponse

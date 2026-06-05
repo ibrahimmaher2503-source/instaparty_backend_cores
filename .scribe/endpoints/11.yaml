@@ -1,0 +1,507 @@
+name: 'Vendor - Profile'
+description: ''
+endpoints:
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/vendor/me
+    metadata:
+      custom: []
+      groupName: 'Vendor - Profile'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"data":null,"meta":null,"errors":[{"code":"unauthenticated","message":"Unauthenticated."}]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-correlation-id: 01KTBQ4QQPJY97DFBZ5AYW7G2J
+          vary: Origin
+          x-trace-id: 7e304134-8bce-462c-a6d7-a2bb8dc8fc4b
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/vendor/profile
+    metadata:
+      custom: []
+      groupName: 'Vendor - Profile'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"data":null,"meta":null,"errors":[{"code":"unauthenticated","message":"Unauthenticated."}]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-correlation-id: 01KTBQ4QR5Y7FB53R089CBCMG5
+          vary: Origin
+          x-trace-id: 8496d297-82b7-47ab-9041-35ced23e7069
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - PUT
+    uri: api/v1/vendor/profile
+    metadata:
+      custom: []
+      groupName: 'Vendor - Profile'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      business_name:
+        custom: []
+        name: business_name
+        description: ''
+        required: false
+        example: null
+        type: object
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      business_name.en:
+        custom: []
+        name: business_name.en
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: b
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      business_name.ar:
+        custom: []
+        name: business_name.ar
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: 'n'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      bio:
+        custom: []
+        name: bio
+        description: ''
+        required: false
+        example: null
+        type: object
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      bio.en:
+        custom: []
+        name: bio.en
+        description: 'Must not be greater than 2000 characters.'
+        required: false
+        example: g
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      bio.ar:
+        custom: []
+        name: bio.ar
+        description: 'Must not be greater than 2000 characters.'
+        required: false
+        example: z
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      business_type:
+        custom: []
+        name: business_type
+        description: ''
+        required: false
+        example: establishment
+        type: string
+        enumValues:
+          - individual
+          - company
+          - establishment
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      bank_name:
+        custom: []
+        name: bank_name
+        description: 'Must not be greater than 120 characters.'
+        required: false
+        example: m
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      bank_account_holder:
+        custom: []
+        name: bank_account_holder
+        description: 'Must not be greater than 160 characters.'
+        required: false
+        example: i
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      bank_iban:
+        custom: []
+        name: bank_iban
+        description: 'Must not be greater than 34 characters.'
+        required: false
+        example: 'y'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      bank_swift_bic:
+        custom: []
+        name: bank_swift_bic
+        description: 'Must not be greater than 11 characters.'
+        required: false
+        example: vdljni
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      bank_branch:
+        custom: []
+        name: bank_branch
+        description: 'Must not be greater than 120 characters.'
+        required: false
+        example: k
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      preferred_locale:
+        custom: []
+        name: preferred_locale
+        description: ''
+        required: false
+        example: en
+        type: string
+        enumValues:
+          - en
+          - ar
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      business_name:
+        en: b
+        ar: 'n'
+      bio:
+        en: g
+        ar: z
+      business_type: establishment
+      bank_name: m
+      bank_account_holder: i
+      bank_iban: 'y'
+      bank_swift_bic: vdljni
+      bank_branch: k
+      preferred_locale: en
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/v1/vendor/profile/{kind}'
+    metadata:
+      custom: []
+      groupName: 'Vendor - Profile'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: '2.3 / 2.4 — upload logo or cover.'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: multipart/form-data
+      Accept: application/json
+    urlParameters:
+      kind:
+        custom: []
+        name: kind
+        description: ''
+        required: true
+        example: logo|cover
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      kind: logo|cover
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      file:
+        custom: []
+        name: file
+        description: 'Must be an image. Must not be greater than 5120 kilobytes.'
+        required: true
+        example: null
+        type: file
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters: []
+    fileParameters:
+      file: null
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - DELETE
+    uri: 'api/v1/vendor/profile/{kind}'
+    metadata:
+      custom: []
+      groupName: 'Vendor - Profile'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: '2.5 / 2.6 — remove logo or cover.'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      kind:
+        custom: []
+        name: kind
+        description: ''
+        required: true
+        example: logo|cover
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      kind: logo|cover
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/vendor/profile/portfolio
+    metadata:
+      custom: []
+      groupName: 'Vendor - Profile'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Portfolio listing for the management screen.'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"data":null,"meta":null,"errors":[{"code":"unauthenticated","message":"Unauthenticated."}]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-correlation-id: 01KTBQ4QSCQ78M9QZZBMYJVJ3E
+          vary: Origin
+          x-trace-id: b2745a93-f3a0-4370-87e8-16e957d0b076
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/v1/vendor/profile/portfolio
+    metadata:
+      custom: []
+      groupName: 'Vendor - Profile'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: '2.9 — upload portfolio photos.'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: multipart/form-data
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      files:
+        custom: []
+        name: files
+        description: 'Must be an image. Must not be greater than 5120 kilobytes.'
+        required: false
+        example:
+          - null
+        type: 'file[]'
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters: []
+    fileParameters:
+      files:
+        - null
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - DELETE
+    uri: 'api/v1/vendor/profile/portfolio/{mediaPublicId}'
+    metadata:
+      custom: []
+      groupName: 'Vendor - Profile'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: '2.10 — remove one portfolio photo (own only).'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      mediaPublicId:
+        custom: []
+        name: mediaPublicId
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      mediaPublicId: architecto
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null

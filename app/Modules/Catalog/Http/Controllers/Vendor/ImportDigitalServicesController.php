@@ -14,6 +14,8 @@ use Illuminate\Http\JsonResponse;
  * @response 422 {"data":{"status":"failed","imported_rows":0,"total_rows":1,"errors":[{"row":2,"field":"delivery_method","message":{"en":"The selected delivery method is invalid.","ar":"قيمة طريقة التسليم غير صالحة."}}]},"meta":{},"errors":null}
  * @response 403 {"data":null,"meta":{},"errors":{"message":"store_not_owned"}}
  * @response 401 {"message":"Unauthenticated."}
+ *
+ * @group Vendor - Excel Import
  */
 class ImportDigitalServicesController
 {

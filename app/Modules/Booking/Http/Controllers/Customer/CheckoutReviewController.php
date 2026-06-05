@@ -9,6 +9,9 @@ use App\Modules\Booking\Domain\Contracts\BookingRepository;
 use App\Modules\Shared\Http\ApiResponse;
 use Illuminate\Http\JsonResponse;
 
+/**
+ * @group Customer - Bookings
+ */
 class CheckoutReviewController
 {
     public function __invoke(string $bookingPublicId, CheckoutReviewService $service): JsonResponse

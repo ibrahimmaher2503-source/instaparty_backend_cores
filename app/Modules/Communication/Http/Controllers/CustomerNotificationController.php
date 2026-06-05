@@ -15,6 +15,9 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
+/**
+ * @group Customer - Notifications
+ */
 class CustomerNotificationController
 {
     public function index(Request $request): JsonResponse

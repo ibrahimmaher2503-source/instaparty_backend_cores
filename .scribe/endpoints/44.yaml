@@ -1,0 +1,185 @@
+name: 'Trust & Safety'
+description: ''
+endpoints:
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/v1/customer/vendors/{vendorPublicId}/badges'
+    metadata:
+      custom: []
+      groupName: 'Trust & Safety'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      vendorPublicId:
+        custom: []
+        name: vendorPublicId
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      vendorPublicId: architecto
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 404
+        content: '{"data":null,"meta":null,"errors":[{"code":"http_error","message":"Not found."}]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-correlation-id: 01KTBQ4SA4R56WQYY8162YJYSY
+          vary: Origin
+          x-trace-id: 27f6a6c0-36b6-4436-85f2-01d3e4e23a47
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/customer/settings/escrow-banner
+    metadata:
+      custom: []
+      groupName: 'Trust & Safety'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"data":{"enabled":true,"text":"Your payment is held securely until your event is complete."}}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-correlation-id: 01KTBQ4SAKS5S29JSMX1NPH623
+          vary: Origin
+          x-trace-id: d906bba1-c92a-44ac-9335-30d2f1968621
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/v1/customer/reports
+    metadata:
+      custom: []
+      groupName: 'Trust & Safety'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      reportable_type:
+        custom: []
+        name: reportable_type
+        description: ''
+        required: true
+        example: vendor_profile
+        type: string
+        enumValues:
+          - vendor_profile
+          - chat_thread
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      reportable_id:
+        custom: []
+        name: reportable_id
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      reason:
+        custom: []
+        name: reason
+        description: ''
+        required: true
+        example: fraudulent_activity
+        type: string
+        enumValues:
+          - inappropriate_content
+          - fake_profile
+          - fraudulent_activity
+          - harassment
+          - other
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      details:
+        custom: []
+        name: details
+        description: 'Must not be greater than 1000 characters.'
+        required: false
+        example: 'n'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+    cleanBodyParameters:
+      reportable_type: vendor_profile
+      reportable_id: architecto
+      reason: fraudulent_activity
+      details: 'n'
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null

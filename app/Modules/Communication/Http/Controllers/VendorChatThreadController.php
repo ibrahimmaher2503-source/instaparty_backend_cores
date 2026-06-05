@@ -16,6 +16,8 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  * gives mobile the thread index. Send/read-state stay client-side
  * (Firestore-first — 11.2 upload-url and 11.3 mark-read intentionally
  * not REST endpoints).
+ *
+ * @group Chat
  */
 class VendorChatThreadController
 {

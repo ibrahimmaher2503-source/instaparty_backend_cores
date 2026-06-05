@@ -7,6 +7,7 @@ namespace App\Modules\Settlement\Http\Controllers\Vendor;
 use App\Modules\Identity\Domain\Models\User;
 use App\Modules\Settlement\Application\Actions\RequestWithdrawalAction;
 use App\Modules\Settlement\Domain\Exceptions\ExistingPendingWithdrawalException;
+use App\Modules\Settlement\Domain\Exceptions\InsufficientAvailableBalanceException;
 use App\Modules\Settlement\Domain\Exceptions\InsufficientWalletBalanceException;
 use App\Modules\Settlement\Domain\Exceptions\WithdrawalBelowMinimumException;
 use App\Modules\Settlement\Http\Requests\RequestWithdrawalRequest;
@@ -19,6 +20,9 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
+/**
+ * @group Vendor - Withdrawals & Bank
+ */
 class WithdrawalController extends Controller
 {
     public function __construct(
@@ -33,6 +37,8 @@ class WithdrawalController extends Controller
         } catch (WithdrawalBelowMinimumException $e) {
             return ApiResponse::error($e->getMessage(), 422);
         } catch (InsufficientWalletBalanceException $e) {
+            return ApiResponse::error($e->getMessage(), 422);
+        } catch (InsufficientAvailableBalanceException $e) {
             return ApiResponse::error($e->getMessage(), 422);
         } catch (ExistingPendingWithdrawalException $e) {
             return ApiResponse::error($e->getMessage(), 422);

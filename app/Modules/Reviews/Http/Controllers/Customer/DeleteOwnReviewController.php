@@ -10,6 +10,9 @@ use App\Modules\Reviews\Domain\Contracts\VendorReviewRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
+/**
+ * @group Customer - Reviews
+ */
 class DeleteOwnReviewController
 {
     public function __construct(

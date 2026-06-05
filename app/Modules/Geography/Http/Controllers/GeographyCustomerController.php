@@ -13,6 +13,9 @@ use App\Modules\Shared\Http\ApiResponse;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
+/**
+ * @group Customer - Geography
+ */
 class GeographyCustomerController
 {
     public function governorates(): JsonResponse

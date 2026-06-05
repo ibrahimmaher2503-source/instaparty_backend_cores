@@ -12,6 +12,9 @@ use App\Modules\Catalog\Domain\Models\Service;
 use App\Modules\Catalog\Http\Requests\ServiceResubmitFormRequest;
 use Illuminate\Http\JsonResponse;
 
+/**
+ * @group Vendor - Services
+ */
 class ServiceResubmitController
 {
     public function store(

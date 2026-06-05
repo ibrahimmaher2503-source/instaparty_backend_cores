@@ -13,6 +13,8 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 /**
  * Vendor-portal 14.4 — aggregate review stats: vendor-level rating plus the
  * per-service breakdown (approved reviews only, own services only).
+ *
+ * @group Vendor - Reviews
  */
 class VendorReviewStatsController
 {

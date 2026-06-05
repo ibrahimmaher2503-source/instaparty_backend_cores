@@ -10,6 +10,9 @@ use App\Modules\Shared\Http\ApiResponse;
 use Illuminate\Http\JsonResponse;
 use Throwable;
 
+/**
+ * @group Webhooks
+ */
 class PaymobWebhookController
 {
     public function __invoke(PaymobWebhookRequest $request, ProcessPaymobWebhookAction $action): JsonResponse

@@ -18,6 +18,8 @@ use Illuminate\Http\Request;
 /**
  * Customer vendor-browsing endpoints (audit F8 / file 17a). All public —
  * only approved vendors resolve (404 otherwise, no status leak).
+ *
+ * @group Customer - Vendor Browsing
  */
 class VendorBrowsingController
 {
