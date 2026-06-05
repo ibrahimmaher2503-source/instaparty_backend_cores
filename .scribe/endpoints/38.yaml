@@ -1,18 +1,18 @@
-name: Internal
+name: 'Vendor - Notifications'
 description: ''
 endpoints:
   -
     custom: []
     httpMethods:
-      - POST
-    uri: api/v1/internal/chat/mirror-message
+      - GET
+    uri: api/v1/vendor/notifications
     metadata:
       custom: []
-      groupName: Internal
+      groupName: 'Vendor - Notifications'
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
-      title: 'Mirror a Firestore chat message into chat_message_log (idempotent).'
+      title: ''
       description: ''
       authenticated: false
       deprecated: false
@@ -23,32 +23,90 @@ endpoints:
     cleanUrlParameters: []
     queryParameters: []
     cleanQueryParameters: []
-    bodyParameters:
-      firestore_thread_id:
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
         custom: []
-        name: firestore_thread_id
-        description: 'Must not be greater than 64 characters.'
-        required: true
-        example: b
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      firestore_message_id:
+        status: 401
+        content: '{"data":null,"meta":null,"errors":[{"code":"unauthenticated","message":"Unauthenticated."}]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-correlation-id: 01KTCGFNDT95ZPEHTY28YFER6D
+          vary: Origin
+          x-trace-id: f3f418b5-a438-4121-b409-82e520cecb84
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/vendor/notifications/unread-count
+    metadata:
+      custom: []
+      groupName: 'Vendor - Notifications'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
         custom: []
-        name: firestore_message_id
-        description: 'Must not be greater than 64 characters.'
-        required: true
-        example: 'n'
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      sender_user_id:
+        status: 401
+        content: '{"data":null,"meta":null,"errors":[{"code":"unauthenticated","message":"Unauthenticated."}]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-correlation-id: 01KTCGFNERQT757X9VHNEB19BX
+          vary: Origin
+          x-trace-id: c837f0de-d904-4996-ab6e-32a24c8ba6de
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - PATCH
+    uri: 'api/v1/vendor/notifications/{publicId}/mark-read'
+    metadata:
+      custom: []
+      groupName: 'Vendor - Notifications'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      publicId:
         custom: []
-        name: sender_user_id
+        name: publicId
         description: ''
         required: true
         example: architecto
@@ -57,97 +115,88 @@ endpoints:
         exampleWasSpecified: false
         nullable: false
         deprecated: false
-      body:
+    cleanUrlParameters:
+      publicId: architecto
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/v1/vendor/notifications/mark-all-read
+    metadata:
+      custom: []
+      groupName: 'Vendor - Notifications'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - DELETE
+    uri: 'api/v1/vendor/notifications/{publicId}'
+    metadata:
+      custom: []
+      groupName: 'Vendor - Notifications'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      publicId:
         custom: []
-        name: body
-        description: 'Must not be greater than 2000 characters.'
-        required: false
-        example: 'n'
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      blocked:
-        custom: []
-        name: blocked
+        name: publicId
         description: ''
         required: true
-        example: false
-        type: boolean
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      flag_reason:
-        custom: []
-        name: flag_reason
-        description: ''
-        required: false
-        example: phone
-        type: string
-        enumValues:
-          - phone
-          - email
-          - external_link
-        exampleWasSpecified: false
-        nullable: true
-        deprecated: false
-      matched_patterns:
-        custom: []
-        name: matched_patterns
-        description: ''
-        required: false
-        example: null
-        type: 'object[]'
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      'matched_patterns[].flag_type':
-        custom: []
-        name: 'matched_patterns[].flag_type'
-        description: 'This field is required when <code>matched_patterns</code> is present.'
-        required: false
-        example: external_link
-        type: string
-        enumValues:
-          - phone
-          - email
-          - external_link
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      'matched_patterns[].matched_pattern':
-        custom: []
-        name: 'matched_patterns[].matched_pattern'
-        description: 'This field is required when <code>matched_patterns</code> is present. Must not be greater than 255 characters.'
-        required: false
-        example: g
+        example: architecto
         type: string
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
-    cleanBodyParameters:
-      firestore_thread_id: b
-      firestore_message_id: 'n'
-      sender_user_id: architecto
-      body: 'n'
-      blocked: false
-      flag_reason: phone
-      matched_patterns:
-        -
-          flag_type: external_link
-          matched_pattern: g
+    cleanUrlParameters:
+      publicId: architecto
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
     fileParameters: []
-    responses:
-      -
-        custom: []
-        status: 200
-        content: '{"data":{"chat_message_log_id":123,"created":true},"meta":{},"errors":null}'
-        headers: []
-        description: ''
+    responses: []
     responseFields: []
     auth: []
     controller: null

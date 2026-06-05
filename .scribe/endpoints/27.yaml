@@ -1,14 +1,14 @@
-name: 'Vendor - Fulfillment'
+name: 'Vendor - Schedule'
 description: ''
 endpoints:
   -
     custom: []
     httpMethods:
       - GET
-    uri: 'api/v1/vendor/booking-items/{bookingItemPublicId}'
+    uri: api/v1/vendor/schedule
     metadata:
       custom: []
-      groupName: 'Vendor - Fulfillment'
+      groupName: 'Vendor - Schedule'
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
@@ -19,24 +19,51 @@ endpoints:
     headers:
       Content-Type: application/json
       Accept: application/json
-    urlParameters:
-      bookingItemPublicId:
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      window:
         custom: []
-        name: bookingItemPublicId
+        name: window
         description: ''
-        required: true
-        example: architecto
+        required: false
+        example: null
         type: string
         enumValues: []
         exampleWasSpecified: false
-        nullable: false
+        nullable: true
         deprecated: false
-    cleanUrlParameters:
-      bookingItemPublicId: architecto
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
+      from:
+        custom: []
+        name: from
+        description: |-
+          Vendor-portal 7.3 mobile parity (C): explicit calendar range
+          (max 62 days) overrides window. The 62-day cap is enforced
+          below — 'before_or_equal' takes a date/field, not field-relative
+          arithmetic, so it cannot express "from + 62 days". This field is required when <code>to</code> is present. Must be a valid date in the format <code>Y-m-d</code>.
+        required: false
+        example: '2026-06-05'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      to:
+        custom: []
+        name: to
+        description: 'This field is required when <code>from</code> is present. Must be a valid date in the format <code>Y-m-d</code>. Must be a date after or equal to <code>from</code>.'
+        required: false
+        example: '2052-06-28'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+    cleanBodyParameters:
+      from: '2026-06-05'
+      to: '2052-06-28'
     fileParameters: []
     responses:
       -
@@ -46,236 +73,10 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-correlation-id: 01KTBQ4RRJR4Z0V52BGERN8S2Z
+          x-correlation-id: 01KTCGFKV6RAPYBYVM7AVZEB1J
           vary: Origin
-          x-trace-id: ef1398b3-7d28-4cbd-b771-d8b11c3173b0
+          x-trace-id: d1783e57-1f1a-4d83-9b8f-5ad08f506453
         description: null
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-  -
-    custom: []
-    httpMethods:
-      - POST
-    uri: 'api/v1/vendor/booking-items/{bookingItemPublicId}/transition'
-    metadata:
-      custom: []
-      groupName: 'Vendor - Fulfillment'
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: ''
-      description: ''
-      authenticated: false
-      deprecated: false
-    headers:
-      Content-Type: multipart/form-data
-      Accept: application/json
-    urlParameters:
-      bookingItemPublicId:
-        custom: []
-        name: bookingItemPublicId
-        description: ''
-        required: true
-        example: architecto
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-    cleanUrlParameters:
-      bookingItemPublicId: architecto
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters:
-      lane:
-        custom: []
-        name: lane
-        description: ''
-        required: true
-        example: preparing
-        type: string
-        enumValues:
-          - preparing
-          - ready
-          - in_progress
-          - completed
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      completion_note:
-        custom: []
-        name: completion_note
-        description: 'Must not be greater than 500 characters.'
-        required: false
-        example: b
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        deprecated: false
-      completion_photo:
-        custom: []
-        name: completion_photo
-        description: 'Must be an image. Must not be greater than 10240 kilobytes.'
-        required: false
-        example: null
-        type: file
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        deprecated: false
-    cleanBodyParameters:
-      lane: preparing
-      completion_note: b
-    fileParameters:
-      completion_photo: null
-    responses: []
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-  -
-    custom: []
-    httpMethods:
-      - POST
-    uri: 'api/v1/vendor/booking-items/{bookingItemPublicId}/condition-photos'
-    metadata:
-      custom: []
-      groupName: 'Vendor - Fulfillment'
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: ''
-      description: ''
-      authenticated: false
-      deprecated: false
-    headers:
-      Content-Type: multipart/form-data
-      Accept: application/json
-    urlParameters:
-      bookingItemPublicId:
-        custom: []
-        name: bookingItemPublicId
-        description: ''
-        required: true
-        example: architecto
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-    cleanUrlParameters:
-      bookingItemPublicId: architecto
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters:
-      phase:
-        custom: []
-        name: phase
-        description: ''
-        required: true
-        example: return
-        type: string
-        enumValues:
-          - handover
-          - return
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      photos:
-        custom: []
-        name: photos
-        description: 'Must be an image. Must not be greater than 10240 kilobytes.'
-        required: false
-        example:
-          - null
-        type: 'file[]'
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-    cleanBodyParameters:
-      phase: return
-    fileParameters:
-      photos:
-        - null
-    responses: []
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-  -
-    custom: []
-    httpMethods:
-      - POST
-    uri: 'api/v1/vendor/booking-items/{bookingItemPublicId}/report-issue'
-    metadata:
-      custom: []
-      groupName: 'Vendor - Fulfillment'
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Vendor-portal 6.12 — escalate a fulfillment issue to admin (REST for the existing Filament Action).'
-      description: ''
-      authenticated: false
-      deprecated: false
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters:
-      bookingItemPublicId:
-        custom: []
-        name: bookingItemPublicId
-        description: ''
-        required: true
-        example: architecto
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-    cleanUrlParameters:
-      bookingItemPublicId: architecto
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters:
-      reason_code:
-        custom: []
-        name: reason_code
-        description: ''
-        required: true
-        example: damaged_goods
-        type: string
-        enumValues:
-          - venue_unavailable
-          - customer_unreachable
-          - damaged_goods
-          - safety_concern
-          - other
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      note:
-        custom: []
-        name: note
-        description: 'Must not be greater than 1000 characters.'
-        required: true
-        example: b
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-    cleanBodyParameters:
-      reason_code: damaged_goods
-      note: b
-    fileParameters: []
-    responses: []
     responseFields: []
     auth: []
     controller: null

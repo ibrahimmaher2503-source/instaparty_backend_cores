@@ -1,14 +1,14 @@
-name: 'Vendor - Withdrawals & Bank'
+name: 'Vendor - Wallet & Settlements'
 description: ''
 endpoints:
   -
     custom: []
     httpMethods:
       - GET
-    uri: api/v1/vendor/withdrawals
+    uri: api/v1/vendor/wallet
     metadata:
       custom: []
-      groupName: 'Vendor - Withdrawals & Bank'
+      groupName: 'Vendor - Wallet & Settlements'
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
@@ -34,9 +34,9 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-correlation-id: 01KTBQ4RW69TJQEM29AF6V8RSG
+          x-correlation-id: 01KTCGFMGQA61VY1F3Z6SXYEVB
           vary: Origin
-          x-trace-id: bbfae6b4-1cc5-413b-aa65-d1d2b547a9fd
+          x-trace-id: 210c60e0-fd2d-41d0-81ea-d110da08bb99
         description: null
     responseFields: []
     auth: []
@@ -47,64 +47,10 @@ endpoints:
     custom: []
     httpMethods:
       - GET
-    uri: 'api/v1/vendor/withdrawals/{public_id}'
+    uri: api/v1/vendor/wallet/ledger
     metadata:
       custom: []
-      groupName: 'Vendor - Withdrawals & Bank'
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: ''
-      description: ''
-      authenticated: false
-      deprecated: false
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters:
-      public_id:
-        custom: []
-        name: public_id
-        description: 'The ID of the public.'
-        required: true
-        example: architecto
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-    cleanUrlParameters:
-      public_id: architecto
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        custom: []
-        status: 401
-        content: '{"data":null,"meta":null,"errors":[{"code":"unauthenticated","message":"Unauthenticated."}]}'
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          x-correlation-id: 01KTBQ4RWGFV8GK3Y4QZD4KPHY
-          vary: Origin
-          x-trace-id: f06e97fe-10f4-4a4f-8c26-72c46ce1bde6
-        description: null
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-  -
-    custom: []
-    httpMethods:
-      - POST
-    uri: api/v1/vendor/withdrawals
-    metadata:
-      custom: []
-      groupName: 'Vendor - Withdrawals & Bank'
+      groupName: 'Vendor - Wallet & Settlements'
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
@@ -117,96 +63,83 @@ endpoints:
       Accept: application/json
     urlParameters: []
     cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters:
-      amount_minor:
+    queryParameters:
+      per_page:
         custom: []
-        name: amount_minor
-        description: 'Must be at least 1.'
-        required: true
-        example: 16
+        name: per_page
+        description: 'Number of entries per page (cursor pagination).'
+        required: false
+        example: 25
         type: integer
         enumValues: []
-        exampleWasSpecified: false
+        exampleWasSpecified: true
         nullable: false
         deprecated: false
-      currency:
+      cursor:
         custom: []
-        name: currency
-        description: 'Must be 3 characters.'
-        required: true
-        example: ngz
+        name: cursor
+        description: 'Opaque cursor for the next/previous page.'
+        required: false
+        example: eyJpZCI6MTB9
         type: string
         enumValues: []
-        exampleWasSpecified: false
+        exampleWasSpecified: true
         nullable: false
         deprecated: false
-      bank_account:
+      entry_type:
         custom: []
-        name: bank_account
-        description: ''
-        required: true
-        example: []
-        type: object
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      bank_account.account_holder:
-        custom: []
-        name: bank_account.account_holder
-        description: 'Must not be greater than 255 characters.'
-        required: true
-        example: b
+        name: entry_type
+        description: 'Filter by ledger entry type (commission_credit, refund_debit, withdrawal_debit).'
+        required: false
+        example: commission_credit
         type: string
         enumValues: []
-        exampleWasSpecified: false
+        exampleWasSpecified: true
         nullable: false
         deprecated: false
-      bank_account.iban:
+      from:
         custom: []
-        name: bank_account.iban
-        description: 'Must be at least 4 characters. Must not be greater than 34 characters.'
-        required: true
-        example: 'n'
+        name: from
+        description: 'Filter entries on or after this date (Y-m-d).'
+        required: false
+        example: '2026-01-01'
         type: string
         enumValues: []
-        exampleWasSpecified: false
+        exampleWasSpecified: true
         nullable: false
         deprecated: false
-      bank_account.bank_name:
+      to:
         custom: []
-        name: bank_account.bank_name
-        description: 'Must not be greater than 255 characters.'
-        required: true
-        example: g
+        name: to
+        description: 'Filter entries on or before this date (Y-m-d).'
+        required: false
+        example: '2026-12-31'
         type: string
         enumValues: []
-        exampleWasSpecified: false
+        exampleWasSpecified: true
         nullable: false
         deprecated: false
-      bank_account.swift_bic:
-        custom: []
-        name: bank_account.swift_bic
-        description: 'Must not be greater than 11 characters.'
-        required: true
-        example: zmiyvd
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-    cleanBodyParameters:
-      amount_minor: 16
-      currency: ngz
-      bank_account:
-        account_holder: b
-        iban: 'n'
-        bank_name: g
-        swift_bic: zmiyvd
+    cleanQueryParameters:
+      per_page: 25
+      cursor: eyJpZCI6MTB9
+      entry_type: commission_credit
+      from: '2026-01-01'
+      to: '2026-12-31'
+    bodyParameters: []
+    cleanBodyParameters: []
     fileParameters: []
-    responses: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"data":null,"meta":null,"errors":[{"code":"unauthenticated","message":"Unauthenticated."}]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-correlation-id: 01KTCGFMJ6RZ3BSDCJN5XYGG4J
+          vary: Origin
+          x-trace-id: 1ed04a7a-f00d-4f30-b6bf-c6a149221a21
+        description: null
     responseFields: []
     auth: []
     controller: null
@@ -216,10 +149,10 @@ endpoints:
     custom: []
     httpMethods:
       - GET
-    uri: api/v1/vendor/bank-accounts
+    uri: api/v1/vendor/wallet/settlements
     metadata:
       custom: []
-      groupName: 'Vendor - Withdrawals & Bank'
+      groupName: 'Vendor - Wallet & Settlements'
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
@@ -245,9 +178,9 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-correlation-id: 01KTBQ4RXEHP1TC0YS32H1RVPW
+          x-correlation-id: 01KTCGFMZX7DWVVDAR3XM8QKBS
           vary: Origin
-          x-trace-id: 92e93a65-6cde-4a3b-b70e-2fad2e37ad07
+          x-trace-id: 6b516a56-a439-4c3e-bf73-b03ec7602548
         description: null
     responseFields: []
     auth: []
@@ -257,42 +190,11 @@ endpoints:
   -
     custom: []
     httpMethods:
-      - POST
-    uri: api/v1/vendor/bank-accounts
+      - GET
+    uri: 'api/v1/vendor/wallet/settlements/{publicId}'
     metadata:
       custom: []
-      groupName: 'Vendor - Withdrawals & Bank'
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: ''
-      description: ''
-      authenticated: false
-      deprecated: false
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses: []
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-  -
-    custom: []
-    httpMethods:
-      - PATCH
-    uri: 'api/v1/vendor/bank-accounts/{publicId}'
-    metadata:
-      custom: []
-      groupName: 'Vendor - Withdrawals & Bank'
+      groupName: 'Vendor - Wallet & Settlements'
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
@@ -322,93 +224,18 @@ endpoints:
     bodyParameters: []
     cleanBodyParameters: []
     fileParameters: []
-    responses: []
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-  -
-    custom: []
-    httpMethods:
-      - DELETE
-    uri: 'api/v1/vendor/bank-accounts/{publicId}'
-    metadata:
-      custom: []
-      groupName: 'Vendor - Withdrawals & Bank'
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: ''
-      description: ''
-      authenticated: false
-      deprecated: false
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters:
-      publicId:
+    responses:
+      -
         custom: []
-        name: publicId
-        description: ''
-        required: true
-        example: architecto
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-    cleanUrlParameters:
-      publicId: architecto
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses: []
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-  -
-    custom: []
-    httpMethods:
-      - POST
-    uri: 'api/v1/vendor/bank-accounts/{publicId}/set-default'
-    metadata:
-      custom: []
-      groupName: 'Vendor - Withdrawals & Bank'
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: ''
-      description: ''
-      authenticated: false
-      deprecated: false
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters:
-      publicId:
-        custom: []
-        name: publicId
-        description: ''
-        required: true
-        example: architecto
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-    cleanUrlParameters:
-      publicId: architecto
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses: []
+        status: 401
+        content: '{"data":null,"meta":null,"errors":[{"code":"unauthenticated","message":"Unauthenticated."}]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-correlation-id: 01KTCGFN1W1FXXP3X9NM629V03
+          vary: Origin
+          x-trace-id: 78737dd4-2a2f-4f2a-82b2-e424cf560449
+        description: null
     responseFields: []
     auth: []
     controller: null

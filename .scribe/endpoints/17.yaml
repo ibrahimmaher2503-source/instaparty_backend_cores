@@ -36,9 +36,9 @@ endpoints:
           content-type: application/json
           x-ratelimit-limit: '60'
           x-ratelimit-remaining: '59'
-          x-correlation-id: 01KTBQ4QZ6ZZAANWSNSHBP2YAA
+          x-correlation-id: 01KTCGFFTNMWS1GWA83BM6AGAQ
           vary: Origin
-          x-trace-id: 36740362-aad1-4ecb-b319-f1d59bc1cb13
+          x-trace-id: ab93652b-9d6d-4e1c-ac7d-27f940ea52c1
         description: null
     responseFields: []
     auth: []
@@ -92,9 +92,9 @@ endpoints:
           content-type: application/json
           x-ratelimit-limit: '60'
           x-ratelimit-remaining: '59'
-          x-correlation-id: 01KTBQ4R01JQFHHSJAJ2G61GBX
+          x-correlation-id: 01KTCGFFXRZBTM7Z67M52YX3FQ
           vary: Origin
-          x-trace-id: c3fa033e-6b83-47e8-b039-68e836d13397
+          x-trace-id: f7a24b13-6d1f-4808-94cc-7e8cd7844a70
         description: null
     responseFields: []
     auth: []
@@ -136,9 +136,9 @@ endpoints:
           content-type: application/json
           x-ratelimit-limit: '60'
           x-ratelimit-remaining: '59'
-          x-correlation-id: 01KTBQ4R0MT9CPN2KB4673V7GD
+          x-correlation-id: 01KTCGFG0Y51WX6BTZK7BBRYZ6
           vary: Origin
-          x-trace-id: 67fe7393-98c5-447e-95dc-1cc67aab6832
+          x-trace-id: 40ed355c-9209-45ab-9aef-f744545eda87
         description: null
     responseFields: []
     auth: []
@@ -192,9 +192,9 @@ endpoints:
           content-type: application/json
           x-ratelimit-limit: '60'
           x-ratelimit-remaining: '59'
-          x-correlation-id: 01KTBQ4R16FJWZJFVDGE88RQS7
+          x-correlation-id: 01KTCGFG2X47250Y4G1X6F7225
           vary: Origin
-          x-trace-id: e8468ea3-1989-465f-90a6-891d8d2d11db
+          x-trace-id: 05fb23e5-6149-4da5-80f3-24405563f672
         description: null
     responseFields: []
     auth: []
@@ -243,7 +243,7 @@ endpoints:
         name: type
         description: ''
         required: false
-        example: rental
+        example: sale
         type: string
         enumValues:
           - rental
@@ -253,7 +253,7 @@ endpoints:
         nullable: true
         deprecated: false
     cleanBodyParameters:
-      type: rental
+      type: sale
     fileParameters: []
     responses:
       -
@@ -265,9 +265,9 @@ endpoints:
           content-type: application/json
           x-ratelimit-limit: '60'
           x-ratelimit-remaining: '59'
-          x-correlation-id: 01KTBQ4R1PRKQPNQRE7F5H79T5
+          x-correlation-id: 01KTCGFG61MRPHDM367T3EB8TE
           vary: Origin
-          x-trace-id: 16aab7c9-a116-43c9-ae90-dbbee7269962
+          x-trace-id: e20a6ae3-22e6-4a1c-ae4c-f52df10425ce
         description: null
     responseFields: []
     auth: []
@@ -309,9 +309,9 @@ endpoints:
           content-type: application/json
           x-ratelimit-limit: '60'
           x-ratelimit-remaining: '59'
-          x-correlation-id: 01KTBQ4R27AW5FGC52ET4RT7WD
+          x-correlation-id: 01KTCGFG9P730DCQ66K57GQNTX
           vary: Origin
-          x-trace-id: d5409c24-3be0-4532-9f82-befac3596564
+          x-trace-id: 20c2a5b1-2ddd-44cb-9120-fe987fb75c18
         description: null
     responseFields: []
     auth: []
@@ -365,9 +365,9 @@ endpoints:
           content-type: application/json
           x-ratelimit-limit: '60'
           x-ratelimit-remaining: '59'
-          x-correlation-id: 01KTBQ4R2VS33R0F994942HHS6
+          x-correlation-id: 01KTCGFGBSFGX1MKR9NHBTH393
           vary: Origin
-          x-trace-id: 20edfe33-d98b-4aa1-9fac-3f76885d3293
+          x-trace-id: a9e975d8-a5b3-4355-8ea3-ac50b43cd17b
         description: null
     responseFields: []
     auth: []
@@ -421,9 +421,9 @@ endpoints:
           content-type: application/json
           x-ratelimit-limit: '60'
           x-ratelimit-remaining: '59'
-          x-correlation-id: 01KTBQ4R3DWXVY2Z5FEHHTBDSR
+          x-correlation-id: 01KTCGFGD4B2C66GGGTQ473M3B
           vary: Origin
-          x-trace-id: 5ae3bd74-96ce-48e3-aa7b-06b2969e105b
+          x-trace-id: 2e18761c-0ef3-4326-b74f-02154cdc4733
         description: null
     responseFields: []
     auth: []
@@ -477,9 +477,9 @@ endpoints:
           content-type: application/json
           x-ratelimit-limit: '60'
           x-ratelimit-remaining: '59'
-          x-correlation-id: 01KTBQ4R4696NC60149WVCPANM
+          x-correlation-id: 01KTCGFGFD0M8NT5G91KK726D6
           vary: Origin
-          x-trace-id: 06e1f58b-d0e3-491a-9ca4-4f283af169d7
+          x-trace-id: 30c7f336-b64a-47fc-878e-fd00231c3b70
         description: null
     responseFields: []
     auth: []
@@ -532,6 +532,104 @@ endpoints:
   -
     custom: []
     httpMethods:
+      - POST
+    uri: 'api/v1/customer/services/{servicePublicId}/check-availability'
+    metadata:
+      custom: []
+      groupName: 'Customer - Catalog'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: |-
+        Check a published service's availability without placing a hold.
+        Inventory is only reserved at booking submit (cart hold 15 min,
+        payment hold 24 h).
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      servicePublicId:
+        custom: []
+        name: servicePublicId
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      servicePublicId: architecto
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      starts_at:
+        custom: []
+        name: starts_at
+        description: 'Must be a valid date. Must be a date after <code>now</code>.'
+        required: false
+        example: '2052-06-29'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      ends_at:
+        custom: []
+        name: ends_at
+        description: 'Must be a valid date. Must be a date after <code>starts_at</code>.'
+        required: false
+        example: '2052-06-28'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      quantity:
+        custom: []
+        name: quantity
+        description: 'Must be at least 1. Must not be greater than 1000.'
+        required: false
+        example: 22
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+    cleanBodyParameters:
+      starts_at: '2052-06-29'
+      ends_at: '2052-06-28'
+      quantity: 22
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: |-
+          {
+            "data": {
+              "available": true,
+              "product_type": "rental",
+              "reason_code": null,
+              "remaining_quantity": null,
+              "window": {"starts_at": "2026-07-01T10:00:00+00:00", "ends_at": "2026-07-01T15:00:00+00:00"},
+              "reserved_at": "submit"
+            }
+          }
+        headers: []
+        description: ''
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
       - GET
     uri: api/v1/vendor/occasions
     metadata:
@@ -562,9 +660,9 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-correlation-id: 01KTBQ4R4Y6Q03MWEJFB88HAK6
+          x-correlation-id: 01KTCGFGKADQEBSNSQSDMEWPRV
           vary: Origin
-          x-trace-id: c57ba720-a8d8-415a-a601-22dd6407bd04
+          x-trace-id: 5092c674-f3f7-444a-8ca2-a96312cc73a7
         description: null
     responseFields: []
     auth: []

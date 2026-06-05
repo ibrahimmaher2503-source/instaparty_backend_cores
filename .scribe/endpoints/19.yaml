@@ -34,9 +34,9 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-correlation-id: 01KTBQ4R55J0NH36EYSM14M2T9
+          x-correlation-id: 01KTCGFGM6JGJ2MFAAXASCHPEN
           vary: Origin
-          x-trace-id: bd176f1b-3dc2-48d2-ab89-2b6fb43e9204
+          x-trace-id: 44be3e5c-ed7f-4ed2-bafa-88e4e9822b10
         description: null
     responseFields: []
     auth: []
@@ -85,7 +85,7 @@ endpoints:
         name: type
         description: ''
         required: true
-        example: sale
+        example: digital
         type: string
         enumValues:
           - rental
@@ -95,7 +95,7 @@ endpoints:
         nullable: false
         deprecated: false
     cleanBodyParameters:
-      type: sale
+      type: digital
     fileParameters: []
     responses:
       -
@@ -105,9 +105,9 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-correlation-id: 01KTBQ4R5ABP7GCW61516HRMBS
+          x-correlation-id: 01KTCGFGNAE3MQHYE87ZSE5TDN
           vary: Origin
-          x-trace-id: 8569995a-d405-40a1-8095-3ed5c468fa68
+          x-trace-id: a4461070-4c19-4418-a9ba-f853014f02e5
         description: null
     responseFields: []
     auth: []
@@ -159,9 +159,9 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-correlation-id: 01KTBQ4R5GE9C0N9AT3ZKQYZSR
+          x-correlation-id: 01KTCGFGPSSKA5TMGWA1H59311
           vary: Origin
-          x-trace-id: f2df865b-1788-47eb-bbb0-eb1ac0524ff8
+          x-trace-id: 22f0ed2e-74bf-4a38-b39d-581a31b7cf4a
         description: null
     responseFields: []
     auth: []
@@ -235,9 +235,9 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-correlation-id: 01KTBQ4R5R6R7B6GSZPR1HHGAJ
+          x-correlation-id: 01KTCGFGR10W9MXWYVXHBKMKDH
           vary: Origin
-          x-trace-id: 80649ef1-ad12-494f-81a5-be9c5f26deea
+          x-trace-id: 7ec95b42-2a19-47c6-ba34-472c7f69b3c5
         description: null
     responseFields: []
     auth: []
@@ -289,9 +289,9 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-correlation-id: 01KTBQ4R5Y8Q386RGET4QBT12T
+          x-correlation-id: 01KTCGFGS37CDXDA4343KXTTVZ
           vary: Origin
-          x-trace-id: 151b3961-069c-4e26-a280-02397efa1492
+          x-trace-id: 24c46bdb-59a4-45a9-9bc1-faf1d5649c52
         description: null
     responseFields: []
     auth: []
@@ -808,9 +808,9 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-correlation-id: 01KTBQ4RAMCTCPN4ZBGJGFNADN
+          x-correlation-id: 01KTCGFHGBTVPTHD49Y3M5RS8A
           vary: Origin
-          x-trace-id: ed7d014a-4f41-4340-bfe6-e0f79dde29bc
+          x-trace-id: 45ea14e4-4d37-447d-be62-99a907996b56
         description: null
     responseFields: []
     auth: []

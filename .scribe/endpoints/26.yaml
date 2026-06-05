@@ -34,9 +34,9 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-correlation-id: 01KTBQ4RPX7M9V3SD5MFHXZRSG
+          x-correlation-id: 01KTCGFKHCK17W9H7FR32J2MQ3
           vary: Origin
-          x-trace-id: d7c40767-7f19-4c11-bbbf-b036f8344d30
+          x-trace-id: 058d8783-9216-4f80-a0a2-d4ff83a83736
         description: null
     responseFields: []
     auth: []
@@ -88,9 +88,9 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-correlation-id: 01KTBQ4RQ2ZWW4YM9668YAZRRH
+          x-correlation-id: 01KTCGFKJS2RZQCKS6EBZABYS6
           vary: Origin
-          x-trace-id: d56759dc-a59a-4c39-b291-65f37c7b23e9
+          x-trace-id: cc5b7fc6-5271-43d7-827f-038a8cd245a1
         description: null
     responseFields: []
     auth: []
@@ -180,7 +180,7 @@ endpoints:
         name: proposal_kind
         description: ''
         required: true
-        example: change_quantity
+        example: remove_item
         type: string
         enumValues:
           - add_item
@@ -243,7 +243,7 @@ endpoints:
         name: 'changes[].change_kind'
         description: ''
         required: true
-        example: update
+        example: remove
         type: string
         enumValues:
           - add
@@ -275,13 +275,13 @@ endpoints:
         nullable: true
         deprecated: false
     cleanBodyParameters:
-      proposal_kind: change_quantity
+      proposal_kind: remove_item
       vendor_explanation:
         en: b
         ar: 'n'
       changes:
         -
-          change_kind: update
+          change_kind: remove
           target_item_public_id: architecto
     fileParameters: []
     responses: []
@@ -330,7 +330,7 @@ endpoints:
         name: proposal_kind
         description: ''
         required: true
-        example: add_surcharge
+        example: add_note
         type: string
         enumValues:
           - add_item
@@ -425,7 +425,7 @@ endpoints:
         nullable: true
         deprecated: false
     cleanBodyParameters:
-      proposal_kind: add_surcharge
+      proposal_kind: add_note
       vendor_explanation:
         en: b
         ar: 'n'
@@ -485,9 +485,9 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-correlation-id: 01KTBQ4RQKDDVH4K8JGDKAVDES
+          x-correlation-id: 01KTCGFKPKKCE2R7AGZKZMKW8Z
           vary: Origin
-          x-trace-id: e89b2dcb-ec5d-46da-b292-6e1b5cb30520
+          x-trace-id: 8c4ad161-6162-48ba-8c16-95f740fad436
         description: null
     responseFields: []
     auth: []
@@ -541,9 +541,9 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-correlation-id: 01KTBQ4RQRRXJ9RY1JXC3SXGQS
+          x-correlation-id: 01KTCGFKQ6EVVR1NGEJAV581Q6
           vary: Origin
-          x-trace-id: d2391cb0-2f97-4f40-800d-9c05eb0e8418
+          x-trace-id: 0539139a-d823-4e7c-886e-85713a7c790a
         description: null
     responseFields: []
     auth: []

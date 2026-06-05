@@ -1,14 +1,14 @@
-name: Webhooks
+name: 'Customer - Payments'
 description: ''
 endpoints:
   -
     custom: []
     httpMethods:
       - POST
-    uri: api/v1/webhooks/paymob
+    uri: 'api/v1/customer/bookings/{bookingPublicId}/payments'
     metadata:
       custom: []
-      groupName: Webhooks
+      groupName: 'Customer - Payments'
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
@@ -19,26 +19,93 @@ endpoints:
     headers:
       Content-Type: application/json
       Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters:
-      obj:
+    urlParameters:
+      bookingPublicId:
         custom: []
-        name: obj
+        name: bookingPublicId
         description: ''
         required: true
-        example: []
-        type: object
+        example: architecto
+        type: string
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
+    cleanUrlParameters:
+      bookingPublicId: architecto
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      method:
+        custom: []
+        name: method
+        description: ''
+        required: true
+        example: card
+        type: string
+        enumValues:
+          - card
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
     cleanBodyParameters:
-      obj: []
+      method: card
     fileParameters: []
     responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/v1/customer/payments/{paymentPublicId}'
+    metadata:
+      custom: []
+      groupName: 'Customer - Payments'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      paymentPublicId:
+        custom: []
+        name: paymentPublicId
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      paymentPublicId: architecto
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"data":null,"meta":null,"errors":[{"code":"unauthenticated","message":"Unauthenticated."}]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-correlation-id: 01KTCGFMBJ2VW8H2Y5DJFA31BM
+          vary: Origin
+          x-trace-id: a9b017fa-bedc-448d-a4d4-cebe022d1c21
+        description: null
     responseFields: []
     auth: []
     controller: null

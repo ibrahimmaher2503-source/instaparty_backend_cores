@@ -1,14 +1,14 @@
-name: 'Public - Reviews'
+name: 'Vendor - Reviews'
 description: ''
 endpoints:
   -
     custom: []
     httpMethods:
       - GET
-    uri: 'api/v1/public/services/{servicePublicId}/reviews'
+    uri: api/v1/vendor/reviews
     metadata:
       custom: []
-      groupName: 'Public - Reviews'
+      groupName: 'Vendor - Reviews'
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
@@ -19,36 +19,58 @@ endpoints:
     headers:
       Content-Type: application/json
       Accept: application/json
-    urlParameters:
-      servicePublicId:
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      type:
         custom: []
-        name: servicePublicId
+        name: type
         description: ''
-        required: true
-        example: architecto
+        required: false
+        example: null
         type: string
         enumValues: []
         exampleWasSpecified: false
-        nullable: false
+        nullable: true
         deprecated: false
-    cleanUrlParameters:
-      servicePublicId: architecto
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
+      status:
+        custom: []
+        name: status
+        description: ''
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      per_page:
+        custom: []
+        name: per_page
+        description: 'Must be at least 1. Must not be greater than 100.'
+        required: false
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+    cleanBodyParameters:
+      per_page: 1
     fileParameters: []
     responses:
       -
         custom: []
-        status: 404
-        content: '{"data":null,"meta":{},"errors":[{"code":"not_found"}]}'
+        status: 401
+        content: '{"data":null,"meta":null,"errors":[{"code":"unauthenticated","message":"Unauthenticated."}]}'
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-correlation-id: 01KTBQ4S5DCP3RSZTHW9FRXQDC
+          x-correlation-id: 01KTCGFP7VWZG229B9J7ZYQ3SV
           vary: Origin
-          x-trace-id: 21009f2b-51f9-4f71-9536-e05d491488e2
+          x-trace-id: c1ec1098-c970-4f5d-aa42-51528f3da04c
         description: null
     responseFields: []
     auth: []
@@ -59,10 +81,10 @@ endpoints:
     custom: []
     httpMethods:
       - GET
-    uri: 'api/v1/public/services/{servicePublicId}/rating-summary'
+    uri: api/v1/vendor/reviews/stats
     metadata:
       custom: []
-      groupName: 'Public - Reviews'
+      groupName: 'Vendor - Reviews'
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
@@ -73,20 +95,8 @@ endpoints:
     headers:
       Content-Type: application/json
       Accept: application/json
-    urlParameters:
-      servicePublicId:
-        custom: []
-        name: servicePublicId
-        description: ''
-        required: true
-        example: architecto
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-    cleanUrlParameters:
-      servicePublicId: architecto
+    urlParameters: []
+    cleanUrlParameters: []
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -95,14 +105,14 @@ endpoints:
     responses:
       -
         custom: []
-        status: 404
-        content: '{"data":null,"meta":{},"errors":[{"code":"not_found"}]}'
+        status: 401
+        content: '{"data":null,"meta":null,"errors":[{"code":"unauthenticated","message":"Unauthenticated."}]}'
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-correlation-id: 01KTBQ4S5QEGZHC1MD6FY7BCD2
+          x-correlation-id: 01KTCGFP8CEY0AX7CCPE92F659
           vary: Origin
-          x-trace-id: ce8625d1-9c02-4b7b-93b3-a1d6d5294c36
+          x-trace-id: f6e940df-fb45-47fc-8676-73696acedf8b
         description: null
     responseFields: []
     auth: []
@@ -113,10 +123,10 @@ endpoints:
     custom: []
     httpMethods:
       - GET
-    uri: 'api/v1/public/vendors/{vendorPublicId}/reviews'
+    uri: 'api/v1/vendor/reviews/{reviewType}/{publicId}'
     metadata:
       custom: []
-      groupName: 'Public - Reviews'
+      groupName: 'Vendor - Reviews'
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
@@ -128,9 +138,20 @@ endpoints:
       Content-Type: application/json
       Accept: application/json
     urlParameters:
-      vendorPublicId:
+      reviewType:
         custom: []
-        name: vendorPublicId
+        name: reviewType
+        description: ''
+        required: true
+        example: service|vendor
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      publicId:
+        custom: []
+        name: publicId
         description: ''
         required: true
         example: architecto
@@ -140,7 +161,8 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      vendorPublicId: architecto
+      reviewType: service|vendor
+      publicId: architecto
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -150,13 +172,13 @@ endpoints:
       -
         custom: []
         status: 404
-        content: '{"data":null,"meta":{},"errors":[{"code":"not_found"}]}'
+        content: '{"data":null,"meta":null,"errors":[{"code":"http_error","message":"The route api\/v1\/vendor\/reviews\/service|vendor\/architecto could not be found."}]}'
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-correlation-id: 01KTBQ4S632854043YFWYDHAFZ
+          x-correlation-id: 01KTCGFP9BZYX2H8K7DGFNQ9SH
           vary: Origin
-          x-trace-id: 209d84cf-f1cd-4264-9162-85f75abcc4fe
+          x-trace-id: 1580cbee-d9cc-46b8-aec2-bfb52d1d7fee
         description: null
     responseFields: []
     auth: []
@@ -166,11 +188,11 @@ endpoints:
   -
     custom: []
     httpMethods:
-      - GET
-    uri: 'api/v1/public/vendors/{vendorPublicId}/rating-summary'
+      - POST
+    uri: 'api/v1/vendor/reviews/{reviewType}/{publicId}/respond'
     metadata:
       custom: []
-      groupName: 'Public - Reviews'
+      groupName: 'Vendor - Reviews'
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
@@ -182,9 +204,20 @@ endpoints:
       Content-Type: application/json
       Accept: application/json
     urlParameters:
-      vendorPublicId:
+      reviewType:
         custom: []
-        name: vendorPublicId
+        name: reviewType
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      publicId:
+        custom: []
+        name: publicId
         description: ''
         required: true
         example: architecto
@@ -194,24 +227,26 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      vendorPublicId: architecto
+      reviewType: architecto
+      publicId: architecto
     queryParameters: []
     cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
+    bodyParameters:
+      body:
         custom: []
-        status: 404
-        content: '{"data":null,"meta":{},"errors":[{"code":"not_found"}]}'
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          x-correlation-id: 01KTBQ4S6CYQHR4PFKKWC71SC7
-          vary: Origin
-          x-trace-id: 06a59301-aeab-48d1-888b-26c42771ca75
-        description: null
+        name: body
+        description: "The vendor's response text."
+        required: true
+        example: '"Thank you for your kind review!"'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      body: '"Thank you for your kind review!"'
+    fileParameters: []
+    responses: []
     responseFields: []
     auth: []
     controller: null

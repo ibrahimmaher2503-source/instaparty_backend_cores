@@ -1,14 +1,14 @@
-name: 'Vendor - Notifications'
+name: Chat
 description: ''
 endpoints:
   -
     custom: []
     httpMethods:
       - GET
-    uri: api/v1/vendor/notifications
+    uri: api/v1/customer/chat/identity
     metadata:
       custom: []
-      groupName: 'Vendor - Notifications'
+      groupName: Chat
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
@@ -29,15 +29,10 @@ endpoints:
     responses:
       -
         custom: []
-        status: 401
-        content: '{"data":null,"meta":null,"errors":[{"code":"unauthenticated","message":"Unauthenticated."}]}'
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          x-correlation-id: 01KTBQ4S0VGEEKYP4XDCS17BG1
-          vary: Origin
-          x-trace-id: 3497c165-5846-41f4-a4cd-fa2745cc4848
-        description: null
+        status: 200
+        content: '{"data":{"user_id":42,"is_admin":false},"meta":{},"errors":null}'
+        headers: []
+        description: ''
     responseFields: []
     auth: []
     controller: null
@@ -47,10 +42,59 @@ endpoints:
     custom: []
     httpMethods:
       - GET
-    uri: api/v1/vendor/notifications/unread-count
+    uri: 'api/v1/customer/bookings/{booking}/chat-threads'
     metadata:
       custom: []
-      groupName: 'Vendor - Notifications'
+      groupName: Chat
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      booking:
+        custom: []
+        name: booking
+        description: 'The booking.'
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      booking: architecto
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"data":[{"vendor_public_id":"01J...","firestore_thread_id":"01J...","frozen":false}],"meta":{"self_user_id":42},"errors":null}'
+        headers: []
+        description: ''
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/vendor/chat/threads
+    metadata:
+      custom: []
+      groupName: Chat
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
@@ -76,127 +120,10 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-correlation-id: 01KTBQ4S119Y5WCFBTJ69EGJRH
+          x-correlation-id: 01KTCGFND3VWC8P50HYJKJAS1V
           vary: Origin
-          x-trace-id: 1af9072a-0f6a-46b1-b50b-8f4b08277006
+          x-trace-id: 5a52ec42-aa97-4a35-bbf2-9be0d07642d8
         description: null
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-  -
-    custom: []
-    httpMethods:
-      - PATCH
-    uri: 'api/v1/vendor/notifications/{publicId}/mark-read'
-    metadata:
-      custom: []
-      groupName: 'Vendor - Notifications'
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: ''
-      description: ''
-      authenticated: false
-      deprecated: false
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters:
-      publicId:
-        custom: []
-        name: publicId
-        description: ''
-        required: true
-        example: architecto
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-    cleanUrlParameters:
-      publicId: architecto
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses: []
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-  -
-    custom: []
-    httpMethods:
-      - POST
-    uri: api/v1/vendor/notifications/mark-all-read
-    metadata:
-      custom: []
-      groupName: 'Vendor - Notifications'
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: ''
-      description: ''
-      authenticated: false
-      deprecated: false
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses: []
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-  -
-    custom: []
-    httpMethods:
-      - DELETE
-    uri: 'api/v1/vendor/notifications/{publicId}'
-    metadata:
-      custom: []
-      groupName: 'Vendor - Notifications'
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: ''
-      description: ''
-      authenticated: false
-      deprecated: false
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters:
-      publicId:
-        custom: []
-        name: publicId
-        description: ''
-        required: true
-        example: architecto
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-    cleanUrlParameters:
-      publicId: architecto
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses: []
     responseFields: []
     auth: []
     controller: null

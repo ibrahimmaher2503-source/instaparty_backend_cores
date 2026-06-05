@@ -302,6 +302,11 @@ customer filter sheet. Only filterable fields are exposed.</a>
                                                                                 <li class="tocify-item level-2" data-unique="customer-catalog-POSTapi-v1-customer-services--servicePublicId--views">
                                 <a href="#customer-catalog-POSTapi-v1-customer-services--servicePublicId--views">POST api/v1/customer/services/{servicePublicId}/views</a>
                             </li>
+                                                                                <li class="tocify-item level-2" data-unique="customer-catalog-POSTapi-v1-customer-services--servicePublicId--check-availability">
+                                <a href="#customer-catalog-POSTapi-v1-customer-services--servicePublicId--check-availability">Check a published service's availability without placing a hold.
+Inventory is only reserved at booking submit (cart hold 15 min,
+payment hold 24 h).</a>
+                            </li>
                                                                                 <li class="tocify-item level-2" data-unique="customer-catalog-GETapi-v1-vendor-occasions">
                                 <a href="#customer-catalog-GETapi-v1-vendor-occasions">GET api/v1/vendor/occasions</a>
                             </li>
@@ -984,6 +989,16 @@ this vendor's own item transitions. Other vendors' items are excluded.</a>
                             </li>
                                                                         </ul>
                             </ul>
+                    <ul id="tocify-header-vendor-schedule" class="tocify-header">
+                <li class="tocify-item level-1" data-unique="vendor-schedule">
+                    <a href="#vendor-schedule">Vendor - Schedule</a>
+                </li>
+                                    <ul id="tocify-subheader-vendor-schedule" class="tocify-subheader">
+                                                    <li class="tocify-item level-2" data-unique="vendor-schedule-GETapi-v1-vendor-schedule">
+                                <a href="#vendor-schedule-GETapi-v1-vendor-schedule">GET api/v1/vendor/schedule</a>
+                            </li>
+                                                                        </ul>
+                            </ul>
                     <ul id="tocify-header-vendor-services" class="tocify-header">
                 <li class="tocify-item level-1" data-unique="vendor-services">
                     <a href="#vendor-services">Vendor - Services</a>
@@ -1217,9 +1232,9 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-correlation-id: 01KTBQ4QXMDVA4FFD6632943XE
+x-correlation-id: 01KTCGFFK8VHMWG6JATJTZDFH8
 vary: Origin
-x-trace-id: 899bf7c2-4339-4f6e-870b-a355e7005b77
+x-trace-id: 4944f6ba-6660-4994-925f-43e2fffce50e
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -1623,7 +1638,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"product_type\": \"sale\"
+    \"product_type\": \"digital\"
 }"
 </code></pre></div>
 
@@ -1639,7 +1654,7 @@ const headers = {
 };
 
 let body = {
-    "product_type": "sale"
+    "product_type": "digital"
 };
 
 fetch(url, {
@@ -1744,10 +1759,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="product_type"                data-endpoint="POSTapi-v1-admin-vendor-profiles--vendorProfile_public_id--approve-for-type"
-               value="sale"
+               value="digital"
                data-component="body">
     <br>
-<p>Example: <code>sale</code></p>
+<p>Example: <code>digital</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>rental</code></li> <li><code>sale</code></li> <li><code>digital</code></li></ul>
         </div>
@@ -1770,7 +1785,7 @@ Must be one of:
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"product_type\": \"sale\",
+    \"product_type\": \"rental\",
     \"revoke_reason\": {
         \"en\": \"b\",
         \"ar\": \"n\"
@@ -1790,7 +1805,7 @@ const headers = {
 };
 
 let body = {
-    "product_type": "sale",
+    "product_type": "rental",
     "revoke_reason": {
         "en": "b",
         "ar": "n"
@@ -1899,10 +1914,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="product_type"                data-endpoint="POSTapi-v1-admin-vendor-profiles--vendorProfile_public_id--revoke-type"
-               value="sale"
+               value="rental"
                data-component="body">
     <br>
-<p>Example: <code>sale</code></p>
+<p>Example: <code>rental</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>rental</code></li> <li><code>sale</code></li> <li><code>digital</code></li></ul>
         </div>
@@ -3038,7 +3053,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Content-Type: multipart/form-data" \
     --header "Accept: application/json" \
     --form "collection=architecto"\
-    --form "files[]=@C:\Users\N\AppData\Local\Temp\php6642.tmp" </code></pre></div>
+    --form "files[]=@C:\Users\N\AppData\Local\Temp\phpCBFF.tmp" </code></pre></div>
 
 
 <div class="javascript-example">
@@ -3224,9 +3239,9 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-correlation-id: 01KTBQ4RC7R23BGDN7S829V76E
+x-correlation-id: 01KTCGFHTKAWVXDNARBSJZVZ69
 vary: Origin
-x-trace-id: 88cc3fb6-fd2b-4840-83b2-78cd904c5c20
+x-trace-id: 5f24dc6c-acc8-4c1a-af07-e61cb0e02968
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -3804,7 +3819,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"reason_code\": \"customer_request\",
+    \"reason_code\": \"admin_discretion\",
     \"reason_notes\": {
         \"en\": \"bngzmiyvdljnikhw\",
         \"ar\": \"aykcmyuwpwlvqwrs\"
@@ -3825,7 +3840,7 @@ const headers = {
 };
 
 let body = {
-    "reason_code": "customer_request",
+    "reason_code": "admin_discretion",
     "reason_notes": {
         "en": "bngzmiyvdljnikhw",
         "ar": "aykcmyuwpwlvqwrs"
@@ -3935,10 +3950,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="reason_code"                data-endpoint="POSTapi-v1-admin-bookings--bookingPublicId--refunds"
-               value="customer_request"
+               value="admin_discretion"
                data-component="body">
     <br>
-<p>Example: <code>customer_request</code></p>
+<p>Example: <code>admin_discretion</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>customer_request</code></li> <li><code>vendor_cancellation</code></li> <li><code>service_unavailable</code></li> <li><code>duplicate_charge</code></li> <li><code>admin_discretion</code></li></ul>
         </div>
@@ -4038,9 +4053,9 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-correlation-id: 01KTBQ4RTN0ZVH7M7VKWFT8R53
+x-correlation-id: 01KTCGFMCX83ADT21K1DM7BWHY
 vary: Origin
-x-trace-id: 2aea82d8-9068-4d49-821a-79254ac437d9
+x-trace-id: e7844920-2d42-4149-b411-a93f4a21e381
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -4187,9 +4202,9 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-correlation-id: 01KTBQ4RYD3VQGQNRYXRAXNX7Q
+x-correlation-id: 01KTCGFN30M4EYX35VY3YT10JJ
 vary: Origin
-x-trace-id: 05dcd015-de03-49e0-95aa-1e4e384e9e75
+x-trace-id: f8a3dd63-86d7-41c8-b6c2-e9011bdd2812
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -4294,7 +4309,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"scope\": \"date_range\",
+    \"scope\": \"recent_touch\",
     \"wallet_id\": 16,
     \"vendor_id\": 22,
     \"date_from\": \"2026-06-05\",
@@ -4315,7 +4330,7 @@ const headers = {
 };
 
 let body = {
-    "scope": "date_range",
+    "scope": "recent_touch",
     "wallet_id": 16,
     "vendor_id": 22,
     "date_from": "2026-06-05",
@@ -4412,10 +4427,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="scope"                data-endpoint="POSTapi-v1-admin-settlement-reconciliation-trigger"
-               value="date_range"
+               value="recent_touch"
                data-component="body">
     <br>
-<p>Example: <code>date_range</code></p>
+<p>Example: <code>recent_touch</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>all</code></li> <li><code>wallet</code></li> <li><code>vendor</code></li> <li><code>date_range</code></li> <li><code>recent_touch</code></li></ul>
         </div>
@@ -4500,7 +4515,7 @@ Must be one of:
     --data "{
     \"reason_en\": \"b\",
     \"reason_ar\": \"n\",
-    \"category\": \"other\"
+    \"category\": \"policy_violation\"
 }"
 </code></pre></div>
 
@@ -4518,7 +4533,7 @@ const headers = {
 let body = {
     "reason_en": "b",
     "reason_ar": "n",
-    "category": "other"
+    "category": "policy_violation"
 };
 
 fetch(url, {
@@ -4647,10 +4662,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="category"                data-endpoint="POSTapi-v1-admin-chat-threads--thread_id--freeze"
-               value="other"
+               value="policy_violation"
                data-component="body">
     <br>
-<p>Example: <code>other</code></p>
+<p>Example: <code>policy_violation</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>off_platform_contact</code></li> <li><code>policy_violation</code></li> <li><code>harassment</code></li> <li><code>other</code></li></ul>
         </div>
@@ -4832,7 +4847,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"decision\": \"upheld_redact\",
+    \"decision\": \"upheld_warn\",
     \"note_en\": \"b\",
     \"note_ar\": \"n\"
 }"
@@ -4850,7 +4865,7 @@ const headers = {
 };
 
 let body = {
-    "decision": "upheld_redact",
+    "decision": "upheld_warn",
     "note_en": "b",
     "note_ar": "n"
 };
@@ -4957,10 +4972,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="decision"                data-endpoint="POSTapi-v1-admin-chat-moderation-flags--flag_id--resolve"
-               value="upheld_redact"
+               value="upheld_warn"
                data-component="body">
     <br>
-<p>Example: <code>upheld_redact</code></p>
+<p>Example: <code>upheld_warn</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>upheld_redact</code></li> <li><code>upheld_warn</code></li> <li><code>upheld_block</code></li> <li><code>dismissed_false_positive</code></li></ul>
         </div>
@@ -5007,7 +5022,7 @@ Must be one of:
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"flag_type\": \"other\",
+    \"flag_type\": \"email\",
     \"reason_en\": \"b\",
     \"reason_ar\": \"n\"
 }"
@@ -5025,7 +5040,7 @@ const headers = {
 };
 
 let body = {
-    "flag_type": "other",
+    "flag_type": "email",
     "reason_en": "b",
     "reason_ar": "n"
 };
@@ -5132,10 +5147,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="flag_type"                data-endpoint="POSTapi-v1-admin-chat-message-logs--log_id--mark-off-platform"
-               value="other"
+               value="email"
                data-component="body">
     <br>
-<p>Example: <code>other</code></p>
+<p>Example: <code>email</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>phone</code></li> <li><code>email</code></li> <li><code>external_link</code></li> <li><code>other</code></li></ul>
         </div>
@@ -5182,7 +5197,7 @@ Must be one of:
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"severity\": \"warning\",
+    \"severity\": \"info\",
     \"summary_en\": \"b\",
     \"summary_ar\": \"n\"
 }"
@@ -5200,7 +5215,7 @@ const headers = {
 };
 
 let body = {
-    "severity": "warning",
+    "severity": "info",
     "summary_en": "b",
     "summary_ar": "n"
 };
@@ -5307,10 +5322,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="severity"                data-endpoint="POSTapi-v1-admin-chat-moderation-flags--flag_id--escalate"
-               value="warning"
+               value="info"
                data-component="body">
     <br>
-<p>Example: <code>warning</code></p>
+<p>Example: <code>info</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>info</code></li> <li><code>warning</code></li> <li><code>critical</code></li></ul>
         </div>
@@ -5365,7 +5380,7 @@ Must be one of:
     \"phone_e164\": \"+36425593142326\",
     \"email\": \"breitenberg.gilbert@example.com\",
     \"password\": \"kXaz&lt;m\",
-    \"preferred_locale\": \"en\",
+    \"preferred_locale\": \"ar\",
     \"accepted_terms\": true
 }"
 </code></pre></div>
@@ -5386,7 +5401,7 @@ let body = {
     "phone_e164": "+36425593142326",
     "email": "breitenberg.gilbert@example.com",
     "password": "kXaz&lt;m",
-    "preferred_locale": "en",
+    "preferred_locale": "ar",
     "accepted_terms": true
 };
 
@@ -5527,10 +5542,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="preferred_locale"                data-endpoint="POSTapi-v1-register-customer"
-               value="en"
+               value="ar"
                data-component="body">
     <br>
-<p>Example: <code>en</code></p>
+<p>Example: <code>ar</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>en</code></li> <li><code>ar</code></li></ul>
         </div>
@@ -6479,10 +6494,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
         \"en\": \"b\",
         \"ar\": \"n\"
     },
-    \"business_type\": \"company\",
+    \"business_type\": \"individual\",
     \"primary_governorate_id\": 16,
     \"primary_city_id\": 16,
-    \"preferred_locale\": \"ar\"
+    \"preferred_locale\": \"en\"
 }"
 </code></pre></div>
 
@@ -6506,10 +6521,10 @@ let body = {
         "en": "b",
         "ar": "n"
     },
-    "business_type": "company",
+    "business_type": "individual",
     "primary_governorate_id": 16,
     "primary_city_id": 16,
-    "preferred_locale": "ar"
+    "preferred_locale": "en"
 };
 
 fetch(url, {
@@ -6685,10 +6700,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="business_type"                data-endpoint="POSTapi-v1-register-vendor"
-               value="company"
+               value="individual"
                data-component="body">
     <br>
-<p>Example: <code>company</code></p>
+<p>Example: <code>individual</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>individual</code></li> <li><code>company</code></li> <li><code>establishment</code></li></ul>
         </div>
@@ -6723,10 +6738,10 @@ Must be one of:
  &nbsp;
                 <input type="text" style="display: none"
                               name="preferred_locale"                data-endpoint="POSTapi-v1-register-vendor"
-               value="ar"
+               value="en"
                data-component="body">
     <br>
-<p>Example: <code>ar</code></p>
+<p>Example: <code>en</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>en</code></li> <li><code>ar</code></li></ul>
         </div>
@@ -6940,9 +6955,9 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: max-age=60, must-revalidate, public
 content-type: application/json
-x-correlation-id: 01KTBQ4QCG22K6CF2MN2759FSS
+x-correlation-id: 01KTCGFB889R4A9J6YKD58NDZP
 vary: Origin
-x-trace-id: aa96015e-86dd-4aa1-86e7-89f0582e5014
+x-trace-id: f6786a88-714d-491d-9c43-4b5eeccb6c27
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -7413,9 +7428,9 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-correlation-id: 01KTBQ4S0N78ZECKYK2YSDA8NY
+x-correlation-id: 01KTCGFND3VWC8P50HYJKJAS1V
 vary: Origin
-x-trace-id: 41122ad4-479f-4801-b594-6b57da809277
+x-trace-id: 5a52ec42-aa97-4a35-bbf2-9be0d07642d8
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -7563,9 +7578,9 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-correlation-id: 01KTBQ4RM6E3ZEZBM87K3Z2AWR
+x-correlation-id: 01KTCGFJYQHHZABK8N76MXVEF3
 vary: Origin
-x-trace-id: 095dbdc4-ca76-4add-bb4a-dbe060d965a1
+x-trace-id: c26b9d87-7bc4-4185-9abc-03751ef4ae9c
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -7696,7 +7711,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Accept: application/json" \
     --data "{
     \"occasion_id\": \"architecto\",
-    \"event_starts_at\": \"2052-06-28\",
+    \"event_starts_at\": \"2052-06-29\",
     \"event_ends_at\": \"2052-06-28\",
     \"guest_count\": 22,
     \"theme\": {
@@ -7704,7 +7719,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
         \"ar\": \"z\"
     },
     \"celebrant_name\": \"m\",
-    \"celebrant_dob\": \"2026-06-05T11:01:56\",
+    \"celebrant_dob\": \"2026-06-05T18:24:45\",
     \"celebrant_gender\": \"female\",
     \"address\": {
         \"city_id\": \"architecto\",
@@ -7732,7 +7747,7 @@ const headers = {
 
 let body = {
     "occasion_id": "architecto",
-    "event_starts_at": "2052-06-28",
+    "event_starts_at": "2052-06-29",
     "event_ends_at": "2052-06-28",
     "guest_count": 22,
     "theme": {
@@ -7740,7 +7755,7 @@ let body = {
         "ar": "z"
     },
     "celebrant_name": "m",
-    "celebrant_dob": "2026-06-05T11:01:56",
+    "celebrant_dob": "2026-06-05T18:24:45",
     "celebrant_gender": "female",
     "address": {
         "city_id": "architecto",
@@ -7855,10 +7870,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="event_starts_at"                data-endpoint="POSTapi-v1-customer-bookings"
-               value="2052-06-28"
+               value="2052-06-29"
                data-component="body">
     <br>
-<p>Must be a valid date. Must be a date after <code>now</code>. Example: <code>2052-06-28</code></p>
+<p>Must be a valid date. Must be a date after <code>now</code>. Example: <code>2052-06-29</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>event_ends_at</code></b>&nbsp;&nbsp;
@@ -7939,10 +7954,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="celebrant_dob"                data-endpoint="POSTapi-v1-customer-bookings"
-               value="2026-06-05T11:01:56"
+               value="2026-06-05T18:24:45"
                data-component="body">
     <br>
-<p>Must be a valid date. Example: <code>2026-06-05T11:01:56</code></p>
+<p>Must be a valid date. Example: <code>2026-06-05T18:24:45</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>celebrant_gender</code></b>&nbsp;&nbsp;
@@ -8114,9 +8129,9 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-correlation-id: 01KTBQ4RMQTERFYJQ7HBQMJAYP
+x-correlation-id: 01KTCGFK2JDRS8DRZ29JF22S3K
 vary: Origin
-x-trace-id: 934010b4-62e1-4ded-9740-ba3c093094d8
+x-trace-id: 7e9b7d6f-282a-47e9-976d-153fc67657b5
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -8250,9 +8265,9 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-correlation-id: 01KTBQ4RMX9059F2TWBP18CB89
+x-correlation-id: 01KTCGFK3DSJAJCN3R0XN3A929
 vary: Origin
-x-trace-id: beff2553-5f1e-4029-9bfd-9e501d8054c9
+x-trace-id: 78547277-b86b-48c7-bde1-4fa165302478
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -8496,7 +8511,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --data "{
     \"service_id\": \"architecto\",
     \"quantity\": 22,
-    \"effective_starts_at\": \"2026-06-05T11:01:56\",
+    \"effective_starts_at\": \"2026-06-05T18:24:45\",
     \"effective_ends_at\": \"2052-06-28\"
 }"
 </code></pre></div>
@@ -8515,7 +8530,7 @@ const headers = {
 let body = {
     "service_id": "architecto",
     "quantity": 22,
-    "effective_starts_at": "2026-06-05T11:01:56",
+    "effective_starts_at": "2026-06-05T18:24:45",
     "effective_ends_at": "2052-06-28"
 };
 
@@ -8645,10 +8660,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="effective_starts_at"                data-endpoint="POSTapi-v1-customer-bookings--bookingPublicId--items"
-               value="2026-06-05T11:01:56"
+               value="2026-06-05T18:24:45"
                data-component="body">
     <br>
-<p>Must be a valid date. Example: <code>2026-06-05T11:01:56</code></p>
+<p>Must be a valid date. Example: <code>2026-06-05T18:24:45</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>effective_ends_at</code></b>&nbsp;&nbsp;
@@ -9106,9 +9121,9 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-correlation-id: 01KTBQ4RNZXSKQF42274YWXCE3
+x-correlation-id: 01KTCGFKB8EY7XXDV9G574S70G
 vary: Origin
-x-trace-id: 9aabf187-2a9e-4ca5-8a82-b0ab02c9fc9b
+x-trace-id: 609e8884-c631-492d-94e9-471b766cf08c
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -9400,9 +9415,9 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-correlation-id: 01KTBQ4RP74DR6CRHDNV4Z2MSH
+x-correlation-id: 01KTCGFKC91Q36G67Y0DNTPGA1
 vary: Origin
-x-trace-id: d4ab0250-72b4-46c1-8b71-d41072b76394
+x-trace-id: cd93b8d6-0c80-4755-b812-fad2d9c856ee
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -9549,9 +9564,9 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-correlation-id: 01KTBQ4RPD7CCFFFCRG6QVNE5W
+x-correlation-id: 01KTCGFKCZKEEWQ6XYZA320V6N
 vary: Origin
-x-trace-id: c4aaf7b9-44e0-4678-ada6-3e3d9bc215ec
+x-trace-id: f31d6586-781f-442b-8932-199f8b69d835
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -10034,9 +10049,9 @@ fetch(url, {
 content-type: application/json
 x-ratelimit-limit: 60
 x-ratelimit-remaining: 59
-x-correlation-id: 01KTBQ4QZ6ZZAANWSNSHBP2YAA
+x-correlation-id: 01KTCGFFTNMWS1GWA83BM6AGAQ
 vary: Origin
-x-trace-id: 36740362-aad1-4ecb-b319-f1d59bc1cb13
+x-trace-id: ab93652b-9d6d-4e1c-ac7d-27f940ea52c1
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -10210,9 +10225,9 @@ fetch(url, {
 content-type: application/json
 x-ratelimit-limit: 60
 x-ratelimit-remaining: 59
-x-correlation-id: 01KTBQ4R01JQFHHSJAJ2G61GBX
+x-correlation-id: 01KTCGFFXRZBTM7Z67M52YX3FQ
 vary: Origin
-x-trace-id: c3fa033e-6b83-47e8-b039-68e836d13397
+x-trace-id: f7a24b13-6d1f-4808-94cc-7e8cd7844a70
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -10361,9 +10376,9 @@ fetch(url, {
 content-type: application/json
 x-ratelimit-limit: 60
 x-ratelimit-remaining: 59
-x-correlation-id: 01KTBQ4R0MT9CPN2KB4673V7GD
+x-correlation-id: 01KTCGFG0Y51WX6BTZK7BBRYZ6
 vary: Origin
-x-trace-id: 67fe7393-98c5-447e-95dc-1cc67aab6832
+x-trace-id: 40ed355c-9209-45ab-9aef-f744545eda87
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -10585,9 +10600,9 @@ fetch(url, {
 content-type: application/json
 x-ratelimit-limit: 60
 x-ratelimit-remaining: 59
-x-correlation-id: 01KTBQ4R16FJWZJFVDGE88RQS7
+x-correlation-id: 01KTCGFG2X47250Y4G1X6F7225
 vary: Origin
-x-trace-id: e8468ea3-1989-465f-90a6-891d8d2d11db
+x-trace-id: 05fb23e5-6149-4da5-80f3-24405563f672
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -10706,7 +10721,7 @@ customer filter sheet. Only filterable fields are exposed.</h2>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"type\": \"rental\"
+    \"type\": \"sale\"
 }"
 </code></pre></div>
 
@@ -10722,7 +10737,7 @@ const headers = {
 };
 
 let body = {
-    "type": "rental"
+    "type": "sale"
 };
 
 fetch(url, {
@@ -10745,9 +10760,9 @@ fetch(url, {
 content-type: application/json
 x-ratelimit-limit: 60
 x-ratelimit-remaining: 59
-x-correlation-id: 01KTBQ4R1PRKQPNQRE7F5H79T5
+x-correlation-id: 01KTCGFG61MRPHDM367T3EB8TE
 vary: Origin
-x-trace-id: 16aab7c9-a116-43c9-ae90-dbbee7269962
+x-trace-id: e20a6ae3-22e6-4a1c-ae4c-f52df10425ce
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -10854,10 +10869,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="type"                data-endpoint="GETapi-v1-customer-categories--publicId--field-schemas"
-               value="rental"
+               value="sale"
                data-component="body">
     <br>
-<p>Example: <code>rental</code></p>
+<p>Example: <code>sale</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>rental</code></li> <li><code>sale</code></li> <li><code>digital</code></li></ul>
         </div>
@@ -10911,9 +10926,9 @@ fetch(url, {
 content-type: application/json
 x-ratelimit-limit: 60
 x-ratelimit-remaining: 59
-x-correlation-id: 01KTBQ4R27AW5FGC52ET4RT7WD
+x-correlation-id: 01KTCGFG9P730DCQ66K57GQNTX
 vary: Origin
-x-trace-id: d5409c24-3be0-4532-9f82-befac3596564
+x-trace-id: 20c2a5b1-2ddd-44cb-9120-fe987fb75c18
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -11071,9 +11086,9 @@ fetch(url, {
 content-type: application/json
 x-ratelimit-limit: 60
 x-ratelimit-remaining: 59
-x-correlation-id: 01KTBQ4R2VS33R0F994942HHS6
+x-correlation-id: 01KTCGFGBSFGX1MKR9NHBTH393
 vary: Origin
-x-trace-id: 20edfe33-d98b-4aa1-9fac-3f76885d3293
+x-trace-id: a9e975d8-a5b3-4355-8ea3-ac50b43cd17b
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -11220,9 +11235,9 @@ fetch(url, {
 content-type: application/json
 x-ratelimit-limit: 60
 x-ratelimit-remaining: 59
-x-correlation-id: 01KTBQ4R3DWXVY2Z5FEHHTBDSR
+x-correlation-id: 01KTCGFGD4B2C66GGGTQ473M3B
 vary: Origin
-x-trace-id: 5ae3bd74-96ce-48e3-aa7b-06b2969e105b
+x-trace-id: 2e18761c-0ef3-4326-b74f-02154cdc4733
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -11371,9 +11386,9 @@ fetch(url, {
 content-type: application/json
 x-ratelimit-limit: 60
 x-ratelimit-remaining: 59
-x-correlation-id: 01KTBQ4R4696NC60149WVCPANM
+x-correlation-id: 01KTCGFGFD0M8NT5G91KK726D6
 vary: Origin
-x-trace-id: 06e1f58b-d0e3-491a-9ca4-4f283af169d7
+x-trace-id: 30c7f336-b64a-47fc-878e-fd00231c3b70
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -11598,6 +11613,200 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </div>
                     </form>
 
+                    <h2 id="customer-catalog-POSTapi-v1-customer-services--servicePublicId--check-availability">Check a published service&#039;s availability without placing a hold.
+Inventory is only reserved at booking submit (cart hold 15 min,
+payment hold 24 h).</h2>
+
+<p>
+</p>
+
+
+
+<span id="example-requests-POSTapi-v1-customer-services--servicePublicId--check-availability">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request POST \
+    "http://localhost:8000/api/v1/customer/services/architecto/check-availability" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json" \
+    --data "{
+    \"starts_at\": \"2052-06-29\",
+    \"ends_at\": \"2052-06-28\",
+    \"quantity\": 22
+}"
+</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/v1/customer/services/architecto/check-availability"
+);
+
+const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "starts_at": "2052-06-29",
+    "ends_at": "2052-06-28",
+    "quantity": 22
+};
+
+fetch(url, {
+    method: "POST",
+    headers,
+    body: JSON.stringify(body),
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-POSTapi-v1-customer-services--servicePublicId--check-availability">
+            <blockquote>
+            <p>Example response (200):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;data&quot;: {
+        &quot;available&quot;: true,
+        &quot;product_type&quot;: &quot;rental&quot;,
+        &quot;reason_code&quot;: null,
+        &quot;remaining_quantity&quot;: null,
+        &quot;window&quot;: {
+            &quot;starts_at&quot;: &quot;2026-07-01T10:00:00+00:00&quot;,
+            &quot;ends_at&quot;: &quot;2026-07-01T15:00:00+00:00&quot;
+        },
+        &quot;reserved_at&quot;: &quot;submit&quot;
+    }
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-POSTapi-v1-customer-services--servicePublicId--check-availability" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-POSTapi-v1-customer-services--servicePublicId--check-availability"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-POSTapi-v1-customer-services--servicePublicId--check-availability"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-POSTapi-v1-customer-services--servicePublicId--check-availability" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-POSTapi-v1-customer-services--servicePublicId--check-availability">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-POSTapi-v1-customer-services--servicePublicId--check-availability" data-method="POST"
+      data-path="api/v1/customer/services/{servicePublicId}/check-availability"
+      data-authed="0"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('POSTapi-v1-customer-services--servicePublicId--check-availability', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-POSTapi-v1-customer-services--servicePublicId--check-availability"
+                    onclick="tryItOut('POSTapi-v1-customer-services--servicePublicId--check-availability');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-POSTapi-v1-customer-services--servicePublicId--check-availability"
+                    onclick="cancelTryOut('POSTapi-v1-customer-services--servicePublicId--check-availability');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-POSTapi-v1-customer-services--servicePublicId--check-availability"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-black">POST</small>
+            <b><code>api/v1/customer/services/{servicePublicId}/check-availability</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="POSTapi-v1-customer-services--servicePublicId--check-availability"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="POSTapi-v1-customer-services--servicePublicId--check-availability"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>servicePublicId</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="servicePublicId"                data-endpoint="POSTapi-v1-customer-services--servicePublicId--check-availability"
+               value="architecto"
+               data-component="url">
+    <br>
+<p>Example: <code>architecto</code></p>
+            </div>
+                            <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+        <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>starts_at</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="starts_at"                data-endpoint="POSTapi-v1-customer-services--servicePublicId--check-availability"
+               value="2052-06-29"
+               data-component="body">
+    <br>
+<p>Must be a valid date. Must be a date after <code>now</code>. Example: <code>2052-06-29</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>ends_at</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="ends_at"                data-endpoint="POSTapi-v1-customer-services--servicePublicId--check-availability"
+               value="2052-06-28"
+               data-component="body">
+    <br>
+<p>Must be a valid date. Must be a date after <code>starts_at</code>. Example: <code>2052-06-28</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>quantity</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+<i>optional</i> &nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="quantity"                data-endpoint="POSTapi-v1-customer-services--servicePublicId--check-availability"
+               value="22"
+               data-component="body">
+    <br>
+<p>Must be at least 1. Must not be greater than 1000. Example: <code>22</code></p>
+        </div>
+        </form>
+
                     <h2 id="customer-catalog-GETapi-v1-vendor-occasions">GET api/v1/vendor/occasions</h2>
 
 <p>
@@ -11644,9 +11853,9 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-correlation-id: 01KTBQ4R4Y6Q03MWEJFB88HAK6
+x-correlation-id: 01KTCGFGKADQEBSNSQSDMEWPRV
 vary: Origin
-x-trace-id: c57ba720-a8d8-415a-a601-22dd6407bd04
+x-trace-id: 5092c674-f3f7-444a-8ca2-a96312cc73a7
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -11758,13 +11967,14 @@ You can check the Dev Tools console for debugging information.</code></pre>
     \"q\": \"b\",
     \"product_type\": \"sale\",
     \"category_slug\": \"architecto\",
+    \"occasion\": \"architecto\",
     \"occasion_slug\": \"architecto\",
     \"vendor_public_id\": \"architecto\",
     \"city_public_id\": \"architecto\",
     \"price_min\": 39,
     \"price_max\": 84,
     \"min_rating\": 1,
-    \"sort\": \"price_asc\",
+    \"sort\": \"newest\",
     \"page\": 27,
     \"per_page\": 15
 }"
@@ -11785,13 +11995,14 @@ let body = {
     "q": "b",
     "product_type": "sale",
     "category_slug": "architecto",
+    "occasion": "architecto",
     "occasion_slug": "architecto",
     "vendor_public_id": "architecto",
     "city_public_id": "architecto",
     "price_min": 39,
     "price_max": 84,
     "min_rating": 1,
-    "sort": "price_asc",
+    "sort": "newest",
     "page": 27,
     "per_page": 15
 };
@@ -11816,9 +12027,9 @@ fetch(url, {
 content-type: application/json
 x-ratelimit-limit: 60
 x-ratelimit-remaining: 59
-x-correlation-id: 01KTBQ4RCYNZFHT147A9QY3GDH
+x-correlation-id: 01KTCGFJ1MRF9ATTBMZCF7TTMY
 vary: Origin
-x-trace-id: 5a229367-c758-4791-bdf4-635ae1f20a49
+x-trace-id: 1785a244-59e4-41d6-ba64-6ba5009e604e
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -11949,6 +12160,18 @@ Must be one of:
 <p>Example: <code>architecto</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>occasion</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="occasion"                data-endpoint="GETapi-v1-customer-services"
+               value="architecto"
+               data-component="body">
+    <br>
+<p>Example: <code>architecto</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>occasion_slug</code></b>&nbsp;&nbsp;
 <small>string</small>&nbsp;
 <i>optional</i> &nbsp;
@@ -12027,10 +12250,10 @@ Must be one of:
  &nbsp;
                 <input type="text" style="display: none"
                               name="sort"                data-endpoint="GETapi-v1-customer-services"
-               value="price_asc"
+               value="newest"
                data-component="body">
     <br>
-<p>Example: <code>price_asc</code></p>
+<p>Example: <code>newest</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>price_asc</code></li> <li><code>price_desc</code></li> <li><code>rating_desc</code></li> <li><code>newest</code></li></ul>
         </div>
@@ -12300,9 +12523,9 @@ fetch(url, {
 content-type: application/json
 x-ratelimit-limit: 60
 x-ratelimit-remaining: 59
-x-correlation-id: 01KTBQ4QHSQ0JJ5SHA644Q0D5H
+x-correlation-id: 01KTCGFCWQRBR2ZR3YPAN5EQZA
 vary: Origin
-x-trace-id: 89f4511e-7394-4571-9d50-0fb9032fd598
+x-trace-id: 24130e93-ef66-46bd-964b-64a5df940951
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -12571,9 +12794,9 @@ fetch(url, {
 content-type: application/json
 x-ratelimit-limit: 60
 x-ratelimit-remaining: 59
-x-correlation-id: 01KTBQ4QJH0032YCY2JKTM9XC5
+x-correlation-id: 01KTCGFD79YQADZW7QPAGR79P3
 vary: Origin
-x-trace-id: 20f8a944-1b99-4873-8766-14d0c494b084
+x-trace-id: 1b346325-0e65-443b-a0b2-2d326b41dfd0
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -12722,9 +12945,9 @@ fetch(url, {
 content-type: application/json
 x-ratelimit-limit: 60
 x-ratelimit-remaining: 59
-x-correlation-id: 01KTBQ4QK3DTYSY76F41S8ASYF
+x-correlation-id: 01KTCGFD959VM337GP5JD1GXPH
 vary: Origin
-x-trace-id: cfddeaa6-96b4-4f6d-837c-dc465ccda757
+x-trace-id: 79c02b6c-b0bb-4ae1-9c18-cfc8c3160a41
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -12881,9 +13104,9 @@ fetch(url, {
 content-type: application/json
 x-ratelimit-limit: 60
 x-ratelimit-remaining: 59
-x-correlation-id: 01KTBQ4QKM0BXA3QYTQNN58RH2
+x-correlation-id: 01KTCGFDEGX1KMQRQQ2HCDVCAX
 vary: Origin
-x-trace-id: 6e74baad-468e-4850-a34a-be456c4fb5a1
+x-trace-id: 7b55b40a-9bc3-473b-b21b-0b66cab83f26
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -13032,9 +13255,9 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-correlation-id: 01KTBQ4S8ZBYRBRN5ZQR81QEP2
+x-correlation-id: 01KTCGFPPS04E473J64HGYH7SM
 vary: Origin
-x-trace-id: 3384bede-49d1-45a5-9bc0-eb0b7a424667
+x-trace-id: 56066a76-c1af-490f-be3c-90ee2e40b1bd
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -13181,9 +13404,9 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-correlation-id: 01KTBQ4S98GYSR3SNE8WQRXVK8
+x-correlation-id: 01KTCGFPR147SADCVN6VE5MCZT
 vary: Origin
-x-trace-id: 4f14a185-eac6-44e2-9bf9-69f90573b070
+x-trace-id: 8c450144-a5de-4984-ab62-75a999b76270
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -13330,9 +13553,9 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-correlation-id: 01KTBQ4S9CTQMN0QNVYRW21Z6R
+x-correlation-id: 01KTCGFPRF8JADVWPN1BK5RJMA
 vary: Origin
-x-trace-id: 0342625a-9702-419d-a6d9-a0935c0233a3
+x-trace-id: b27bbb71-030a-4d55-93af-ba1be022874e
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -13479,9 +13702,9 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-correlation-id: 01KTBQ4S9J6KQ5W90GWMS5T434
+x-correlation-id: 01KTCGFPSJ9TMAEXFV8J0N7W7N
 vary: Origin
-x-trace-id: c26c5769-b883-4ea5-b279-46e7fc54fa35
+x-trace-id: 16fb774c-ab98-43ff-b74a-5ce9c1464f72
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -13900,9 +14123,9 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-correlation-id: 01KTBQ4RZBN9JCW7TJYS6RW1NQ
+x-correlation-id: 01KTCGFN97RZ0CQ281XC503ZV4
 vary: Origin
-x-trace-id: 54ee8d11-17c9-4987-97f2-b7f4d298fea5
+x-trace-id: 761156a2-4450-4907-9d5a-d4558a43eb86
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -14036,9 +14259,9 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-correlation-id: 01KTBQ4RZGGDZK09APRA0E6CYZ
+x-correlation-id: 01KTCGFN9N78NX45AMGYB06NP5
 vary: Origin
-x-trace-id: 2357e3ce-7af4-44fb-94e1-b8f9351e39d7
+x-trace-id: 947d53c0-be14-46ec-b16f-104a4329b99e
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -14682,9 +14905,9 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-correlation-id: 01KTBQ4RT89EN4Z22X1X86ND8A
+x-correlation-id: 01KTCGFMBJ2VW8H2Y5DJFA31BM
 vary: Origin
-x-trace-id: 84a50ff7-3940-4786-8d70-f789983f5157
+x-trace-id: a9b017fa-bedc-448d-a4d4-cebe022d1c21
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -14835,9 +15058,9 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-correlation-id: 01KTBQ4QNMREEFM4R8AQX40X3W
+x-correlation-id: 01KTCGFDYHPYF6HVRYEMY4MBBK
 vary: Origin
-x-trace-id: 84f467f4-51d2-4f1a-99db-199cf9ecf048
+x-trace-id: 2518a3c9-661b-4a99-9d41-fc8b46310020
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -14943,10 +15166,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Accept: application/json" \
     --data "{
     \"name\": \"b\",
-    \"preferred_locale\": \"ar\",
-    \"date_of_birth\": \"2022-06-29\",
-    \"gender\": \"prefer_not_to_say\",
-    \"accepts_marketing\": true
+    \"preferred_locale\": \"en\",
+    \"date_of_birth\": \"2022-06-30\",
+    \"gender\": \"female\",
+    \"accepts_marketing\": false
 }"
 </code></pre></div>
 
@@ -14963,10 +15186,10 @@ const headers = {
 
 let body = {
     "name": "b",
-    "preferred_locale": "ar",
-    "date_of_birth": "2022-06-29",
-    "gender": "prefer_not_to_say",
-    "accepts_marketing": true
+    "preferred_locale": "en",
+    "date_of_birth": "2022-06-30",
+    "gender": "female",
+    "accepts_marketing": false
 };
 
 fetch(url, {
@@ -15070,10 +15293,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="preferred_locale"                data-endpoint="PUTapi-v1-customer-profile"
-               value="ar"
+               value="en"
                data-component="body">
     <br>
-<p>Example: <code>ar</code></p>
+<p>Example: <code>en</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>en</code></li> <li><code>ar</code></li></ul>
         </div>
@@ -15084,10 +15307,10 @@ Must be one of:
  &nbsp;
                 <input type="text" style="display: none"
                               name="date_of_birth"                data-endpoint="PUTapi-v1-customer-profile"
-               value="2022-06-29"
+               value="2022-06-30"
                data-component="body">
     <br>
-<p>Must be a valid date. Must be a date before <code>today</code>. Example: <code>2022-06-29</code></p>
+<p>Must be a valid date. Must be a date before <code>today</code>. Example: <code>2022-06-30</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>gender</code></b>&nbsp;&nbsp;
@@ -15096,10 +15319,10 @@ Must be one of:
  &nbsp;
                 <input type="text" style="display: none"
                               name="gender"                data-endpoint="PUTapi-v1-customer-profile"
-               value="prefer_not_to_say"
+               value="female"
                data-component="body">
     <br>
-<p>Example: <code>prefer_not_to_say</code></p>
+<p>Example: <code>female</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>male</code></li> <li><code>female</code></li> <li><code>prefer_not_to_say</code></li></ul>
         </div>
@@ -15123,7 +15346,7 @@ Must be one of:
             <code>false</code>
         </label>
     <br>
-<p>Example: <code>true</code></p>
+<p>Example: <code>false</code></p>
         </div>
         </form>
 
@@ -15173,9 +15396,9 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-correlation-id: 01KTBQ4QP2TEN81H8MB76X76WX
+x-correlation-id: 01KTCGFE38BTVZM6MKZS79ESME
 vary: Origin
-x-trace-id: 3187e6d0-668e-4760-8d68-90b9283de514
+x-trace-id: b3203c4d-ca1a-46da-a59b-28d8a59fe5bb
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -16259,7 +16482,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"scope\": \"global\",
+    \"scope\": \"category\",
     \"vendor_public_id\": \"bngzmiyvdljnikhwaykcmyuwpw\",
     \"limit\": 7,
     \"cursor\": \"v\"
@@ -16287,7 +16510,7 @@ const headers = {
 };
 
 let body = {
-    "scope": "global",
+    "scope": "category",
     "vendor_public_id": "bngzmiyvdljnikhwaykcmyuwpw",
     "limit": 7,
     "cursor": "v"
@@ -16311,9 +16534,9 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-correlation-id: 01KTBQ4SCM8TKHDBFAF5R0V23W
+x-correlation-id: 01KTCGFQA710JX1PAQ2FC4JRPX
 vary: Origin
-x-trace-id: 5cef93ea-9d12-45e1-ad68-fb0cdc923bc7
+x-trace-id: 2a6f2fa0-42ae-4d4e-b184-9f124dd35b8a
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -16456,10 +16679,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="scope"                data-endpoint="GETapi-v1-customer-promotions-active"
-               value="global"
+               value="category"
                data-component="body">
     <br>
-<p>Example: <code>global</code></p>
+<p>Example: <code>category</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>global</code></li> <li><code>category</code></li> <li><code>vendor</code></li> <li><code>service</code></li></ul>
         </div>
@@ -16869,9 +17092,9 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-correlation-id: 01KTBQ4S3MC5S05AYCS7H2TD3B
+x-correlation-id: 01KTCGFP58XKD10FRM88EDX06J
 vary: Origin
-x-trace-id: 06c3b23b-aa3f-4d52-b43c-6f45fcac275c
+x-trace-id: 29b9cc44-5e15-41b3-8ca8-b92125e92037
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -17318,9 +17541,9 @@ fetch(url, {
 content-type: application/json
 x-ratelimit-limit: 60
 x-ratelimit-remaining: 59
-x-correlation-id: 01KTBQ4REB2JX1FH40JZ57HATP
+x-correlation-id: 01KTCGFJA6KJ8842QY5A7CV23G
 vary: Origin
-x-trace-id: 5635134e-adea-4822-8118-4befed8078c2
+x-trace-id: a29bb3b0-e7c2-4aa8-8da1-8a006a625aeb
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -17530,9 +17753,9 @@ fetch(url, {
 content-type: application/json
 x-ratelimit-limit: 60
 x-ratelimit-remaining: 59
-x-correlation-id: 01KTBQ4RFPYKVAK4JTANW1P12J
+x-correlation-id: 01KTCGFJEEY14HWR47AQA3191C
 vary: Origin
-x-trace-id: 35fbb3a5-d792-467a-b4bc-adf7903d9ad6
+x-trace-id: fb858138-8296-46f5-aad2-8b1c5abf2c7e
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -17647,7 +17870,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"type\": \"sale\"
+    \"type\": \"rental\"
 }"
 </code></pre></div>
 
@@ -17663,7 +17886,7 @@ const headers = {
 };
 
 let body = {
-    "type": "sale"
+    "type": "rental"
 };
 
 fetch(url, {
@@ -17686,9 +17909,9 @@ fetch(url, {
 content-type: application/json
 x-ratelimit-limit: 60
 x-ratelimit-remaining: 59
-x-correlation-id: 01KTBQ4RGB6Q5JC5ENWRVH7X13
+x-correlation-id: 01KTCGFJHCEZZ0HRBCD3K20B49
 vary: Origin
-x-trace-id: f5655755-3107-4bde-bab5-228bfcc8af4b
+x-trace-id: 8da394c7-d19b-492f-b727-4167202eb094
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -17795,10 +18018,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="type"                data-endpoint="GETapi-v1-customer-vendors--publicId--services"
-               value="sale"
+               value="rental"
                data-component="body">
     <br>
-<p>Example: <code>sale</code></p>
+<p>Example: <code>rental</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>rental</code></li> <li><code>sale</code></li> <li><code>digital</code></li></ul>
         </div>
@@ -17852,9 +18075,9 @@ fetch(url, {
 content-type: application/json
 x-ratelimit-limit: 60
 x-ratelimit-remaining: 59
-x-correlation-id: 01KTBQ4RGXGDDM78D19NJG3YY8
+x-correlation-id: 01KTCGFJMCZ1MYVEZYJW4DPTVQ
 vary: Origin
-x-trace-id: 8b62cbb3-b192-47f2-b11e-d2494faca4b6
+x-trace-id: 00b60a65-60c4-476b-8659-b2d9a3fcbccc
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -18003,9 +18226,9 @@ fetch(url, {
 content-type: application/json
 x-ratelimit-limit: 60
 x-ratelimit-remaining: 59
-x-correlation-id: 01KTBQ4RHGHEN0TD25PA2E575Z
+x-correlation-id: 01KTCGFJPP43RCJB4FH8ZKGBRH
 vary: Origin
-x-trace-id: 875bf5d1-7cab-4ad2-a2d8-c207878174bf
+x-trace-id: 9dd32a0a-e518-494f-8c04-2be463d91e14
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -18299,9 +18522,9 @@ fetch(url, {
 content-type: application/json
 x-ratelimit-limit: 60
 x-ratelimit-remaining: 59
-x-correlation-id: 01KTBQ4RJC48V0CWEV0N3RGH73
+x-correlation-id: 01KTCGFJS09KQ61TBBRPZTKVJ4
 vary: Origin
-x-trace-id: 1c668e9c-c856-4308-ad5c-6a7210624075
+x-trace-id: 64381946-c572-4edf-bebc-cae7f631c3ce
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -18448,9 +18671,9 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-correlation-id: 01KTBQ4S2ZC32CYB8T6FDGE7ES
+x-correlation-id: 01KTCGFP0PX4QR4NZADDD2WCC0
 vary: Origin
-x-trace-id: 3c920c21-2035-4b72-ba79-ba2881f33824
+x-trace-id: 69a5b823-9cb4-42fa-a0f1-d1c1697c40d9
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -18600,9 +18823,9 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-correlation-id: 01KTBQ4RV1J3EKCKQZ2KT3QYC0
+x-correlation-id: 01KTCGFMEQ0NM8YHHX7PV2YZN1
 vary: Origin
-x-trace-id: c1efd25b-077e-4341-9297-f91b39b7c00b
+x-trace-id: 6a69ff74-4ee5-46ab-a5af-066c610bdc4f
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -18746,9 +18969,9 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-correlation-id: 01KTBQ4RV7P44A5GQ497SMBVFV
+x-correlation-id: 01KTCGFMFFP0RWSRXS2D8H6DZT
 vary: Origin
-x-trace-id: 348d98b1-f3c6-43b2-ba5b-e102f2a59d83
+x-trace-id: 9ef50455-af29-4327-8275-9c07f85c6986
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -18907,9 +19130,9 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-correlation-id: 01KTBQ4RVCRYMPZ105VB091C46
+x-correlation-id: 01KTCGFMFW0AYTD342BCN5ZJWE
 vary: Origin
-x-trace-id: 6805f724-93d0-4d38-b640-908f604797ce
+x-trace-id: 5c681479-eecd-4391-b8ba-9c02a243bce9
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -19047,9 +19270,9 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-correlation-id: 01KTBQ4QQ1MFNQ5E09SJWY5KFX
+x-correlation-id: 01KTCGFEA7GG2DKNQ5WN58S8EA
 vary: Origin
-x-trace-id: 31eaf1db-3998-4f9a-bef8-a035bcd16f0b
+x-trace-id: 3845ccbe-ef9d-4d59-9dd0-0270ad42defe
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -19439,9 +19662,9 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-correlation-id: 01KTBQ4RKKR5FE1BP9GDPHJPBR
+x-correlation-id: 01KTCGFJVM27VFSNAV0Z2A0B4E
 vary: Origin
-x-trace-id: b78ca172-4cf9-4fc3-8c6f-a54981f91900
+x-trace-id: 5816a3db-72e7-4f0a-9645-ac1e9b01c80a
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -19806,7 +20029,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"platform\": \"android\",
+    \"platform\": \"ios\",
     \"fcm_token\": \"b\",
     \"device_id\": \"n\"
 }"
@@ -19824,7 +20047,7 @@ const headers = {
 };
 
 let body = {
-    "platform": "android",
+    "platform": "ios",
     "fcm_token": "b",
     "device_id": "n"
 };
@@ -19918,10 +20141,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="platform"                data-endpoint="POSTapi-v1-devices"
-               value="android"
+               value="ios"
                data-component="body">
     <br>
-<p>Example: <code>android</code></p>
+<p>Example: <code>ios</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>ios</code></li> <li><code>android</code></li> <li><code>web</code></li></ul>
         </div>
@@ -20126,9 +20349,9 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: max-age=60, must-revalidate, public
 content-type: application/json
-x-correlation-id: 01KTBQ4QGPMVZ8PE3P6ZPYMHNY
+x-correlation-id: 01KTCGFCBQ7KWBZNBW8HNXAZ3Z
 vary: Origin
-x-trace-id: f4b72e43-c156-4bcd-b1f5-6f518b3df5fe
+x-trace-id: 8f985a02-5130-4608-837e-98ac1b965e1d
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -20236,11 +20459,11 @@ You can check the Dev Tools console for debugging information.</code></pre>
     \"firestore_message_id\": \"n\",
     \"sender_user_id\": \"architecto\",
     \"body\": \"n\",
-    \"blocked\": false,
+    \"blocked\": true,
     \"flag_reason\": \"phone\",
     \"matched_patterns\": [
         {
-            \"flag_type\": \"external_link\",
+            \"flag_type\": \"email\",
             \"matched_pattern\": \"g\"
         }
     ]
@@ -20263,11 +20486,11 @@ let body = {
     "firestore_message_id": "n",
     "sender_user_id": "architecto",
     "body": "n",
-    "blocked": false,
+    "blocked": true,
     "flag_reason": "phone",
     "matched_patterns": [
         {
-            "flag_type": "external_link",
+            "flag_type": "email",
             "matched_pattern": "g"
         }
     ]
@@ -20437,7 +20660,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
             <code>false</code>
         </label>
     <br>
-<p>Example: <code>false</code></p>
+<p>Example: <code>true</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>flag_reason</code></b>&nbsp;&nbsp;
@@ -20470,10 +20693,10 @@ Must be one of:
  &nbsp;
                 <input type="text" style="display: none"
                               name="matched_patterns.0.flag_type"                data-endpoint="POSTapi-v1-internal-chat-mirror-message"
-               value="external_link"
+               value="email"
                data-component="body">
     <br>
-<p>This field is required when <code>matched_patterns</code> is present. Example: <code>external_link</code></p>
+<p>This field is required when <code>matched_patterns</code> is present. Example: <code>email</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>phone</code></li> <li><code>email</code></li> <li><code>external_link</code></li></ul>
                     </div>
@@ -20543,9 +20766,9 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-correlation-id: 01KTBQ4RYX985QV30SNP7QJBDJ
+x-correlation-id: 01KTCGFN6DST72147SFZMRJF9X
 vary: Origin
-x-trace-id: d77d170a-3414-4f14-9d5f-421a09c3b909
+x-trace-id: de6e50b0-6353-48f0-af05-a5e4a88880fb
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -20650,7 +20873,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"is_enabled\": true,
+    \"is_enabled\": false,
     \"quiet_hours_start\": \"64:25\",
     \"quiet_hours_end\": \"64:25\",
     \"timezone\": \"Asia\\/Anadyr\"
@@ -20669,7 +20892,7 @@ const headers = {
 };
 
 let body = {
-    "is_enabled": true,
+    "is_enabled": false,
     "quiet_hours_start": "64:25",
     "quiet_hours_end": "64:25",
     "timezone": "Asia\/Anadyr"
@@ -20802,7 +21025,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
             <code>false</code>
         </label>
     <br>
-<p>Example: <code>true</code></p>
+<p>Example: <code>false</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>quiet_hours_start</code></b>&nbsp;&nbsp;
@@ -20888,9 +21111,9 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-correlation-id: 01KTBQ4S04ZG7K8YV7Q3ZCC3QJ
+x-correlation-id: 01KTCGFNC6Z9ZS8N5F5ZE43QS1
 vary: Origin
-x-trace-id: 29f7658d-560d-4e31-86f0-2c7947c0500b
+x-trace-id: 2773bbde-9283-4dd3-89b6-401bba4dd250
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -21237,9 +21460,9 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-correlation-id: 01KTBQ4S5DCP3RSZTHW9FRXQDC
+x-correlation-id: 01KTCGFPAXZAMS3AK6VTQ2YF04
 vary: Origin
-x-trace-id: 21009f2b-51f9-4f71-9536-e05d491488e2
+x-trace-id: 0a071c15-b17c-4b8b-90d6-e4ed1dc3b8a9
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -21385,9 +21608,9 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-correlation-id: 01KTBQ4S5QEGZHC1MD6FY7BCD2
+x-correlation-id: 01KTCGFPBFC3CH2XF6EBKTR9QZ
 vary: Origin
-x-trace-id: ce8625d1-9c02-4b7b-93b3-a1d6d5294c36
+x-trace-id: 2ebb6ffd-cd59-4af9-8888-036ff1ee2e2c
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -21533,9 +21756,9 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-correlation-id: 01KTBQ4S632854043YFWYDHAFZ
+x-correlation-id: 01KTCGFPCCHNV6YN6NZQ7X8FEA
 vary: Origin
-x-trace-id: 209d84cf-f1cd-4264-9162-85f75abcc4fe
+x-trace-id: d31177e3-775a-4f5d-b812-c7736b8b08f8
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -21681,9 +21904,9 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-correlation-id: 01KTBQ4S6CYQHR4PFKKWC71SC7
+x-correlation-id: 01KTCGFPD1XX3M96PHRS4ND1E9
 vary: Origin
-x-trace-id: 06a59301-aeab-48d1-888b-26c42771ca75
+x-trace-id: 33682ae1-9846-4611-9d5a-2879f996c01f
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -21833,9 +22056,9 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-correlation-id: 01KTBQ4SB4J5JSPM10M1AH49XH
+x-correlation-id: 01KTCGFQ5ZPKY4WGVJ7P5EBK45
 vary: Origin
-x-trace-id: 30aa99a2-a891-416d-9dd6-5e69eef580b3
+x-trace-id: c213e2a3-5eb0-4734-a62c-802e655730e2
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -21972,9 +22195,9 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-correlation-id: 01KTBQ4SBZSCZ4BBSEXGZ42P5Y
+x-correlation-id: 01KTCGFQ827T2TC2F3QH7WC8MZ
 vary: Origin
-x-trace-id: b9e8e0a9-e0d9-47a0-840e-21a1c4cbd8a2
+x-trace-id: 1b8c8cb7-5bc9-4991-b468-f4fc6c603e87
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -22420,9 +22643,9 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: max-age=300, must-revalidate, public
 content-type: application/json
-x-correlation-id: 01KTBQ4QF6XDK0CNKQ14DZK2CY
+x-correlation-id: 01KTCGFC104X3CQ5TS9ZYJJ0N3
 vary: Origin
-x-trace-id: 2e469ae0-a11d-4002-b072-c8f6e24e150b
+x-trace-id: 5834a4d8-4e8e-4dae-92f7-1f634c4096e1
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -22577,9 +22800,9 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-correlation-id: 01KTBQ4QGFJSG19RD06BGWD7HF
+x-correlation-id: 01KTCGFCA6EMPGPDH11DM287GB
 vary: Origin
-x-trace-id: b18cbd09-d1dc-4b4c-b566-7a79214bb4d3
+x-trace-id: b5c3fcb8-280d-4d01-8a93-55465f4d4b12
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -22727,9 +22950,9 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-correlation-id: 01KTBQ4SA4R56WQYY8162YJYSY
+x-correlation-id: 01KTCGFPYQW4SMHB28SXN7PMD2
 vary: Origin
-x-trace-id: 27f6a6c0-36b6-4436-85f2-01d3e4e23a47
+x-trace-id: 2e07cd5b-1fc7-4d1e-b8c1-b090ddd08e92
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -22876,9 +23099,9 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-correlation-id: 01KTBQ4SAKS5S29JSMX1NPH623
+x-correlation-id: 01KTCGFQ1X8TGGVDTVXZPBG7GA
 vary: Origin
-x-trace-id: d906bba1-c92a-44ac-9335-30d2f1968621
+x-trace-id: cd7f4c29-338b-4811-89b4-14c569a442a7
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -22981,7 +23204,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --data "{
     \"reportable_type\": \"vendor_profile\",
     \"reportable_id\": \"architecto\",
-    \"reason\": \"fraudulent_activity\",
+    \"reason\": \"harassment\",
     \"details\": \"n\"
 }"
 </code></pre></div>
@@ -23000,7 +23223,7 @@ const headers = {
 let body = {
     "reportable_type": "vendor_profile",
     "reportable_id": "architecto",
-    "reason": "fraudulent_activity",
+    "reason": "harassment",
     "details": "n"
 };
 
@@ -23119,10 +23342,10 @@ Must be one of:
  &nbsp;
                 <input type="text" style="display: none"
                               name="reason"                data-endpoint="POSTapi-v1-customer-reports"
-               value="fraudulent_activity"
+               value="harassment"
                data-component="body">
     <br>
-<p>Example: <code>fraudulent_activity</code></p>
+<p>Example: <code>harassment</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>inappropriate_content</code></li> <li><code>fake_profile</code></li> <li><code>fraudulent_activity</code></li> <li><code>harassment</code></li> <li><code>other</code></li></ul>
         </div>
@@ -23859,9 +24082,9 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-correlation-id: 01KTBQ4QW1G7Z8AQHHEZNGMGWP
+x-correlation-id: 01KTCGFFBECT6W38AW82EME6AP
 vary: Origin
-x-trace-id: 37194459-cbd7-48de-99a1-1003be8c6a7d
+x-trace-id: 653cdce1-2f4c-4f7d-8af1-c447d2130fa2
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -23969,7 +24192,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     \"hours\": [
         {
             \"day_of_week\": 1,
-            \"opens_at\": \"11:01\",
+            \"opens_at\": \"18:24\",
             \"closes_at\": \"2052-06-28\"
         }
     ]
@@ -23991,7 +24214,7 @@ let body = {
     "hours": [
         {
             "day_of_week": 1,
-            "opens_at": "11:01",
+            "opens_at": "18:24",
             "closes_at": "2052-06-28"
         }
     ]
@@ -24108,10 +24331,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="hours.0.opens_at"                data-endpoint="PUTapi-v1-vendor-business-hours"
-               value="11:01"
+               value="18:24"
                data-component="body">
     <br>
-<p>Must be a valid date in the format <code>H:i</code>. Example: <code>11:01</code></p>
+<p>Must be a valid date in the format <code>H:i</code>. Example: <code>18:24</code></p>
                     </div>
                                                                 <div style="margin-left: 14px; clear: unset;">
                         <b style="line-height: 2;"><code>closes_at</code></b>&nbsp;&nbsp;
@@ -24147,7 +24370,7 @@ edit one day without round-tripping the full 7-day grid.</h2>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"opens_at\": \"11:01\",
+    \"opens_at\": \"18:24\",
     \"closes_at\": \"2052-06-28\"
 }"
 </code></pre></div>
@@ -24164,7 +24387,7 @@ const headers = {
 };
 
 let body = {
-    "opens_at": "11:01",
+    "opens_at": "18:24",
     "closes_at": "2052-06-28"
 };
 
@@ -24270,10 +24493,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="opens_at"                data-endpoint="PATCHapi-v1-vendor-business-hours-days--day-"
-               value="11:01"
+               value="18:24"
                data-component="body">
     <br>
-<p>This field is required when <code>closes_at</code> is present. Must be a valid date in the format <code>H:i</code>. Example: <code>11:01</code></p>
+<p>This field is required when <code>closes_at</code> is present. Must be a valid date in the format <code>H:i</code>. Example: <code>18:24</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>closes_at</code></b>&nbsp;&nbsp;
@@ -24335,9 +24558,9 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-correlation-id: 01KTBQ4QWJ7H412ZQP7C0H0A6Q
+x-correlation-id: 01KTCGFFDX502GG2WQ73X9N72E
 vary: Origin
-x-trace-id: 46a0d9c7-d8e2-45d8-98b2-4765900debcf
+x-trace-id: 7415aea5-200c-4010-af1f-6dcd7f673afe
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -24775,9 +24998,9 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-correlation-id: 01KTBQ4RPX7M9V3SD5MFHXZRSG
+x-correlation-id: 01KTCGFKHCK17W9H7FR32J2MQ3
 vary: Origin
-x-trace-id: d7c40767-7f19-4c11-bbbf-b036f8344d30
+x-trace-id: 058d8783-9216-4f80-a0a2-d4ff83a83736
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -24911,9 +25134,9 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-correlation-id: 01KTBQ4RQ2ZWW4YM9668YAZRRH
+x-correlation-id: 01KTCGFKJS2RZQCKS6EBZABYS6
 vary: Origin
-x-trace-id: d56759dc-a59a-4c39-b291-65f37c7b23e9
+x-trace-id: cc5b7fc6-5271-43d7-827f-038a8cd245a1
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -25155,14 +25378,14 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"proposal_kind\": \"change_quantity\",
+    \"proposal_kind\": \"remove_item\",
     \"vendor_explanation\": {
         \"en\": \"b\",
         \"ar\": \"n\"
     },
     \"changes\": [
         {
-            \"change_kind\": \"update\",
+            \"change_kind\": \"remove\",
             \"target_item_public_id\": \"architecto\"
         }
     ]
@@ -25181,14 +25404,14 @@ const headers = {
 };
 
 let body = {
-    "proposal_kind": "change_quantity",
+    "proposal_kind": "remove_item",
     "vendor_explanation": {
         "en": "b",
         "ar": "n"
     },
     "changes": [
         {
-            "change_kind": "update",
+            "change_kind": "remove",
             "target_item_public_id": "architecto"
         }
     ]
@@ -25296,10 +25519,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="proposal_kind"                data-endpoint="POSTapi-v1-vendor-booking-vendors--bookingVendorPublicId--modify"
-               value="change_quantity"
+               value="remove_item"
                data-component="body">
     <br>
-<p>Example: <code>change_quantity</code></p>
+<p>Example: <code>remove_item</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>add_item</code></li> <li><code>remove_item</code></li> <li><code>change_quantity</code></li> <li><code>change_price</code></li> <li><code>change_slot</code></li> <li><code>add_surcharge</code></li> <li><code>add_note</code></li></ul>
         </div>
@@ -25356,10 +25579,10 @@ Must be one of:
  &nbsp;
                 <input type="text" style="display: none"
                               name="changes.0.change_kind"                data-endpoint="POSTapi-v1-vendor-booking-vendors--bookingVendorPublicId--modify"
-               value="update"
+               value="remove"
                data-component="body">
     <br>
-<p>Example: <code>update</code></p>
+<p>Example: <code>remove</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>add</code></li> <li><code>remove</code></li> <li><code>update</code></li></ul>
                     </div>
@@ -25408,7 +25631,7 @@ Must be one of:
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"proposal_kind\": \"add_surcharge\",
+    \"proposal_kind\": \"add_note\",
     \"vendor_explanation\": {
         \"en\": \"b\",
         \"ar\": \"n\"
@@ -25434,7 +25657,7 @@ const headers = {
 };
 
 let body = {
-    "proposal_kind": "add_surcharge",
+    "proposal_kind": "add_note",
     "vendor_explanation": {
         "en": "b",
         "ar": "n"
@@ -25549,10 +25772,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="proposal_kind"                data-endpoint="POSTapi-v1-vendor-booking-vendors--bookingVendorPublicId--preview-modification"
-               value="add_surcharge"
+               value="add_note"
                data-component="body">
     <br>
-<p>Example: <code>add_surcharge</code></p>
+<p>Example: <code>add_note</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>add_item</code></li> <li><code>remove_item</code></li> <li><code>change_quantity</code></li> <li><code>change_price</code></li> <li><code>change_slot</code></li> <li><code>add_surcharge</code></li> <li><code>add_note</code></li></ul>
         </div>
@@ -25690,9 +25913,9 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-correlation-id: 01KTBQ4RQKDDVH4K8JGDKAVDES
+x-correlation-id: 01KTCGFKPKKCE2R7AGZKZMKW8Z
 vary: Origin
-x-trace-id: e89b2dcb-ec5d-46da-b292-6e1b5cb30520
+x-trace-id: 8c4ad161-6162-48ba-8c16-95f740fad436
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -25840,9 +26063,9 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-correlation-id: 01KTBQ4RQRRXJ9RY1JXC3SXGQS
+x-correlation-id: 01KTCGFKQ6EVVR1NGEJAV581Q6
 vary: Origin
-x-trace-id: d2391cb0-2f97-4f40-800d-9c05eb0e8418
+x-trace-id: 0539139a-d823-4e7c-886e-85713a7c790a
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -26168,9 +26391,9 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-correlation-id: 01KTBQ4QH8SC5SEBG2SDGTY74X
+x-correlation-id: 01KTCGFCKB9NS59TSP9WDN1GGN
 vary: Origin
-x-trace-id: ae279d36-95d2-459e-bd85-18c0261abb2c
+x-trace-id: 7461a7aa-86da-4287-b8da-a31b3ffb2671
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -26304,9 +26527,9 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-correlation-id: 01KTBQ4QSZNG14XGFX1H9C0DKW
+x-correlation-id: 01KTCGFF2BKZNED9FZSE4HSWPM
 vary: Origin
-x-trace-id: fbb461f5-8aaf-4237-8550-7c55bd21839f
+x-trace-id: 8ab7fe57-3435-49e7-b93c-1484739a440c
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -26440,9 +26663,9 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-correlation-id: 01KTBQ4QT64MGH13DJTBZNPX56
+x-correlation-id: 01KTCGFF3KPAVEF74M7YCCNG3D
 vary: Origin
-x-trace-id: e5560c83-1bf8-4a6e-a3ed-50289e888863
+x-trace-id: c885121d-e66a-4298-8496-c0205a0e44ac
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -26576,9 +26799,9 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-correlation-id: 01KTBQ4QTM7QFSZ4DVQCKRCBCK
+x-correlation-id: 01KTCGFF5E8SAHFWN87PG6ZN5A
 vary: Origin
-x-trace-id: 96388e64-48fe-4f5c-86c4-abbf80184e6f
+x-trace-id: cb3d757b-965c-4f45-b396-612c21f93e8c
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -26683,7 +26906,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Content-Type: multipart/form-data" \
     --header "Accept: application/json" \
     --form "doc_type=cr"\
-    --form "file=@C:\Users\N\AppData\Local\Temp\php6412.tmp" </code></pre></div>
+    --form "file=@C:\Users\N\AppData\Local\Temp\phpC173.tmp" </code></pre></div>
 
 
 <div class="javascript-example">
@@ -26806,7 +27029,7 @@ Must be one of:
                value=""
                data-component="body">
     <br>
-<p>Must be a file. Must not be greater than 10240 kilobytes. Example: <code>C:\Users\N\AppData\Local\Temp\php6412.tmp</code></p>
+<p>Must be a file. Must not be greater than 10240 kilobytes. Example: <code>C:\Users\N\AppData\Local\Temp\phpC173.tmp</code></p>
         </div>
         </form>
 
@@ -26980,9 +27203,9 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-correlation-id: 01KTBQ4QV2X7Q5W21BG0892E17
+x-correlation-id: 01KTCGFF6W1QQ9JCDXNTG2K6A1
 vary: Origin
-x-trace-id: 54b7942e-c558-4c6e-a6a2-896422816bbb
+x-trace-id: 9f7eb247-8ca5-474b-b331-050c561d62fd
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -27318,9 +27541,9 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-correlation-id: 01KTBQ4QVBHFS55GQJSQQMSJGB
+x-correlation-id: 01KTCGFF7PDJYWR2BEVJ44098Y
 vary: Origin
-x-trace-id: 3f648c57-1267-4ae2-9013-14768be5e062
+x-trace-id: f9e034d5-688e-4944-9bcb-08de7c0891f4
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -27642,9 +27865,9 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-correlation-id: 01KTBQ4QVMYR9PNPYMWEWKHRZS
+x-correlation-id: 01KTCGFF95GNZY3CKREE4T81VP
 vary: Origin
-x-trace-id: e037caeb-2b6d-431d-8f74-407851818edb
+x-trace-id: f32f7449-2793-4ef9-be64-8e1883de8ff2
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -28065,9 +28288,9 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-correlation-id: 01KTBQ4R4SZB4W1615E2C89YGK
+x-correlation-id: 01KTCGFGJK34YEFJZP7BFSNBEZ
 vary: Origin
-x-trace-id: 280473fe-6138-4e3c-8a56-e7e0e82cebea
+x-trace-id: a3a6aab8-1ad2-4f13-a560-e8255df066be
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -28185,7 +28408,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Content-Type: multipart/form-data" \
     --header "Accept: application/json" \
     --form "store_id="01HXYZ1234567890ABCDEFGHIJ""\
-    --form "file=@C:\Users\N\AppData\Local\Temp\php65CB.tmp" </code></pre></div>
+    --form "file=@C:\Users\N\AppData\Local\Temp\phpC974.tmp" </code></pre></div>
 
 
 <div class="javascript-example">
@@ -28306,7 +28529,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value=""
                data-component="body">
     <br>
-<p>Excel file (.xlsx or .xls) containing rental services to import. Example: <code>C:\Users\N\AppData\Local\Temp\php65CB.tmp</code></p>
+<p>Excel file (.xlsx or .xls) containing rental services to import. Example: <code>C:\Users\N\AppData\Local\Temp\phpC974.tmp</code></p>
         </div>
         </form>
 
@@ -28327,7 +28550,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Content-Type: multipart/form-data" \
     --header "Accept: application/json" \
     --form "store_id="01HXYZ1234567890ABCDEFGHIJ""\
-    --form "file=@C:\Users\N\AppData\Local\Temp\php65CE.tmp" </code></pre></div>
+    --form "file=@C:\Users\N\AppData\Local\Temp\phpC9A6.tmp" </code></pre></div>
 
 
 <div class="javascript-example">
@@ -28448,7 +28671,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value=""
                data-component="body">
     <br>
-<p>Excel file (.xlsx or .xls) containing sale services to import. Example: <code>C:\Users\N\AppData\Local\Temp\php65CE.tmp</code></p>
+<p>Excel file (.xlsx or .xls) containing sale services to import. Example: <code>C:\Users\N\AppData\Local\Temp\phpC9A6.tmp</code></p>
         </div>
         </form>
 
@@ -28469,7 +28692,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Content-Type: multipart/form-data" \
     --header "Accept: application/json" \
     --form "store_id="01HXYZ1234567890ABCDEFGHIJ""\
-    --form "file=@C:\Users\N\AppData\Local\Temp\php65E0.tmp" </code></pre></div>
+    --form "file=@C:\Users\N\AppData\Local\Temp\phpC9D8.tmp" </code></pre></div>
 
 
 <div class="javascript-example">
@@ -28590,7 +28813,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value=""
                data-component="body">
     <br>
-<p>Excel file (.xlsx or .xls) containing digital services to import. Example: <code>C:\Users\N\AppData\Local\Temp\php65E0.tmp</code></p>
+<p>Excel file (.xlsx or .xls) containing digital services to import. Example: <code>C:\Users\N\AppData\Local\Temp\phpC9D8.tmp</code></p>
         </div>
         </form>
 
@@ -28640,9 +28863,9 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-correlation-id: 01KTBQ4R9NH33TCM25REZD4ZNB
+x-correlation-id: 01KTCGFHCJ5NGDPHTZHQ7JMA9V
 vary: Origin
-x-trace-id: 4ff48a39-de2a-4272-8aeb-5e6ef02bb4a0
+x-trace-id: 9a17da66-677d-4335-9cc0-21ccc60313e3
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -28789,9 +29012,9 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-correlation-id: 01KTBQ4R9Z2ZDYREGJKZJ3VR2K
+x-correlation-id: 01KTCGFHDCR3ZQ0KGGW3BFFTXK
 vary: Origin
-x-trace-id: 71ef2cd3-b0f5-45a9-a5a9-4567571d1aeb
+x-trace-id: 9551b82f-08f8-430f-9848-a81e02a192c3
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -28942,9 +29165,9 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-correlation-id: 01KTBQ4RRJR4Z0V52BGERN8S2Z
+x-correlation-id: 01KTCGFKXYWGRD3P5NJ557SEDR
 vary: Origin
-x-trace-id: ef1398b3-7d28-4cbd-b771-d8b11c3173b0
+x-trace-id: ff75d91d-7feb-42c1-aaf6-03f78e5cbfb9
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -29063,7 +29286,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Accept: application/json" \
     --form "lane=preparing"\
     --form "completion_note=b"\
-    --form "completion_photo=@C:\Users\N\AppData\Local\Temp\php67D9.tmp" </code></pre></div>
+    --form "completion_photo=@C:\Users\N\AppData\Local\Temp\phpD4DA.tmp" </code></pre></div>
 
 
 <div class="javascript-example">
@@ -29212,7 +29435,7 @@ Must be one of:
                value=""
                data-component="body">
     <br>
-<p>Must be an image. Must not be greater than 10240 kilobytes. Example: <code>C:\Users\N\AppData\Local\Temp\php67D9.tmp</code></p>
+<p>Must be an image. Must not be greater than 10240 kilobytes. Example: <code>C:\Users\N\AppData\Local\Temp\phpD4DA.tmp</code></p>
         </div>
         </form>
 
@@ -29233,7 +29456,7 @@ Must be one of:
     --header "Content-Type: multipart/form-data" \
     --header "Accept: application/json" \
     --form "phase=return"\
-    --form "photos[]=@C:\Users\N\AppData\Local\Temp\php67DA.tmp" </code></pre></div>
+    --form "photos[]=@C:\Users\N\AppData\Local\Temp\phpD50A.tmp" </code></pre></div>
 
 
 <div class="javascript-example">
@@ -29392,7 +29615,7 @@ Must be one of:
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"reason_code\": \"damaged_goods\",
+    \"reason_code\": \"other\",
     \"note\": \"b\"
 }"
 </code></pre></div>
@@ -29409,7 +29632,7 @@ const headers = {
 };
 
 let body = {
-    "reason_code": "damaged_goods",
+    "reason_code": "other",
     "note": "b"
 };
 
@@ -29515,10 +29738,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="reason_code"                data-endpoint="POSTapi-v1-vendor-booking-items--bookingItemPublicId--report-issue"
-               value="damaged_goods"
+               value="other"
                data-component="body">
     <br>
-<p>Example: <code>damaged_goods</code></p>
+<p>Example: <code>other</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>venue_unavailable</code></li> <li><code>customer_unreachable</code></li> <li><code>damaged_goods</code></li> <li><code>safety_concern</code></li> <li><code>other</code></li></ul>
         </div>
@@ -29972,7 +30195,7 @@ Must be one of:
             <code>false</code>
         </label>
     <br>
-<p>Example: <code>true</code></p>
+<p>Example: <code>false</code></p>
                     </div>
                                                                 <div style="margin-left: 14px; clear: unset;">
                         <b style="line-height: 2;"><code>starts_at</code></b>&nbsp;&nbsp;
@@ -29981,10 +30204,10 @@ Must be one of:
  &nbsp;
                 <input type="text" style="display: none"
                               name="rules.0.starts_at"                data-endpoint="POSTapi-v1-vendor-loyalty-program"
-               value="2026-06-05T11:01:57"
+               value="2026-06-05T18:24:49"
                data-component="body">
     <br>
-<p>Must be a valid date. Example: <code>2026-06-05T11:01:57</code></p>
+<p>Must be a valid date. Example: <code>2026-06-05T18:24:49</code></p>
                     </div>
                                                                 <div style="margin-left: 14px; clear: unset;">
                         <b style="line-height: 2;"><code>ends_at</code></b>&nbsp;&nbsp;
@@ -30100,9 +30323,9 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-correlation-id: 01KTBQ4S7QS9S16F2EKH7099QK
+x-correlation-id: 01KTCGFPJ7W35P7AVHRDWQWW9D
 vary: Origin
-x-trace-id: c3d147b0-ea52-4b08-8a59-f433338d5c95
+x-trace-id: 55e6c591-4fb5-4586-986d-cea5040146b4
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -30372,10 +30595,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="rules.0.rule_kind"                data-endpoint="GETapi-v1-vendor-loyalty-program"
-               value="referral"
+               value="threshold_bonus"
                data-component="body">
     <br>
-<p>This field is required when <code>rules</code> is present. Example: <code>referral</code></p>
+<p>This field is required when <code>rules</code> is present. Example: <code>threshold_bonus</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>first_booking</code></li> <li><code>category_bonus</code></li> <li><code>threshold_bonus</code></li> <li><code>referral</code></li></ul>
                     </div>
@@ -30468,10 +30691,10 @@ Must be one of:
  &nbsp;
                 <input type="text" style="display: none"
                               name="rules.0.starts_at"                data-endpoint="GETapi-v1-vendor-loyalty-program"
-               value="2026-06-05T11:01:57"
+               value="2026-06-05T18:24:49"
                data-component="body">
     <br>
-<p>Must be a valid date. Example: <code>2026-06-05T11:01:57</code></p>
+<p>Must be a valid date. Example: <code>2026-06-05T18:24:49</code></p>
                     </div>
                                                                 <div style="margin-left: 14px; clear: unset;">
                         <b style="line-height: 2;"><code>ends_at</code></b>&nbsp;&nbsp;
@@ -30529,8 +30752,8 @@ Must be one of:
                 \"en\": \"k\",
                 \"ar\": \"h\"
             },
-            \"is_active\": false,
-            \"starts_at\": \"2026-06-05T11:01:57\",
+            \"is_active\": true,
+            \"starts_at\": \"2026-06-05T18:24:49\",
             \"ends_at\": \"2052-06-28\"
         }
     ]
@@ -30572,8 +30795,8 @@ let body = {
                 "en": "k",
                 "ar": "h"
             },
-            "is_active": false,
-            "starts_at": "2026-06-05T11:01:57",
+            "is_active": true,
+            "starts_at": "2026-06-05T18:24:49",
             "ends_at": "2052-06-28"
         }
     ]
@@ -30931,7 +31154,7 @@ Must be one of:
             <code>false</code>
         </label>
     <br>
-<p>Example: <code>false</code></p>
+<p>Example: <code>true</code></p>
                     </div>
                                                                 <div style="margin-left: 14px; clear: unset;">
                         <b style="line-height: 2;"><code>starts_at</code></b>&nbsp;&nbsp;
@@ -30940,10 +31163,10 @@ Must be one of:
  &nbsp;
                 <input type="text" style="display: none"
                               name="rules.0.starts_at"                data-endpoint="PUTapi-v1-vendor-loyalty-program"
-               value="2026-06-05T11:01:57"
+               value="2026-06-05T18:24:49"
                data-component="body">
     <br>
-<p>Must be a valid date. Example: <code>2026-06-05T11:01:57</code></p>
+<p>Must be a valid date. Example: <code>2026-06-05T18:24:49</code></p>
                     </div>
                                                                 <div style="margin-left: 14px; clear: unset;">
                         <b style="line-height: 2;"><code>ends_at</code></b>&nbsp;&nbsp;
@@ -31007,9 +31230,9 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-correlation-id: 01KTBQ4S8F4ADEGVVMZM5ZKKZD
+x-correlation-id: 01KTCGFPN0A8V960417107KZF4
 vary: Origin
-x-trace-id: 7b2a8b64-0d47-43a6-91bf-2ff3e6371258
+x-trace-id: 383adb58-4668-4070-99e5-f35d5890df6b
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -31143,9 +31366,9 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-correlation-id: 01KTBQ4S8M5KTDN2AEWES2EKR3
+x-correlation-id: 01KTCGFPNB9JXNH8774WY9VT8Q
 vary: Origin
-x-trace-id: 198f4a0b-4287-4c21-b725-7a73b040fea0
+x-trace-id: b2d68fbb-2b22-4190-b873-4e26767af212
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -31456,9 +31679,9 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-correlation-id: 01KTBQ4S0VGEEKYP4XDCS17BG1
+x-correlation-id: 01KTCGFNDT95ZPEHTY28YFER6D
 vary: Origin
-x-trace-id: 3497c165-5846-41f4-a4cd-fa2745cc4848
+x-trace-id: f3f418b5-a438-4121-b409-82e520cecb84
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -31592,9 +31815,9 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-correlation-id: 01KTBQ4S119Y5WCFBTJ69EGJRH
+x-correlation-id: 01KTCGFNERQT757X9VHNEB19BX
 vary: Origin
-x-trace-id: 1af9072a-0f6a-46b1-b50b-8f4b08277006
+x-trace-id: c837f0de-d904-4996-ab6e-32a24c8ba6de
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -32091,9 +32314,9 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-correlation-id: 01KTBQ4QQYTY14ZZBY576ZK5JR
+x-correlation-id: 01KTCGFEFPYWKXYWSA53CHCA0W
 vary: Origin
-x-trace-id: 5461ee34-d868-40cc-97cb-ee0c92ff9a16
+x-trace-id: a027ee24-6b26-4425-876d-e3adcd18ad05
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -32231,9 +32454,9 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-correlation-id: 01KTBQ4RWYERSTWKPZKTE1M7NK
+x-correlation-id: 01KTCGFMR08R5VS6R7678D30XT
 vary: Origin
-x-trace-id: 848bdb1c-889f-418f-8b49-d77d7b624fbf
+x-trace-id: 038542cb-1379-44ae-9fb9-dd1050290879
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -32339,7 +32562,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Accept: application/json" \
     --data "{
     \"amount_minor\": 16,
-    \"product_type\": \"digital\",
+    \"product_type\": \"sale\",
     \"category_public_id\": \"n\"
 }"
 </code></pre></div>
@@ -32357,7 +32580,7 @@ const headers = {
 
 let body = {
     "amount_minor": 16,
-    "product_type": "digital",
+    "product_type": "sale",
     "category_public_id": "n"
 };
 
@@ -32379,9 +32602,9 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-correlation-id: 01KTBQ4RX4TF636ZT9QVHV17R0
+x-correlation-id: 01KTCGFMS0XQZY8S23XS6RDNEQ
 vary: Origin
-x-trace-id: 778ad021-0f1d-42ae-8ddf-558ca85558a4
+x-trace-id: 108b591a-5416-40ef-88aa-cb7c832f4ab1
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -32487,10 +32710,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="product_type"                data-endpoint="GETapi-v1-vendor-pricing-calculator"
-               value="digital"
+               value="sale"
                data-component="body">
     <br>
-<p>Example: <code>digital</code></p>
+<p>Example: <code>sale</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>rental</code></li> <li><code>sale</code></li> <li><code>digital</code></li></ul>
         </div>
@@ -32558,9 +32781,9 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-correlation-id: 01KTBQ4QQPJY97DFBZ5AYW7G2J
+x-correlation-id: 01KTCGFEECVDSJ86TBH98Q8RKW
 vary: Origin
-x-trace-id: 7e304134-8bce-462c-a6d7-a2bb8dc8fc4b
+x-trace-id: 269f22d4-b49f-4735-ae90-af470cc93998
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -32694,9 +32917,9 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-correlation-id: 01KTBQ4QR5Y7FB53R089CBCMG5
+x-correlation-id: 01KTCGFEJGEB0GEMBBHVZMKGEN
 vary: Origin
-x-trace-id: 8496d297-82b7-47ab-9041-35ced23e7069
+x-trace-id: 04ec6f62-4673-4303-80ff-71ff39b8edf2
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -32815,7 +33038,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     \"bank_iban\": \"y\",
     \"bank_swift_bic\": \"vdljni\",
     \"bank_branch\": \"k\",
-    \"preferred_locale\": \"en\"
+    \"preferred_locale\": \"ar\"
 }"
 </code></pre></div>
 
@@ -32845,7 +33068,7 @@ let body = {
     "bank_iban": "y",
     "bank_swift_bic": "vdljni",
     "bank_branch": "k",
-    "preferred_locale": "en"
+    "preferred_locale": "ar"
 };
 
 fetch(url, {
@@ -33083,10 +33306,10 @@ Must be one of:
  &nbsp;
                 <input type="text" style="display: none"
                               name="preferred_locale"                data-endpoint="PUTapi-v1-vendor-profile"
-               value="en"
+               value="ar"
                data-component="body">
     <br>
-<p>Example: <code>en</code></p>
+<p>Example: <code>ar</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>en</code></li> <li><code>ar</code></li></ul>
         </div>
@@ -33108,7 +33331,7 @@ Must be one of:
     "http://localhost:8000/api/v1/vendor/profile/logo|cover" \
     --header "Content-Type: multipart/form-data" \
     --header "Accept: application/json" \
-    --form "file=@C:\Users\N\AppData\Local\Temp\php63D1.tmp" </code></pre></div>
+    --form "file=@C:\Users\N\AppData\Local\Temp\phpC018.tmp" </code></pre></div>
 
 
 <div class="javascript-example">
@@ -33229,7 +33452,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value=""
                data-component="body">
     <br>
-<p>Must be an image. Must not be greater than 5120 kilobytes. Example: <code>C:\Users\N\AppData\Local\Temp\php63D1.tmp</code></p>
+<p>Must be an image. Must not be greater than 5120 kilobytes. Example: <code>C:\Users\N\AppData\Local\Temp\phpC018.tmp</code></p>
         </div>
         </form>
 
@@ -33403,9 +33626,9 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-correlation-id: 01KTBQ4QSCQ78M9QZZBMYJVJ3E
+x-correlation-id: 01KTCGFEYFSEYDP6ANEH5SP6RD
 vary: Origin
-x-trace-id: b2745a93-f3a0-4370-87e8-16e957d0b076
+x-trace-id: 9cc9f61d-fcc2-4340-b552-73e410980c7d
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -33509,7 +33732,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     "http://localhost:8000/api/v1/vendor/profile/portfolio" \
     --header "Content-Type: multipart/form-data" \
     --header "Accept: application/json" \
-    --form "files[]=@C:\Users\N\AppData\Local\Temp\php63E2.tmp" </code></pre></div>
+    --form "files[]=@C:\Users\N\AppData\Local\Temp\phpC0B6.tmp" </code></pre></div>
 
 
 <div class="javascript-example">
@@ -33797,9 +34020,9 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-correlation-id: 01KTBQ4QHGEC31NQEEBDG0K51N
+x-correlation-id: 01KTCGFCR39GYMDS4BYR18WBQ8
 vary: Origin
-x-trace-id: 6aedf458-1e59-43c7-96b6-361bdfb6a6c3
+x-trace-id: 33e33265-8773-46d9-b2fc-ffedbc1a85c3
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -33933,9 +34156,9 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-correlation-id: 01KTBQ4RSBJ3ARP74GNXF0YGYW
+x-correlation-id: 01KTCGFM5JWVQT1JS05CK0XKDR
 vary: Origin
-x-trace-id: b08e8337-c19a-4316-8b58-a45b360d06f8
+x-trace-id: eba6b2ec-aea0-47bb-9736-e21bc052931d
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -34069,9 +34292,9 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-correlation-id: 01KTBQ4RSH1GTMG6RNJ5M9Z0ZK
+x-correlation-id: 01KTCGFM6BT0EDKQ4RXP0EAXFV
 vary: Origin
-x-trace-id: fbef80a2-5852-4129-bbb2-97bab8e0010e
+x-trace-id: cb7aeece-50b6-49f4-835f-e43239ee3642
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -34205,9 +34428,9 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-correlation-id: 01KTBQ4RSPCBPVNEAZ2RSCEV1J
+x-correlation-id: 01KTCGFM7CSF0MEGYN17SF5XBE
 vary: Origin
-x-trace-id: 59e6f293-2187-4a9a-855c-bda2b6e486a4
+x-trace-id: 081cc7d2-38e6-410b-8d56-997083c2202d
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -34353,9 +34576,9 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-correlation-id: 01KTBQ4S4FEC7Y963PNTDVSY6J
+x-correlation-id: 01KTCGFP7VWZG229B9J7ZYQ3SV
 vary: Origin
-x-trace-id: 58489564-5210-4a3e-8237-1dfbe948bce1
+x-trace-id: c1ec1098-c970-4f5d-aa42-51528f3da04c
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -34526,9 +34749,9 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-correlation-id: 01KTBQ4S4PBRRM6S2JJMV5RWTK
+x-correlation-id: 01KTCGFP8CEY0AX7CCPE92F659
 vary: Origin
-x-trace-id: 383c00cb-8af0-456e-ae89-69d8a64998f6
+x-trace-id: f6e940df-fb45-47fc-8676-73696acedf8b
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -34662,9 +34885,9 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-correlation-id: 01KTBQ4S4WMTBEPZNTDF5EAM47
+x-correlation-id: 01KTCGFP9BZYX2H8K7DGFNQ9SH
 vary: Origin
-x-trace-id: 750dfe66-10ac-4827-8322-36dddc6489ba
+x-trace-id: 1580cbee-d9cc-46b8-aec2-bfb52d1d7fee
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -34934,6 +35157,196 @@ You can check the Dev Tools console for debugging information.</code></pre>
         </div>
         </form>
 
+                <h1 id="vendor-schedule">Vendor - Schedule</h1>
+
+    
+
+                                <h2 id="vendor-schedule-GETapi-v1-vendor-schedule">GET api/v1/vendor/schedule</h2>
+
+<p>
+</p>
+
+
+
+<span id="example-requests-GETapi-v1-vendor-schedule">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "http://localhost:8000/api/v1/vendor/schedule" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json" \
+    --data "{
+    \"from\": \"2026-06-05\",
+    \"to\": \"2052-06-28\"
+}"
+</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/v1/vendor/schedule"
+);
+
+const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "from": "2026-06-05",
+    "to": "2052-06-28"
+};
+
+fetch(url, {
+    method: "GET",
+    headers,
+    body: JSON.stringify(body),
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETapi-v1-vendor-schedule">
+            <blockquote>
+            <p>Example response (401):</p>
+        </blockquote>
+                <details class="annotation">
+            <summary style="cursor: pointer;">
+                <small onclick="textContent = parentElement.parentElement.open ? 'Show headers' : 'Hide headers'">Show headers</small>
+            </summary>
+            <pre><code class="language-http">cache-control: no-cache, private
+content-type: application/json
+x-correlation-id: 01KTCGFKV6RAPYBYVM7AVZEB1J
+vary: Origin
+x-trace-id: d1783e57-1f1a-4d83-9b8f-5ad08f506453
+ </code></pre></details>         <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;data&quot;: null,
+    &quot;meta&quot;: null,
+    &quot;errors&quot;: [
+        {
+            &quot;code&quot;: &quot;unauthenticated&quot;,
+            &quot;message&quot;: &quot;Unauthenticated.&quot;
+        }
+    ]
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-GETapi-v1-vendor-schedule" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETapi-v1-vendor-schedule"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETapi-v1-vendor-schedule"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-GETapi-v1-vendor-schedule" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETapi-v1-vendor-schedule">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-GETapi-v1-vendor-schedule" data-method="GET"
+      data-path="api/v1/vendor/schedule"
+      data-authed="0"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-v1-vendor-schedule', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-GETapi-v1-vendor-schedule"
+                    onclick="tryItOut('GETapi-v1-vendor-schedule');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-GETapi-v1-vendor-schedule"
+                    onclick="cancelTryOut('GETapi-v1-vendor-schedule');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-GETapi-v1-vendor-schedule"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>api/v1/vendor/schedule</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="GETapi-v1-vendor-schedule"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="GETapi-v1-vendor-schedule"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+        <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>window</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="window"                data-endpoint="GETapi-v1-vendor-schedule"
+               value=""
+               data-component="body">
+    <br>
+
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>from</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="from"                data-endpoint="GETapi-v1-vendor-schedule"
+               value="2026-06-05"
+               data-component="body">
+    <br>
+<p>Vendor-portal 7.3 mobile parity (C): explicit calendar range
+(max 62 days) overrides window. The 62-day cap is enforced
+below — 'before_or_equal' takes a date/field, not field-relative
+arithmetic, so it cannot express "from + 62 days". This field is required when <code>to</code> is present. Must be a valid date in the format <code>Y-m-d</code>. Example: <code>2026-06-05</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>to</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="to"                data-endpoint="GETapi-v1-vendor-schedule"
+               value="2052-06-28"
+               data-component="body">
+    <br>
+<p>This field is required when <code>from</code> is present. Must be a valid date in the format <code>Y-m-d</code>. Must be a date after or equal to <code>from</code>. Example: <code>2052-06-28</code></p>
+        </div>
+        </form>
+
                 <h1 id="vendor-services">Vendor - Services</h1>
 
     
@@ -34984,9 +35397,9 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-correlation-id: 01KTBQ4R55J0NH36EYSM14M2T9
+x-correlation-id: 01KTCGFGM6JGJ2MFAAXASCHPEN
 vary: Origin
-x-trace-id: bd176f1b-3dc2-48d2-ab89-2b6fb43e9204
+x-trace-id: 44be3e5c-ed7f-4ed2-bafa-88e4e9822b10
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -35092,7 +35505,7 @@ edit form (the customer variant exposes filterable fields only).</h2>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"type\": \"sale\"
+    \"type\": \"digital\"
 }"
 </code></pre></div>
 
@@ -35108,7 +35521,7 @@ const headers = {
 };
 
 let body = {
-    "type": "sale"
+    "type": "digital"
 };
 
 fetch(url, {
@@ -35129,9 +35542,9 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-correlation-id: 01KTBQ4R5ABP7GCW61516HRMBS
+x-correlation-id: 01KTCGFGNAE3MQHYE87ZSE5TDN
 vary: Origin
-x-trace-id: 8569995a-d405-40a1-8095-3ed5c468fa68
+x-trace-id: a4461070-4c19-4418-a9ba-f853014f02e5
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -35238,10 +35651,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="type"                data-endpoint="GETapi-v1-vendor-categories--categoryPublicId--field-schemas"
-               value="sale"
+               value="digital"
                data-component="body">
     <br>
-<p>Example: <code>sale</code></p>
+<p>Example: <code>digital</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>rental</code></li> <li><code>sale</code></li> <li><code>digital</code></li></ul>
         </div>
@@ -35293,9 +35706,9 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-correlation-id: 01KTBQ4R5GE9C0N9AT3ZKQYZSR
+x-correlation-id: 01KTCGFGPSSKA5TMGWA1H59311
 vary: Origin
-x-trace-id: f2df865b-1788-47eb-bbb0-eb1ac0524ff8
+x-trace-id: 22f0ed2e-74bf-4a38-b39d-581a31b7cf4a
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -35450,9 +35863,9 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-correlation-id: 01KTBQ4R5R6R7B6GSZPR1HHGAJ
+x-correlation-id: 01KTCGFGR10W9MXWYVXHBKMKDH
 vary: Origin
-x-trace-id: 80649ef1-ad12-494f-81a5-be9c5f26deea
+x-trace-id: 7ec95b42-2a19-47c6-ba34-472c7f69b3c5
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -35623,9 +36036,9 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-correlation-id: 01KTBQ4R5Y8Q386RGET4QBT12T
+x-correlation-id: 01KTCGFGS37CDXDA4343KXTTVZ
 vary: Origin
-x-trace-id: 151b3961-069c-4e26-a280-02397efa1492
+x-trace-id: 24c46bdb-59a4-45a9-9bc1-faf1d5649c52
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -36731,7 +37144,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Content-Type: multipart/form-data" \
     --header "Accept: application/json" \
     --form "collection=gallery"\
-    --form "files[]=@C:\Users\N\AppData\Local\Temp\php6612.tmp" </code></pre></div>
+    --form "files[]=@C:\Users\N\AppData\Local\Temp\phpCAB6.tmp" </code></pre></div>
 
 
 <div class="javascript-example">
@@ -36929,9 +37342,9 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-correlation-id: 01KTBQ4RAMCTCPN4ZBGJGFNADN
+x-correlation-id: 01KTCGFHGBTVPTHD49Y3M5RS8A
 vary: Origin
-x-trace-id: ed7d014a-4f41-4340-bfe6-e0f79dde29bc
+x-trace-id: 45ea14e4-4d37-447d-be62-99a907996b56
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -39484,9 +39897,9 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-correlation-id: 01KTBQ4RVJGHCBH0BZCET1JECT
+x-correlation-id: 01KTCGFMGQA61VY1F3Z6SXYEVB
 vary: Origin
-x-trace-id: ae9a8be2-5a56-4b73-90f5-1d0be305df25
+x-trace-id: 210c60e0-fd2d-41d0-81ea-d110da08bb99
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -39630,9 +40043,9 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-correlation-id: 01KTBQ4RVRXE8XM9SDMFN6A3CB
+x-correlation-id: 01KTCGFMJ6RZ3BSDCJN5XYGG4J
 vary: Origin
-x-trace-id: 25599dd7-6e5f-4d3f-aa4a-21369d2bf548
+x-trace-id: 1ed04a7a-f00d-4f30-b6bf-c6a149221a21
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -39827,9 +40240,9 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-correlation-id: 01KTBQ4RXZ9F0D70W3REXCTW05
+x-correlation-id: 01KTCGFMZX7DWVVDAR3XM8QKBS
 vary: Origin
-x-trace-id: 791bcaf6-6bae-4c45-bdd7-bc6c9630b3f6
+x-trace-id: 6b516a56-a439-4c3e-bf73-b03ec7602548
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -39963,9 +40376,9 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-correlation-id: 01KTBQ4RY5W5EP6BKAA3PPV26S
+x-correlation-id: 01KTCGFN1W1FXXP3X9NM629V03
 vary: Origin
-x-trace-id: 0e930a78-b1bb-4cd2-8f34-b36cc5899ba4
+x-trace-id: 78737dd4-2a2f-4f2a-82b2-e424cf560449
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -40116,9 +40529,9 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-correlation-id: 01KTBQ4RW69TJQEM29AF6V8RSG
+x-correlation-id: 01KTCGFMKH1JYQZDBK7VP6S0G1
 vary: Origin
-x-trace-id: bbfae6b4-1cc5-413b-aa65-d1d2b547a9fd
+x-trace-id: 6b1dba3f-3565-4ca1-8a22-48fb565ea11f
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -40252,9 +40665,9 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-correlation-id: 01KTBQ4RWGFV8GK3Y4QZD4KPHY
+x-correlation-id: 01KTCGFMMJWWKCXH90RFESTED3
 vary: Origin
-x-trace-id: f06e97fe-10f4-4a4f-8c26-72c46ce1bde6
+x-trace-id: 01802461-f0ac-4d5f-ba0e-5492ed7c863f
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -40619,9 +41032,9 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-correlation-id: 01KTBQ4RXEHP1TC0YS32H1RVPW
+x-correlation-id: 01KTCGFMW9NR3KD8N38XNMZVWJ
 vary: Origin
-x-trace-id: 92e93a65-6cde-4a3b-b70e-2fad2e37ad07
+x-trace-id: d827e7be-a0e4-4f82-ad87-72ccf3591181
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{

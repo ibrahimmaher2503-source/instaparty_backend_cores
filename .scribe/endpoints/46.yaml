@@ -1,14 +1,56 @@
-name: 'Customer - Promotions'
+name: Support
 description: ''
 endpoints:
   -
     custom: []
     httpMethods:
-      - POST
-    uri: api/v1/customer/promo-codes/validate
+      - GET
+    uri: api/v1/customer/faq/categories
     metadata:
       custom: []
-      groupName: 'Customer - Promotions'
+      groupName: Support
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"data":[],"meta":{},"errors":null}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-correlation-id: 01KTCGFQ5ZPKY4WGVJ7P5EBK45
+          vary: Origin
+          x-trace-id: c213e2a3-5eb0-4734-a62c-802e655730e2
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/customer/faq/search
+    metadata:
+      custom: []
+      groupName: Support
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
@@ -24,10 +66,10 @@ endpoints:
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
-      code:
+      q:
         custom: []
-        name: code
-        description: 'Must not be greater than 50 characters.'
+        name: q
+        description: 'Must be at least 2 characters. Must not be greater than 100 characters.'
         required: true
         example: b
         type: string
@@ -35,46 +77,21 @@ endpoints:
         exampleWasSpecified: false
         nullable: false
         deprecated: false
-      booking_draft_id:
-        custom: []
-        name: booking_draft_id
-        description: 'The <code>public_id</code> of an existing record in the bookings table.'
-        required: true
-        example: architecto
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      cart_total_minor:
-        custom: []
-        name: cart_total_minor
-        description: 'Must be at least 1.'
-        required: true
-        example: 22
-        type: integer
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      cart_currency:
-        custom: []
-        name: cart_currency
-        description: 'Must be 3 characters.'
-        required: true
-        example: gzm
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
     cleanBodyParameters:
-      code: b
-      booking_draft_id: architecto
-      cart_total_minor: 22
-      cart_currency: gzm
+      q: b
     fileParameters: []
-    responses: []
+    responses:
+      -
+        custom: []
+        status: 422
+        content: '{"message":"The q field must be at least 2 characters.","errors":{"q":["The q field must be at least 2 characters."]}}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-correlation-id: 01KTCGFQ827T2TC2F3QH7WC8MZ
+          vary: Origin
+          x-trace-id: 1b8c8cb7-5bc9-4991-b468-f4fc6c603e87
+        description: null
     responseFields: []
     auth: []
     controller: null
@@ -83,15 +100,15 @@ endpoints:
   -
     custom: []
     httpMethods:
-      - GET
-    uri: api/v1/customer/promotions/active
+      - POST
+    uri: api/v1/customer/support/tickets
     metadata:
       custom: []
-      groupName: 'Customer - Promotions'
+      groupName: Support
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
-      title: 'Feature 054 — US11 (C4). List active customer-visible promotions.'
+      title: ''
       description: ''
       authenticated: false
       deprecated: false
@@ -100,98 +117,46 @@ endpoints:
       Accept: application/json
     urlParameters: []
     cleanUrlParameters: []
-    queryParameters:
-      scope:
-        custom: []
-        name: scope
-        description: 'Optional scope filter: global|category|vendor|service.'
-        required: false
-        example: vendor
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        deprecated: false
-      vendor_public_id:
-        custom: []
-        name: vendor_public_id
-        description: "Optional ULID to scope to a single vendor's promotions."
-        required: false
-        example: 01JC7G3F0AY3T9V5K0X9N1QY3S
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        deprecated: false
-      limit:
-        custom: []
-        name: limit
-        description: 'Page size (1-50).'
-        required: false
-        example: 20
-        type: integer
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        deprecated: false
-      cursor:
-        custom: []
-        name: cursor
-        description: "Opaque cursor from a previous response's meta.next_cursor."
-        required: false
-        example: architecto
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-    cleanQueryParameters:
-      scope: vendor
-      vendor_public_id: 01JC7G3F0AY3T9V5K0X9N1QY3S
-      limit: 20
-      cursor: architecto
+    queryParameters: []
+    cleanQueryParameters: []
     bodyParameters:
-      scope:
+      subject:
         custom: []
-        name: scope
-        description: ''
-        required: false
-        example: global
-        type: string
-        enumValues:
-          - global
-          - category
-          - vendor
-          - service
-        exampleWasSpecified: false
-        nullable: true
-        deprecated: false
-      vendor_public_id:
-        custom: []
-        name: vendor_public_id
-        description: 'Must be 26 characters.'
-        required: false
-        example: bngzmiyvdljnikhwaykcmyuwpw
+        name: subject
+        description: 'Must not be greater than 255 characters.'
+        required: true
+        example: b
         type: string
         enumValues: []
         exampleWasSpecified: false
-        nullable: true
+        nullable: false
         deprecated: false
-      limit:
+      body:
         custom: []
-        name: limit
-        description: 'Must be at least 1. Must not be greater than 50.'
-        required: false
-        example: 7
-        type: integer
+        name: body
+        description: 'Must not be greater than 5000 characters.'
+        required: true
+        example: 'n'
+        type: string
         enumValues: []
         exampleWasSpecified: false
-        nullable: true
+        nullable: false
         deprecated: false
-      cursor:
+      email:
         custom: []
-        name: cursor
-        description: 'Must not be greater than 512 characters.'
+        name: email
+        description: 'Must be a valid email address. Must not be greater than 255 characters.'
+        required: true
+        example: ashly64@example.com
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      booking_id:
+        custom: []
+        name: booking_id
+        description: 'Must not be greater than 26 characters.'
         required: false
         example: v
         type: string
@@ -200,23 +165,12 @@ endpoints:
         nullable: true
         deprecated: false
     cleanBodyParameters:
-      scope: global
-      vendor_public_id: bngzmiyvdljnikhwaykcmyuwpw
-      limit: 7
-      cursor: v
+      subject: b
+      body: 'n'
+      email: ashly64@example.com
+      booking_id: v
     fileParameters: []
-    responses:
-      -
-        custom: []
-        status: 401
-        content: '{"data":null,"meta":null,"errors":[{"code":"unauthenticated","message":"Unauthenticated."}]}'
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          x-correlation-id: 01KTBQ4SCM8TKHDBFAF5R0V23W
-          vary: Origin
-          x-trace-id: 5cef93ea-9d12-45e1-ad68-fb0cdc923bc7
-        description: null
+    responses: []
     responseFields: []
     auth: []
     controller: null

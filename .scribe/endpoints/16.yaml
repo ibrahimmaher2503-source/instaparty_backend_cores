@@ -34,9 +34,9 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-correlation-id: 01KTBQ4QXMDVA4FFD6632943XE
+          x-correlation-id: 01KTCGFFK8VHMWG6JATJTZDFH8
           vary: Origin
-          x-trace-id: 899bf7c2-4339-4f6e-870b-a355e7005b77
+          x-trace-id: 4944f6ba-6660-4994-925f-43e2fffce50e
         description: null
     responseFields: []
     auth: []
@@ -205,7 +205,7 @@ endpoints:
         name: product_type
         description: ''
         required: true
-        example: sale
+        example: digital
         type: string
         enumValues:
           - rental
@@ -215,7 +215,7 @@ endpoints:
         nullable: false
         deprecated: false
     cleanBodyParameters:
-      product_type: sale
+      product_type: digital
     fileParameters: []
     responses: []
     responseFields: []
@@ -263,7 +263,7 @@ endpoints:
         name: product_type
         description: ''
         required: true
-        example: sale
+        example: rental
         type: string
         enumValues:
           - rental
@@ -306,7 +306,7 @@ endpoints:
         nullable: true
         deprecated: false
     cleanBodyParameters:
-      product_type: sale
+      product_type: rental
       revoke_reason:
         en: b
         ar: 'n'
@@ -933,9 +933,9 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-correlation-id: 01KTBQ4RC7R23BGDN7S829V76E
+          x-correlation-id: 01KTCGFHTKAWVXDNARBSJZVZ69
           vary: Origin
-          x-trace-id: 88cc3fb6-fd2b-4840-83b2-78cd904c5c20
+          x-trace-id: 5f24dc6c-acc8-4c1a-af07-e61cb0e02968
         description: null
     responseFields: []
     auth: []
@@ -1173,7 +1173,7 @@ endpoints:
         name: reason_code
         description: ''
         required: true
-        example: customer_request
+        example: admin_discretion
         type: string
         enumValues:
           - customer_request
@@ -1229,7 +1229,7 @@ endpoints:
         nullable: false
         deprecated: false
     cleanBodyParameters:
-      reason_code: customer_request
+      reason_code: admin_discretion
       reason_notes:
         en: bngzmiyvdljnikhw
         ar: aykcmyuwpwlvqwrs
@@ -1286,9 +1286,9 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-correlation-id: 01KTBQ4RTN0ZVH7M7VKWFT8R53
+          x-correlation-id: 01KTCGFMCX83ADT21K1DM7BWHY
           vary: Origin
-          x-trace-id: 2aea82d8-9068-4d49-821a-79254ac437d9
+          x-trace-id: e7844920-2d42-4149-b411-a93f4a21e381
         description: null
     responseFields: []
     auth: []
@@ -1328,9 +1328,9 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-correlation-id: 01KTBQ4RYD3VQGQNRYXRAXNX7Q
+          x-correlation-id: 01KTCGFN30M4EYX35VY3YT10JJ
           vary: Origin
-          x-trace-id: 05dcd015-de03-49e0-95aa-1e4e384e9e75
+          x-trace-id: f8a3dd63-86d7-41c8-b6c2-e9011bdd2812
         description: null
     responseFields: []
     auth: []
@@ -1365,7 +1365,7 @@ endpoints:
         name: scope
         description: ''
         required: true
-        example: date_range
+        example: recent_touch
         type: string
         enumValues:
           - all
@@ -1432,7 +1432,7 @@ endpoints:
         nullable: false
         deprecated: false
     cleanBodyParameters:
-      scope: date_range
+      scope: recent_touch
       wallet_id: 16
       vendor_id: 22
       date_from: '2026-06-05'
@@ -1507,7 +1507,7 @@ endpoints:
         name: category
         description: ''
         required: true
-        example: other
+        example: policy_violation
         type: string
         enumValues:
           - off_platform_contact
@@ -1520,7 +1520,7 @@ endpoints:
     cleanBodyParameters:
       reason_en: b
       reason_ar: 'n'
-      category: other
+      category: policy_violation
     fileParameters: []
     responses: []
     responseFields: []
@@ -1635,7 +1635,7 @@ endpoints:
         name: decision
         description: ''
         required: true
-        example: upheld_redact
+        example: upheld_warn
         type: string
         enumValues:
           - upheld_redact
@@ -1668,7 +1668,7 @@ endpoints:
         nullable: false
         deprecated: false
     cleanBodyParameters:
-      decision: upheld_redact
+      decision: upheld_warn
       note_en: b
       note_ar: 'n'
     fileParameters: []
@@ -1718,7 +1718,7 @@ endpoints:
         name: flag_type
         description: ''
         required: true
-        example: other
+        example: email
         type: string
         enumValues:
           - phone
@@ -1751,7 +1751,7 @@ endpoints:
         nullable: false
         deprecated: false
     cleanBodyParameters:
-      flag_type: other
+      flag_type: email
       reason_en: b
       reason_ar: 'n'
     fileParameters: []
@@ -1801,7 +1801,7 @@ endpoints:
         name: severity
         description: ''
         required: true
-        example: warning
+        example: info
         type: string
         enumValues:
           - info
@@ -1833,7 +1833,7 @@ endpoints:
         nullable: false
         deprecated: false
     cleanBodyParameters:
-      severity: warning
+      severity: info
       summary_en: b
       summary_ar: 'n'
     fileParameters: []

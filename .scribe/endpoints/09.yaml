@@ -34,9 +34,9 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-correlation-id: 01KTBQ4QNMREEFM4R8AQX40X3W
+          x-correlation-id: 01KTCGFDYHPYF6HVRYEMY4MBBK
           vary: Origin
-          x-trace-id: 84f467f4-51d2-4f1a-99db-199cf9ecf048
+          x-trace-id: 2518a3c9-661b-4a99-9d41-fc8b46310020
         description: null
     responseFields: []
     auth: []
@@ -82,7 +82,7 @@ endpoints:
         name: preferred_locale
         description: ''
         required: false
-        example: ar
+        example: en
         type: string
         enumValues:
           - en
@@ -95,7 +95,7 @@ endpoints:
         name: date_of_birth
         description: 'Must be a valid date. Must be a date before <code>today</code>.'
         required: false
-        example: '2022-06-29'
+        example: '2022-06-30'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -106,7 +106,7 @@ endpoints:
         name: gender
         description: ''
         required: false
-        example: prefer_not_to_say
+        example: female
         type: string
         enumValues:
           - male
@@ -120,7 +120,7 @@ endpoints:
         name: accepts_marketing
         description: ''
         required: false
-        example: true
+        example: false
         type: boolean
         enumValues: []
         exampleWasSpecified: false
@@ -128,10 +128,10 @@ endpoints:
         deprecated: false
     cleanBodyParameters:
       name: b
-      preferred_locale: ar
-      date_of_birth: '2022-06-29'
-      gender: prefer_not_to_say
-      accepts_marketing: true
+      preferred_locale: en
+      date_of_birth: '2022-06-30'
+      gender: female
+      accepts_marketing: false
     fileParameters: []
     responses: []
     responseFields: []
@@ -172,9 +172,9 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-correlation-id: 01KTBQ4QP2TEN81H8MB76X76WX
+          x-correlation-id: 01KTCGFE38BTVZM6MKZS79ESME
           vary: Origin
-          x-trace-id: 3187e6d0-668e-4760-8d68-90b9283de514
+          x-trace-id: b3203c4d-ca1a-46da-a59b-28d8a59fe5bb
         description: null
     responseFields: []
     auth: []

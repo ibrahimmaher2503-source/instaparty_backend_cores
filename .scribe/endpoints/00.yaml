@@ -95,9 +95,9 @@ endpoints:
         headers:
           cache-control: 'max-age=60, must-revalidate, public'
           content-type: application/json
-          x-correlation-id: 01KTBQ4QCG22K6CF2MN2759FSS
+          x-correlation-id: 01KTCGFB889R4A9J6YKD58NDZP
           vary: Origin
-          x-trace-id: aa96015e-86dd-4aa1-86e7-89f0582e5014
+          x-trace-id: f6786a88-714d-491d-9c43-4b5eeccb6c27
         description: null
     responseFields: []
     auth: []

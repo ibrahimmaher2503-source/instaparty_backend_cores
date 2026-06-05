@@ -58,9 +58,9 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-correlation-id: 01KTBQ4RM6E3ZEZBM87K3Z2AWR
+          x-correlation-id: 01KTCGFJYQHHZABK8N76MXVEF3
           vary: Origin
-          x-trace-id: 095dbdc4-ca76-4add-bb4a-dbe060d965a1
+          x-trace-id: c26b9d87-7bc4-4185-9abc-03751ef4ae9c
         description: null
     responseFields: []
     auth: []
@@ -106,7 +106,7 @@ endpoints:
         name: event_starts_at
         description: 'Must be a valid date. Must be a date after <code>now</code>.'
         required: true
-        example: '2052-06-28'
+        example: '2052-06-29'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -183,7 +183,7 @@ endpoints:
         name: celebrant_dob
         description: 'Must be a valid date.'
         required: false
-        example: '2026-06-05T11:01:56'
+        example: '2026-06-05T18:24:45'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -304,14 +304,14 @@ endpoints:
         deprecated: false
     cleanBodyParameters:
       occasion_id: architecto
-      event_starts_at: '2052-06-28'
+      event_starts_at: '2052-06-29'
       event_ends_at: '2052-06-28'
       guest_count: 22
       theme:
         en: g
         ar: z
       celebrant_name: m
-      celebrant_dob: '2026-06-05T11:01:56'
+      celebrant_dob: '2026-06-05T18:24:45'
       celebrant_gender: female
       address:
         city_id: architecto
@@ -362,9 +362,9 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-correlation-id: 01KTBQ4RMQTERFYJQ7HBQMJAYP
+          x-correlation-id: 01KTCGFK2JDRS8DRZ29JF22S3K
           vary: Origin
-          x-trace-id: 934010b4-62e1-4ded-9740-ba3c093094d8
+          x-trace-id: 7e9b7d6f-282a-47e9-976d-153fc67657b5
         description: null
     responseFields: []
     auth: []
@@ -416,9 +416,9 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-correlation-id: 01KTBQ4RMX9059F2TWBP18CB89
+          x-correlation-id: 01KTCGFK3DSJAJCN3R0XN3A929
           vary: Origin
-          x-trace-id: beff2553-5f1e-4029-9bfd-9e501d8054c9
+          x-trace-id: 78547277-b86b-48c7-bde1-4fa165302478
         description: null
     responseFields: []
     auth: []
@@ -530,7 +530,7 @@ endpoints:
         name: effective_starts_at
         description: 'Must be a valid date.'
         required: false
-        example: '2026-06-05T11:01:56'
+        example: '2026-06-05T18:24:45'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -561,7 +561,7 @@ endpoints:
     cleanBodyParameters:
       service_id: architecto
       quantity: 22
-      effective_starts_at: '2026-06-05T11:01:56'
+      effective_starts_at: '2026-06-05T18:24:45'
       effective_ends_at: '2052-06-28'
     fileParameters: []
     responses: []
@@ -756,9 +756,9 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-correlation-id: 01KTBQ4RNZXSKQF42274YWXCE3
+          x-correlation-id: 01KTCGFKB8EY7XXDV9G574S70G
           vary: Origin
-          x-trace-id: 9aabf187-2a9e-4ca5-8a82-b0ab02c9fc9b
+          x-trace-id: 609e8884-c631-492d-94e9-471b766cf08c
         description: null
     responseFields: []
     auth: []
@@ -865,9 +865,9 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-correlation-id: 01KTBQ4RP74DR6CRHDNV4Z2MSH
+          x-correlation-id: 01KTCGFKC91Q36G67Y0DNTPGA1
           vary: Origin
-          x-trace-id: d4ab0250-72b4-46c1-8b71-d41072b76394
+          x-trace-id: cd93b8d6-0c80-4755-b812-fad2d9c856ee
         description: null
     responseFields: []
     auth: []
@@ -931,9 +931,9 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-correlation-id: 01KTBQ4RPD7CCFFFCRG6QVNE5W
+          x-correlation-id: 01KTCGFKCZKEEWQ6XYZA320V6N
           vary: Origin
-          x-trace-id: c4aaf7b9-44e0-4678-ada6-3e3d9bc215ec
+          x-trace-id: f31d6586-781f-442b-8932-199f8b69d835
         description: null
     responseFields: []
     auth: []

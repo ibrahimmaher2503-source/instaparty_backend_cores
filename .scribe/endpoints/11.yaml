@@ -34,9 +34,9 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-correlation-id: 01KTBQ4QQPJY97DFBZ5AYW7G2J
+          x-correlation-id: 01KTCGFEECVDSJ86TBH98Q8RKW
           vary: Origin
-          x-trace-id: 7e304134-8bce-462c-a6d7-a2bb8dc8fc4b
+          x-trace-id: 269f22d4-b49f-4735-ae90-af470cc93998
         description: null
     responseFields: []
     auth: []
@@ -76,9 +76,9 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-correlation-id: 01KTBQ4QR5Y7FB53R089CBCMG5
+          x-correlation-id: 01KTCGFEJGEB0GEMBBHVZMKGEN
           vary: Origin
-          x-trace-id: 8496d297-82b7-47ab-9041-35ced23e7069
+          x-trace-id: 04ec6f62-4673-4303-80ff-71ff39b8edf2
         description: null
     responseFields: []
     auth: []
@@ -248,7 +248,7 @@ endpoints:
         name: preferred_locale
         description: ''
         required: false
-        example: en
+        example: ar
         type: string
         enumValues:
           - en
@@ -269,7 +269,7 @@ endpoints:
       bank_iban: 'y'
       bank_swift_bic: vdljni
       bank_branch: k
-      preferred_locale: en
+      preferred_locale: ar
     fileParameters: []
     responses: []
     responseFields: []
@@ -408,9 +408,9 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-correlation-id: 01KTBQ4QSCQ78M9QZZBMYJVJ3E
+          x-correlation-id: 01KTCGFEYFSEYDP6ANEH5SP6RD
           vary: Origin
-          x-trace-id: b2745a93-f3a0-4370-87e8-16e957d0b076
+          x-trace-id: 9cc9f61d-fcc2-4340-b552-73e410980c7d
         description: null
     responseFields: []
     auth: []

@@ -29,7 +29,7 @@ endpoints:
         name: platform
         description: ''
         required: true
-        example: android
+        example: ios
         type: string
         enumValues:
           - ios
@@ -61,7 +61,7 @@ endpoints:
         nullable: true
         deprecated: false
     cleanBodyParameters:
-      platform: android
+      platform: ios
       fcm_token: b
       device_id: 'n'
     fileParameters: []

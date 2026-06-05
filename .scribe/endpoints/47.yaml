@@ -1,0 +1,224 @@
+name: 'Customer - Promotions'
+description: ''
+endpoints:
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/v1/customer/promo-codes/validate
+    metadata:
+      custom: []
+      groupName: 'Customer - Promotions'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      code:
+        custom: []
+        name: code
+        description: 'Must not be greater than 50 characters.'
+        required: true
+        example: b
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      booking_draft_id:
+        custom: []
+        name: booking_draft_id
+        description: 'The <code>public_id</code> of an existing record in the bookings table.'
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      cart_total_minor:
+        custom: []
+        name: cart_total_minor
+        description: 'Must be at least 1.'
+        required: true
+        example: 22
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      cart_currency:
+        custom: []
+        name: cart_currency
+        description: 'Must be 3 characters.'
+        required: true
+        example: gzm
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      code: b
+      booking_draft_id: architecto
+      cart_total_minor: 22
+      cart_currency: gzm
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/customer/promotions/active
+    metadata:
+      custom: []
+      groupName: 'Customer - Promotions'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Feature 054 — US11 (C4). List active customer-visible promotions.'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters:
+      scope:
+        custom: []
+        name: scope
+        description: 'Optional scope filter: global|category|vendor|service.'
+        required: false
+        example: vendor
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      vendor_public_id:
+        custom: []
+        name: vendor_public_id
+        description: "Optional ULID to scope to a single vendor's promotions."
+        required: false
+        example: 01JC7G3F0AY3T9V5K0X9N1QY3S
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      limit:
+        custom: []
+        name: limit
+        description: 'Page size (1-50).'
+        required: false
+        example: 20
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      cursor:
+        custom: []
+        name: cursor
+        description: "Opaque cursor from a previous response's meta.next_cursor."
+        required: false
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanQueryParameters:
+      scope: vendor
+      vendor_public_id: 01JC7G3F0AY3T9V5K0X9N1QY3S
+      limit: 20
+      cursor: architecto
+    bodyParameters:
+      scope:
+        custom: []
+        name: scope
+        description: ''
+        required: false
+        example: category
+        type: string
+        enumValues:
+          - global
+          - category
+          - vendor
+          - service
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      vendor_public_id:
+        custom: []
+        name: vendor_public_id
+        description: 'Must be 26 characters.'
+        required: false
+        example: bngzmiyvdljnikhwaykcmyuwpw
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      limit:
+        custom: []
+        name: limit
+        description: 'Must be at least 1. Must not be greater than 50.'
+        required: false
+        example: 7
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      cursor:
+        custom: []
+        name: cursor
+        description: 'Must not be greater than 512 characters.'
+        required: false
+        example: v
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+    cleanBodyParameters:
+      scope: category
+      vendor_public_id: bngzmiyvdljnikhwaykcmyuwpw
+      limit: 7
+      cursor: v
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"data":null,"meta":null,"errors":[{"code":"unauthenticated","message":"Unauthenticated."}]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-correlation-id: 01KTCGFQA710JX1PAQ2FC4JRPX
+          vary: Origin
+          x-trace-id: 2a6f2fa0-42ae-4d4e-b184-9f124dd35b8a
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null

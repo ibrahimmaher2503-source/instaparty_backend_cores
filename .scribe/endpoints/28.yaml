@@ -1,70 +1,14 @@
-name: 'Customer - Payments'
+name: 'Vendor - Fulfillment'
 description: ''
 endpoints:
   -
     custom: []
     httpMethods:
-      - POST
-    uri: 'api/v1/customer/bookings/{bookingPublicId}/payments'
-    metadata:
-      custom: []
-      groupName: 'Customer - Payments'
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: ''
-      description: ''
-      authenticated: false
-      deprecated: false
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters:
-      bookingPublicId:
-        custom: []
-        name: bookingPublicId
-        description: ''
-        required: true
-        example: architecto
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-    cleanUrlParameters:
-      bookingPublicId: architecto
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters:
-      method:
-        custom: []
-        name: method
-        description: ''
-        required: true
-        example: card
-        type: string
-        enumValues:
-          - card
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-    cleanBodyParameters:
-      method: card
-    fileParameters: []
-    responses: []
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-  -
-    custom: []
-    httpMethods:
       - GET
-    uri: 'api/v1/customer/payments/{paymentPublicId}'
+    uri: 'api/v1/vendor/booking-items/{bookingItemPublicId}'
     metadata:
       custom: []
-      groupName: 'Customer - Payments'
+      groupName: 'Vendor - Fulfillment'
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
@@ -76,9 +20,9 @@ endpoints:
       Content-Type: application/json
       Accept: application/json
     urlParameters:
-      paymentPublicId:
+      bookingItemPublicId:
         custom: []
-        name: paymentPublicId
+        name: bookingItemPublicId
         description: ''
         required: true
         example: architecto
@@ -88,7 +32,7 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      paymentPublicId: architecto
+      bookingItemPublicId: architecto
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -102,10 +46,236 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-correlation-id: 01KTBQ4RT89EN4Z22X1X86ND8A
+          x-correlation-id: 01KTCGFKXYWGRD3P5NJ557SEDR
           vary: Origin
-          x-trace-id: 84a50ff7-3940-4786-8d70-f789983f5157
+          x-trace-id: ff75d91d-7feb-42c1-aaf6-03f78e5cbfb9
         description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/v1/vendor/booking-items/{bookingItemPublicId}/transition'
+    metadata:
+      custom: []
+      groupName: 'Vendor - Fulfillment'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: multipart/form-data
+      Accept: application/json
+    urlParameters:
+      bookingItemPublicId:
+        custom: []
+        name: bookingItemPublicId
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      bookingItemPublicId: architecto
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      lane:
+        custom: []
+        name: lane
+        description: ''
+        required: true
+        example: preparing
+        type: string
+        enumValues:
+          - preparing
+          - ready
+          - in_progress
+          - completed
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      completion_note:
+        custom: []
+        name: completion_note
+        description: 'Must not be greater than 500 characters.'
+        required: false
+        example: b
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      completion_photo:
+        custom: []
+        name: completion_photo
+        description: 'Must be an image. Must not be greater than 10240 kilobytes.'
+        required: false
+        example: null
+        type: file
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+    cleanBodyParameters:
+      lane: preparing
+      completion_note: b
+    fileParameters:
+      completion_photo: null
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/v1/vendor/booking-items/{bookingItemPublicId}/condition-photos'
+    metadata:
+      custom: []
+      groupName: 'Vendor - Fulfillment'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: multipart/form-data
+      Accept: application/json
+    urlParameters:
+      bookingItemPublicId:
+        custom: []
+        name: bookingItemPublicId
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      bookingItemPublicId: architecto
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      phase:
+        custom: []
+        name: phase
+        description: ''
+        required: true
+        example: return
+        type: string
+        enumValues:
+          - handover
+          - return
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      photos:
+        custom: []
+        name: photos
+        description: 'Must be an image. Must not be greater than 10240 kilobytes.'
+        required: false
+        example:
+          - null
+        type: 'file[]'
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      phase: return
+    fileParameters:
+      photos:
+        - null
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/v1/vendor/booking-items/{bookingItemPublicId}/report-issue'
+    metadata:
+      custom: []
+      groupName: 'Vendor - Fulfillment'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Vendor-portal 6.12 — escalate a fulfillment issue to admin (REST for the existing Filament Action).'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      bookingItemPublicId:
+        custom: []
+        name: bookingItemPublicId
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      bookingItemPublicId: architecto
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      reason_code:
+        custom: []
+        name: reason_code
+        description: ''
+        required: true
+        example: other
+        type: string
+        enumValues:
+          - venue_unavailable
+          - customer_unreachable
+          - damaged_goods
+          - safety_concern
+          - other
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      note:
+        custom: []
+        name: note
+        description: 'Must not be greater than 1000 characters.'
+        required: true
+        example: b
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      reason_code: other
+      note: b
+    fileParameters: []
+    responses: []
     responseFields: []
     auth: []
     controller: null

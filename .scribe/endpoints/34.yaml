@@ -1,18 +1,18 @@
-name: 'Notification Preferences'
+name: 'Vendor - Pricing'
 description: ''
 endpoints:
   -
     custom: []
     httpMethods:
       - GET
-    uri: api/v1/customer/notification-preferences
+    uri: api/v1/vendor/pricing/commission-rates
     metadata:
       custom: []
-      groupName: 'Notification Preferences'
+      groupName: 'Vendor - Pricing'
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
-      title: ''
+      title: '10.3 — resolved bps per (approved type × offered category).'
       description: ''
       authenticated: false
       deprecated: false
@@ -34,113 +34,10 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-correlation-id: 01KTBQ4RYX985QV30SNP7QJBDJ
+          x-correlation-id: 01KTCGFMR08R5VS6R7678D30XT
           vary: Origin
-          x-trace-id: d77d170a-3414-4f14-9d5f-421a09c3b909
+          x-trace-id: 038542cb-1379-44ae-9fb9-dd1050290879
         description: null
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-  -
-    custom: []
-    httpMethods:
-      - PUT
-    uri: 'api/v1/customer/notification-preferences/{channel}/{event_category}'
-    metadata:
-      custom: []
-      groupName: 'Notification Preferences'
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: ''
-      description: ''
-      authenticated: false
-      deprecated: false
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters:
-      channel:
-        custom: []
-        name: channel
-        description: ''
-        required: true
-        example: architecto
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      event_category:
-        custom: []
-        name: event_category
-        description: ''
-        required: true
-        example: architecto
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-    cleanUrlParameters:
-      channel: architecto
-      event_category: architecto
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters:
-      is_enabled:
-        custom: []
-        name: is_enabled
-        description: ''
-        required: true
-        example: true
-        type: boolean
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      quiet_hours_start:
-        custom: []
-        name: quiet_hours_start
-        description: 'Must match the regex /^\d{2}:\d{2}$/.'
-        required: false
-        example: '64:25'
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        deprecated: false
-      quiet_hours_end:
-        custom: []
-        name: quiet_hours_end
-        description: 'This field is required when <code>quiet_hours_start</code> is present. Must match the regex /^\d{2}:\d{2}$/.'
-        required: false
-        example: '64:25'
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        deprecated: false
-      timezone:
-        custom: []
-        name: timezone
-        description: 'Must not be greater than 60 characters.'
-        required: false
-        example: Asia/Anadyr
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        deprecated: false
-    cleanBodyParameters:
-      is_enabled: true
-      quiet_hours_start: '64:25'
-      quiet_hours_end: '64:25'
-      timezone: Asia/Anadyr
-    fileParameters: []
-    responses: []
     responseFields: []
     auth: []
     controller: null
@@ -150,14 +47,14 @@ endpoints:
     custom: []
     httpMethods:
       - GET
-    uri: api/v1/vendor/notification-preferences
+    uri: api/v1/vendor/pricing/calculator
     metadata:
       custom: []
-      groupName: 'Notification Preferences'
+      groupName: 'Vendor - Pricing'
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
-      title: ''
+      title: '10.4 — preview the commission/payout split for a hypothetical price.'
       description: ''
       authenticated: false
       deprecated: false
@@ -168,8 +65,47 @@ endpoints:
     cleanUrlParameters: []
     queryParameters: []
     cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
+    bodyParameters:
+      amount_minor:
+        custom: []
+        name: amount_minor
+        description: 'Must be at least 1.'
+        required: true
+        example: 16
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      product_type:
+        custom: []
+        name: product_type
+        description: ''
+        required: true
+        example: sale
+        type: string
+        enumValues:
+          - rental
+          - sale
+          - digital
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      category_public_id:
+        custom: []
+        name: category_public_id
+        description: 'Must not be greater than 26 characters.'
+        required: false
+        example: 'n'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+    cleanBodyParameters:
+      amount_minor: 16
+      product_type: sale
+      category_public_id: 'n'
     fileParameters: []
     responses:
       -
@@ -179,113 +115,10 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-correlation-id: 01KTBQ4S04ZG7K8YV7Q3ZCC3QJ
+          x-correlation-id: 01KTCGFMS0XQZY8S23XS6RDNEQ
           vary: Origin
-          x-trace-id: 29f7658d-560d-4e31-86f0-2c7947c0500b
+          x-trace-id: 108b591a-5416-40ef-88aa-cb7c832f4ab1
         description: null
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-  -
-    custom: []
-    httpMethods:
-      - PUT
-    uri: 'api/v1/vendor/notification-preferences/{channel}/{event_category}'
-    metadata:
-      custom: []
-      groupName: 'Notification Preferences'
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: ''
-      description: ''
-      authenticated: false
-      deprecated: false
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters:
-      channel:
-        custom: []
-        name: channel
-        description: ''
-        required: true
-        example: architecto
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      event_category:
-        custom: []
-        name: event_category
-        description: ''
-        required: true
-        example: architecto
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-    cleanUrlParameters:
-      channel: architecto
-      event_category: architecto
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters:
-      is_enabled:
-        custom: []
-        name: is_enabled
-        description: ''
-        required: true
-        example: true
-        type: boolean
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      quiet_hours_start:
-        custom: []
-        name: quiet_hours_start
-        description: 'Must match the regex /^\d{2}:\d{2}$/.'
-        required: false
-        example: '64:25'
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        deprecated: false
-      quiet_hours_end:
-        custom: []
-        name: quiet_hours_end
-        description: 'This field is required when <code>quiet_hours_start</code> is present. Must match the regex /^\d{2}:\d{2}$/.'
-        required: false
-        example: '64:25'
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        deprecated: false
-      timezone:
-        custom: []
-        name: timezone
-        description: 'Must not be greater than 60 characters.'
-        required: false
-        example: Asia/Anadyr
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        deprecated: false
-    cleanBodyParameters:
-      is_enabled: true
-      quiet_hours_start: '64:25'
-      quiet_hours_end: '64:25'
-      timezone: Asia/Anadyr
-    fileParameters: []
-    responses: []
     responseFields: []
     auth: []
     controller: null

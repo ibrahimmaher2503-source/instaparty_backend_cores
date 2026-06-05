@@ -34,9 +34,9 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-correlation-id: 01KTBQ4QW1G7Z8AQHHEZNGMGWP
+          x-correlation-id: 01KTCGFFBECT6W38AW82EME6AP
           vary: Origin
-          x-trace-id: 37194459-cbd7-48de-99a1-1003be8c6a7d
+          x-trace-id: 653cdce1-2f4c-4f7d-8af1-c447d2130fa2
         description: null
     responseFields: []
     auth: []
@@ -94,7 +94,7 @@ endpoints:
         name: 'hours[].opens_at'
         description: 'Must be a valid date in the format <code>H:i</code>.'
         required: false
-        example: '11:01'
+        example: '18:24'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -115,7 +115,7 @@ endpoints:
       hours:
         -
           day_of_week: 1
-          opens_at: '11:01'
+          opens_at: '18:24'
           closes_at: '2052-06-28'
     fileParameters: []
     responses: []
@@ -166,7 +166,7 @@ endpoints:
         name: opens_at
         description: 'This field is required when <code>closes_at</code> is present. Must be a valid date in the format <code>H:i</code>.'
         required: false
-        example: '11:01'
+        example: '18:24'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -184,7 +184,7 @@ endpoints:
         nullable: true
         deprecated: false
     cleanBodyParameters:
-      opens_at: '11:01'
+      opens_at: '18:24'
       closes_at: '2052-06-28'
     fileParameters: []
     responses: []
@@ -226,9 +226,9 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-correlation-id: 01KTBQ4QWJ7H412ZQP7C0H0A6Q
+          x-correlation-id: 01KTCGFFDX502GG2WQ73X9N72E
           vary: Origin
-          x-trace-id: 46a0d9c7-d8e2-45d8-98b2-4765900debcf
+          x-trace-id: 7415aea5-200c-4010-af1f-6dcd7f673afe
         description: null
     responseFields: []
     auth: []

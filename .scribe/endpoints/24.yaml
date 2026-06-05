@@ -36,9 +36,9 @@ endpoints:
           content-type: application/json
           x-ratelimit-limit: '60'
           x-ratelimit-remaining: '59'
-          x-correlation-id: 01KTBQ4REB2JX1FH40JZ57HATP
+          x-correlation-id: 01KTCGFJA6KJ8842QY5A7CV23G
           vary: Origin
-          x-trace-id: 5635134e-adea-4822-8118-4befed8078c2
+          x-trace-id: a29bb3b0-e7c2-4aa8-8da1-8a006a625aeb
         description: null
     responseFields: []
     auth: []
@@ -92,9 +92,9 @@ endpoints:
           content-type: application/json
           x-ratelimit-limit: '60'
           x-ratelimit-remaining: '59'
-          x-correlation-id: 01KTBQ4RFPYKVAK4JTANW1P12J
+          x-correlation-id: 01KTCGFJEEY14HWR47AQA3191C
           vary: Origin
-          x-trace-id: 35fbb3a5-d792-467a-b4bc-adf7903d9ad6
+          x-trace-id: fb858138-8296-46f5-aad2-8b1c5abf2c7e
         description: null
     responseFields: []
     auth: []
@@ -141,7 +141,7 @@ endpoints:
         name: type
         description: ''
         required: false
-        example: sale
+        example: rental
         type: string
         enumValues:
           - rental
@@ -151,7 +151,7 @@ endpoints:
         nullable: true
         deprecated: false
     cleanBodyParameters:
-      type: sale
+      type: rental
     fileParameters: []
     responses:
       -
@@ -163,9 +163,9 @@ endpoints:
           content-type: application/json
           x-ratelimit-limit: '60'
           x-ratelimit-remaining: '59'
-          x-correlation-id: 01KTBQ4RGB6Q5JC5ENWRVH7X13
+          x-correlation-id: 01KTCGFJHCEZZ0HRBCD3K20B49
           vary: Origin
-          x-trace-id: f5655755-3107-4bde-bab5-228bfcc8af4b
+          x-trace-id: 8da394c7-d19b-492f-b727-4167202eb094
         description: null
     responseFields: []
     auth: []
@@ -219,9 +219,9 @@ endpoints:
           content-type: application/json
           x-ratelimit-limit: '60'
           x-ratelimit-remaining: '59'
-          x-correlation-id: 01KTBQ4RGXGDDM78D19NJG3YY8
+          x-correlation-id: 01KTCGFJMCZ1MYVEZYJW4DPTVQ
           vary: Origin
-          x-trace-id: 8b62cbb3-b192-47f2-b11e-d2494faca4b6
+          x-trace-id: 00b60a65-60c4-476b-8659-b2d9a3fcbccc
         description: null
     responseFields: []
     auth: []
@@ -275,9 +275,9 @@ endpoints:
           content-type: application/json
           x-ratelimit-limit: '60'
           x-ratelimit-remaining: '59'
-          x-correlation-id: 01KTBQ4RHGHEN0TD25PA2E575Z
+          x-correlation-id: 01KTCGFJPP43RCJB4FH8ZKGBRH
           vary: Origin
-          x-trace-id: 875bf5d1-7cab-4ad2-a2d8-c207878174bf
+          x-trace-id: 9dd32a0a-e518-494f-8c04-2be463d91e14
         description: null
     responseFields: []
     auth: []
@@ -386,9 +386,9 @@ endpoints:
           content-type: application/json
           x-ratelimit-limit: '60'
           x-ratelimit-remaining: '59'
-          x-correlation-id: 01KTBQ4RJC48V0CWEV0N3RGH73
+          x-correlation-id: 01KTCGFJS09KQ61TBBRPZTKVJ4
           vary: Origin
-          x-trace-id: 1c668e9c-c856-4308-ad5c-6a7210624075
+          x-trace-id: 64381946-c572-4edf-bebc-cae7f631c3ce
         description: null
     responseFields: []
     auth: []
@@ -440,9 +440,9 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-correlation-id: 01KTBQ4S2ZC32CYB8T6FDGE7ES
+          x-correlation-id: 01KTCGFP0PX4QR4NZADDD2WCC0
           vary: Origin
-          x-trace-id: 3c920c21-2035-4b72-ba79-ba2881f33824
+          x-trace-id: 69a5b823-9cb4-42fa-a0f1-d1c1697c40d9
         description: null
     responseFields: []
     auth: []

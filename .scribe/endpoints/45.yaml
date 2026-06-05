@@ -1,14 +1,68 @@
-name: Support
+name: 'Trust & Safety'
 description: ''
 endpoints:
   -
     custom: []
     httpMethods:
       - GET
-    uri: api/v1/customer/faq/categories
+    uri: 'api/v1/customer/vendors/{vendorPublicId}/badges'
     metadata:
       custom: []
-      groupName: Support
+      groupName: 'Trust & Safety'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      vendorPublicId:
+        custom: []
+        name: vendorPublicId
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      vendorPublicId: architecto
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 404
+        content: '{"data":null,"meta":null,"errors":[{"code":"http_error","message":"Not found."}]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-correlation-id: 01KTCGFPYQW4SMHB28SXN7PMD2
+          vary: Origin
+          x-trace-id: 2e07cd5b-1fc7-4d1e-b8c1-b090ddd08e92
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/customer/settings/escrow-banner
+    metadata:
+      custom: []
+      groupName: 'Trust & Safety'
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
@@ -30,67 +84,13 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":[],"meta":{},"errors":null}'
+        content: '{"data":{"enabled":true,"text":"Your payment is held securely until your event is complete."}}'
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-correlation-id: 01KTBQ4SB4J5JSPM10M1AH49XH
+          x-correlation-id: 01KTCGFQ1X8TGGVDTVXZPBG7GA
           vary: Origin
-          x-trace-id: 30aa99a2-a891-416d-9dd6-5e69eef580b3
-        description: null
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-  -
-    custom: []
-    httpMethods:
-      - GET
-    uri: api/v1/customer/faq/search
-    metadata:
-      custom: []
-      groupName: Support
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: ''
-      description: ''
-      authenticated: false
-      deprecated: false
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters:
-      q:
-        custom: []
-        name: q
-        description: 'Must be at least 2 characters. Must not be greater than 100 characters.'
-        required: true
-        example: b
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-    cleanBodyParameters:
-      q: b
-    fileParameters: []
-    responses:
-      -
-        custom: []
-        status: 422
-        content: '{"message":"The q field must be at least 2 characters.","errors":{"q":["The q field must be at least 2 characters."]}}'
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          x-correlation-id: 01KTBQ4SBZSCZ4BBSEXGZ42P5Y
-          vary: Origin
-          x-trace-id: b9e8e0a9-e0d9-47a0-840e-21a1c4cbd8a2
+          x-trace-id: cd7f4c29-338b-4811-89b4-14c569a442a7
         description: null
     responseFields: []
     auth: []
@@ -101,10 +101,10 @@ endpoints:
     custom: []
     httpMethods:
       - POST
-    uri: api/v1/customer/support/tickets
+    uri: api/v1/customer/reports
     metadata:
       custom: []
-      groupName: Support
+      groupName: 'Trust & Safety'
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
@@ -120,55 +120,62 @@ endpoints:
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
-      subject:
+      reportable_type:
         custom: []
-        name: subject
-        description: 'Must not be greater than 255 characters.'
+        name: reportable_type
+        description: ''
         required: true
-        example: b
+        example: vendor_profile
+        type: string
+        enumValues:
+          - vendor_profile
+          - chat_thread
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      reportable_id:
+        custom: []
+        name: reportable_id
+        description: ''
+        required: true
+        example: architecto
         type: string
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
-      body:
+      reason:
         custom: []
-        name: body
-        description: 'Must not be greater than 5000 characters.'
+        name: reason
+        description: ''
         required: true
-        example: 'n'
+        example: harassment
         type: string
-        enumValues: []
+        enumValues:
+          - inappropriate_content
+          - fake_profile
+          - fraudulent_activity
+          - harassment
+          - other
         exampleWasSpecified: false
         nullable: false
         deprecated: false
-      email:
+      details:
         custom: []
-        name: email
-        description: 'Must be a valid email address. Must not be greater than 255 characters.'
-        required: true
-        example: ashly64@example.com
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      booking_id:
-        custom: []
-        name: booking_id
-        description: 'Must not be greater than 26 characters.'
+        name: details
+        description: 'Must not be greater than 1000 characters.'
         required: false
-        example: v
+        example: 'n'
         type: string
         enumValues: []
         exampleWasSpecified: false
         nullable: true
         deprecated: false
     cleanBodyParameters:
-      subject: b
-      body: 'n'
-      email: ashly64@example.com
-      booking_id: v
+      reportable_type: vendor_profile
+      reportable_id: architecto
+      reason: harassment
+      details: 'n'
     fileParameters: []
     responses: []
     responseFields: []

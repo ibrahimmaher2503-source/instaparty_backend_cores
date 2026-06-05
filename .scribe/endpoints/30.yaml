@@ -1,56 +1,14 @@
-name: 'Customer - Wallet'
+name: Webhooks
 description: ''
 endpoints:
   -
     custom: []
     httpMethods:
-      - GET
-    uri: api/v1/customer/wallet
+      - POST
+    uri: api/v1/webhooks/paymob
     metadata:
       custom: []
-      groupName: 'Customer - Wallet'
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: ''
-      description: ''
-      authenticated: false
-      deprecated: false
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        custom: []
-        status: 401
-        content: '{"data":null,"meta":null,"errors":[{"code":"unauthenticated","message":"Unauthenticated."}]}'
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          x-correlation-id: 01KTBQ4RV1J3EKCKQZ2KT3QYC0
-          vary: Origin
-          x-trace-id: c1efd25b-077e-4341-9297-f91b39b7c00b
-        description: null
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-  -
-    custom: []
-    httpMethods:
-      - GET
-    uri: api/v1/customer/wallet/transactions
-    metadata:
-      custom: []
-      groupName: 'Customer - Wallet'
+      groupName: Webhooks
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
@@ -66,86 +24,21 @@ endpoints:
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
-      direction:
+      obj:
         custom: []
-        name: direction
+        name: obj
         description: ''
-        required: false
-        example: architecto
-        type: string
+        required: true
+        example: []
+        type: object
         enumValues: []
         exampleWasSpecified: false
-        nullable: true
-        deprecated: false
-      cursor:
-        custom: []
-        name: cursor
-        description: 'Must not be greater than 512 characters.'
-        required: false
-        example: 'n'
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
+        nullable: false
         deprecated: false
     cleanBodyParameters:
-      direction: architecto
-      cursor: 'n'
+      obj: []
     fileParameters: []
-    responses:
-      -
-        custom: []
-        status: 401
-        content: '{"data":null,"meta":null,"errors":[{"code":"unauthenticated","message":"Unauthenticated."}]}'
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          x-correlation-id: 01KTBQ4RV7P44A5GQ497SMBVFV
-          vary: Origin
-          x-trace-id: 348d98b1-f3c6-43b2-ba5b-e102f2a59d83
-        description: null
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-  -
-    custom: []
-    httpMethods:
-      - GET
-    uri: api/v1/customer/wallet/refunds
-    metadata:
-      custom: []
-      groupName: 'Customer - Wallet'
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: ''
-      description: ''
-      authenticated: false
-      deprecated: false
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        custom: []
-        status: 401
-        content: '{"data":null,"meta":null,"errors":[{"code":"unauthenticated","message":"Unauthenticated."}]}'
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          x-correlation-id: 01KTBQ4RVCRYMPZ105VB091C46
-          vary: Origin
-          x-trace-id: 6805f724-93d0-4d38-b640-908f604797ce
-        description: null
+    responses: []
     responseFields: []
     auth: []
     controller: null

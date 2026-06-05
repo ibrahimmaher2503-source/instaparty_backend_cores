@@ -73,7 +73,7 @@ endpoints:
         name: preferred_locale
         description: ''
         required: false
-        example: en
+        example: ar
         type: string
         enumValues:
           - en
@@ -97,7 +97,7 @@ endpoints:
       phone_e164: '+36425593142326'
       email: breitenberg.gilbert@example.com
       password: kXaz<m
-      preferred_locale: en
+      preferred_locale: ar
       accepted_terms: true
     fileParameters: []
     responses: []
@@ -551,7 +551,7 @@ endpoints:
         name: business_type
         description: ''
         required: true
-        example: company
+        example: individual
         type: string
         enumValues:
           - individual
@@ -587,7 +587,7 @@ endpoints:
         name: preferred_locale
         description: ''
         required: false
-        example: ar
+        example: en
         type: string
         enumValues:
           - en
@@ -603,10 +603,10 @@ endpoints:
       business_name:
         en: b
         ar: 'n'
-      business_type: company
+      business_type: individual
       primary_governorate_id: 16
       primary_city_id: 16
-      preferred_locale: ar
+      preferred_locale: en
     fileParameters: []
     responses: []
     responseFields: []

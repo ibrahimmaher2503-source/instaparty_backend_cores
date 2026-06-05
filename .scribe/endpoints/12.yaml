@@ -34,9 +34,9 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-correlation-id: 01KTBQ4QQYTY14ZZBY576ZK5JR
+          x-correlation-id: 01KTCGFEFPYWKXYWSA53CHCA0W
           vary: Origin
-          x-trace-id: 5461ee34-d868-40cc-97cb-ee0c92ff9a16
+          x-trace-id: a027ee24-6b26-4425-876d-e3adcd18ad05
         description: null
     responseFields: []
     auth: []

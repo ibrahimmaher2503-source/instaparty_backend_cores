@@ -1,14 +1,14 @@
-name: 'Trust & Safety'
+name: 'Customer - Loyalty'
 description: ''
 endpoints:
   -
     custom: []
     httpMethods:
       - GET
-    uri: 'api/v1/customer/vendors/{vendorPublicId}/badges'
+    uri: 'api/v1/customer/loyalty/programs/{vendorPublicId}/balance'
     metadata:
       custom: []
-      groupName: 'Trust & Safety'
+      groupName: 'Customer - Loyalty'
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
@@ -41,14 +41,14 @@ endpoints:
     responses:
       -
         custom: []
-        status: 404
-        content: '{"data":null,"meta":null,"errors":[{"code":"http_error","message":"Not found."}]}'
+        status: 401
+        content: '{"data":null,"meta":null,"errors":[{"code":"unauthenticated","message":"Unauthenticated."}]}'
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-correlation-id: 01KTBQ4SA4R56WQYY8162YJYSY
+          x-correlation-id: 01KTCGFPPS04E473J64HGYH7SM
           vary: Origin
-          x-trace-id: 27f6a6c0-36b6-4436-85f2-01d3e4e23a47
+          x-trace-id: 56066a76-c1af-490f-be3c-90ee2e40b1bd
         description: null
     responseFields: []
     auth: []
@@ -59,10 +59,118 @@ endpoints:
     custom: []
     httpMethods:
       - GET
-    uri: api/v1/customer/settings/escrow-banner
+    uri: 'api/v1/customer/loyalty/programs/{vendorPublicId}/history'
     metadata:
       custom: []
-      groupName: 'Trust & Safety'
+      groupName: 'Customer - Loyalty'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      vendorPublicId:
+        custom: []
+        name: vendorPublicId
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      vendorPublicId: architecto
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"data":null,"meta":null,"errors":[{"code":"unauthenticated","message":"Unauthenticated."}]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-correlation-id: 01KTCGFPR147SADCVN6VE5MCZT
+          vary: Origin
+          x-trace-id: 8c450144-a5de-4984-ab62-75a999b76270
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/v1/customer/loyalty/programs/{vendorPublicId}/rules'
+    metadata:
+      custom: []
+      groupName: 'Customer - Loyalty'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      vendorPublicId:
+        custom: []
+        name: vendorPublicId
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      vendorPublicId: architecto
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"data":null,"meta":null,"errors":[{"code":"unauthenticated","message":"Unauthenticated."}]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-correlation-id: 01KTCGFPRF8JADVWPN1BK5RJMA
+          vary: Origin
+          x-trace-id: b27bbb71-030a-4d55-93af-ba1be022874e
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/customer/loyalty/balances
+    metadata:
+      custom: []
+      groupName: 'Customer - Loyalty'
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
@@ -83,14 +191,14 @@ endpoints:
     responses:
       -
         custom: []
-        status: 200
-        content: '{"data":{"enabled":true,"text":"Your payment is held securely until your event is complete."}}'
+        status: 401
+        content: '{"data":null,"meta":null,"errors":[{"code":"unauthenticated","message":"Unauthenticated."}]}'
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-correlation-id: 01KTBQ4SAKS5S29JSMX1NPH623
+          x-correlation-id: 01KTCGFPSJ9TMAEXFV8J0N7W7N
           vary: Origin
-          x-trace-id: d906bba1-c92a-44ac-9335-30d2f1968621
+          x-trace-id: 16fb774c-ab98-43ff-b74a-5ce9c1464f72
         description: null
     responseFields: []
     auth: []
@@ -101,10 +209,10 @@ endpoints:
     custom: []
     httpMethods:
       - POST
-    uri: api/v1/customer/reports
+    uri: 'api/v1/customer/bookings/{bookingPublicId}/redemptions'
     metadata:
       custom: []
-      groupName: 'Trust & Safety'
+      groupName: 'Customer - Loyalty'
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
@@ -115,27 +223,10 @@ endpoints:
     headers:
       Content-Type: application/json
       Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters:
-      reportable_type:
+    urlParameters:
+      bookingPublicId:
         custom: []
-        name: reportable_type
-        description: ''
-        required: true
-        example: vendor_profile
-        type: string
-        enumValues:
-          - vendor_profile
-          - chat_thread
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      reportable_id:
-        custom: []
-        name: reportable_id
+        name: bookingPublicId
         description: ''
         required: true
         example: architecto
@@ -144,38 +235,79 @@ endpoints:
         exampleWasSpecified: false
         nullable: false
         deprecated: false
-      reason:
+    cleanUrlParameters:
+      bookingPublicId: architecto
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      points:
         custom: []
-        name: reason
-        description: ''
+        name: points
+        description: 'Number of points to redeem.'
         required: true
-        example: fraudulent_activity
-        type: string
-        enumValues:
-          - inappropriate_content
-          - fake_profile
-          - fraudulent_activity
-          - harassment
-          - other
-        exampleWasSpecified: false
+        example: 400
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
         nullable: false
         deprecated: false
-      details:
+    cleanBodyParameters:
+      points: 400
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - DELETE
+    uri: 'api/v1/customer/bookings/{bookingPublicId}/redemptions/{redemptionPublicId}'
+    metadata:
+      custom: []
+      groupName: 'Customer - Loyalty'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      bookingPublicId:
         custom: []
-        name: details
-        description: 'Must not be greater than 1000 characters.'
-        required: false
-        example: 'n'
+        name: bookingPublicId
+        description: ''
+        required: true
+        example: architecto
         type: string
         enumValues: []
         exampleWasSpecified: false
-        nullable: true
+        nullable: false
         deprecated: false
-    cleanBodyParameters:
-      reportable_type: vendor_profile
-      reportable_id: architecto
-      reason: fraudulent_activity
-      details: 'n'
+      redemptionPublicId:
+        custom: []
+        name: redemptionPublicId
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      bookingPublicId: architecto
+      redemptionPublicId: architecto
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
     fileParameters: []
     responses: []
     responseFields: []

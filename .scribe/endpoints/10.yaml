@@ -34,9 +34,9 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-correlation-id: 01KTBQ4QQ1MFNQ5E09SJWY5KFX
+          x-correlation-id: 01KTCGFEA7GG2DKNQ5WN58S8EA
           vary: Origin
-          x-trace-id: 31eaf1db-3998-4f9a-bef8-a035bcd16f0b
+          x-trace-id: 3845ccbe-ef9d-4d59-9dd0-0270ad42defe
         description: null
     responseFields: []
     auth: []
@@ -162,9 +162,9 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-correlation-id: 01KTBQ4RKKR5FE1BP9GDPHJPBR
+          x-correlation-id: 01KTCGFJVM27VFSNAV0Z2A0B4E
           vary: Origin
-          x-trace-id: b78ca172-4cf9-4fc3-8c6f-a54981f91900
+          x-trace-id: 5816a3db-72e7-4f0a-9645-ac1e9b01c80a
         description: null
     responseFields: []
     auth: []
