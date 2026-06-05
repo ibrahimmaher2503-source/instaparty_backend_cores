@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Modules\Booking\Http\Controllers\Vendor\BookingController;
 use App\Modules\Booking\Http\Controllers\Vendor\BookingItemController;
+use App\Modules\Booking\Http\Controllers\Vendor\VendorReportsController;
 use App\Modules\Booking\Http\Controllers\Vendor\VendorScheduleController;
 use App\Modules\Identity\Http\Middleware\SetLocaleMiddleware;
 use Illuminate\Support\Facades\Route;
@@ -26,4 +27,9 @@ Route::middleware(['auth:sanctum', 'role:vendor', SetLocaleMiddleware::class])
         Route::post('booking-items/{bookingItemPublicId}/transition', [BookingItemController::class, 'transition']);
         Route::post('booking-items/{bookingItemPublicId}/condition-photos', [BookingItemController::class, 'conditionPhotos']);
         Route::post('booking-items/{bookingItemPublicId}/report-issue', [BookingItemController::class, 'reportIssue']);
+
+        // Vendor-portal 15.2–15.4 — reports (?granularity=summary for mobile).
+        Route::get('reports/bookings', [VendorReportsController::class, 'bookings']);
+        Route::get('reports/revenue', [VendorReportsController::class, 'revenue']);
+        Route::get('reports/services-performance', [VendorReportsController::class, 'servicesPerformance']);
     });
