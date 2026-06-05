@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Modules\Identity\Http\Controllers;
 
+use App\Modules\Identity\Application\Actions\DeleteVendorDocumentAction;
 use App\Modules\Identity\Application\Actions\GenerateDocumentSignedUrlAction;
 use App\Modules\Identity\Application\Actions\UploadVendorDocumentAction;
 use App\Modules\Identity\Domain\Enums\DocumentType;
@@ -37,6 +38,22 @@ class VendorDocumentController extends Controller
         );
 
         return ApiResponse::success(new VendorDocumentResource($document), [], 201);
+    }
+
+    /** Vendor-portal 3.4 — delete a document (rejected-only per ADR-0021; existing action). */
+    public function destroy(Request $request, string $publicId, DeleteVendorDocumentAction $action): JsonResponse
+    {
+        $vendorProfile = $this->vendorProfileForUser($request->user());
+        /** @var VendorDocument|null $document */
+        $document = $vendorProfile->documents()->where('public_id', $publicId)->first();
+
+        if ($document === null) {
+            throw new NotFoundHttpException('Document not found.');
+        }
+
+        $action->execute($vendorProfile, $document);
+
+        return ApiResponse::success(null);
     }
 
     public function signedUrl(Request $request, string $publicId, GenerateDocumentSignedUrlAction $action): JsonResponse

@@ -10,6 +10,7 @@ use App\Modules\Identity\Http\Controllers\VendorComplianceController;
 use App\Modules\Identity\Http\Controllers\VendorCoverageAreaController;
 use App\Modules\Identity\Http\Controllers\VendorDocumentController;
 use App\Modules\Identity\Http\Controllers\VendorMeController;
+use App\Modules\Identity\Http\Controllers\VendorOnboardingStatusController;
 use App\Modules\Identity\Http\Controllers\VendorProfileController;
 use App\Modules\Identity\Http\Controllers\VendorProfileMediaController;
 use App\Modules\Identity\Http\Controllers\VendorProfileResubmitController;
@@ -21,10 +22,14 @@ Route::prefix('api/v1')->middleware(['api', SetLocaleMiddleware::class])->group(
     // Public registration — IP-throttled.
     Route::post('register/vendor', [VendorRegistrationController::class, 'register'])->middleware('throttle:10,1');
 
-    // Authenticated vendor endpoints.
-    Route::middleware(['auth:sanctum', 'role:vendor'])->prefix('vendor')->group(function (): void {
+    // Authenticated vendor endpoints. Suspended vendors are read-only
+    // (vendor.not_suspended blocks mutations — approval-gate finding).
+    Route::middleware(['auth:sanctum', 'role:vendor', 'vendor.not_suspended'])->prefix('vendor')->group(function (): void {
         // G2 — role-aware identity payload for the vendor app.
         Route::get('me', VendorMeController::class);
+
+        // Vendor-portal 1.4 (C)-lite — resumable onboarding status (spec 034).
+        Route::get('onboarding-status', VendorOnboardingStatusController::class);
 
         Route::get('profile', [VendorProfileController::class, 'show']);
         Route::put('profile', [VendorProfileController::class, 'update']);
@@ -42,6 +47,7 @@ Route::prefix('api/v1')->middleware(['api', SetLocaleMiddleware::class])->group(
 
         Route::get('documents', [VendorDocumentController::class, 'index']);
         Route::post('documents', [VendorDocumentController::class, 'store']);
+        Route::delete('documents/{publicId}', [VendorDocumentController::class, 'destroy']);
         Route::get('documents/{publicId}/signed-url', [VendorDocumentController::class, 'signedUrl']);
 
         // Coverage areas — full CRUD (vendor-portal 9.1–9.5; only POST existed).
@@ -54,6 +60,7 @@ Route::prefix('api/v1')->middleware(['api', SetLocaleMiddleware::class])->group(
         // Business hours — GET added (vendor-portal 8.1; PUT existed without a read).
         Route::get('business-hours', [VendorBusinessHourController::class, 'index']);
         Route::put('business-hours', [VendorBusinessHourController::class, 'update']);
+        Route::patch('business-hours/days/{day}', [VendorBusinessHourController::class, 'updateDay'])->whereNumber('day');
 
         // Blocked dates / holidays (vendor-portal 8.3–8.5, schema approved 2026-06-05).
         Route::get('availability/blocked-dates', [VendorBlockedDateController::class, 'index']);

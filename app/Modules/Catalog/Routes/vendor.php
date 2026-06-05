@@ -25,7 +25,7 @@ use Illuminate\Support\Facades\Route;
 
 // Template downloads are static files, but they live on the vendor surface —
 // vendor role required (P0 hardening, vendor-portal audit 2026-06-04).
-Route::middleware(['api', 'auth:sanctum', 'role:vendor'])->prefix('api/v1/vendor')->group(function (): void {
+Route::middleware(['api', 'auth:sanctum', 'role:vendor', 'vendor.not_suspended'])->prefix('api/v1/vendor')->group(function (): void {
     Route::get('catalog/import/template/{type}', DownloadImportTemplateController::class)
         ->name('vendor.catalog.import.template');
 });
@@ -33,7 +33,7 @@ Route::middleware(['api', 'auth:sanctum', 'role:vendor'])->prefix('api/v1/vendor
 // role:vendor added route-wide (P0 hardening, vendor-portal audit 2026-06-04:
 // customer tokens previously got 200 on vendor reads; mutations were only
 // saved by FormRequest authorize()).
-Route::middleware(['api', 'auth:sanctum', 'role:vendor'])->prefix('api/v1/vendor')->group(function (): void {
+Route::middleware(['api', 'auth:sanctum', 'role:vendor', 'vendor.not_suspended'])->prefix('api/v1/vendor')->group(function (): void {
     Route::get('occasions', [OccasionController::class, 'index']);
     Route::get('categories', [VendorCategoryController::class, 'index']);
     Route::get('categories/{categoryPublicId}/field-schemas', [VendorCategoryController::class, 'fieldSchemas']);

@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Route;
 
 // role:vendor added (P0 hardening, vendor-portal audit 2026-06-04: a
 // customer token could read AND attempt writes on the loyalty program).
-Route::middleware(['auth:sanctum', 'role:vendor', 'idempotency'])
+Route::middleware(['auth:sanctum', 'role:vendor', 'vendor.not_suspended', 'idempotency'])
     ->prefix('vendor/loyalty')
     ->group(function () {
         Route::post('program', [LoyaltyProgramController::class, 'store']);

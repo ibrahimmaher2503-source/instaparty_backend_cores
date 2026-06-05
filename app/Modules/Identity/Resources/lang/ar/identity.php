@@ -72,6 +72,7 @@ return [
         'identity' => 'الهوية',
         'business_profile' => 'بيانات النشاط التجاري',
         'banking' => 'البيانات البنكية',
+        'bank_information' => 'بيانات البنك',
         'uploaded_documents' => 'المستندات المرفوعة',
         'approved_product_types' => 'أنواع المنتجات المعتمدة',
         'business_hours' => 'ساعات العمل',
@@ -83,6 +84,62 @@ return [
         'reviews' => 'التقييمات',
         'activity' => 'سجل النشاط',
         'documents' => 'المستندات',
+        'location' => 'الموقع',
+    ],
+
+    // Compliance / document expiry section
+    'compliance' => [
+        'expiry_and_criticality' => 'تاريخ الانتهاء والأهمية',
+    ],
+
+    // Activity log column labels
+    'activity' => [
+        'description' => 'الوصف',
+        'caused_by' => 'بواسطة',
+        'properties' => 'التفاصيل',
+    ],
+
+    // Filters
+    'filters' => [
+        'approved_product_type' => 'نوع المنتج المعتمد',
+        'status_active' => 'نشط',
+        'status_suspended' => 'موقوف',
+    ],
+
+    // Empty state messages
+    'empty_states' => [
+        'no_bookings' => 'لا توجد حجوزات بعد.',
+        'no_reviews' => 'لا توجد تقييمات بعد.',
+        'no_loyalty' => 'لا توجد أرصدة ولاء بعد.',
+        'no_addresses' => 'لا توجد عناوين محفوظة بعد.',
+        'no_activity' => 'لا يوجد نشاط مسجل بعد.',
+        'no_documents' => 'لم يتم رفع أي مستندات.',
+    ],
+
+    // Modal descriptions
+    'modals' => [
+        'suspend_customer' => 'هل أنت متأكد من تعليق حساب :name؟ سيتم إنهاء جلسته فوراً.',
+        'force_logout_customer' => 'سيتم إلغاء جميع الجلسات النشطة لـ :name.',
+        'approve_vendor_heading' => 'اعتماد هذا المورد؟',
+        'approve_vendor_description' => 'سيمنح هذا الإجراء المورد حالة الاعتماد. يمكنك منح صلاحيات لأنواع المنتجات بعد ذلك.',
+    ],
+
+    // Page titles
+    'pages' => [
+        'review_vendor_application' => 'مراجعة طلب المورد',
+    ],
+
+    // Misc display labels
+    'misc' => [
+        'piastres' => 'قرش',
+        'address_default_marker' => '[افتراضي]',
+        'booking_id' => 'رقم الحجز',
+        'id_short' => 'المعرّف',
+        'translations_tab' => 'الترجمات',
+        'tab_english' => 'الإنجليزية',
+        'tab_arabic' => 'العربية',
+        'bookings_count' => '{0} لا يوجد حجوزات|{1} حجز واحد|[2,*] :count حجوزات',
+        'reviews_count' => '{0} لا يوجد تقييمات|{1} تقييم واحد|[2,*] :count تقييمات',
     ],
 
     // Table column labels
@@ -131,6 +188,26 @@ return [
         'approved_at' => 'تاريخ الموافقة',
         'revoked_at' => 'تاريخ السحب',
         'role' => 'الدور',
+        'reference' => 'المرجع',
+        'lifecycle_status' => 'مرحلة الحجز',
+        'payment_status' => 'الدفع',
+        'fulfillment_status' => 'التنفيذ',
+        'total' => 'الإجمالي',
+        'kind' => 'النوع',
+        'target' => 'الهدف',
+        'rating' => 'التقييم',
+        'body' => 'التعليق',
+        'program' => 'البرنامج',
+        'points' => 'النقاط',
+        'address_line' => 'العنوان',
+        'description' => 'الوصف',
+        'actor' => 'المُنفِّذ',
+    ],
+
+    'gender' => [
+        'male' => 'ذكر',
+        'female' => 'أنثى',
+        'prefer_not_to_say' => 'أفضل عدم الإفصاح',
     ],
 
     // Filament action labels
@@ -151,14 +228,27 @@ return [
         'login_as_vendor' => 'الدخول كمورد (ويب)',
         'replace_coverage' => 'استبدال مناطق التغطية',
         're_upload_document' => 'إعادة رفع المستند',
+        'request_changes' => 'طلب تعديلات',
+        'approve_for_rental' => 'اعتماد للإيجار',
+        'approve_for_sale' => 'اعتماد للبيع',
+        'approve_for_digital' => 'اعتماد للرقمي',
+        'revoke_type_short' => 'سحب الاعتماد',
+        'suspend_vendor' => 'إيقاف المورد',
+        'edit' => 'تعديل',
+        'remove' => 'حذف',
+        'delete' => 'حذف',
+        'upload' => 'رفع',
+        'approve_profile' => 'اعتماد الملف',
     ],
 
     // Form field labels
     'forms' => [
+        'rejection_reason' => 'سبب الرفض',
         'rejection_reason_en' => 'سبب الرفض بالإنجليزية',
         'rejection_reason_ar' => 'سبب الرفض بالعربية',
         'revoke_reason_en' => 'سبب السحب بالإنجليزية',
         'revoke_reason_ar' => 'سبب السحب بالعربية',
+        'revoke_reason_en_short' => 'سبب السحب (إنجليزي)',
         'business_name_en' => 'اسم النشاط التجاري بالإنجليزية',
         'business_name_ar' => 'اسم النشاط التجاري بالعربية',
         'bio_en' => 'النبذة بالإنجليزية',
@@ -174,13 +264,24 @@ return [
         'vendor_approved' => 'تمت الموافقة على الملف التجاري',
         'vendor_rejected' => 'تم رفض الملف التجاري',
         'vendor_suspended' => 'تم إيقاف المورد',
+        'vendor_unsuspended' => 'تم إعادة تفعيل المورد',
         'type_approved' => 'تم اعتماد المورد لنوع المنتج: :type',
+        'type_approved_for' => 'تم اعتماد المورد لـ: :type',
         'type_revoked' => 'تم سحب اعتماد نوع المنتج',
         'signed_url_generated' => 'تم إنشاء رابط موقّع',
         'impersonation_token' => 'رمز انتحال الصفة (ينتهي خلال 30 دقيقة)',
         'coverage_updated' => 'تم تحديث مناطق التغطية بنجاح',
         'document_uploaded' => 'تم استبدال المستند بنجاح',
+        'document_deleted' => 'تم حذف المستند',
+        'document_upload_success' => 'تم رفع المستند بنجاح',
         'vendor_profile_updated' => 'تم تحديث ملف مقدم الخدمة',
+        'change_request_created' => 'تم إرسال طلب التعديل',
+        'expiry_set_successfully' => 'تم تحديث تاريخ انتهاء المستند',
+        'approval_request_submitted' => 'تم إرسال طلب الاعتماد. سيقوم أحد المشرفين بمراجعته قريباً.',
+        'coverage_removed' => 'تم حذف منطقة التغطية',
+        'coverage_saved' => 'تم حفظ منطقة التغطية',
+        'document_approved' => 'تمت الموافقة على المستند',
+        'document_rejected' => 'تم رفض المستند',
     ],
 
     // Confirmation dialog content
@@ -210,6 +311,7 @@ return [
         'slug' => 'المعرّف النصي',
         'doc_type' => 'نوع المستند',
         'file' => 'الملف',
+        'document_file' => 'ملف المستند',
         'city_id' => 'المدينة',
         'governorate_id' => 'المحافظة',
         'delivery_fee' => 'رسوم التوصيل',
@@ -228,6 +330,18 @@ return [
         'recipient_name' => 'اسم المستلم',
         'recipient_phone' => 'هاتف المستلم',
         'is_default' => 'تعيين كافتراضي',
+        'field_path' => 'الحقل',
+        'requested_change_en' => 'التعديل المطلوب (إنجليزي)',
+        'requested_change_ar' => 'التعديل المطلوب (عربي)',
+        'expires_at' => 'تاريخ الانتهاء',
+        'is_critical' => 'مستند حرج',
+        'commercial_register_no' => 'رقم السجل التجاري',
+        'tax_id' => 'الرقم الضريبي',
+        'national_id' => 'رقم الهوية الوطنية',
+        'locale' => 'اللغة المفضلة',
+        'last_login_at' => 'آخر تسجيل دخول',
+        'joined_at' => 'تاريخ الانضمام',
+        'uploaded_at' => 'تاريخ الرفع',
     ],
 
     // Role labels (Spatie roles)
@@ -242,9 +356,10 @@ return [
     // Approval status labels
     'status' => [
         'pending' => 'قيد المراجعة',
-        'approved' => 'موافق عليه',
+        'approved' => 'معتمد',
         'rejected' => 'مرفوض',
         'suspended' => 'موقوف',
+        'changes_requested' => 'تعديلات مطلوبة',
     ],
 
     // Document status labels
@@ -313,6 +428,9 @@ return [
 
     // Validation messages
     'validation' => [
+        'platform_required' => 'نظام تشغيل الجهاز مطلوب.',
+        'platform_invalid' => 'يجب أن يكون نظام تشغيل الجهاز ios أو android أو web.',
+        'fcm_token_required' => 'رمز الجهاز (FCM) مطلوب.',
         'phone_e164' => 'يجب أن يكون رقم الهاتف بصيغة E.164، مثال: +201001234567.',
         'otp_invalid' => 'رمز التحقق غير صحيح أو منتهي الصلاحية.',
         'otp_throttled' => 'تم تجاوز عدد محاولات التحقق المسموح. يرجى المحاولة لاحقاً.',
@@ -364,9 +482,10 @@ return [
     ],
 
     'errors' => [
-        'document_not_owned'     => 'هذه الوثيقة لا تنتمي إلى ملفك الشخصي.',
+        'document_not_owned' => 'هذه الوثيقة لا تنتمي إلى ملفك الشخصي.',
         'document_not_deletable' => 'يمكن حذف الوثائق المرفوضة فقط.',
-        'profile_not_approved'   => 'يجب أن يكون ملفك الشخصي معتمداً قبل طلب اعتماد نوع المنتج.',
-        'type_already_approved'  => 'أنت معتمد بالفعل لهذا النوع من المنتجات.',
+        'profile_not_approved' => 'يجب أن يكون ملفك الشخصي معتمداً قبل طلب اعتماد نوع المنتج.',
+        'type_already_approved' => 'أنت معتمد بالفعل لهذا النوع من المنتجات.',
+        'vendor_suspended' => 'حسابك موقوف. يمكنك عرض بياناتك ولكن لا يمكنك إجراء تغييرات.',
     ],
 ];

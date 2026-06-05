@@ -9,7 +9,7 @@ use App\Modules\Booking\Http\Controllers\Vendor\VendorScheduleController;
 use App\Modules\Identity\Http\Middleware\SetLocaleMiddleware;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware(['auth:sanctum', 'role:vendor', SetLocaleMiddleware::class])
+Route::middleware(['auth:sanctum', 'role:vendor', 'vendor.not_suspended', SetLocaleMiddleware::class])
     ->prefix('api/v1/vendor')
     ->group(function (): void {
         Route::get('booking-vendors', [BookingController::class, 'index']);

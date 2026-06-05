@@ -72,6 +72,7 @@ return [
         'identity' => 'Identity',
         'business_profile' => 'Business Profile',
         'banking' => 'Banking Details',
+        'bank_information' => 'Bank Information',
         'uploaded_documents' => 'Uploaded Documents',
         'approved_product_types' => 'Approved Product Types',
         'business_hours' => 'Business Hours',
@@ -83,6 +84,62 @@ return [
         'reviews' => 'Reviews',
         'activity' => 'Activity Log',
         'documents' => 'Documents',
+        'location' => 'Location',
+    ],
+
+    // Compliance / document expiry section
+    'compliance' => [
+        'expiry_and_criticality' => 'Expiry & Criticality',
+    ],
+
+    // Activity log column labels
+    'activity' => [
+        'description' => 'Description',
+        'caused_by' => 'Caused By',
+        'properties' => 'Properties',
+    ],
+
+    // Filters
+    'filters' => [
+        'approved_product_type' => 'Approved Product Type',
+        'status_active' => 'Active',
+        'status_suspended' => 'Suspended',
+    ],
+
+    // Empty state messages
+    'empty_states' => [
+        'no_bookings' => 'No bookings yet.',
+        'no_reviews' => 'No reviews yet.',
+        'no_loyalty' => 'No loyalty balances yet.',
+        'no_addresses' => 'No addresses saved yet.',
+        'no_activity' => 'No activity recorded yet.',
+        'no_documents' => 'No documents uploaded.',
+    ],
+
+    // Modal descriptions
+    'modals' => [
+        'suspend_customer' => 'Are you sure you want to suspend :name? They will be logged out immediately.',
+        'force_logout_customer' => 'This will revoke all active sessions for :name.',
+        'approve_vendor_heading' => 'Approve this vendor?',
+        'approve_vendor_description' => 'This grants the vendor the approved status. You can grant per-product-type permissions afterwards.',
+    ],
+
+    // Page titles
+    'pages' => [
+        'review_vendor_application' => 'Review Vendor Application',
+    ],
+
+    // Misc display labels
+    'misc' => [
+        'piastres' => 'piastres',
+        'address_default_marker' => '[Default]',
+        'booking_id' => 'Booking ID',
+        'id_short' => 'ID',
+        'translations_tab' => 'Translations',
+        'tab_english' => 'English',
+        'tab_arabic' => 'العربية',
+        'bookings_count' => '{0} No bookings|{1} 1 booking|[2,*] :count bookings',
+        'reviews_count' => '{0} No reviews|{1} 1 review|[2,*] :count reviews',
     ],
 
     // Table column labels
@@ -131,6 +188,26 @@ return [
         'approved_at' => 'Approved At',
         'revoked_at' => 'Revoked At',
         'role' => 'Role',
+        'reference' => 'Reference',
+        'lifecycle_status' => 'Lifecycle',
+        'payment_status' => 'Payment',
+        'fulfillment_status' => 'Fulfillment',
+        'total' => 'Total',
+        'kind' => 'Type',
+        'target' => 'Target',
+        'rating' => 'Rating',
+        'body' => 'Comment',
+        'program' => 'Program',
+        'points' => 'Points',
+        'address_line' => 'Address',
+        'description' => 'Description',
+        'actor' => 'Actor',
+    ],
+
+    'gender' => [
+        'male' => 'Male',
+        'female' => 'Female',
+        'prefer_not_to_say' => 'Prefer not to say',
     ],
 
     // Filament action labels
@@ -151,14 +228,27 @@ return [
         'login_as_vendor' => 'Login as Vendor (Web)',
         'replace_coverage' => 'Replace Coverage Areas',
         're_upload_document' => 'Re-upload Document',
+        'request_changes' => 'Request Changes',
+        'approve_for_rental' => 'Approve for Rental',
+        'approve_for_sale' => 'Approve for Sale',
+        'approve_for_digital' => 'Approve for Digital',
+        'revoke_type_short' => 'Revoke Type',
+        'suspend_vendor' => 'Suspend Vendor',
+        'edit' => 'Edit',
+        'remove' => 'Remove',
+        'delete' => 'Delete',
+        'upload' => 'Upload',
+        'approve_profile' => 'Approve Profile',
     ],
 
     // Form field labels
     'forms' => [
+        'rejection_reason' => 'rejection reason',
         'rejection_reason_en' => 'Rejection Reason in English',
         'rejection_reason_ar' => 'Rejection Reason in Arabic',
         'revoke_reason_en' => 'Revocation Reason in English',
         'revoke_reason_ar' => 'Revocation Reason in Arabic',
+        'revoke_reason_en_short' => 'Revoke Reason (EN)',
         'business_name_en' => 'Business Name in English',
         'business_name_ar' => 'Business Name in Arabic',
         'bio_en' => 'Bio in English',
@@ -174,13 +264,24 @@ return [
         'vendor_approved' => 'Vendor profile approved',
         'vendor_rejected' => 'Vendor profile rejected',
         'vendor_suspended' => 'Vendor suspended',
+        'vendor_unsuspended' => 'Vendor reactivated',
         'type_approved' => 'Vendor approved for product type: :type',
+        'type_approved_for' => 'Vendor approved for :type',
         'type_revoked' => 'Product type approval revoked',
         'signed_url_generated' => 'Signed URL generated',
         'impersonation_token' => 'Impersonation Token (expires in 30 min)',
         'coverage_updated' => 'Coverage areas updated successfully',
         'document_uploaded' => 'Document replaced successfully',
+        'document_deleted' => 'Document deleted',
+        'document_upload_success' => 'Document uploaded successfully',
         'vendor_profile_updated' => 'Vendor profile updated',
+        'change_request_created' => 'Change request submitted',
+        'expiry_set_successfully' => 'Document expiry updated',
+        'approval_request_submitted' => 'Approval request submitted. An admin will review shortly.',
+        'coverage_removed' => 'Coverage area removed',
+        'coverage_saved' => 'Coverage area saved',
+        'document_approved' => 'Document approved',
+        'document_rejected' => 'Document rejected',
     ],
 
     // Confirmation dialog content
@@ -210,6 +311,7 @@ return [
         'slug' => 'Slug',
         'doc_type' => 'Document Type',
         'file' => 'File',
+        'document_file' => 'Document File',
         'city_id' => 'City',
         'governorate_id' => 'Governorate',
         'delivery_fee' => 'Delivery Fee',
@@ -228,6 +330,18 @@ return [
         'recipient_name' => 'Recipient Name',
         'recipient_phone' => 'Recipient Phone',
         'is_default' => 'Set as Default',
+        'field_path' => 'Field',
+        'requested_change_en' => 'Requested Change (English)',
+        'requested_change_ar' => 'Requested Change (Arabic)',
+        'expires_at' => 'Expires At',
+        'is_critical' => 'Critical Document',
+        'commercial_register_no' => 'Commercial Register No.',
+        'tax_id' => 'Tax ID',
+        'national_id' => 'National ID',
+        'locale' => 'Locale',
+        'last_login_at' => 'Last Login',
+        'joined_at' => 'Joined',
+        'uploaded_at' => 'Uploaded',
     ],
 
     // Role labels (Spatie roles)
@@ -245,6 +359,7 @@ return [
         'approved' => 'Approved',
         'rejected' => 'Rejected',
         'suspended' => 'Suspended',
+        'changes_requested' => 'Changes Requested',
     ],
 
     // Document status labels
@@ -313,6 +428,9 @@ return [
 
     // Validation messages
     'validation' => [
+        'platform_required' => 'The device platform is required.',
+        'platform_invalid' => 'The device platform must be ios, android, or web.',
+        'fcm_token_required' => 'The FCM device token is required.',
         'phone_e164' => 'Phone number must be in E.164 format, for example: +201001234567.',
         'otp_invalid' => 'The verification code is incorrect or has expired.',
         'otp_throttled' => 'Too many verification attempts. Please try again later.',
@@ -364,9 +482,10 @@ return [
     ],
 
     'errors' => [
-        'document_not_owned'   => 'This document does not belong to your profile.',
+        'document_not_owned' => 'This document does not belong to your profile.',
         'document_not_deletable' => 'Only rejected documents can be deleted.',
         'profile_not_approved' => 'Your profile must be approved before requesting product-type approval.',
         'type_already_approved' => 'You are already approved for this product type.',
+        'vendor_suspended' => 'Your account is suspended. You can view your data but cannot make changes.',
     ],
 ];

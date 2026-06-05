@@ -9,7 +9,7 @@ use App\Modules\Settlement\Http\Controllers\Vendor\WalletController;
 use App\Modules\Settlement\Http\Controllers\Vendor\WithdrawalController;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware(['auth:sanctum'])->prefix('api/v1/vendor')->group(function (): void {
+Route::middleware(['auth:sanctum', 'vendor.not_suspended'])->prefix('api/v1/vendor')->group(function (): void {
     // US2 — Wallet balance & ledger
     Route::middleware('permission:settlement.view_wallet.own')->group(function (): void {
         Route::get('/wallet', [WalletController::class, 'show']);

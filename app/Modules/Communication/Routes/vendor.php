@@ -3,12 +3,17 @@
 declare(strict_types=1);
 
 use App\Modules\Communication\Http\Controllers\NotificationPreferenceController;
+use App\Modules\Communication\Http\Controllers\VendorChatThreadController;
 use App\Modules\Communication\Http\Controllers\VendorNotificationController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('role:vendor')->group(function () {
     Route::get('/notification-preferences', [NotificationPreferenceController::class, 'indexVendor']);
     Route::put('/notification-preferences/{channel}/{event_category}', [NotificationPreferenceController::class, 'updateVendor']);
+
+    // Chat threads mirror (vendor-portal 11.1; send/read-state are
+    // Firestore-first per spec 056 — intentionally no REST endpoints).
+    Route::get('/chat/threads', VendorChatThreadController::class);
 
     // In-app notifications inbox (vendor-portal 17.1–17.5 / G11).
     Route::get('/notifications', [VendorNotificationController::class, 'index']);

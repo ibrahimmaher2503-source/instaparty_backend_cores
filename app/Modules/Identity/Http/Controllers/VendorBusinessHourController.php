@@ -11,6 +11,7 @@ use App\Modules\Shared\Http\ApiResponse;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class VendorBusinessHourController extends Controller
@@ -49,5 +50,38 @@ class VendorBusinessHourController extends Controller
         $hours = $action->execute($vendorProfile, $request->input('hours'));
 
         return ApiResponse::success(['hours' => $hours]);
+    }
+
+    /**
+     * Vendor-portal 8.2 mobile parity (C) — single-day upsert so mobile can
+     * edit one day without round-tripping the full 7-day grid.
+     */
+    public function updateDay(Request $request, int $day): JsonResponse
+    {
+        abort_if($day < 0 || $day > 6, 404);
+
+        $validated = $request->validate([
+            'opens_at' => ['nullable', 'date_format:H:i', 'required_with:closes_at'],
+            'closes_at' => ['nullable', 'date_format:H:i', 'required_with:opens_at', 'after:opens_at'],
+        ]);
+
+        $vendorProfile = $request->user()?->vendorProfile;
+
+        if ($vendorProfile === null) {
+            throw new NotFoundHttpException('Vendor profile not found.');
+        }
+
+        $row = DB::transaction(
+            fn () => VendorBusinessHour::query()->updateOrCreate(
+                ['vendor_profile_id' => $vendorProfile->id, 'day_of_week' => $day],
+                ['opens_at' => $validated['opens_at'] ?? null, 'closes_at' => $validated['closes_at'] ?? null],
+            )
+        );
+
+        return ApiResponse::success([
+            'day_of_week' => $day,
+            'opens_at' => $row->opens_at !== null ? substr((string) $row->opens_at, 0, 5) : null,
+            'closes_at' => $row->closes_at !== null ? substr((string) $row->closes_at, 0, 5) : null,
+        ]);
     }
 }
