@@ -13,6 +13,8 @@ use App\Modules\Booking\Application\DTOs\VendorModifyDTO;
 use App\Modules\Booking\Application\DTOs\VendorRejectDTO;
 use App\Modules\Booking\Domain\Enums\ModificationProposalKind;
 use App\Modules\Booking\Domain\Enums\VendorSubStatus;
+use App\Modules\Booking\Domain\Models\Booking;
+use App\Modules\Booking\Domain\Models\BookingItem;
 use App\Modules\Booking\Domain\Models\BookingModification;
 use App\Modules\Booking\Domain\Models\BookingVendor;
 use App\Modules\Booking\Http\Requests\VendorModifyRequest;
@@ -22,6 +24,7 @@ use App\Modules\Booking\Http\Resources\BookingVendorResource;
 use App\Modules\Booking\Http\Resources\VendorBookingVendorDetailResource;
 use App\Modules\Identity\Domain\Models\User;
 use App\Modules\Identity\Domain\Models\VendorProfile;
+use App\Modules\Shared\Domain\Models\StateTransition;
 use App\Modules\Shared\Http\ApiResponse;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -69,6 +72,39 @@ class BookingController
             ->firstOrFail();
 
         return ApiResponse::success(new VendorBookingVendorDetailResource($bookingVendor));
+    }
+
+    /**
+     * Vendor-portal 6.11 — lifecycle timeline: booking-level transitions plus
+     * this vendor's own item transitions. Other vendors' items are excluded.
+     */
+    public function timeline(string $bookingVendorPublicId): JsonResponse
+    {
+        $bookingVendor = BookingVendor::with('items')
+            ->where('public_id', $bookingVendorPublicId)
+            ->where('vendor_profile_id', $this->vendorProfileId())
+            ->firstOrFail();
+
+        $entries = StateTransition::query()
+            ->where(fn ($q) => $q
+                ->where(fn ($b) => $b
+                    ->where('transitionable_type', Booking::class)
+                    ->where('transitionable_id', $bookingVendor->booking_id))
+                ->orWhere(fn ($i) => $i
+                    ->where('transitionable_type', BookingItem::class)
+                    ->whereIn('transitionable_id', $bookingVendor->items->pluck('id'))))
+            ->orderBy('id')
+            ->get()
+            ->map(fn ($t): array => [
+                'scope' => str_contains((string) $t->transitionable_type, 'BookingItem') ? 'item' : 'booking',
+                'from_state' => $t->from_state,
+                'to_state' => $t->to_state,
+                'trigger_kind' => $t->trigger_kind,
+                'created_at' => $t->created_at?->toIso8601String(),
+            ])
+            ->values();
+
+        return ApiResponse::success($entries);
     }
 
     public function accept(Request $request, string $bookingVendorPublicId): JsonResponse

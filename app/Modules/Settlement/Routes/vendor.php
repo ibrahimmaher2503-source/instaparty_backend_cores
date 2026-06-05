@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Modules\Settlement\Http\Controllers\Vendor\VendorCommissionRateController;
+use App\Modules\Settlement\Http\Controllers\Vendor\VendorSettlementController;
 use App\Modules\Settlement\Http\Controllers\Vendor\WalletController;
 use App\Modules\Settlement\Http\Controllers\Vendor\WithdrawalController;
 use Illuminate\Support\Facades\Route;
@@ -27,5 +28,11 @@ Route::middleware(['auth:sanctum'])->prefix('api/v1/vendor')->group(function ():
     Route::middleware('role:vendor')->group(function (): void {
         Route::get('/pricing/commission-rates', [VendorCommissionRateController::class, 'index']);
         Route::get('/pricing/calculator', [VendorCommissionRateController::class, 'calculator']);
+    });
+
+    // Vendor-portal 12.4/12.5 — settlement history (own commissions records).
+    Route::middleware('permission:settlement.view_wallet.own')->group(function (): void {
+        Route::get('/wallet/settlements', [VendorSettlementController::class, 'index']);
+        Route::get('/wallet/settlements/{publicId}', [VendorSettlementController::class, 'show']);
     });
 });

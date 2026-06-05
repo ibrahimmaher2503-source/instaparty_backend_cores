@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Modules\Identity\Http\Controllers\VendorAccountController;
 use App\Modules\Identity\Http\Controllers\VendorBusinessHourController;
+use App\Modules\Identity\Http\Controllers\VendorComplianceAuditLogController;
 use App\Modules\Identity\Http\Controllers\VendorComplianceController;
 use App\Modules\Identity\Http\Controllers\VendorCoverageAreaController;
 use App\Modules\Identity\Http\Controllers\VendorDocumentController;
@@ -28,6 +29,7 @@ Route::prefix('api/v1')->middleware(['api', SetLocaleMiddleware::class])->group(
 
         // G3 — per-type approval + document expiry view (ADR-0021).
         Route::get('compliance', VendorComplianceController::class);
+        Route::get('compliance/audit-log', VendorComplianceAuditLogController::class);
 
         Route::get('documents', [VendorDocumentController::class, 'index']);
         Route::post('documents', [VendorDocumentController::class, 'store']);
