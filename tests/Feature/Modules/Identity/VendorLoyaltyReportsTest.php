@@ -131,6 +131,7 @@ it('revenue report sums completed rows in integer minor units', function (): voi
 
 it('services-performance ranks own services by gross', function (): void {
     $data = makeSubmittedBookingWithVendor();
+    $data['bookingVendor']->update(['sub_status' => 'completed']); // only completed lines count
     $vendorUser = User::query()->findOrFail($data['vendor']->user_id);
 
     $response = $this->actingAs($vendorUser)

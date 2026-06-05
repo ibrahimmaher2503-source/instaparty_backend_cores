@@ -63,7 +63,18 @@ class BookingController
             ->with(['vendors.items', 'address']);
 
         if ($request->filled('status')) {
-            $query->where('lifecycle_status', $request->string('status'));
+            // Friendly customer-facing buckets → underlying lifecycle states.
+            // 'upcoming' has no matching state value; it spans the
+            // post-submission, pre-event states. Applying the raw value
+            // returned an always-empty list (review finding).
+            $states = match ($request->string('status')->toString()) {
+                'upcoming' => ['submitted', 'vendor_review', 'customer_review', 'confirmed'],
+                'active' => ['active'],
+                'completed' => ['completed'],
+                'cancelled' => ['cancelled'],
+                default => [],
+            };
+            $query->whereIn('lifecycle_status', $states);
         }
 
         if ($request->filled('cursor')) {

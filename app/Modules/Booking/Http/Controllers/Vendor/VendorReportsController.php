@@ -96,6 +96,9 @@ class VendorReportsController
             ->join('booking_vendors as bv', 'bv.id', '=', 'bi.booking_vendor_id')
             ->join('services as s', 's.id', '=', 'bi.service_id')
             ->where('bv.vendor_profile_id', $vendorId)
+            // Match revenue(): only completed lines count toward performance —
+            // otherwise cancelled/rejected items inflate gross and counts.
+            ->where('bv.sub_status', 'completed')
             ->groupBy('s.id', 's.public_id', 's.product_type')
             ->orderByDesc(DB::raw('SUM(bi.line_total_minor)'))
             ->limit(50)

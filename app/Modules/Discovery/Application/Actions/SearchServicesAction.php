@@ -58,9 +58,8 @@ class SearchServicesAction
 
         if ($dto->occasionCode !== null) {
             $occasionId = $this->searchRepository->resolveOccasionId($dto->occasionCode);
-            if ($occasionId !== null) {
-                $builder->where('occasion_ids', $occasionId);
-            }
+            // An unknown occasion matches nothing — never silently drop the filter.
+            $builder->where('occasion_ids', $occasionId ?? -1);
         }
 
         if ($dto->vendorPublicId !== null) {
@@ -105,6 +104,8 @@ class SearchServicesAction
         event(new ServiceSearchPerformed(
             query: $dto->query,
             locale: $dto->locale,
+            // Drop only NULL (unset) filters — keep explicit 0 values
+            // (price_min=0 / min_rating=0 are real filters, not "unset").
             filtersApplied: array_filter([
                 'type' => $dto->type?->value,
                 'occasion' => $dto->occasionCode,
@@ -114,7 +115,7 @@ class SearchServicesAction
                 'price_min' => $dto->priceMin,
                 'price_max' => $dto->priceMax,
                 'min_rating' => $dto->minRating,
-            ]),
+            ], static fn ($v): bool => $v !== null),
             resultsCount: $results->total(),
             userId: auth()->id(),
         ));
@@ -149,7 +150,8 @@ class SearchServicesAction
 
         if ($dto->occasionCode !== null) {
             $occasionId = $this->searchRepository->resolveOccasionId($dto->occasionCode);
-            $builder->when($occasionId !== null, fn ($q) => $q->whereHas('category.occasions', fn ($oq) => $oq->whereKey($occasionId)));
+            // An unknown occasion matches nothing — never silently drop the filter.
+            $builder->whereHas('category.occasions', fn ($oq) => $oq->whereKey($occasionId ?? -1));
         }
 
         if ($dto->vendorPublicId !== null) {
@@ -196,6 +198,8 @@ class SearchServicesAction
         event(new ServiceSearchPerformed(
             query: $dto->query,
             locale: $dto->locale,
+            // Drop only NULL (unset) filters — keep explicit 0 values
+            // (price_min=0 / min_rating=0 are real filters, not "unset").
             filtersApplied: array_filter([
                 'type' => $dto->type?->value,
                 'occasion' => $dto->occasionCode,
@@ -205,7 +209,7 @@ class SearchServicesAction
                 'price_min' => $dto->priceMin,
                 'price_max' => $dto->priceMax,
                 'min_rating' => $dto->minRating,
-            ]),
+            ], static fn ($v): bool => $v !== null),
             resultsCount: $results->total(),
             userId: auth()->id(),
         ));

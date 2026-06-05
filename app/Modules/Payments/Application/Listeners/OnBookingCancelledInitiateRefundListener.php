@@ -31,6 +31,15 @@ class OnBookingCancelledInitiateRefundListener
     {
         $booking = $event->booking;
 
+        // BookingCancelled also fires on vendor-reject (which never sets
+        // cancelled_by). Only a customer-initiated cancellation should run the
+        // CustomerRequest refund path — otherwise the audit reason is
+        // mislabeled. amount_paid is 0 at vendor_review today, but gate on the
+        // actor explicitly so this stays correct if payment timing changes.
+        if ($booking->cancelled_by === null) {
+            return;
+        }
+
         if ((int) ($booking->amount_paid_minor ?? 0) <= 0) {
             return;
         }

@@ -12,6 +12,7 @@ use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
@@ -28,10 +29,21 @@ class VendorScheduleController
         $request->validate([
             'window' => ['nullable', Rule::in(['today', 'tomorrow', 'week'])],
             // Vendor-portal 7.3 mobile parity (C): explicit calendar range
-            // (max 62 days) overrides window.
+            // (max 62 days) overrides window. The 62-day cap is enforced
+            // below — 'before_or_equal' takes a date/field, not field-relative
+            // arithmetic, so it cannot express "from + 62 days".
             'from' => ['nullable', 'date_format:Y-m-d', 'required_with:to'],
-            'to' => ['nullable', 'date_format:Y-m-d', 'required_with:from', 'after_or_equal:from', 'before_or_equal:from +62 days'],
+            'to' => ['nullable', 'date_format:Y-m-d', 'required_with:from', 'after_or_equal:from'],
         ]);
+
+        if ($request->filled('from') && $request->filled('to')) {
+            $rangeFrom = Carbon::parse((string) $request->query('from'));
+            if ($rangeFrom->diffInDays(Carbon::parse((string) $request->query('to'))) > 62) {
+                throw ValidationException::withMessages([
+                    'to' => __('booking::booking.errors.schedule_range_too_wide.message'),
+                ]);
+            }
+        }
 
         $vendor = $request->user()?->vendorProfile;
 

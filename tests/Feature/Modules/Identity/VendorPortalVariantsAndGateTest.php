@@ -60,6 +60,12 @@ it('schedule accepts an explicit calendar range', function (): void {
     $this->actingAs($this->user)
         ->getJson("/api/v1/vendor/schedule?from={$to}&to={$from}")
         ->assertStatus(422);
+
+    // 62-day cap is enforced (the rule was previously a no-op).
+    $wide = now()->addDays(120)->toDateString();
+    $this->actingAs($this->user)
+        ->getJson("/api/v1/vendor/schedule?from={$from}&to={$wide}")
+        ->assertStatus(422);
 })->group('booking', 'vendor-portal');
 
 it('returns the resumable onboarding checklist', function (): void {

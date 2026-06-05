@@ -40,6 +40,11 @@ class VendorCommissionRateController
             ->filter()
             ->values();
 
+        // Resolve category public_ids once (was a per-iteration query → N+1).
+        $publicIds = DB::table('categories')
+            ->whereIn('id', $categoryIds)
+            ->pluck('public_id', 'id');
+
         $rates = [];
         foreach ($approvedTypes as $type) {
             // Global/default rate for the type.
@@ -51,7 +56,7 @@ class VendorCommissionRateController
 
             foreach ($categoryIds as $categoryId) {
                 $rates[] = [
-                    'category_public_id' => DB::table('categories')->where('id', $categoryId)->value('public_id'),
+                    'category_public_id' => $publicIds[$categoryId] ?? null,
                     'product_type' => $type->value,
                     'commission_bps' => $this->resolver->resolve((int) $categoryId, $type),
                 ];

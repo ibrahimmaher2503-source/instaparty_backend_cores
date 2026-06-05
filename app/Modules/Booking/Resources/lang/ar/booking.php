@@ -348,6 +348,9 @@ return [
         'delivery_city_required' => [
             'message' => 'مدينة التسليم مطلوبة.',
         ],
+        'schedule_range_too_wide' => [
+            'message' => 'لا يمكن أن يتجاوز نطاق الجدول 62 يوماً.',
+        ],
         'currency_mismatch' => [
             'message' => 'عملة منطقة التغطية لا تتطابق مع عملة الحجز.',
         ],

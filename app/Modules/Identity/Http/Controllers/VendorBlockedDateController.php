@@ -9,6 +9,7 @@ use App\Modules\Identity\Domain\Models\VendorProfile;
 use App\Modules\Shared\Http\ApiResponse;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -53,19 +54,37 @@ class VendorBlockedDateController
             ['public_id' => (string) Str::ulid(), 'reason' => $validated['reason'] ?? null],
         ));
 
+        $this->bustProfileCache((int) $vendor->id);
+
         return ApiResponse::success(['public_id' => $row->public_id, 'blocked_date' => $validated['blocked_date']], [], 201);
     }
 
     public function destroy(Request $request, string $publicId): JsonResponse
     {
+        $vendor = $this->vendorProfile($request);
+
         $row = VendorBlockedDate::query()
-            ->where('vendor_profile_id', $this->vendorProfile($request)->id)
+            ->where('vendor_profile_id', $vendor->id)
             ->where('public_id', $publicId)
             ->firstOrFail();
 
         DB::transaction(fn () => $row->delete());
 
+        $this->bustProfileCache((int) $vendor->id);
+
         return ApiResponse::success(null);
+    }
+
+    /**
+     * The composite customer vendor-profile (VendorProfileShowController)
+     * caches the availability snapshot incl. blocked_dates for 5 min per
+     * locale; forget both so a block/unblock is reflected immediately.
+     */
+    private function bustProfileCache(int $vendorId): void
+    {
+        foreach (['en', 'ar'] as $locale) {
+            Cache::forget("customer:vendor-profile:{$vendorId}:{$locale}");
+        }
     }
 
     private function vendorProfile(Request $request): VendorProfile

@@ -38,10 +38,13 @@ class InitiateRefundAction
             throw new PartialRefundUnsupportedException;
         }
 
-        // Over-refund guard: sum all non-failed prior refunds + requested must not exceed captured total
+        // Over-refund guard: sum all non-FAILED prior refunds (Pending included)
+        // + requested must not exceed captured total. Pending MUST count —
+        // otherwise two BookingCancelled deliveries before the first refund
+        // settles each see 0 prior and both issue a full refund (double-refund).
         $priorRefundedMinor = (int) Refund::query()
             ->where('payment_id', $payment->id)
-            ->whereNotIn('status', [RefundStatus::Failed->value, RefundStatus::Pending->value])
+            ->where('status', '!=', RefundStatus::Failed->value)
             ->sum('amount_minor');
 
         $capturedTotal = (int) $payment->amount_minor;

@@ -360,6 +360,9 @@ return [
         'delivery_city_required' => [
             'message' => 'Delivery city is required.',
         ],
+        'schedule_range_too_wide' => [
+            'message' => 'The schedule range cannot exceed 62 days.',
+        ],
         'currency_mismatch' => [
             'message' => 'Coverage area currency does not match the booking currency.',
         ],

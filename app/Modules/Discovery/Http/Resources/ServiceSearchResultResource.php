@@ -4,48 +4,56 @@ declare(strict_types=1);
 
 namespace App\Modules\Discovery\Http\Resources;
 
+use App\Modules\Catalog\Domain\Models\Service;
+use App\Modules\Catalog\Http\Resources\Concerns\BuildsServiceContract;
 use App\Modules\Discovery\Domain\Models\Wishlist;
 use App\Modules\Discovery\Domain\Models\WishlistItem;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/**
+ * Search hit. Emits the canonical `ServiceSummary` contract (shared with the
+ * customer detail and vendor resources via BuildsServiceContract) plus the
+ * authenticated customer's wishlist flag.
+ *
+ * @mixin Service
+ */
 class ServiceSearchResultResource extends JsonResource
 {
+    use BuildsServiceContract;
+
     public function toArray(Request $request): array
     {
-        $locale = $request->header('Accept-Language', 'en') === 'ar' ? 'ar' : 'en';
-        $resource = is_array($this->resource) ? $this->resource : $this->resource->toArray();
+        /** @var Service $service */
+        $service = $this->resource;
 
-        return [
-            'public_id' => $resource['public_id'] ?? null,
-            'name' => $resource["name_{$locale}"] ?? $resource['name_en'] ?? null,
-            'short_description' => $resource["short_description_{$locale}"] ?? $resource['short_description_en'] ?? null,
-            'product_type' => $resource['product_type'] ?? null,
-            'base_price_minor' => $resource['price_minor'] ?? null,
-            'base_price_currency' => $resource['currency'] ?? 'EGP',
-            'rating_avg' => $resource['rating_avg'] ?? 0,
-            'vendor' => [
-                'id' => $resource['vendor_id'] ?? null,
-                'rating_avg' => $resource['vendor_rating'] ?? 0,
-            ],
-            'is_wishlisted' => $this->resolveIsWishlisted($resource['id'] ?? null),
-        ];
+        return array_merge(
+            $this->serviceSummary($service, app()->getLocale()),
+            ['is_wishlisted' => $this->resolveIsWishlisted($request, $service->id)],
+        );
     }
 
-    private function resolveIsWishlisted(mixed $serviceId): bool
+    /**
+     * Whether the service is in the customer's wishlist. The set of
+     * wishlisted service-ids is loaded once and memoized on the REQUEST
+     * (not a static — that would leak across requests under Octane/tests).
+     * Previously this ran two queries PER card: 40 on a 20-card page.
+     */
+    private function resolveIsWishlisted(Request $request, mixed $serviceId): bool
     {
         if (! auth()->check() || $serviceId === null) {
             return false;
         }
 
-        /** @var Wishlist|null $wishlist */
-        $wishlist = Wishlist::where('user_id', auth()->id())->first();
-        if ($wishlist === null) {
-            return false;
+        if (! $request->attributes->has('wishlisted_service_ids')) {
+            $wishlistId = Wishlist::where('user_id', auth()->id())->value('id');
+            $ids = $wishlistId === null
+                ? []
+                : WishlistItem::where('wishlist_id', $wishlistId)->pluck('service_id')
+                    ->mapWithKeys(fn ($id): array => [(int) $id => true])->all();
+            $request->attributes->set('wishlisted_service_ids', $ids);
         }
 
-        return WishlistItem::where('wishlist_id', $wishlist->id)
-            ->where('service_id', $serviceId)
-            ->exists();
+        return isset($request->attributes->get('wishlisted_service_ids')[(int) $serviceId]);
     }
 }
