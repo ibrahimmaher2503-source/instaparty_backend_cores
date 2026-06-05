@@ -1,0 +1,143 @@
+name: Theme
+description: ''
+endpoints:
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/theme/tokens
+    metadata:
+      custom: []
+      groupName: Theme
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: |-
+        Get the currently active design tokens.
+
+        Returns the design-token JSON the customer frontend should render with.
+        Falls back to a built-in default if no token row is active.
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"data":{"public_id":"01H...","name":"default","tokens":{...},"updated_at":"2026-05-17T12:00:00.000000Z"},"meta":{},"errors":null}'
+        headers: []
+        description: ''
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/theme/branding
+    metadata:
+      custom: []
+      groupName: Theme
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: |-
+        Get current branding (logo URLs, site name, contact, social).
+
+        Returns translatable fields resolved against Accept-Language.
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"data":{"public_id":"01KSB2A1V1C9SPEQR5HVKEMYWR","site_name":"InstaParty","tagline":"Everything for memorable events in one place.","address_line":"Benha, Qalyubia, Egypt","support_email":"support@instaparty.local","support_phone":"+201000000000","whatsapp_number":"+201000000000","social":{"instagram":"https:\/\/instagram.com\/instaparty"},"assets":{"logo_light":null,"logo_dark":null,"favicon":null,"og_image":null,"app_store_badge":null,"play_store_badge":null},"updated_at":"2026-05-23T18:42:07.000000Z"},"meta":{},"errors":null}'
+        headers:
+          cache-control: 'max-age=300, must-revalidate, public'
+          content-type: application/json
+          x-correlation-id: 01KTBPJMNY4K9FQZHCW50230BQ
+          vary: Origin
+          x-trace-id: 4533a5fe-89f5-41ad-b1fd-f21ec2309c44
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/theme/menus
+    metadata:
+      custom: []
+      groupName: Theme
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Get a navigation menu by slot.'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters:
+      slot:
+        custom: []
+        name: slot
+        description: 'One of: header, footer_primary, footer_secondary, mobile_drawer.'
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanQueryParameters:
+      slot: architecto
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 422
+        content: '{"data":null,"meta":{},"errors":{"message":"Unknown slot."}}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-correlation-id: 01KTBPJMQFSBE5PAJ9Q5JC6GRB
+          vary: Origin
+          x-trace-id: fc414cbc-35df-4c7c-97a1-8bb08d388cd5
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null

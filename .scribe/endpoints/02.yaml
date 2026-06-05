@@ -1,0 +1,47 @@
+name: 'Feature Flags'
+description: ''
+endpoints:
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/feature-flags/public
+    metadata:
+      custom: []
+      groupName: 'Feature Flags'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: |-
+        Returns the public-facing feature flags (frontend.* namespace only).
+        Internal flags are never exposed by this endpoint.
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"data":[],"meta":{},"errors":null}'
+        headers:
+          cache-control: 'max-age=60, must-revalidate, public'
+          content-type: application/json
+          x-correlation-id: 01KTBPJMQQ3EM1HPXKJVPARJF2
+          vary: Origin
+          x-trace-id: 872c47ef-204e-42b5-952b-cb71e4e7e73b
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
