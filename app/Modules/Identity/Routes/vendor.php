@@ -10,6 +10,7 @@ use App\Modules\Identity\Http\Controllers\VendorCoverageAreaController;
 use App\Modules\Identity\Http\Controllers\VendorDocumentController;
 use App\Modules\Identity\Http\Controllers\VendorMeController;
 use App\Modules\Identity\Http\Controllers\VendorProfileController;
+use App\Modules\Identity\Http\Controllers\VendorProfileMediaController;
 use App\Modules\Identity\Http\Controllers\VendorProfileResubmitController;
 use App\Modules\Identity\Http\Controllers\VendorRegistrationController;
 use App\Modules\Identity\Http\Middleware\SetLocaleMiddleware;
@@ -26,6 +27,13 @@ Route::prefix('api/v1')->middleware(['api', SetLocaleMiddleware::class])->group(
 
         Route::get('profile', [VendorProfileController::class, 'show']);
         Route::put('profile', [VendorProfileController::class, 'update']);
+
+        // Vendor-portal 2.3–2.6 + 2.9/2.10 — branding + portfolio media.
+        Route::post('profile/{kind}', [VendorProfileMediaController::class, 'uploadBranding'])->whereIn('kind', ['logo', 'cover']);
+        Route::delete('profile/{kind}', [VendorProfileMediaController::class, 'deleteBranding'])->whereIn('kind', ['logo', 'cover']);
+        Route::get('profile/portfolio', [VendorProfileMediaController::class, 'listPortfolio']);
+        Route::post('profile/portfolio', [VendorProfileMediaController::class, 'uploadPortfolio']);
+        Route::delete('profile/portfolio/{mediaPublicId}', [VendorProfileMediaController::class, 'deletePortfolio']);
 
         // G3 — per-type approval + document expiry view (ADR-0021).
         Route::get('compliance', VendorComplianceController::class);

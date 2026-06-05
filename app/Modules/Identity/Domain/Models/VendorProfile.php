@@ -16,6 +16,7 @@ use App\Modules\Identity\Domain\States\VendorApprovalStatus\VendorApprovalState;
 use App\Modules\Reviews\Domain\Models\VendorReview;
 use App\Modules\Settlement\Domain\Models\Wallet;
 use App\Modules\Settlement\Domain\Models\Withdrawal;
+use App\Modules\Shared\Domain\Concerns\HasPublicGallery;
 use App\Modules\Shared\Domain\Concerns\HasPublicId;
 use App\Modules\Shared\Domain\Contracts\ChangeRequestSubject;
 use App\Modules\Shared\Domain\Enums\ChangeRequestSubjectType;
@@ -29,6 +30,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Spatie\ModelStates\HasStates;
 use Spatie\Translatable\HasTranslations;
 
@@ -73,10 +77,48 @@ use Spatie\Translatable\HasTranslations;
  * @method static \Illuminate\Database\Eloquent\Builder<static> approved()
  * @method static \Illuminate\Database\Eloquent\Builder<static> approvedForType(\App\Modules\Catalog\Domain\Enums\ProductType $type)
  */
-class VendorProfile extends Model implements ChangeRequestSubject
+class VendorProfile extends Model implements ChangeRequestSubject, HasMedia
 {
     /** @use HasFactory<VendorProfileFactory> */
     use HasFactory, HasPublicId, HasStates, HasTranslations, SoftDeletes;
+
+    use HasPublicGallery;
+    use InteractsWithMedia;
+
+    /**
+     * ADR-0047 amendment (vendor-portal 2.9/2.10, approved 2026-06-05):
+     * vendor portfolio photos as a public media collection. Also upgrades
+     * the customer-facing portfolio endpoint source.
+     *
+     * @var array<string, array<string, mixed>>
+     */
+    public static array $mediaCollectionRegistry = [
+        'portfolio' => [
+            'trait' => 'HasPublicGallery',
+            'disk' => 's3-public',
+            'max_files' => 30,
+            'min_files' => 0,
+            'mime_types' => ['image/jpeg', 'image/png', 'image/webp'],
+            'max_size_bytes' => 5 * 1024 * 1024,
+            'conversions' => [
+                'thumb' => ['width' => 200, 'format' => 'webp'],
+                'large' => ['width' => 1600, 'format' => 'webp'],
+            ],
+            'reorderable' => false,
+            'image_editor' => false,
+            'audit_logged' => false,
+        ],
+    ];
+
+    public function registerMediaCollections(): void
+    {
+        $this->registerPublicGalleryCollections();
+    }
+
+    public function registerMediaConversions(?Media $media = null): void
+    {
+        $this->registerPublicGalleryConversions($media);
+    }
 
     /** @var array<int, string> */
     public $translatable = ['business_name', 'bio', 'address_line', 'rejection_reason', 'suspension_reason'];
@@ -111,6 +153,7 @@ class VendorProfile extends Model implements ChangeRequestSubject
         'bank_iban',
         'bank_swift_bic',
         'bank_branch',
+        'approval_status',
     ];
 
     public function getRouteKeyName(): string
@@ -209,11 +252,6 @@ class VendorProfile extends Model implements ChangeRequestSubject
     public function getChangeRequestSubjectType(): ChangeRequestSubjectType
     {
         return ChangeRequestSubjectType::VendorProfile;
-    }
-
-    public function getKey(): int
-    {
-        return $this->id;
     }
 
     protected function casts(): array
