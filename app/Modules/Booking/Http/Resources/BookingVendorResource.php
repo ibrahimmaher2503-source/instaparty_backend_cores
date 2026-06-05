@@ -4,9 +4,13 @@ declare(strict_types=1);
 
 namespace App\Modules\Booking\Http\Resources;
 
+use App\Modules\Booking\Application\Services\BookingVendorStatusMapCache;
+use App\Modules\Booking\Application\Services\CoverageMinimumStatusService;
 use App\Modules\Booking\Domain\Enums\ModificationStatus;
+use App\Modules\Booking\Domain\Models\Booking;
 use App\Modules\Booking\Domain\Models\BookingModification;
 use App\Modules\Booking\Domain\Models\BookingVendor;
+use Brick\Money\Money;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -38,8 +42,10 @@ class BookingVendorResource extends JsonResource
 
         return [
             'public_id' => $this->public_id,
-            'vendor_profile_id' => $this->vendor_profile_id,
+            'vendor_public_id' => $this->vendor?->public_id,
+            'vendor_name' => $this->vendor?->business_name,
             'sub_status' => $this->sub_status->value,
+            'rejection_reason' => $this->localizedRejectionReason($locale),
             'response_deadline' => $this->response_deadline?->toIso8601String(),
             'responded_at' => $this->responded_at?->toIso8601String(),
             'subtotal_minor' => $this->subtotal_minor,
@@ -47,6 +53,73 @@ class BookingVendorResource extends JsonResource
             'currency' => $this->subtotal_currency ?? 'EGP',
             'active_modification_proposal' => $this->activeModificationProposal($locale),
             'items' => BookingItemResource::collection($this->whenLoaded('items')),
+            ...$this->minOrderStatusBlock($locale),
+        ];
+    }
+
+    private function localizedRejectionReason(string $locale): ?string
+    {
+        $reason = $this->rejection_reason;
+
+        if (! is_array($reason) || $reason === []) {
+            return null;
+        }
+
+        return $reason[$locale] ?? $reason['en'] ?? $reason['ar'] ?? null;
+    }
+
+    /** @return array<string, mixed> */
+    private function minOrderStatusBlock(string $locale): array
+    {
+        /** @var BookingVendor $bookingVendor */
+        $bookingVendor = $this->resource;
+
+        $bookingId = (int) $bookingVendor->booking_id;
+
+        $cache = app(BookingVendorStatusMapCache::class);
+
+        if (! $cache->has($bookingId)) {
+            /** @var Booking|null $booking */
+            $booking = $bookingVendor->relationLoaded('booking')
+                ? $bookingVendor->booking
+                : Booking::with(['address', 'vendors'])->find($bookingId);
+
+            if ($booking === null) {
+                return ['min_order_status' => null, 'min_order_status_reason' => null];
+            }
+
+            if (! $booking->relationLoaded('address')) {
+                $booking->load('address');
+            }
+            if (! $booking->relationLoaded('vendors')) {
+                $booking->load('vendors');
+            }
+            $cache->set($bookingId, app(CoverageMinimumStatusService::class)->statusFor($booking));
+        }
+
+        $entry = $cache->get($bookingId)[$bookingVendor->id] ?? ['status' => null, 'reason_code' => null];
+
+        $status = $entry['status'];
+        $reasonCode = $entry['reason_code'];
+
+        if ($status === null) {
+            return ['min_order_status' => null, 'min_order_status_reason' => $reasonCode];
+        }
+
+        $fmt = fn (int $minor, string $currency): string => Money::ofMinor($minor, $currency)->formatTo($locale);
+
+        return [
+            'min_order_status' => [
+                'min_order_minor' => $status->minOrderMinor,
+                'min_order_currency' => $status->minOrderCurrency,
+                'min_order_formatted' => $fmt($status->minOrderMinor, $status->minOrderCurrency),
+                'current_subtotal_minor' => $status->currentSubtotalMinor,
+                'current_subtotal_formatted' => $fmt($status->currentSubtotalMinor, $status->minOrderCurrency),
+                'meets_minimum' => $status->meetsMinimum,
+                'shortfall_minor' => $status->shortfallMinor,
+                'shortfall_formatted' => $fmt($status->shortfallMinor, $status->minOrderCurrency),
+            ],
+            'min_order_status_reason' => null,
         ];
     }
 
