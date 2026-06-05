@@ -3,6 +3,10 @@
 declare(strict_types=1);
 
 return [
+    'availability' => [
+        'window_required' => 'يتطلب فحص توفر الإيجار تحديد starts_at و ends_at.',
+    ],
+
     // Navigation groups
     'nav_group_services' => 'الخدمات',
     'nav_group_catalog' => 'الكتالوج',
@@ -13,6 +17,7 @@ return [
         'rental_services' => 'خدمات التأجير',
         'sale_services' => 'خدمات البيع',
         'digital_services' => 'الخدمات الرقمية',
+        'pending_service_edits' => 'تعديلات الخدمات المعلقة',
         'service_themes' => 'ثيمات الخدمات',
         'category_field_schemas' => 'مخططات حقول التصنيفات',
         'excel_imports' => 'عمليات استيراد إكسل',
@@ -85,10 +90,17 @@ return [
         'failed' => 'فشل',
     ],
 
-    // Product types
+    // Product types (legacy flat keys kept for backward compat)
     'product_type_rental' => 'تأجير',
     'product_type_sale' => 'بيع',
     'product_type_digital' => 'رقمي',
+
+    // Product type labels (used by ProductType::label())
+    'product_types' => [
+        'rental' => 'تأجير',
+        'sale' => 'بيع',
+        'digital' => 'رقمي',
+    ],
 
     // Field types
     'field_types' => [
@@ -125,13 +137,21 @@ return [
     'parent_category' => 'التصنيف الرئيسي',
     'no_parent' => 'بدون تصنيف رئيسي',
     'allowed_product_types' => 'أنواع المنتجات المسموح بها',
+    'vendor_categories' => [
+        'intro_heading' => 'التصنيفات التي يمكنك العمل بها',
+        'intro_body' => 'هذه قائمة مرجعية للاطلاع فقط بالتصنيفات المتاحة لك على المنصة، بناءً على أنواع المنتجات المعتمَدة لحسابك. لتغيير أنواع المنتجات المعتمَدة لك، انتقل إلى حالة الاعتماد.',
+        'manage_link' => 'الانتقال إلى حالة الاعتماد',
+        'empty_heading' => 'لا توجد تصنيفات متاحة بعد',
+        'empty_description' => 'بمجرد اعتماد حسابك لنوع منتج واحد أو أكثر، ستظهر التصنيفات المطابقة هنا.',
+    ],
     'product_type' => 'نوع المنتج',
     'category' => 'التصنيف',
-    'base_price' => 'السعر الأساسي بالقرش',
+    'base_price' => 'السعر الأساسي',
     'status_label' => 'الحالة',
     'is_featured' => 'مميز',
     'vendor' => 'المورّد',
     'media' => 'الوسائط / المعرض',
+    'cover_image' => 'صورة الغلاف',
     'service' => 'الخدمة',
     'user_id' => 'المستخدم',
     'quantity' => 'الكمية',
@@ -193,6 +213,7 @@ return [
     'translatable_fields' => 'المحتوى القابل للترجمة',
 
     // Excel import
+    'download_template' => 'تحميل النموذج',
     'import_file_label' => 'ملف إكسل أو CSV',
     'import_button' => 'استيراد',
     'import_no_vendor' => 'لا يوجد ملف مورّد مرتبط بحسابك.',
@@ -203,11 +224,37 @@ return [
     'row' => 'الصف',
     'field' => 'الحقل',
     'error' => 'الخطأ',
+
+    // Import history & error review (feature 039)
+    'import_details' => 'تفاصيل الاستيراد',
+    'import_history' => 'سجل الاستيراد',
+    'view_errors' => 'عرض الأخطاء',
+    'import_errors_for' => 'أخطاء الاستيراد: :filename',
+    'row_number' => 'رقم الصف',
+    'field_name' => 'الحقل',
+    'entered_value' => 'القيمة المُدخلة',
+    'validation_message' => 'رسالة التحقق',
+    'required_fix' => 'الإصلاح المطلوب',
+    'no_failed_rows' => 'لا توجد صفوف فاشلة للتصدير',
+    'download_failed_rows' => 'تحميل الصفوف الفاشلة',
+    'retry_import' => 'إعادة محاولة الاستيراد',
+    'retry_import_queued' => 'بدأ استيراد جديد. تحقق من سجل الاستيراد للمتابعة.',
+
+    // Fix hints
+    'fix_hint_required' => 'هذا الحقل مطلوب',
+    'fix_hint_integer' => 'يجب أن يكون رقمًا صحيحًا',
+    'fix_hint_min_0' => 'يجب أن يكون 0 أو أكثر',
+    'fix_hint_min_1' => 'يجب أن يكون 1 أو أكثر',
+    'fix_hint_max_255' => 'الحد الأقصى 255 حرفًا',
+    'fix_hint_boolean' => 'يجب أن يكون صحيحًا (1) أو خاطئًا (0)',
+    'fix_hint_string' => 'يجب أن يكون نصًا',
+    'fix_hint_default' => 'تحقق من القيمة وحاول مجددًا',
     // Moderation actions
     'approve_publish' => 'اعتماد ونشر',
     'approve_publish_heading' => 'اعتماد الخدمة ونشرها',
     'approve_publish_description' => 'سيتم نشر الخدمة وإزالتها من قائمة المراجعة.',
     'approve_publish_success' => 'تم نشر الخدمة بنجاح.',
+    'approve_publish_failed' => 'تعذر نشر الخدمة',
     'approve_selected' => 'اعتماد المحدد',
     'approve_selected_heading' => 'اعتماد الخدمات المحددة',
     'approve_selected_description' => 'سيتم نشر كل الخدمات المحددة قيد المراجعة.',
@@ -243,7 +290,56 @@ return [
     'moderation_invalid_transition' => 'لم تعد هذه الخدمة مؤهلة لهذا إجراء المراجعة.',
     'moderation_conflict' => 'تعذر تنفيذ الإجراء على :count خدمة لأن حالتها تغيرت.',
     'moderation_notes' => 'ملاحظات المراجعة',
-    'category_has_children'        => 'لا يمكن حذف فئة تحتوي على فئات فرعية. انقل أو احذف الفئات الفرعية أولاً.',
-    'reorder_unknown_categories'   => 'إحدى الفئات في قائمة الترتيب غير موجودة.',
-    'reorder_parent_mismatch'      => 'جميع الفئات في عملية إعادة ترتيب واحدة يجب أن يكون لها نفس الأب.',
+    'category_has_children' => 'لا يمكن حذف فئة تحتوي على فئات فرعية. انقل أو احذف الفئات الفرعية أولاً.',
+    'reorder_unknown_categories' => 'إحدى الفئات في قائمة الترتيب غير موجودة.',
+    'reorder_parent_mismatch' => 'جميع الفئات في عملية إعادة ترتيب واحدة يجب أن يكون لها نفس الأب.',
+
+    // طرق التسليم
+    'delivery_methods' => [
+        'email' => 'بريد إلكتروني',
+        'sms' => 'رسالة نصية',
+        'whatsapp' => 'واتساب',
+        'link' => 'رابط',
+        'in_app' => 'داخل التطبيق',
+    ],
+
+    // حقول الترجمة (للنماذج ذات الأعمدة JSON اليدوية)
+    'fields' => [
+        'name_en' => 'الاسم (إنجليزي)',
+        'description_en' => 'الوصف (إنجليزي)',
+        'name_ar' => 'الاسم (عربي)',
+        'description_ar' => 'الوصف (عربي)',
+    ],
+
+    // تسميات بوابة المورد
+    'vendor_portal' => [
+        'submit_for_review' => 'إرسال للمراجعة',
+        'clone' => 'نسخ',
+        'cloned' => 'تم نسخ الخدمة. أنت الآن تعدّل النسخة.',
+        'block_dates' => 'حظر تواريخ',
+        'unblock' => 'إزالة الحظر',
+        'blocked' => 'تم حظر التواريخ.',
+        'unblocked' => 'تمت إزالة الحظر.',
+        'availability_title' => 'كتل التوافر',
+        'cannot_edit_published' => 'التعديلات الجوهرية ستعيد هذه الخدمة إلى المراجعة.',
+    ],
+
+    // لاحقة المبلغ / تلميح السعر
+    'piastres_suffix' => 'قرش',
+    'price_helper' => 'بالقرش — 10000 = 100.00 جنيه مصري',
+
+    // إجراء الاستيراد المدمج في جدول المسؤول
+    'import' => [
+        'rental_label' => 'استيراد خدمات التأجير',
+        'sale_label' => 'استيراد خدمات البيع',
+        'digital_label' => 'استيراد الخدمات الرقمية',
+        'vendor' => 'المورّد',
+        'file' => 'ملف إكسل (.xlsx / .xls)',
+        'modal_heading_rental' => 'استيراد خدمات التأجير',
+        'modal_heading_sale' => 'استيراد خدمات البيع',
+        'modal_heading_digital' => 'استيراد الخدمات الرقمية',
+        'modal_submit' => 'استيراد',
+        'completed' => 'اكتمل الاستيراد: تم إنشاء :count خدمة.',
+        'failed_row_errors' => 'فشل الاستيراد — راجع أخطاء كل صف في سجل الاستيراد.',
+    ],
 ];

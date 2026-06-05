@@ -3,6 +3,10 @@
 declare(strict_types=1);
 
 return [
+    'availability' => [
+        'window_required' => 'A rental availability check requires starts_at and ends_at.',
+    ],
+
     // Navigation groups
     'nav_group_services' => 'Services',
     'nav_group_catalog' => 'Catalog',
@@ -14,6 +18,7 @@ return [
         'sale_services' => 'Sale Services',
         'digital_services' => 'Digital Services',
         'service_themes' => 'Service Themes',
+        'pending_service_edits' => 'Pending Service Edits',
         'category_field_schemas' => 'Category Field Schemas',
         'excel_imports' => 'Excel Imports',
         'inventory_reservations' => 'Inventory Reservations',
@@ -85,10 +90,17 @@ return [
         'failed' => 'Failed',
     ],
 
-    // Product types
+    // Product types (legacy flat keys kept for backward compat)
     'product_type_rental' => 'Rental',
     'product_type_sale' => 'Sale',
     'product_type_digital' => 'Digital',
+
+    // Product type labels (used by ProductType::label())
+    'product_types' => [
+        'rental' => 'Rental',
+        'sale' => 'Sale',
+        'digital' => 'Digital',
+    ],
 
     // Field types
     'field_types' => [
@@ -125,13 +137,21 @@ return [
     'parent_category' => 'Parent Category',
     'no_parent' => 'No Parent Category',
     'allowed_product_types' => 'Allowed Product Types',
+    'vendor_categories' => [
+        'intro_heading' => 'Categories you can operate in',
+        'intro_body' => 'This is a read-only reference of the platform categories available to you, based on the product types your account is approved for. To change which product types you are approved for, visit Approval Status.',
+        'manage_link' => 'Go to Approval Status',
+        'empty_heading' => 'No categories available yet',
+        'empty_description' => 'Once your account is approved for one or more product types, the matching categories will appear here.',
+    ],
     'product_type' => 'Product Type',
     'category' => 'Category',
-    'base_price' => 'Base Price in Piastres',
+    'base_price' => 'Base Price',
     'status_label' => 'Status',
     'is_featured' => 'Featured',
     'vendor' => 'Vendor',
     'media' => 'Media / Gallery',
+    'cover_image' => 'Cover Image',
     'service' => 'Service',
     'user_id' => 'User',
     'quantity' => 'Quantity',
@@ -196,6 +216,7 @@ return [
     'translatable_fields' => 'Translatable Content',
 
     // Excel import
+    'download_template' => 'Download Template',
     'import_file_label' => 'Excel or CSV File',
     'import_button' => 'Import',
     'import_no_vendor' => 'No vendor profile is associated with your account.',
@@ -207,11 +228,37 @@ return [
     'field' => 'Field',
     'error' => 'Error',
 
+    // Import history & error review (feature 039)
+    'import_details' => 'Import Details',
+    'import_history' => 'Import History',
+    'view_errors' => 'View Errors',
+    'import_errors_for' => 'Import Errors: :filename',
+    'row_number' => 'Row #',
+    'field_name' => 'Field',
+    'entered_value' => 'Entered Value',
+    'validation_message' => 'Validation Message',
+    'required_fix' => 'Required Fix',
+    'no_failed_rows' => 'No failed rows to export',
+    'download_failed_rows' => 'Download Failed Rows',
+    'retry_import' => 'Retry Import',
+    'retry_import_queued' => 'New import started. Check Import History for progress.',
+
+    // Fix hints
+    'fix_hint_required' => 'This field is required',
+    'fix_hint_integer' => 'Must be a whole number',
+    'fix_hint_min_0' => 'Must be 0 or greater',
+    'fix_hint_min_1' => 'Must be 1 or greater',
+    'fix_hint_max_255' => 'Maximum 255 characters',
+    'fix_hint_boolean' => 'Must be true (1) or false (0)',
+    'fix_hint_string' => 'Must be text',
+    'fix_hint_default' => 'Check the value and try again',
+
     // Moderation actions
     'approve_publish' => 'Approve & Publish',
     'approve_publish_heading' => 'Approve and publish service',
     'approve_publish_description' => 'This publishes the service and removes it from pending review.',
     'approve_publish_success' => 'Service published successfully.',
+    'approve_publish_failed' => 'Cannot publish service',
     'approve_selected' => 'Approve selected',
     'approve_selected_heading' => 'Approve selected services',
     'approve_selected_description' => 'All selected pending services will be published.',
@@ -249,24 +296,60 @@ return [
     'moderation_notes' => 'Moderation Notes',
 
     'errors' => [
-        'not_owned'            => 'This service does not belong to your profile.',
-        'cannot_submit'        => 'This service cannot be submitted for review in its current status.',
+        'not_owned' => 'This service does not belong to your profile.',
+        'cannot_submit' => 'This service cannot be submitted for review in its current status.',
         'not_approved_for_type' => 'You are not approved to operate this product type.',
     ],
 
     // Vendor portal labels
-    'vendor' => [
-        'submit_for_review'   => 'Submit for Review',
-        'clone'               => 'Clone',
-        'cloned'              => 'Service cloned. You are now editing the copy.',
-        'block_dates'         => 'Block Dates',
-        'unblock'             => 'Remove Block',
-        'blocked'             => 'Dates blocked.',
-        'unblocked'           => 'Block removed.',
-        'availability_title'  => 'Availability Blocks',
+    'vendor_portal' => [
+        'submit_for_review' => 'Submit for Review',
+        'clone' => 'Clone',
+        'cloned' => 'Service cloned. You are now editing the copy.',
+        'block_dates' => 'Block Dates',
+        'unblock' => 'Remove Block',
+        'blocked' => 'Dates blocked.',
+        'unblocked' => 'Block removed.',
+        'availability_title' => 'Availability Blocks',
         'cannot_edit_published' => 'Material edits will send this service back to moderation.',
     ],
-    'category_has_children'        => 'Cannot delete a category that has subcategories. Move or delete the children first.',
-    'reorder_unknown_categories'   => 'One or more categories in the supplied order list do not exist.',
-    'reorder_parent_mismatch'      => 'All categories in a single reorder operation must share the same parent.',
+    'category_has_children' => 'Cannot delete a category that has subcategories. Move or delete the children first.',
+    'reorder_unknown_categories' => 'One or more categories in the supplied order list do not exist.',
+    'reorder_parent_mismatch' => 'All categories in a single reorder operation must share the same parent.',
+
+    // Delivery method options
+    'delivery_methods' => [
+        'email' => 'Email',
+        'sms' => 'SMS',
+        'whatsapp' => 'WhatsApp',
+        'link' => 'Link',
+        'in_app' => 'In-App',
+    ],
+
+    // Translatable field labels (for manual JSON-column forms)
+    'fields' => [
+        'name_en' => 'Name (English)',
+        'description_en' => 'Description (English)',
+        'name_ar' => 'الاسم (عربي)',
+        'description_ar' => 'الوصف (عربي)',
+    ],
+
+    // Money helper / suffix
+    'piastres_suffix' => 'Piastres',
+    'price_helper' => 'In piastres — 10000 = 100.00 EGP',
+
+    // Admin inline-import action (table header action)
+    'import' => [
+        'rental_label' => 'Import Rental Services',
+        'sale_label' => 'Import Sale Services',
+        'digital_label' => 'Import Digital Services',
+        'vendor' => 'Vendor',
+        'file' => 'Excel File (.xlsx / .xls)',
+        'modal_heading_rental' => 'Import Rental Services',
+        'modal_heading_sale' => 'Import Sale Services',
+        'modal_heading_digital' => 'Import Digital Services',
+        'modal_submit' => 'Import',
+        'completed' => 'Import completed: :count service(s) created.',
+        'failed_row_errors' => 'Import failed — check per-row errors on the import record.',
+    ],
 ];

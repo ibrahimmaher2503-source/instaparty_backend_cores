@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Modules\Catalog\Http\Controllers\CategoryController;
+use App\Modules\Catalog\Http\Controllers\Customer\CheckServiceAvailabilityController;
 use App\Modules\Catalog\Http\Controllers\Customer\ServiceDetailController;
 use App\Modules\Catalog\Http\Controllers\Customer\ServiceDiscoveryExtrasController;
 use App\Modules\Catalog\Http\Controllers\OccasionController;
@@ -22,5 +23,7 @@ Route::prefix('api/v1/customer')->middleware(['api', 'locale', 'throttle:60,1'])
     Route::get('services/{servicePublicId}', ServiceDetailController::class);
     Route::get('services/{servicePublicId}/similar', [ServiceDiscoveryExtrasController::class, 'similar']);
     Route::post('services/{servicePublicId}/views', [ServiceDiscoveryExtrasController::class, 'trackView'])
+        ->middleware('throttle:30,1');
+    Route::post('services/{servicePublicId}/check-availability', CheckServiceAvailabilityController::class)
         ->middleware('throttle:30,1');
 });
