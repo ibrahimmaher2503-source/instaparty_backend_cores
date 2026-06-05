@@ -7,6 +7,7 @@ namespace App\Modules\Discovery\Application\Services;
 use App\Modules\Discovery\Infrastructure\Repositories\VendorBrowsingRepository;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Vendor opening-hours read model (audit 8.7 / 8.8). Weekly hours only in
@@ -37,13 +38,23 @@ class VendorAvailabilityService
                 'opens_at' => $r->opens_at !== null ? substr((string) $r->opens_at, 0, 5) : null,
                 'closes_at' => $r->closes_at !== null ? substr((string) $r->closes_at, 0, 5) : null,
             ])->values()->all(),
-            'blocked_dates' => [], // no vendor-holiday source in Phase 1
+            // vendor_blocked_dates landed 2026-06-05 (vendor-portal 8.3–8.5).
+            'blocked_dates' => $this->blockedDatesFor($vendorProfileId),
         ];
     }
 
     /** @return array<string, mixed> */
     public function checkDate(int $vendorProfileId, CarbonImmutable $date): array
     {
+        if (in_array($date->toDateString(), $this->blockedDatesFor($vendorProfileId), true)) {
+            return [
+                'date' => $date->toDateString(),
+                'is_available' => false,
+                'opens_at' => null,
+                'closes_at' => null,
+            ];
+        }
+
         $row = $this->rowFor($this->repository->weeklyHoursFor($vendorProfileId), $date->dayOfWeek);
         $open = $row !== null && $row->opens_at !== null;
 
@@ -53,6 +64,18 @@ class VendorAvailabilityService
             'opens_at' => $open ? substr((string) $row->opens_at, 0, 5) : null,
             'closes_at' => $open ? substr((string) $row->closes_at, 0, 5) : null,
         ];
+    }
+
+    /** @return list<string> upcoming blocked dates (Y-m-d) */
+    private function blockedDatesFor(int $vendorProfileId): array
+    {
+        return DB::table('vendor_blocked_dates')
+            ->where('vendor_profile_id', $vendorProfileId)
+            ->where('blocked_date', '>=', now()->toDateString())
+            ->orderBy('blocked_date')
+            ->pluck('blocked_date')
+            ->map(fn ($d): string => substr((string) $d, 0, 10))
+            ->all();
     }
 
     private function rowFor(Collection $rows, int $dayOfWeek): ?object

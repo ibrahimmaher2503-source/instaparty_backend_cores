@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Modules\Identity\Http\Controllers\VendorAccountController;
+use App\Modules\Identity\Http\Controllers\VendorBlockedDateController;
 use App\Modules\Identity\Http\Controllers\VendorBusinessHourController;
 use App\Modules\Identity\Http\Controllers\VendorComplianceAuditLogController;
 use App\Modules\Identity\Http\Controllers\VendorComplianceController;
@@ -53,6 +54,11 @@ Route::prefix('api/v1')->middleware(['api', SetLocaleMiddleware::class])->group(
         // Business hours — GET added (vendor-portal 8.1; PUT existed without a read).
         Route::get('business-hours', [VendorBusinessHourController::class, 'index']);
         Route::put('business-hours', [VendorBusinessHourController::class, 'update']);
+
+        // Blocked dates / holidays (vendor-portal 8.3–8.5, schema approved 2026-06-05).
+        Route::get('availability/blocked-dates', [VendorBlockedDateController::class, 'index']);
+        Route::post('availability/blocked-dates', [VendorBlockedDateController::class, 'store']);
+        Route::delete('availability/blocked-dates/{publicId}', [VendorBlockedDateController::class, 'destroy']);
 
         Route::post('vendor-profiles/{publicId}/resubmit', [VendorProfileResubmitController::class, 'store']);
 

@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Modules\Settlement\Http\Controllers\Vendor\VendorBankAccountController;
 use App\Modules\Settlement\Http\Controllers\Vendor\VendorCommissionRateController;
 use App\Modules\Settlement\Http\Controllers\Vendor\VendorSettlementController;
 use App\Modules\Settlement\Http\Controllers\Vendor\WalletController;
@@ -28,6 +29,15 @@ Route::middleware(['auth:sanctum'])->prefix('api/v1/vendor')->group(function ():
     Route::middleware('role:vendor')->group(function (): void {
         Route::get('/pricing/commission-rates', [VendorCommissionRateController::class, 'index']);
         Route::get('/pricing/calculator', [VendorCommissionRateController::class, 'calculator']);
+    });
+
+    // Vendor-portal 13.1–13.5 / G13 — bank accounts (schema approved 2026-06-05).
+    Route::middleware('role:vendor')->prefix('bank-accounts')->group(function (): void {
+        Route::get('/', [VendorBankAccountController::class, 'index']);
+        Route::post('/', [VendorBankAccountController::class, 'store'])->middleware('idempotency');
+        Route::patch('{publicId}', [VendorBankAccountController::class, 'update']);
+        Route::delete('{publicId}', [VendorBankAccountController::class, 'destroy']);
+        Route::post('{publicId}/set-default', [VendorBankAccountController::class, 'setDefault']);
     });
 
     // Vendor-portal 12.4/12.5 — settlement history (own commissions records).
