@@ -36,7 +36,8 @@ app/Modules/{Name}/
 ├── Routes/
 │   ├── customer.php
 │   ├── vendor.php
-│   └── admin.php
+│   ├── admin.php
+│   └── storefront.php     # optional — Blade storefront pages
 ├── Database/
 │   └── Migrations/
 ├── Resources/
@@ -69,6 +70,34 @@ In `register()`:
 
 - Bind module Contracts to their Infrastructure implementations.
 
+## Storefront routes (Blade) — auto-discovered, do NOT register manually
+
+`Routes/storefront.php` is the one route file a ServiceProvider must **not** load.
+`routes/web.php` discovers every module's `Routes/storefront.php` by glob and wraps
+them all in a single group that supplies:
+
+- the `web` middleware group,
+- `SetStorefrontLocaleMiddleware` (Shared),
+- the `{locale}` URL prefix, constrained to the supported locales,
+- the `storefront.` route-name prefix.
+
+So a module's `storefront.php` declares bare paths only:
+
+```php
+// app/Modules/Catalog/Routes/storefront.php
+Route::get('services/{publicId}', ServicePageController::class)->name('services.show');
+// -> GET /{locale}/services/{publicId}, named storefront.services.show
+```
+
+Never re-declare the prefix or middleware inside a module file — you would nest
+`{locale}` twice. Adding a new module's storefront routes needs no wiring at all.
+
+**Never type-hint `$locale` in a storefront controller.** The middleware removes it
+from the route's parameter bag, because Laravel binds controller arguments
+positionally and `{locale}` is the first parameter of every storefront route — a
+`__invoke(string $publicId)` would otherwise silently receive `"ar"`. Read the locale
+from `app()->getLocale()`. Guarded by `tests/Feature/Storefront/StorefrontRoutingTest.php`.
+
 ## Phase 1 modules
 
 Identity, Catalog, Discovery, Booking, Negotiation, Payments, Settlement, Reviews, Communication, Reporting, Shared.
@@ -90,7 +119,9 @@ If you propose a new module, name the bounded context it represents and which ex
 | Event listener | `Application/Listeners/` |
 | Repository (Eloquent) | `Infrastructure/Repositories/` |
 | External-system adapter (Paymob, Mailchimp, Firebase, Meilisearch) | `Infrastructure/Gateways/` |
-| Controller | `Http/Controllers/` (3-line action body MAX) |
+| Controller (API) | `Http/Controllers/` (3-line action body MAX) |
+| Controller (Blade storefront) | `Http/Controllers/Web/` (same 3-line rule) |
+| Livewire component (storefront) | `Http/Livewire/` |
 | FormRequest | `Http/Requests/` |
 | API Resource | `Http/Resources/` (locale conversion happens here) |
 | Module-specific middleware | `Http/Middleware/` |

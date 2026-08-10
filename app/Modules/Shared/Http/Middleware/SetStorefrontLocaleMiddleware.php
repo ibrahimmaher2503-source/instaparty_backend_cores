@@ -7,6 +7,7 @@ namespace App\Modules\Shared\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\URL;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -34,7 +35,22 @@ class SetStorefrontLocaleMiddleware
 
     public function handle(Request $request, Closure $next): Response
     {
-        App::setLocale($this->resolveLocale($request));
+        $locale = $this->resolveLocale($request);
+
+        App::setLocale($locale);
+
+        // Let route() generate /{locale}/... without every call site passing it.
+        URL::defaults(['locale' => $locale]);
+
+        // Drop {locale} from the route's parameter bag so controllers never receive
+        // it. Laravel fills controller arguments POSITIONALLY, so a prefixed route
+        // would otherwise pass "ar" as the first scalar argument — a
+        // ServicePageController::__invoke(string $publicId) would silently get the
+        // locale instead of the ULID. This project has already been bitten by the
+        // sibling footgun (Route::defaults() swapping positional args), so keep the
+        // parameter out of the bag entirely rather than adding $locale to 35
+        // controller signatures.
+        $request->route()?->forgetParameter('locale');
 
         return $next($request);
     }
