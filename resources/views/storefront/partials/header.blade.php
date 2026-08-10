@@ -1,11 +1,9 @@
 @php
-    use App\Modules\Shared\Http\Middleware\SetStorefrontLocaleMiddleware;
-
     $current = app()->getLocale();
 
-    // Swap the leading locale segment so the switcher keeps the visitor on the
-    // page they are already reading, instead of dumping them on the home page.
-    $segments = request()->segments();
+    // $storefrontLocaleUrls is shared by SetStorefrontLocaleMiddleware and points
+    // at the SAME page in each locale, so switching language keeps the visitor
+    // where they are instead of dumping them on the home page.
     $localeNames = ['en' => 'English', 'ar' => 'العربية'];
 @endphp
 
@@ -16,14 +14,9 @@
         </a>
 
         <nav class="flex items-center gap-2" aria-label="{{ __('storefront.nav.language') }}">
-            @foreach (SetStorefrontLocaleMiddleware::SUPPORTED_LOCALES as $locale)
-                @php
-                    $target = $segments;
-                    $target[0] = $locale;
-                @endphp
-
+            @foreach ($storefrontLocaleUrls ?? [] as $locale => $localeUrl)
                 <a
-                    href="{{ url(implode('/', $target)) }}"
+                    href="{{ $localeUrl }}"
                     hreflang="{{ $locale }}"
                     @class([
                         'rounded px-3 py-1 text-sm',

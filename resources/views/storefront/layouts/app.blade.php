@@ -21,8 +21,8 @@
     <title>@yield('title', config('app.name'))</title>
 
     {{-- Each locale is its own indexable URL; tell crawlers they are alternates. --}}
-    @foreach (\App\Modules\Shared\Http\Middleware\SetStorefrontLocaleMiddleware::SUPPORTED_LOCALES as $alternate)
-        <link rel="alternate" hreflang="{{ $alternate }}" href="{{ url($alternate.'/'.request()->route()?->uri()) }}">
+    @foreach ($storefrontLocaleUrls ?? [] as $alternate => $alternateUrl)
+        <link rel="alternate" hreflang="{{ $alternate }}" href="{{ $alternateUrl }}">
     @endforeach
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])

@@ -52,7 +52,37 @@ class SetStorefrontLocaleMiddleware
         // controller signatures.
         $request->route()?->forgetParameter('locale');
 
+        // Single source of truth for "this same page, in the other language",
+        // consumed by both the <link rel="alternate"> tags and the header switcher.
+        view()->share('storefrontLocaleUrls', $this->alternateUrls($request));
+
         return $next($request);
+    }
+
+    /**
+     * Builds the equivalent URL of the current page in every supported locale.
+     *
+     * Swaps the leading path segment rather than using the matched route, because
+     * Route::uri() yields the route PATTERN ("{locale}/services/{publicId}"), not
+     * the resolved path — using it produces hrefs like /en/{locale}.
+     *
+     * @return array<string, string>
+     */
+    private function alternateUrls(Request $request): array
+    {
+        $segments = $request->segments();
+        $query = $request->getQueryString();
+
+        $urls = [];
+
+        foreach (self::SUPPORTED_LOCALES as $locale) {
+            // Every storefront route is {locale}-prefixed, so segment 0 is the locale.
+            $segments[0] = $locale;
+
+            $urls[$locale] = url(implode('/', $segments)).($query !== null ? '?'.$query : '');
+        }
+
+        return $urls;
     }
 
     private function resolveLocale(Request $request): string

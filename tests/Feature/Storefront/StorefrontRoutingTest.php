@@ -24,6 +24,10 @@ beforeEach(function (): void {
                 'locale' => app()->getLocale(),
                 'generated' => route('storefront._echo', ['publicId' => 'ABC']),
             ]))->name('_echo');
+
+            // Renders the real layout, so the <head> alternates can be asserted
+            // on a nested path rather than only on the home page.
+            Route::get('_page/{publicId}', fn () => view('storefront.home'))->name('_page');
         });
 
     // Routes registered after the app has booted are matchable but absent from the
@@ -82,11 +86,29 @@ it('generates locale-prefixed URLs without passing the locale explicitly', funct
     expect($payload['generated'])->toEndWith('/ar/_echo/ABC');
 })->group('storefront', 'routing', 'locale');
 
+/**
+ * Asserts href VALUES, not just that the attributes exist.
+ *
+ * The first version of this test checked only toContain('hreflang="en"') and
+ * happily passed while every alternate URL was literally
+ * href="http://localhost/en/{locale}" — Route::uri() returns the route PATTERN,
+ * not the resolved path. Per-locale indexability is the entire justification for
+ * the /{locale} scheme, so the URLs themselves are what matter here.
+ */
+it('emits correct alternate URLs for the current page', function (): void {
+    $html = $this->get('/ar/_page/ABC?sort=price')->getContent();
+
+    expect($html)
+        ->toContain('hreflang="en" href="'.url('/en/_page/ABC').'?sort=price"')
+        ->toContain('hreflang="ar" href="'.url('/ar/_page/ABC').'?sort=price"')
+        ->not->toContain('{locale}');
+})->group('storefront', 'routing', 'locale');
+
 it('keeps the visitor on the same page when switching locale', function (): void {
     $html = $this->get('/ar')->getContent();
 
-    // The switcher swaps the leading segment rather than linking to the root.
+    // The switcher points at this page in the other locale, not at the root.
     expect($html)
-        ->toContain('hreflang="en"')
-        ->toContain('hreflang="ar"');
+        ->toContain('href="'.url('/en').'"')
+        ->not->toContain('{locale}');
 })->group('storefront', 'routing', 'locale');
