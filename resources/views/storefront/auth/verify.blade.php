@@ -17,14 +17,14 @@
             dir="ltr"
         />
 
-        <button type="submit" class="w-full rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-800">
+        <x-storefront.button class="w-full">
             {{ __('storefront.auth.verify.submit') }}
-        </button>
+        </x-storefront.button>
     </form>
 
     <form method="POST" action="{{ route('storefront.auth.verify.send') }}">
         @csrf
-        <button type="submit" class="text-sm text-gray-700 underline">
+        <button type="submit" class="text-sm font-medium text-ink-500 underline underline-offset-2 hover:text-ink-900">
             {{ __('storefront.auth.verify.resend') }}
         </button>
     </form>

@@ -36,12 +36,12 @@
             autocomplete="new-password"
         />
 
-        <button type="submit" class="w-full rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-800">
+        <x-storefront.button class="w-full">
             {{ __('storefront.auth.reset.submit') }}
-        </button>
+        </x-storefront.button>
     </form>
 
-    <a href="{{ route('storefront.auth.forgot') }}" class="text-sm text-gray-700 underline">
+    <a href="{{ route('storefront.auth.forgot') }}" class="text-sm font-medium text-ink-500 underline underline-offset-2 hover:text-ink-900">
         {{ __('storefront.auth.reset.retry_link') }}
     </a>
 @endsection

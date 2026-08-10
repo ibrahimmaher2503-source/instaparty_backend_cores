@@ -16,12 +16,12 @@
             dir="ltr"
         />
 
-        <button type="submit" class="w-full rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-800">
+        <x-storefront.button class="w-full">
             {{ __('storefront.auth.forgot.submit') }}
-        </button>
+        </x-storefront.button>
     </form>
 
-    <a href="{{ route('storefront.auth.login') }}" class="text-sm text-gray-700 underline">
+    <a href="{{ route('storefront.auth.login') }}" class="text-sm font-medium text-ink-500 underline underline-offset-2 hover:text-ink-900">
         {{ __('storefront.auth.forgot.back_to_login') }}
     </a>
 @endsection

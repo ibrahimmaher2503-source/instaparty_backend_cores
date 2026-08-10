@@ -1,0 +1,177 @@
+@import 'tailwindcss';
+
+/*
+| Storefront stylesheet.
+|
+| Deliberately separate from resources/css/app.css, which is the FILAMENT admin
+| stylesheet — it carries Filament-specific resets, a `Cairo` --font-sans, and
+| several v3/v4 compatibility patches. Loading it on the storefront would ship the
+| whole admin panel's CSS to customers and override the type system below.
+|
+| Values here are DEFAULTS ONLY. The palette, typography, radii and shadows are
+| admin-editable at runtime (Shared\Domain\Models\DesignToken), and the layout
+| re-declares these same custom properties from the active token row AFTER this
+| file loads — see resources/views/storefront/partials/theme.blade.php. Utilities
+| resolve through var(), so an admin palette change needs no rebuild.
+*/
+
+@source '../views/storefront/**/*.blade.php';
+@source '../views/components/storefront/**/*.blade.php';
+@source '../../app/Modules/**/Http/Livewire/**/*.php';
+
+@theme {
+    /*
+    | Celebration Rose. The brand's only saturated voice — primary CTAs, the active
+    | booking step, verified-vendor markers. The ramp is intentionally flat at each
+    | end (it mirrors DesignTokenSchema::shadeRamp, which an admin edits as two
+    | colors, not ten); mid-tones are derived with color-mix below rather than
+    | invented here, so a re-themed palette stays coherent.
+    */
+    --color-primary-50: #fdf2f8;
+    --color-primary-100: #fdf2f8;
+    --color-primary-200: #fdf2f8;
+    --color-primary-300: #fdf2f8;
+    --color-primary-400: #831843;
+    --color-primary-500: #831843;
+    --color-primary-600: #831843;
+    --color-primary-700: #831843;
+    --color-primary-800: #831843;
+    --color-primary-900: #831843;
+
+    --color-secondary-50: #eef2ff;
+    --color-secondary-100: #eef2ff;
+    --color-secondary-200: #eef2ff;
+    --color-secondary-300: #eef2ff;
+    --color-secondary-400: #312e81;
+    --color-secondary-500: #312e81;
+    --color-secondary-600: #312e81;
+    --color-secondary-700: #312e81;
+    --color-secondary-800: #312e81;
+    --color-secondary-900: #312e81;
+
+    --color-accent-50: #fefce8;
+    --color-accent-100: #fefce8;
+    --color-accent-200: #fefce8;
+    --color-accent-300: #fefce8;
+    --color-accent-400: #713f12;
+    --color-accent-500: #713f12;
+    --color-accent-600: #713f12;
+    --color-accent-700: #713f12;
+    --color-accent-800: #713f12;
+    --color-accent-900: #713f12;
+
+    /* Ground and ink. Never #fff / #000 — both carry a trace of the brand hue. */
+    --color-ink-50: #fafafa;
+    --color-ink-100: #f5f5f5;
+    --color-ink-200: #e5e5e5;
+    --color-ink-300: #d4d4d4;
+    --color-ink-400: #a3a3a3;
+    --color-ink-500: #737373;
+    --color-ink-600: #525252;
+    --color-ink-700: #404040;
+    --color-ink-800: #262626;
+    --color-ink-900: #171717;
+
+    /* Status only. Never repurposed as brand accents. */
+    --color-success: #16a34a;
+    --color-warning: #f59e0b;
+    --color-danger: #dc2626;
+    --color-info: #0ea5e9;
+
+    --font-sans: 'Inter', system-ui, sans-serif;
+
+    --radius-sm: 0.25rem;
+    --radius-md: 0.5rem;
+    --radius-lg: 0.75rem;
+    --radius-xl: 1rem;
+
+    /* Flat at rest. `surface` gives primary buttons minimal separation; `ambient`
+       is hover-only feedback; `deep` is for genuinely floating UI. */
+    --shadow-surface: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow-ambient: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --shadow-deep: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
+
+@layer base {
+    /*
+    | The Tajawal Parity Rule, in one place.
+    |
+    | Redefining --font-sans on the RTL root re-points every font-sans utility at
+    | the Arabic family, so no component needs a per-locale override and no Arabic
+    | text can accidentally render in Inter. Arabic also needs slightly more leading
+    | than Latin at the same size.
+    */
+    [dir='rtl'] {
+        --font-sans: 'Tajawal', system-ui, sans-serif;
+        --leading-normal: 1.6;
+    }
+
+    html {
+        -webkit-text-size-adjust: 100%;
+    }
+
+    body {
+        background-color: var(--color-ink-50);
+        color: var(--color-ink-900);
+        font-family: var(--font-sans);
+        -webkit-font-smoothing: antialiased;
+    }
+
+    /*
+    | One focus treatment for the whole storefront. :focus-visible only, so pointer
+    | users never see a ring but keyboard users always do — PRODUCT.md requires
+    | clear keyboard focus, and operators navigate these forms by keyboard.
+    */
+    :focus-visible {
+        outline: 2px solid var(--color-primary-500);
+        outline-offset: 2px;
+        border-radius: var(--radius-sm);
+    }
+
+    /* Reduced motion is an accessibility requirement in PRODUCT.md, not a nicety. */
+    @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+            scroll-behavior: auto !important;
+        }
+    }
+}
+
+@layer components {
+    /*
+    | Derived interaction states.
+    |
+    | The token ramp is flat by design (an admin edits two colors per palette, not
+    | ten), so a "slightly darker rose on hover" cannot come from a shade step.
+    | color-mix derives it from whatever primary-500 currently is, which keeps hover
+    | feedback correct under any re-themed palette.
+    */
+    .sf-primary-hover:hover {
+        background-color: color-mix(in oklab, var(--color-primary-500) 88%, black);
+    }
+
+    .sf-field:focus {
+        border-color: var(--color-primary-500);
+        box-shadow: 0 0 0 3px color-mix(in oklab, var(--color-primary-500) 25%, transparent);
+        outline: none;
+    }
+
+    /*
+    | The Header Exception: the sticky header lifts off scrolled content with a
+    | translucent backdrop rather than a hard shadow, preserving the flat-surface
+    | feel. Falls back to an opaque ground where backdrop-filter is unsupported.
+    */
+    .sf-header {
+        background-color: color-mix(in oklab, white 95%, var(--color-primary-50));
+    }
+
+    @supports (backdrop-filter: blur(8px)) {
+        .sf-header {
+            backdrop-filter: blur(8px);
+        }
+    }
+}

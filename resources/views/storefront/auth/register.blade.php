@@ -47,8 +47,8 @@
         />
 
         <div class="space-y-1">
-            <label class="flex items-start gap-2 text-sm text-gray-700">
-                <input type="checkbox" name="accepted_terms" value="1" class="mt-1 rounded border-gray-300" @checked(old('accepted_terms'))>
+            <label class="flex items-start gap-2 text-sm text-ink-700">
+                <input type="checkbox" name="accepted_terms" value="1" class="mt-1 rounded border-ink-300 text-primary-500" @checked(old('accepted_terms'))>
                 <span>
                     {{ __('storefront.auth.register.tc_agree') }}
                     <a href="{{ route('storefront.home') }}" class="underline">{{ __('storefront.auth.register.tc_link') }}</a>
@@ -56,21 +56,21 @@
             </label>
 
             @error('accepted_terms')
-                <p class="text-xs text-red-600">{{ $message }}</p>
+                <p class="text-xs text-danger">{{ $message }}</p>
             @enderror
         </div>
 
         {{-- The API defaults preferred_locale from the payload; carry the URL locale. --}}
         <input type="hidden" name="preferred_locale" value="{{ app()->getLocale() }}">
 
-        <button type="submit" class="w-full rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-800">
+        <x-storefront.button class="w-full">
             {{ __('storefront.auth.register.submit') }}
-        </button>
+        </x-storefront.button>
     </form>
 
-    <p class="text-sm text-gray-600">
+    <p class="text-sm text-ink-500">
         {{ __('storefront.auth.register.have_account') }}
-        <a href="{{ route('storefront.auth.login') }}" class="text-gray-900 underline">
+        <a href="{{ route('storefront.auth.login') }}" class="font-medium text-primary-500 underline underline-offset-2">
             {{ __('storefront.auth.login.submit') }}
         </a>
     </p>
