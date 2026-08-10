@@ -231,11 +231,44 @@ function flatten(array $tree, string $prefix = ''): array
     return $out;
 }
 
+/**
+ * Strings the Blade storefront needs that the Next.js app never had.
+ *
+ * They live here rather than being hand-edited into lang/*/ /*storefront.php,
+ * because this script overwrites those files wholesale — a manual edit would be
+ * silently lost the next time anyone regenerates the catalogue.
+ *
+ * `remember_me` exists because moving from long-lived HttpOnly tokens to Laravel
+ * sessions would otherwise sign customers out after SESSION_LIFETIME.
+ */
+const WEB_ONLY_ADDITIONS = [
+    'en' => [
+        'common' => ['remember_me' => 'Remember me'],
+    ],
+    'ar' => [
+        'common' => ['remember_me' => 'تذكرني'],
+    ],
+];
+
+/**
+ * Recursive merge that lets additions sit alongside converted keys.
+ */
+function mergeAdditions(array $base, array $additions): array
+{
+    foreach ($additions as $key => $value) {
+        $base[$key] = is_array($value) && isset($base[$key]) && is_array($base[$key])
+            ? mergeAdditions($base[$key], $value)
+            : $value;
+    }
+
+    return $base;
+}
+
 $converted = [];
 
 foreach (['en', 'ar'] as $locale) {
     $json = json_decode(file_get_contents($source."/{$locale}.json"), true, 512, JSON_THROW_ON_ERROR);
-    $converted[$locale] = convertTree($json, $stats);
+    $converted[$locale] = mergeAdditions(convertTree($json, $stats), WEB_ONLY_ADDITIONS[$locale]);
 
     $header = <<<'PHP'
 <?php

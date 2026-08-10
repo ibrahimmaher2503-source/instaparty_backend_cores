@@ -29,6 +29,7 @@ return [
         'back_to_top' => 'Back to top',
         'cancel' => 'Cancel',
         'confirm' => 'Confirm',
+        'remember_me' => 'Remember me',
     ],
     'nav' => [
         'menu' => 'Menu',

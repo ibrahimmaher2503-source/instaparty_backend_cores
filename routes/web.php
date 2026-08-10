@@ -26,12 +26,24 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function (Request $request) {
-    $locale = $request->getPreferredLanguage(SetStorefrontLocaleMiddleware::SUPPORTED_LOCALES)
-        ?? SetStorefrontLocaleMiddleware::DEFAULT_LOCALE;
+$preferredLocale = static fn (Request $request): string => $request->getPreferredLanguage(
+    SetStorefrontLocaleMiddleware::SUPPORTED_LOCALES
+) ?? SetStorefrontLocaleMiddleware::DEFAULT_LOCALE;
 
-    return redirect('/'.$locale);
-})->name('storefront.root');
+Route::get('/', fn (Request $request) => redirect('/'.$preferredLocale($request)))
+    ->name('storefront.root');
+
+/*
+| Unlocalised /login alias.
+|
+| Laravel's `auth` middleware throws AuthenticationException with a null redirect,
+| and the framework handler then falls back to route('login') — which would raise
+| RouteNotFoundException, because every storefront route name carries the
+| `storefront.` prefix. This alias gives that lookup something to resolve and
+| doubles as the conventional /login entry point.
+*/
+Route::get('login', fn (Request $request) => redirect('/'.$preferredLocale($request).'/auth/login'))
+    ->name('login');
 
 Route::middleware(['web', SetStorefrontLocaleMiddleware::class])
     ->prefix('{locale}')

@@ -29,6 +29,7 @@ return [
         'back_to_top' => 'العودة إلى الأعلى',
         'cancel' => 'إلغاء',
         'confirm' => 'تأكيد',
+        'remember_me' => 'تذكرني',
     ],
     'nav' => [
         'menu' => 'القائمة',
