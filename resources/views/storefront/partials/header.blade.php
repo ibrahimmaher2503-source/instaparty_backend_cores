@@ -15,7 +15,7 @@
             {{ config('app.name') }}
         </a>
 
-        <nav class="flex items-center gap-2" aria-label="{{ __('nav.language') }}">
+        <nav class="flex items-center gap-2" aria-label="{{ __('storefront.nav.language') }}">
             @foreach (SetStorefrontLocaleMiddleware::SUPPORTED_LOCALES as $locale)
                 @php
                     $target = $segments;
