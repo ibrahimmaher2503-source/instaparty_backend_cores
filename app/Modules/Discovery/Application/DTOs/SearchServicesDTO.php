@@ -6,6 +6,7 @@ namespace App\Modules\Discovery\Application\DTOs;
 
 use App\Modules\Catalog\Domain\Enums\ProductType;
 use App\Modules\Discovery\Http\Requests\SearchServicesRequest;
+use Carbon\CarbonImmutable;
 
 final class SearchServicesDTO
 {
@@ -23,6 +24,7 @@ final class SearchServicesDTO
         public readonly int $page,
         public readonly int $perPage,
         public readonly ?string $sort,
+        public readonly ?CarbonImmutable $eventDate = null,
     ) {}
 
     public static function fromRequest(SearchServicesRequest $request): self
@@ -36,7 +38,11 @@ final class SearchServicesDTO
             occasionCode: $request->filled('occasion')
                 ? $request->string('occasion')->toString()
                 : ($request->filled('occasion_slug') ? $request->string('occasion_slug')->toString() : null),
-            vendorPublicId: $request->filled('vendor_public_id') ? $request->string('vendor_public_id')->toString() : null,
+            // `vendor` is canonical; `vendor_public_id` kept as a back-compat alias.
+            // Both match vendor_profiles.public_id.
+            vendorPublicId: $request->filled('vendor')
+                ? $request->string('vendor')->toString()
+                : ($request->filled('vendor_public_id') ? $request->string('vendor_public_id')->toString() : null),
             cityPublicId: $request->filled('city_public_id') ? $request->string('city_public_id')->toString() : null,
             priceMin: $request->filled('price_min') ? $request->integer('price_min') : null,
             priceMax: $request->filled('price_max') ? $request->integer('price_max') : null,

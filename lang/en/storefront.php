@@ -101,6 +101,17 @@ return [
             'trust_secure' => 'Secure booking',
             'trust_local' => 'Local Egyptian support',
         ],
+        'planner' => [
+            'eyebrow' => 'Plan the practical details',
+            'heading' => 'Build your party',
+            'occasion_label' => 'Occasion',
+            'occasion_placeholder' => 'Choose an occasion',
+            'location_label' => 'Location',
+            'location_placeholder' => 'Where is the celebration?',
+            'date_label' => 'Date and time',
+            'search' => 'Find services',
+            'filters' => 'Advanced filters',
+        ],
         'occasions' => [
             'eyebrow' => 'By occasion',
             'heading' => 'Find what fits the moment',
@@ -152,6 +163,15 @@ return [
             'sub' => 'Hand-picked from vendors with strong reviews and fast response times.',
             'view_all' => 'Browse all services',
         ],
+        'packages' => [
+            'eyebrow' => 'Curated packages',
+            'heading' => 'A confident place to start',
+            'sub' => 'Admin-curated ideas with a clear mood and realistic budget. Choose one, then compare matching vendors.',
+            'view_all' => 'Build your own',
+            'explore' => 'Explore package',
+            'budget_range' => ':min to :max',
+            'budget_from' => 'From :amount',
+        ],
         'vendors_strip' => [
             'eyebrow' => 'Verified vendors',
             'heading' => 'People who do this for a living',
@@ -194,6 +214,9 @@ return [
     ],
     'footer' => [
         'contact' => 'Contact',
+        'explore' => 'Explore',
+        'account' => 'Account',
+        'faq' => 'Frequently asked questions',
     ],
     'promo' => [
         'have_code' => 'Have a promo code?',
@@ -632,9 +655,12 @@ return [
         'sort_by' => 'Sort by',
         'sort_newest' => 'Newest',
         'filter_city' => 'City',
+        'filter_date' => 'Event date',
         'filter_category' => 'Category',
         'filter_occasion' => 'Occasion',
         'filter_location' => 'Location',
+        'filter_vendor' => 'Vendor',
+        'filter_vendor_all' => 'All vendors',
         'filter_governorate' => 'Governorate',
         'filter_all' => 'All',
         'filter_all_governorates' => 'All governorates',
@@ -1143,6 +1169,26 @@ return [
             'minutes' => '{1} :count min|[2,*] :count mins',
             'seconds' => '{1} :count sec|[2,*] :count secs',
             'ended' => 'Offer ended',
+        ],
+    ],
+    'pages' => [
+        'faq' => [
+            'title' => 'Frequently asked questions',
+            'intro' => 'A clear answer before you start planning makes the whole event feel lighter.',
+            'sections' => [
+                ['title' => 'How do I start?', 'body' => 'Choose an occasion, tell us where the event is happening, and browse services from verified local vendors.'],
+                ['title' => 'When do I pay?', 'body' => 'You review the event details and vendor responses before completing a secure payment through Paymob.'],
+                ['title' => 'Can a vendor suggest a change?', 'body' => 'Yes. Vendors can propose a small adjustment, and you decide whether to accept it before the booking is confirmed.'],
+            ],
+        ],
+        'trust' => [
+            'title' => 'Trust built into every booking',
+            'intro' => 'InstaParty keeps the important details visible so you can plan with confidence.',
+            'sections' => [
+                ['title' => 'Verified vendors', 'body' => 'Vendor profiles are reviewed before their services are presented to customers.'],
+                ['title' => 'Clear prices', 'body' => 'Service pricing, delivery details, and the information needed for a decision are shown before you continue.'],
+                ['title' => 'Protected payment', 'body' => 'Payment is handled securely and held until the event process reaches the right stage.'],
+            ],
         ],
     ],
     'fields' => [

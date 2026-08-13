@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Modules\Discovery\Application\Actions;
 
+use App\Modules\Catalog\Domain\Enums\ProductType;
 use App\Modules\Catalog\Domain\Models\Service;
 use App\Modules\Discovery\Application\DTOs\SearchServicesDTO;
 use App\Modules\Discovery\Domain\Contracts\SearchRepository;
@@ -22,7 +23,7 @@ class SearchServicesAction
         // DB columns. Any other driver (null, database, collection) must use
         // the SQL fallback — under scout:database the index attributes leak
         // into SQL and 500 (SRCH-001).
-        if (config('scout.driver') !== 'meilisearch') {
+        if ($dto->eventDate !== null || config('scout.driver') !== 'meilisearch') {
             return $this->executeDatabaseFallback($dto);
         }
 
@@ -64,9 +65,8 @@ class SearchServicesAction
 
         if ($dto->vendorPublicId !== null) {
             $vendorId = $this->searchRepository->resolveVendorId($dto->vendorPublicId);
-            if ($vendorId !== null) {
-                $builder->where('vendor_id', $vendorId);
-            }
+            // An unknown vendor matches nothing — never silently drop the filter.
+            $builder->where('vendor_id', $vendorId ?? -1);
         }
 
         if ($dto->cityPublicId !== null) {
@@ -156,7 +156,8 @@ class SearchServicesAction
 
         if ($dto->vendorPublicId !== null) {
             $vendorId = $this->searchRepository->resolveVendorId($dto->vendorPublicId);
-            $builder->when($vendorId !== null, fn ($q) => $q->where('vendor_profile_id', $vendorId));
+            // An unknown vendor matches nothing — never silently drop the filter.
+            $builder->where('vendor_profile_id', $vendorId ?? -1);
         }
 
         if ($dto->cityPublicId !== null) {
@@ -178,6 +179,19 @@ class SearchServicesAction
 
         if ($dto->minRating !== null) {
             $builder->where('rating_avg', '>=', $dto->minRating);
+        }
+
+        if ($dto->eventDate !== null) {
+            $startsAt = $dto->eventDate->startOfDay();
+            $endsAt = $dto->eventDate->endOfDay();
+
+            $builder->where(static function (Builder $query) use ($startsAt, $endsAt): void {
+                $query
+                    ->where('product_type', '!=', ProductType::Rental->value)
+                    ->orWhereDoesntHave('availabilityBlocks', static fn (Builder $blocks) => $blocks
+                        ->where('starts_at', '<=', $endsAt)
+                        ->where('ends_at', '>=', $startsAt));
+            });
         }
 
         match ($dto->sort) {
@@ -209,6 +223,7 @@ class SearchServicesAction
                 'price_min' => $dto->priceMin,
                 'price_max' => $dto->priceMax,
                 'min_rating' => $dto->minRating,
+                'event_date' => $dto->eventDate?->toDateString(),
             ], static fn ($v): bool => $v !== null),
             resultsCount: $results->total(),
             userId: auth()->id(),

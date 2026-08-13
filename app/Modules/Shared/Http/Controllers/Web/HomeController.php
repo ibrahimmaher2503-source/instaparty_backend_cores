@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Modules\Shared\Http\Controllers\Web;
 
+use App\Modules\Geography\Domain\Contracts\GeographyRepository;
+use App\Modules\Shared\Application\Actions\GetHomepageDataAction;
 use Illuminate\Contracts\View\View;
 
 /**
@@ -15,8 +17,13 @@ use Illuminate\Contracts\View\View;
  */
 class HomeController
 {
-    public function __invoke(): View
-    {
-        return view('storefront.home');
+    public function __invoke(
+        GetHomepageDataAction $action,
+        GeographyRepository $geography,
+    ): View {
+        return view('storefront.home', [
+            'homepage' => $action->execute(app()->getLocale()),
+            'cities' => $geography->searchCities(''),
+        ]);
     }
 }
